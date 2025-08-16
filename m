@@ -1,48 +1,48 @@
-Return-Path: <linux-clk+bounces-26190-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26191-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AA03B28C68
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 11:31:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4C9B28C69
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 11:32:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71F38B6291E
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 09:29:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F664B62B85
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 09:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E85923E350;
-	Sat, 16 Aug 2025 09:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAD0216E24;
+	Sat, 16 Aug 2025 09:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+EN03jD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeiDbmo8"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD3F17A2FC;
-	Sat, 16 Aug 2025 09:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D126634;
+	Sat, 16 Aug 2025 09:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755336679; cv=none; b=j7tTvTMhES27ymc7Vbxqo1z1wA1hIh3jp1pTr/AWdI3ucPNY6i0Jmf/SQiFnFwcWVaWVoOA9zTNQFfxEvre/J0i3JgvRZEdlH3MRfXnSNBpf571EiM8yOnOJFVCo6LejqBdXiMMvh02P5UaJ3OFSH+vE8IcpzUEsegyzjnsj/z4=
+	t=1755336727; cv=none; b=DMiziW0knAHSzcEE2LE6y5CtPL8mO2PH3Yrk1QKG1lpCoFOb54IF1Q5WM82B6nxILDemVWenq8NorWcjfvejTGzoEq+GN9YHpfArB6X721ATmnB81+3g3Ep95lb0/fs0WT0I2IkMTGuo+8iGpWrxFDjOeGlLQ5VnQWXUDd1sc48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755336679; c=relaxed/simple;
-	bh=b3nZU4EntGbWNXI7FIE7S/NEvJ6E/2WZETtliu2GRLk=;
+	s=arc-20240116; t=1755336727; c=relaxed/simple;
+	bh=oEyF2eJ6WhDQJU764/6uBj7AJ/pKHLod7UwFKVQuEmI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eAhv/x8S/D6OPipSYSsfobJCSHuVkrmeOQdh0AmaFh63h7vPbAlfc4sup2UhtAa9UL2QjpXHRjI6+jxYk1I7vr89/8AAwFXBGlmpNdGW0WuXnZM5tnNOFZVm0VKUvIOU8mQr6Jc5LVwzVfXtfZJkYvthrXgGyAdtG/0dYZUgQxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+EN03jD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D396C4CEEF;
-	Sat, 16 Aug 2025 09:31:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=JdSHpl53mgS9NQQidoJanqsmoFOB896WkW4JPDjjwIQjEIuuSeve4SfTBzcXiykKE9J2Jnk2LpVEbhpn5ZnUhrJXBwyNSW0nHMRgEGG7elgDct9HQex3rcOBTY192BZDnp+jM1v9LPFS7l0WaJQpmytIk2ds7S+hFm9xlwc/uyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeiDbmo8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD12C4CEEF;
+	Sat, 16 Aug 2025 09:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755336678;
-	bh=b3nZU4EntGbWNXI7FIE7S/NEvJ6E/2WZETtliu2GRLk=;
+	s=k20201202; t=1755336726;
+	bh=oEyF2eJ6WhDQJU764/6uBj7AJ/pKHLod7UwFKVQuEmI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j+EN03jDrf9NJ3ILfY2KjleJ2Of4kMKFqry7Vd5Uvr8odKcnjF7QzIXFGNOlCMq2q
-	 0S9BDOC5FGe2n9S9/nOm+8zb9hZRYhYd5Gwsal/pWpT4OPOFxsoBwW6ZzO1nXKRMeH
-	 Zu2J/3Dr3iMncjIaYqltAOAG+INEQc+s7uErdkFWNCYSUBpIM+eki0gtj6/MCIzV3K
-	 L3ux2shZReP2/IFYG3K48D8WrSUveqCj3TKhcmAhql0sYp70fhHawjqSAIC2+qpEGF
-	 KIL3fQY2mB+uPaguUjGymuoHW+JkJtWBXDZAwuItb6qT+vLTbMI/WCgQVDVRuhdUEW
-	 WII4dlUkMXYCQ==
-Message-ID: <c7468189-deee-449f-b7d0-fa1830ca88fc@kernel.org>
-Date: Sat, 16 Aug 2025 11:31:12 +0200
+	b=qeiDbmo8SFZVpreHbV3TyxkEafKo6aIVu8hKK+LyPE/V9/Ml8s+IuYUOYHN1/wt2R
+	 zlUpiX8S66IOKUYiRkkEwUzry4zqQ7he5t+c2FeIHW0wwpUTm3Ofzc4LDMWraEtxEQ
+	 cGnyyTPXKHQOgL9WHex/YXEtfQr9phCkyBU2lBSLuHU9RYHJeOkXFDIOkzQM34xlX1
+	 hQSyrZIGBi+9Qjm+DDMeXFezd6oCUWcQ6qKIx4m3dck7eBVBXCQ5u2eR5TFv/GPydy
+	 LRnZ1Ql07ABzPJCh5U4lvLdiUSKzTOIgxRgDp64ipA8qsxdWi6dp/W6n9zDmGjRDDO
+	 BS05vfLm/V1rA==
+Message-ID: <5e89d0c7-5ac5-4376-bc6e-c7ff8ee05024@kernel.org>
+Date: Sat, 16 Aug 2025 11:32:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/7] arm64: dts: allwinner: a523: add third usb2 phy
+Subject: Re: [PATCH 5/7] arm64: dts: allwinner: a523: add USB3.0 phy node
 To: iuncuim <iuncuim@gmail.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -64,9 +64,9 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
  linux-clk@vger.kernel.org, linux-sunxi@lists.linux.dev
 References: <20250816084700.569524-1-iuncuim@gmail.com>
- <20250816084700.569524-3-iuncuim@gmail.com>
-Content-Language: en-US
+ <20250816084700.569524-6-iuncuim@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -110,44 +110,27 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250816084700.569524-3-iuncuim@gmail.com>
+In-Reply-To: <20250816084700.569524-6-iuncuim@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/08/2025 10:46, iuncuim wrote:
 > From: Mikhail Kalashnikov <iuncuim@gmail.com>
 > 
-> It seems that there are actually three usb2 phys in the processor, which
-> makes it incompatible with D1.
-> The third phy is used together with USB3/PCIe combophy with DWC3
-> controller. In the BSP code, the third PHY requires a separate glue
-> driver, but it seems that it is not needed.
-> According to the BSP code, the third phy does not have a reset line; the
-> only reset is declared in the DWC3 node, but none of this is documented.
-> Since sun4i-usb-phy driver requires a reset, I added RST_BUS_3 here.
+> After adding the phy driver, we can also add phy node. In addition to the
+> clk and reset lines, the power domain PD_PCIE is declared in this node
+> according to the bsp dtb. So let's mention it. 
+> Currently, phy driver does not support role selection and only works in
+> USB3.0 mode.
 > 
 > Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
 > ---
->  .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 21 ++++++++++++-------
->  1 file changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-> index 6b6f2296b..e4ed4fa82 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-> +++ b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-> @@ -503,22 +503,27 @@ usb_otg: usb@4100000 {
->  		};
->  
->  		usbphy: phy@4100400 {
-> -			compatible = "allwinner,sun55i-a523-usb-phy",
-> -				     "allwinner,sun20i-d1-usb-phy";
-> +			compatible = "allwinner,sun55i-a523-usb-phy";
+>  arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-
-That's potential break of all users. Also, having third phy (so
-additional piece) is not making things incompatible.
-
-
+Please organize your patches correctly. One DTS was in the middle of
+patchset, other is at the end. They all must be at the end, because you
+cannot have dependency of driver on DTS.
 
 Best regards,
 Krzysztof
