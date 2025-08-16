@@ -1,88 +1,114 @@
-Return-Path: <linux-clk+bounces-26163-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26166-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 750A6B288E9
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 01:45:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E80A3B28AC4
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 07:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 765A116E7D8
-	for <lists+linux-clk@lfdr.de>; Fri, 15 Aug 2025 23:45:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E18E85A7D44
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Aug 2025 05:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C6323A9BE;
-	Fri, 15 Aug 2025 23:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C891F5847;
+	Sat, 16 Aug 2025 05:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAocX+1X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="My2OZOmk"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B94202963;
-	Fri, 15 Aug 2025 23:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9DC1F2B8D;
+	Sat, 16 Aug 2025 05:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755301537; cv=none; b=DdRsoMB7ygBJQPRaKeIZCoG99wIwOFr9XJQQt1X/6ZCZyVHpV+CTRnn7o7kWqJ4h3uV9NaWzJ/EnNrVKiPkwI1sm/XQ+gKq5mQlQkiPQf9zLouaoN+w6iiZONYsjpjOBCz8Wzt6dPTh9+wDL9Cw12XnKqbV7eAATxbR/ybk90Kk=
+	t=1755323659; cv=none; b=AM4grCCOa0yfifRcxOUKRz6blywENQlV6uiH9kb+VDk0EJkJLAiECnQao0q872xuQXi4TYDog95Q4WDpo3YZKqarbShr9T8WVueP+Rfm1ynl6igqsilEClSIo9mKzpFUtFi1uO+81jIr7uzHX66HzmsttZbaMJZBXlLBsscuy+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755301537; c=relaxed/simple;
-	bh=g68O3WmYOhk4y5L79Ofa0c3kpmvbkMRbUGdK4BAXSrM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIpcBBsizvSeEbJB+vDUDhIlvV4bA88i7Y/DIXEKKIa1kZUBm597KQm/sg51kGDofqFR7SRVqZQ21cW0D/CzWoclWebTv30OEOo8xV4PKYdokd3tQkB0HMQgV7cNsLPfVM97fXpAYTHdaXpTtGcSvaM9QZ73TbioMttC+XrF/FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAocX+1X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB8FC4CEEB;
-	Fri, 15 Aug 2025 23:45:36 +0000 (UTC)
+	s=arc-20240116; t=1755323659; c=relaxed/simple;
+	bh=8klj2uYRMfs8FE617jEyAtR6aZOYS7SLudYM0j1xsJc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PhSTB12hjWgc3WC/fWiSiMnd4oNXsKodZtcJ56rtYpiNuXyxB9qy9NmZsWLmMk+v9Ydr+dOKqBD2fTJJt5TndJrW4drPxWsEDy3EOExHwUClse++m9n1CxP4CO3XGamG+c72eR5Aw4xTsxtqGyf6alfYomIgoYNZNPBd2Vgzn4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=My2OZOmk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3FC8C4CEEF;
+	Sat, 16 Aug 2025 05:54:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755301537;
-	bh=g68O3WmYOhk4y5L79Ofa0c3kpmvbkMRbUGdK4BAXSrM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AAocX+1XJ55zDaEfebP8eiItlhPcEHOFkcM8AAnOFUHjfUQZjIHRIu54XvhsRnYLW
-	 X248Ua9VPnXnKIUrafSn3+h7l/XhKWoB4eLmAX5wlpzfaH8/0vS0X8czOTA+ASzB0f
-	 dm9xpwP9Wdn64dMZkMJQEse9JfdW+abCZXscpSSmwI47YRqgevHpFPs/baByOAIR5M
-	 woPb7GKTEm6uWNDgjZJCvIHjGIwfpmBBhrLZGm/7y6YtqpHEDSkU42I1Vx8b+gTZUd
-	 bWFtBe7D41YF2EzFcuR1zVWK3CTOoM+L43sG72lVF7tuTGVc+OP56Es5BGtG0Kp9cQ
-	 gbHrpTQN6a2Pw==
-Date: Fri, 15 Aug 2025 16:45:35 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Yao Zi <ziyao@disroot.org>, Han Gao <rabenda.cn@gmail.com>,
-	linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] clk: thead: th1520-ap: describe gate clocks with
- clk_gate
-Message-ID: <aJ/Gn2BeN4w2Yy9y@x1>
-References: <20250813171136.2213309-1-uwu@icenowy.me>
- <20250813171136.2213309-2-uwu@icenowy.me>
+	s=k20201202; t=1755323659;
+	bh=8klj2uYRMfs8FE617jEyAtR6aZOYS7SLudYM0j1xsJc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=My2OZOmkgK8S/P8TzqtVuTbioib7+OEyAX+S/+oU0G3Oa+lzPSj92c5JMbq2rdNhG
+	 Ejcymzn8Ci5jExdHmVkfVFxXkOCDRebXp6Z4jgpSHW4f0uzhDIkEU+Lv75N9n0Hoyd
+	 fxE+BUWaZ4h0yS4YAVembS0HK8QEDMDM7jDVY5BznxFZfD/jEhfx2Qv+kFWdP0Rhe9
+	 7kFh/ayeNIERUMk3USg8FVGonhuX+hHd4plqMJei/+X94jluv+UTa0K8yt4jm1VIA2
+	 eCLkHqvkocH3vUS17tX6knbmnyEAGyaDa5LNCNUdpWiTOd3r6h5Ff0a9wI6tWZ2J5w
+	 Jn7Jgy7GzHNvA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E24EBCA0EE9;
+	Sat, 16 Aug 2025 05:54:18 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Subject: [PATCH 0/5] Properly Limit Tegra210 Clock Rates
+Date: Sat, 16 Aug 2025 00:53:32 -0500
+Message-Id: <20250816-tegra210-speedo-v1-0-a981360adc27@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250813171136.2213309-2-uwu@icenowy.me>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANwcoGgC/x3MSwqAIBRG4a3EHSeo9LC2Eg3M/uxOLDQikPaeN
+ PwG52RKiIxEY5Up4ubERyhQdUVut8FD8FpMWupWGqXFBR+tVlKkE1gP0fSyGxTMYpyjUp0RGz/
+ /cZrf9wPHlmM/YQAAAA==
+X-Change-ID: 20250812-tegra210-speedo-470691e8b8cc
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, Joseph Lo <josephl@nvidia.com>, 
+ Peter De Schrijver <pdeschrijver@nvidia.com>, 
+ Prashant Gaikwad <pgaikwad@nvidia.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thierry Reding <treding@nvidia.com>, Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755323658; l=1124;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=8klj2uYRMfs8FE617jEyAtR6aZOYS7SLudYM0j1xsJc=;
+ b=YxZKMWmKba+krIJVoRlKTJR6SZv8sVtniqhXAmEvuC1t8HToXFXb2O9pGXk+SJ4NDI4UrjzhQ
+ iSR3FVD6PuzDL/FRX2qtKMXMhf5HBqqGlA0s3BPkRJaKv8q50xfq3HX
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-On Thu, Aug 14, 2025 at 01:11:35AM +0800, Icenowy Zheng wrote:
-> Similar to previous situation of mux clocks, the gate clocks of
-> clk-th1520-ap drivers are also using a helper that creates a temporary
-> struct clk_hw and abandons the struct clk_hw in struct ccu_common, which
-> prevents clock gates to be clock parents.
-> 
-> Do the similar refactor of dropping struct ccu_common and directly use
-> struct clk_gate here.
-> 
-> This patch mimics the refactor done on struct ccu_mux at [1].
-> 
-> [1] https://lore.kernel.org/all/20250722080535.60027-2-ziyao@disroot.org/
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
->  drivers/clk/thead/clk-th1520-ap.c | 382 +++++++++++++++---------------
->  1 file changed, 185 insertions(+), 197 deletions(-)
+The Tegra210 CVB tables were added in commit 2b2dbc2f94e5. Since then,
+all Tegra210 socs have tried to scale the cpu to 1.9 GHz, when the
+supported devkits are only supposed to scale to 1.5 or 1.7 GHZ.
+Overclocking should not be the default state.
 
-Reviewed-by: Drew Fustini <fustini@kernel.org>
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+Aaron Kling (5):
+      dt-bindings: clock: tegra124-dfll: Add property to limit frequency
+      soc: tegra: fuse: speedo-tegra210: Update speedo ids
+      soc: tegra: fuse: speedo-tegra210: Add sku 0x8F
+      clk: tegra: dfll: Support limiting max clock per device
+      arm64: tegra: Limit max cpu frequency on P3450
+
+ .../bindings/clock/nvidia,tegra124-dfll.txt        |  3 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |  1 +
+ drivers/clk/tegra/clk-tegra124-dfll-fcpu.c         |  8 ++++-
+ drivers/soc/tegra/fuse/speedo-tegra210.c           | 39 ++++++++++++++++++----
+ 4 files changed, 43 insertions(+), 8 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250812-tegra210-speedo-470691e8b8cc
+
+Best regards,
+-- 
+Aaron Kling <webgeek1234@gmail.com>
+
+
 
