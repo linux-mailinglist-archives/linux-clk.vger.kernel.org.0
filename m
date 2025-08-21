@@ -1,142 +1,121 @@
-Return-Path: <linux-clk+bounces-26470-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26473-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD689B2F664
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Aug 2025 13:21:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2E2B2F73A
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Aug 2025 13:55:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB58F17D958
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Aug 2025 11:19:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F2A81889D47
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Aug 2025 11:54:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A70E30EF86;
-	Thu, 21 Aug 2025 11:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1362E0B7C;
+	Thu, 21 Aug 2025 11:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="asvtgowC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EeTlcgdw"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA16A305050;
-	Thu, 21 Aug 2025 11:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702922E040A
+	for <linux-clk@vger.kernel.org>; Thu, 21 Aug 2025 11:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755775171; cv=none; b=u5CJhV9qyZ2DRI+XoXCSrZ8Din1oTQ9FEWofrawfO32XWhtePtMA8g4d9ELiA/80xiyfZr1p+X3YyPCD0PsX9hlwfyjXqW7N3orOjfYN6U1K8+hniIVTIbm8PSPjIqAUiNqcnFgwWqZ01jvIPKF7x/280zqWKvkk0iaM1QgOsfw=
+	t=1755777240; cv=none; b=tK0F4OM85qVMJc/CPb+WLOhxB+rsLrLZ0j0tqwa4oFl2u3yeJ9dgILtSRWbeeAr1ZHb1xy8lg6BKh2jzdZxioDlqaIp/uCFYHP04bDDRpARhOh/1PaF3uNAsuvjXqOyRlGXUs/lGa/aq4DhxM6cherxZ5PFFV63VAZ2DHsqknb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755775171; c=relaxed/simple;
-	bh=va+Fk/D/QIqK+E/Wc67U3aTPeSCsla0Fk/GDekTcvpo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YUW3jpiqmgRKjK64Mko3LqRz7H/A96spGu3GRZR4hYUAMhCpTYukqnt4loyEUqb4/DiIHozBeOyTJi/O9GyudbaUdXgHZx/hd6cBGRzdZbCJoNrTcUnBmu97ckeJu7dgN/x9Yyw/g1yAqbU3KhvG50Lbw73X21hkCinG4oH2Xqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=asvtgowC; arc=none smtp.client-ip=37.205.8.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
-DKIM-Signature: a=rsa-sha256; bh=TeoXivUMSMZOUdm9E1b1+7fzZ8rfIj1eekPuvAamVYo=;
- c=relaxed/relaxed; d=dujemihanovic.xyz;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@dujemihanovic.xyz; s=default; t=1755775106; v=1; x=1756207106;
- b=asvtgowCtq20brGTP/+zGKWPSmk7nzucKC1QLpj1yp6vFIhGM+aWKw1zvSdf4LAQm/JkAIFW
- RzwUPYet8nZeVXUky2OHG8GmKHcGIAqhYQnqAdZQjMB2LZLzxCQ8iGkVeBDATkGMcMPOcv84HXB
- aTdmHAKG9BVHONsiWguJP+ra2Zg8n2QSAvdAuMcyFlmb4ADrq70gao7r5wVLlh5I+cvY1Pj6eTx
- Y8k2J606NyysMyPeWWKJzxtht+albinI9zqFZH82NwKdHKjmeALhuQMuXhdf2zomkrPHSTPT8ex
- FwiAMoC7wFqheOmCw2KAXIX1YV55tTFuVMLD7gTrKQTDQ==
-Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
- ESMTPS id 8a00f894; Thu, 21 Aug 2025 13:18:26 +0200
-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Date: Thu, 21 Aug 2025 13:17:46 +0200
-Subject: [PATCH v2 4/4] arm64: dts: marvell: pxa1908: Add power domains
+	s=arc-20240116; t=1755777240; c=relaxed/simple;
+	bh=L7PbAw7tFxkqZThPb3yJ9U2UGY2pHnuSaci2IGV7yfc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H4eredic0DU8+YkhSC7fGGjrTv75d8Qm3hElZjPqxbBnZxGKMJWJeCy07P1EWYKX3S8VMixNoCVkQlQQuuTEhZEs6EzZlJGQG5g5IbPGUsPJbeKaeLZlMlOyJa197yiu5PdaqxJl0eFWb+eUvwSZreMUZOAv0ONgY2KQ/nQMyaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EeTlcgdw; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-335360f9b6aso16795381fa.0
+        for <linux-clk@vger.kernel.org>; Thu, 21 Aug 2025 04:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755777236; x=1756382036; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L7PbAw7tFxkqZThPb3yJ9U2UGY2pHnuSaci2IGV7yfc=;
+        b=EeTlcgdwYygVPvWzZ81l5IByZT3GZgdfLnceLEVRtnLKn5kjZAK18d9RTZKllNN3R9
+         UXNJuNZYhZL2/q7EIlmuqT/RNnXonu0xTXfM7Mu1hvzHJXxGStRwQ8wUjUvu1nmWe5kJ
+         bOvHqJiyfkTBFnPalQCG/zkNmCKpV4C//WOnsggDAKiSq2dxxWaUdzQDpOv4icRLO6jy
+         FLT1i4qApSx7t3oDdCbKZI6Uo/XCgFeugJGvh4s4McwDReUaIaDZCi4GNX1+YPb88r4q
+         FyMPyu6OD1xEbix9HWqrFIy2K24Qt+lvmhMkS4VLBb67YbyhwsoovUIdJ3elz5ONpvok
+         A3oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755777236; x=1756382036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L7PbAw7tFxkqZThPb3yJ9U2UGY2pHnuSaci2IGV7yfc=;
+        b=mqjtKfdraPS303G6WNp1bvPabb4/580VEKxp+16vcn//tDqEIWhEwBQfhufdyB1TxU
+         eH09lcwDM7ME+tb07S6FcJCYqVWdBoXZVCbsaXMH1W82rRzu1p0Tc+DCzOYKH1bj4/9Z
+         WSDUfhDUS++OpAPoD0jpCc2xOnhkP+Be7hoEuybxsFCxDX32KDQruyjdHBGy2J59MhiS
+         0ynNvybutZ9NTO8AJfiy/rYuof/AS5hbzxRRt3bD0T37ZnWM1Pu8IDBOFWet3ZasPl1X
+         QWcRr4fqOt1Vsd7+cMJ65hQeIuNZVxMY41ixRDOJSVB5y0EGsTP4mL2yakt52j9GjmI8
+         CxtA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ6ooMh8KLiLy0Pre/ovnn4GwGBxXEOHZB8vbBnRrWIGb6DJrshYc7U1Zu+YctvMkEpF5DCs8sTUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyM1TroDaYtEXCwviu4IAc6lh6DzoAtS2r+vhkTMHKCKzfGNxaF
+	Myo5QbRKYiaKMSYMZtMQcR1f/V90Z96FvIu57oJR8jO3D7vZGcVE+btxbR3XDyr/ImBrekAXbkN
+	OWhR+DpjAL2tJToKl76iS9Za7lAae/MQt6SmwDlDKig==
+X-Gm-Gg: ASbGncuM7mMZnbDFZXSA0mxLoo3SgIKPg1ch7i5MzQte0MmXuf2yHgrTCy6qIO23vy9
+	jB+9gJvyO1teef4VL9VUT3bu36chqid8t66hPYiDydcmmx7yA/F+OjMzb7lsV8YD+JsAtndNFN8
+	IpZ7rC5nx+1DYHMIYTHJZz7IthNOYY4WEVBdynkfwLb8K0mpdwEChyeUZAC7zkn0ga88+mPsFh1
+	PC4vCo=
+X-Google-Smtp-Source: AGHT+IFoewdvNuLwpOMDi7tPmb9FEQKLI5JEdERuyolhueuXHZ2+5KnKdkT/j3cc2QMbmt8jG7ipw7ObSBOoHSZHVLc=
+X-Received: by 2002:a2e:a013:0:b0:332:2d5c:e171 with SMTP id
+ 38308e7fff4ca-3354a275fd8mr4061531fa.11.1755777236482; Thu, 21 Aug 2025
+ 04:53:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250821-pxa1908-genpd-v2-4-eba413edd526@dujemihanovic.xyz>
-References: <20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz>
-In-Reply-To: <20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, 
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2261;
- i=duje@dujemihanovic.xyz; s=20240706; h=from:subject:message-id;
- bh=va+Fk/D/QIqK+E/Wc67U3aTPeSCsla0Fk/GDekTcvpo=;
- b=owGbwMvMwCW21nBykGv/WmbG02pJDBnLGepcbFdqhfmViLZPVj0cq7ZL9GhW1OvV3mc8ru8/s
- mWZo09fRykLgxgXg6yYIkvuf8drvJ9Ftm7PXmYAM4eVCWQIAxenAExkz3ZGhm/V0TL3F3t622xN
- PuvnkHnqonntpp/MmxzYWtqTD0z0v8DwP8nKcda89cyF5jW5WgpuM2yN2XyW2h59VHdWzS3zR7s
- JCwA=
-X-Developer-Key: i=duje@dujemihanovic.xyz; a=openpgp;
- fpr=6DFF41D60DF314B5B76BA630AD319352458FAD03
+References: <20250820171302.324142-1-ariel.dalessandro@collabora.com> <20250820171302.324142-10-ariel.dalessandro@collabora.com>
+In-Reply-To: <20250820171302.324142-10-ariel.dalessandro@collabora.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 21 Aug 2025 13:53:45 +0200
+X-Gm-Features: Ac12FXy1SuiUzS280qDRSJHcA_2jVr4y-FjGItB1ru8eWVK-JVnc9Ql5XGWxM9c
+Message-ID: <CACRpkdbVqNpz2HiAz+_vFUkDy1TE6ZDxp6X2g9rRWAt4s=jRgw@mail.gmail.com>
+Subject: Re: [PATCH v1 09/14] dt-bindings: pinctrl: mediatek,mt65xx-pinctrl:
+ Allow gpio-line-names
+To: "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
+Cc: airlied@gmail.com, amergnat@baylibre.com, andrew+netdev@lunn.ch, 
+	andrew-ct.chen@mediatek.com, angelogioacchino.delregno@collabora.com, 
+	broonie@kernel.org, chunkuang.hu@kernel.org, ck.hu@mediatek.com, 
+	conor+dt@kernel.org, davem@davemloft.net, dmitry.torokhov@gmail.com, 
+	edumazet@google.com, flora.fu@mediatek.com, houlong.wei@mediatek.com, 
+	jeesw@melfas.com, jmassot@collabora.com, kernel@collabora.com, 
+	krzk+dt@kernel.org, kuba@kernel.org, 
+	kyrie.wu@mediatek.corp-partner.google.com, lgirdwood@gmail.com, 
+	louisalexis.eyraud@collabora.com, maarten.lankhorst@linux.intel.com, 
+	matthias.bgg@gmail.com, mchehab@kernel.org, minghsiu.tsai@mediatek.com, 
+	mripard@kernel.org, p.zabel@pengutronix.de, pabeni@redhat.com, 
+	robh@kernel.org, sean.wang@kernel.org, simona@ffwll.ch, 
+	support.opensource@diasemi.com, tiffany.lin@mediatek.com, tzimmermann@suse.de, 
+	yunfei.dong@mediatek.com, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+	linux-sound@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Update the APMU clock controller's compatible to allow the new power
-domain driver to probe. Also add the first two power domain consumers:
-IOMMU (fixes probing) and framebuffer.
+On Wed, Aug 20, 2025 at 7:16=E2=80=AFPM Ariel D'Alessandro
+<ariel.dalessandro@collabora.com> wrote:
 
-Signed-off-by: Duje Mihanović <duje@dujemihanovic.xyz>
----
-v2:
-- Drop power controller node
-- &pd -> &apmu
----
- arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts | 1 +
- arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi                       | 5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+> Current, the DT bindings for MediaTek's MT65xx Pin controller is missing
+> the gpio-line-names property, add it to the associated schema.
+>
+> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 
-diff --git a/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts b/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-index 47a4f01a7077bfafe2cc50d0e59c37685ec9c2e9..d61922f326a4654a45ab4312ea512ac1b8b01c50 100644
---- a/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-+++ b/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-@@ -23,6 +23,7 @@ chosen {
- 		fb0: framebuffer@17177000 {
- 			compatible = "simple-framebuffer";
- 			reg = <0 0x17177000 0 (480 * 800 * 4)>;
-+			power-domains = <&apmu PXA1908_POWER_DOMAIN_DSI>;
- 			width = <480>;
- 			height = <800>;
- 			stride = <(480 * 4)>;
-diff --git a/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi b/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-index cf2b9109688ce560eec8a1397251ead68d78a239..ae85b90eeb408a8f4014ec7b60048ae1fd3d4044 100644
---- a/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-+++ b/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/marvell,pxa1908.h>
-+#include <dt-bindings/power/marvell,pxa1908-power.h>
- 
- / {
- 	model = "Marvell Armada PXA1908";
-@@ -79,6 +80,7 @@ smmu: iommu@c0010000 {
- 			#iommu-cells = <1>;
- 			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
- 				<GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&apmu PXA1908_POWER_DOMAIN_VPU>;
- 			status = "disabled";
- 		};
- 
-@@ -291,9 +293,10 @@ sdh2: mmc@81000 {
- 			};
- 
- 			apmu: clock-controller@82800 {
--				compatible = "marvell,pxa1908-apmu";
-+				compatible = "marvell,pxa1908-apmu", "syscon";
- 				reg = <0x82800 0x400>;
- 				#clock-cells = <1>;
-+				#power-domain-cells = <1>;
- 			};
- 		};
- 	};
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
--- 
-2.50.1
-
+Yours,
+Linus Walleij
 
