@@ -1,180 +1,163 @@
-Return-Path: <linux-clk+bounces-26531-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26526-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95413B31B16
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Aug 2025 16:18:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A81B31A92
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Aug 2025 16:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D26D1890E17
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Aug 2025 14:14:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CFFC17B6CD
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Aug 2025 13:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD1F308F1A;
-	Fri, 22 Aug 2025 14:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB300308F01;
+	Fri, 22 Aug 2025 13:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfR5e113"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jwvOoxx+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53943054C5;
-	Fri, 22 Aug 2025 14:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC613074B0
+	for <linux-clk@vger.kernel.org>; Fri, 22 Aug 2025 13:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755872035; cv=none; b=n3EktkpKienSgHcNhmvB0Vxt0YhFN/kySvArF4XvL+PHo9OVsLG7J4ffdqCuIIxgsTXL2gZ5X391sWxjCsDGnyJ/rSpSFeRl5NV/EXObGeeiM3FZ+oTMWkHlKV3QWe47zUa78YqUdcRMr6rEg4zGpl9GXyWNZg3bBqXg3/28uxk=
+	t=1755871041; cv=none; b=CXZ0eQD9zd8Zq2oaDSAkbsD1FUjFU7kS7jyLxKJ1feiwArCI9ERWwDxPXXVUIXzYuhTgvHhN8pExItldnS/zDcwQ5LTabBe7IG0ZMJZPGEEf21z1tR4xRNlf3maZPbJsnK4068bEQbmDjhDi6WkLmPoj+bY8Kmnh0gfG4poqdsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755872035; c=relaxed/simple;
-	bh=p5a7degfIw0dQZsZxxsvkoQCwnY6OhJE2U6FzHq3N6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d8daS5I66NBClpj/Mwfvx5MP9BjhjS4vmcCacZy6bII0cAn6SrSXg90cb19RA9zqU5KvTnzgLqYTItANzO4S4E/IWNAD790c1v3KzJWNzOB/5BiVTwHJI+6qkbJoNRM6iFzWM5pEZdacdiiW+SDO0vWgjELcOsgdZ5UE7EJAUJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfR5e113; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AABEC113D0;
-	Fri, 22 Aug 2025 14:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755872034;
-	bh=p5a7degfIw0dQZsZxxsvkoQCwnY6OhJE2U6FzHq3N6A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EfR5e113OergLD1D6mQfNAi67vZvuSnQ2SCuHyjiBfXC4Lrx7FP2CnOTgpRx7lNav
-	 cBqjJp9tO+jX0LUirAxEFcM7+w7Gtk9RiOPLLiZOq3O+fPwboBVi4xXh9txiaA/OqU
-	 mrVPfTisuNk/O2rviGhWlCgB0IzXDAqPrg79wJp9ZLuvmA4r4RzhBUU+iZE4EQqh+r
-	 XcPR6MVD03qhX69VMv81Jnr8L1H+8u+lHO/4+/jG0Ob9uJOOP+xhfYC1nrNM5r9naJ
-	 Enou61vI55SjWtM4xkrSgINKJxJltBw0KltDtFfuXYbuB8A9lUemyj3ZA39oncjgXU
-	 xf1Pi9daOw9+A==
-Date: Fri, 22 Aug 2025 21:56:36 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: designware: Avoid taking clk_prepare mutex in
- PM callbacks
-Message-ID: <aKh3FMgMVP20DvN0@xhacker>
-References: <20250820153125.22002-1-jszhang@kernel.org>
- <20250820153125.22002-2-jszhang@kernel.org>
- <aKXyVvFOvpsaAEAB@smile.fi.intel.com>
- <aKX4xEYE29JC_g14@xhacker>
- <7198221a-1f12-49cf-9d35-7498ae7389cd@linux.intel.com>
- <aKcYw0Az1fYfNbBr@smile.fi.intel.com>
- <aKdKOa1jFXDHK8uI@xhacker>
- <aKg18p9Zf9hoZHPY@smile.fi.intel.com>
- <aKg5j7hkxI2q1x0s@smile.fi.intel.com>
+	s=arc-20240116; t=1755871041; c=relaxed/simple;
+	bh=qYOiKaomuYF3FFz6S9PgNZ0UIWGTOlBCNi6+QRdBe8c=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=mw/YHtDsD8s+UWU0P8dC1Ml9i3lPoXSjq+W0Z90oX0jH4uQ4e55jYq9wn+E+0EZeAVbso462T9u5Ko+tcRvS8TxB2Ksxq27kqq6PmbP68MDgzfnyq10GHzCfjQB9hGMGF/sLZNROXQaYmUN5dXVjEOuW1A3Ib2BaIWBf2+C9+Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jwvOoxx+; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250822135717epoutp0136b7b303feb9d1178a2ccc2fdcf02634~eG2e8ZdT21625816258epoutp011
+	for <linux-clk@vger.kernel.org>; Fri, 22 Aug 2025 13:57:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250822135717epoutp0136b7b303feb9d1178a2ccc2fdcf02634~eG2e8ZdT21625816258epoutp011
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755871037;
+	bh=W4C5v6Mam7mfoOZt+/Uk2fNaLUuqcHXWmVmMPWM4nmI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=jwvOoxx+0UkR29FGHjt3nZB44roEkqCrPy3UV4AxVKwtIX37Oul0uvkstC1WMv2Jq
+	 EVKhVqqQcxDJBxtEAtUas3cMR818eJ/xFBm1R+98ywV0zAFG1JpHKkCARpXGj0ZOLa
+	 6w0XRyIrH69pEU8cfi4QLo0K4EXFLxqOhao5xbfs=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250822135716epcas5p18bd9dbea2d4c64fddf513df96cf206a8~eG2eIJ28p2289722897epcas5p1m;
+	Fri, 22 Aug 2025 13:57:16 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.38.87]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4c7hZg1tPyz6B9m4; Fri, 22 Aug
+	2025 13:57:15 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250822135714epcas5p1061155a3eaf18a8843e73652afbcfe52~eG2ckacBH1755517555epcas5p1I;
+	Fri, 22 Aug 2025 13:57:14 +0000 (GMT)
+Received: from FDSFTE196 (unknown [107.116.189.214]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250822135710epsmtip1545b9b7689f40f6c2351d8d4952539fc~eG2Y0A9DZ0796007960epsmtip1e;
+	Fri, 22 Aug 2025 13:57:10 +0000 (GMT)
+From: "Inbaraj E" <inbaraj.e@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, <mturquette@baylibre.com>,
+	<sboyd@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <s.nawrocki@samsung.com>, <s.hauer@pengutronix.de>,
+	<shawnguo@kernel.org>, <cw00.choi@samsung.com>, <rmfrfs@gmail.com>,
+	<laurent.pinchart@ideasonboard.com>, <martink@posteo.de>,
+	<mchehab@kernel.org>, <linux-fsd@tesla.com>, <will@kernel.org>,
+	<catalin.marinas@arm.com>, <pankaj.dubey@samsung.com>,
+	<shradha.t@samsung.com>, <ravi.patel@samsung.com>
+Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <alim.akhtar@samsung.com>,
+	<linux-samsung-soc@vger.kernel.org>, <kernel@puri.sm>,
+	<kernel@pengutronix.de>, <festevam@gmail.com>,
+	<linux-media@vger.kernel.org>, <imx@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>
+In-Reply-To: <1919de68-99ea-47f7-b3d2-cae4611f9c52@kernel.org>
+Subject: RE: [PATCH v2 04/12] arm64: dts: fsd: Add CSI nodes
+Date: Fri, 22 Aug 2025 19:27:09 +0530
+Message-ID: <00d101dc136c$aa037020$fe0a5060$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aKg5j7hkxI2q1x0s@smile.fi.intel.com>
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQK5oFMD+tt4mLQU5V9KgVyIDaUIUQE9OnCOAxwEstACXXiXx7J94PTA
+Content-Language: en-in
+X-CMS-MailID: 20250822135714epcas5p1061155a3eaf18a8843e73652afbcfe52
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-541,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250814141019epcas5p2f957b934d5b60d4649cf9c6abd6969d5
+References: <20250814140943.22531-1-inbaraj.e@samsung.com>
+	<CGME20250814141019epcas5p2f957b934d5b60d4649cf9c6abd6969d5@epcas5p2.samsung.com>
+	<20250814140943.22531-5-inbaraj.e@samsung.com>
+	<1919de68-99ea-47f7-b3d2-cae4611f9c52@kernel.org>
 
-On Fri, Aug 22, 2025 at 12:34:07PM +0300, Andy Shevchenko wrote:
-> On Fri, Aug 22, 2025 at 12:18:43PM +0300, Andy Shevchenko wrote:
-> > On Fri, Aug 22, 2025 at 12:32:57AM +0800, Jisheng Zhang wrote:
-> > > On Thu, Aug 21, 2025 at 04:01:55PM +0300, Andy Shevchenko wrote:
-> > > > On Thu, Aug 21, 2025 at 03:45:43PM +0300, Jarkko Nikula wrote:
-> > > > > On 8/20/25 7:33 PM, Jisheng Zhang wrote:
-> > > > > > On Wed, Aug 20, 2025 at 07:05:42PM +0300, Andy Shevchenko wrote:
-> > > > > > > On Wed, Aug 20, 2025 at 11:31:24PM +0800, Jisheng Zhang wrote:
-> > > > > > > > This is unsafe, as the runtime PM callbacks are called from the PM
-> > > > > > > > workqueue, so this may deadlock when handling an i2c attached clock,
-> > > > > > > > which may already hold the clk_prepare mutex from another context.
-> > > > > > > 
-> > > > > > > Can you be more specific? What is the actual issue in practice?
-> > > > > > > Do you have traces and lockdep warnings?
-> > > > > > 
-> > > > > > Assume we use i2c designware to control any i2c based clks, e.g the
-> > > > > > clk-si5351.c driver. In its .clk_prepare, we'll get the prepare_lock
-> > > > > > mutex, then we call i2c adapter to operate the regs, to runtime resume
-> > > > > > the i2c adapter, we call clk_prepare_enable() which will try to get
-> > > > > > the prepare_lock mutex again.
-> > > > > > 
-> > > > > I'd also like to see the issue here. I'm blind to see what's the relation
-> > > > > between the clocks managed by the clk-si5351.c and clocks to the
-> > > > > i2c-designware IP.
-> > > 
-> > > The key here is: all clks in the system share the same prepare_lock
-> > > mutex, so the global prepare_lock mutex is locked by clk-si5351
-> > > .prepare(), then in this exact .prepare(), the i2c-designware's runtime
-> > > resume will try to lock the same prepare_lock again due to
-> > > clk_prepare_enable()
-> > > can you plz check clk_prepare_lock() in drivers/clk/clk.c?
-> > > 
-> > > And if we take a look at other i2c adapters' drivers, we'll see
-> > > some of them have ever met this issue and already fixed it, such
-> > > as 
-> > > 
-> > > i2c-exynos5, by commit 10ff4c5239a1 ("i2c: exynos5: Fix possible ABBA
-> > > deadlock by keeping I2C clock prepared")
-> > > 
-> > > i2c-imx, by commit d9a22d713acb ("i2c: imx: avoid taking clk_prepare
-> > > mutex in PM callbacks")
-> 
-> > Why is this an I²C driver problem?
-> 
-> I just read these two and one more referenced from one of the changes.
-> 
-> I do not think this is a correct fix. Seems to me like papering over a special
-> (corner case). I would agree on this change if and only if the CLK maintainers
-> tell us that there is no other way.
-> 
-> My understanding is that the I²C clock and client's clocks (when it's a clock
-> provider) are independent. There should not be such a clash to begin with. The
-> clock framework should operate on a clock subtrees and not having yet another
-> Global Kernel Lock.
-> 
-> That said, I think this is a design issue in CLK framework, we should not go and
-> "fix" all the drivers. Today it's I²C, tomorrow SPI and I³C and so on...
-> This is not a scalable solution.
 
-The fact is there's no SPI attached clks. Current all clks are either
-mmio based or i2c attached clks. And yep you're right, I3C has the same
-problem if we use i3c controller to operate those i2c attached clks.
+Hi Krzysztof,
 
-> 
-> Here is formal NAK until it will be worked with CLK maintainers to provide an
-> agreed roadmap for this(ese) issue(s).
+Thanks for the review.
 
-+ clk maintainers
+>=20
+> On 14/08/2025 16:09, Inbaraj E wrote:
+> > There is a csi dma and csis interface that bundles together to allow
+>=20
+> CSI DMA?
+> What is CSIS?
+>=20
+> > csi2 capture.
+>=20
+> CSI2?
 
-Hi Michael and Stephen,
+CSIS stands for Camera Serial Interface Slave.
 
-If we use i2c designware adapter to operate the i2c attached clks such
-as clk-si5351, then there's a deadlock issue -- This issue is well
-explained by commit d9a22d713acb ("i2c: imx: avoid taking clk_prepare
-mutex in PM callbacks")
+Samsung v4.3 CSIS IP bundles both the CSIS link operation and the CSIS
+DMA operation. The DMA-related operation are referred to as CSIS DMA and
+are handled by the fsd-csis driver. The link related operations are
+referred to simply as CSIS and are integrated into imx-mipi-csis driver.
 
-I propsed a similar fix for the i2c-designware adapter, but Andy
-disagree with this fix. Instead, he thinks the issue is from the clk
-framework. Could you please comment?
+I'll update the commit message and commit description accordingly,
+and maintain consistency across the patches.
 
-Thanks
+>=20
+> >
+> > Signed-off-by: Inbaraj E <inbaraj.e=40samsung.com>
+> > ---
+> >  arch/arm64/boot/dts/tesla/fsd-evb.dts =7C  96 +++++
+> > +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > =40=40 -493,6 +493,558 =40=40 clock_mfc: clock-controller=4012810000 =
+=7B
+> >  			clock-names =3D =22fin_pll=22;
+> >  		=7D;
+> >
+> > +		mipicsis0: mipi-csis=4012640000 =7B
+>=20
+> Messed ordering. See DTS coding style.
 
-> 
-> > > > I believe they try to make an example when clk-si5351 is the provider of
-> > > > the clock to I²C host controller (DesignWare).
-> > > 
-> > > Nope, the example case is using i2c host controller to operate the clk-si5351
-> > 
-> > Okay, so that chip is controlled over I²C, but how their clocks even related to
-> > the I²C host controller clock?! I am sorry, I am lost here.
-> > 
-> > > > But I'm still not sure about the issues here... Without (even simulated with
-> > > > specific delay injections) lockdep warnings it would be rather theoretical.
-> > > 
-> > > No, it happened in real world.
-> > 
-> > Can you provide the asked traces and lockdep warnigns and/or other stuff to see
-> > what's going on there?
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+I'll fix the ordering in next patchset.
+
+>=20
+> Node names should be generic. See also an explanation and list of example=
+s
+> (not exhaustive) in DT specification:
+> https://protect2.fireeye.com/v1/url?k=3Da30d23f8-c28636dd-a30ca8b7-
+> 74fe485cbff6-ee12f8a711c584c8&q=3D1&e=3Db96506d8-2d5d-4303-b9e8-
+> 0e1189db1585&u=3Dhttps%3A%2F%2Fdevicetree-
+> specification.readthedocs.io%2Fen%2Flatest%2Fchapter2-devicetree-
+> basics.html%23generic-names-recommendation
+>=20
+
+There is no generic name directly related to CSI apart from camera. That's
+why I used mipi-csis. If preferred, I can move the name to csis or simply c=
+si.
+Please let me know which one is more appropriate.
+
+Regards,
+Inbaraj E
+
 
