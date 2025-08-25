@@ -1,164 +1,181 @@
-Return-Path: <linux-clk+bounces-26645-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26647-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74168B33FD4
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Aug 2025 14:46:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1F59B34008
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Aug 2025 14:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B415B7A2233
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Aug 2025 12:44:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AFB7205E2E
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Aug 2025 12:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA741D5178;
-	Mon, 25 Aug 2025 12:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB911EDA1B;
+	Mon, 25 Aug 2025 12:50:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bsTLrN2f"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fb/dQwQE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB8519E7F8
-	for <linux-clk@vger.kernel.org>; Mon, 25 Aug 2025 12:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9231E3DFE;
+	Mon, 25 Aug 2025 12:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756125979; cv=none; b=Q/QWDeDmm6qQPe05g/EwiIxYduMQs81C54p4/TzDdjD0btXEphe+APz2u8IoZ2N0qzhN7DpXbqbmO3cIMAxSyAfrXdr64OHh00Bn4t0UcvVU2AvLtSXJMTOWVgJ+9UmqnZV7OMmLBq6HtUkl8oGgJ79JHDqQVBreQA4t5kq4DDc=
+	t=1756126221; cv=none; b=oOJJBOQwIeKXD7336i4qznXGTi4NKVtJsfd3aZ7PnKciflfO4PFuV8dD9cqAxWRFzP/hQCqR8EMyca5M9XUtynv/LyzR+gaPYThszcnFEBlJFiIGlp1d0z+N546EZ5egIYc2UNZ2H0PKH6aQbUbfY2X52Bysi+IqX8pda52lSa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756125979; c=relaxed/simple;
-	bh=NFA7Rip9aCBxNZXcfUwWfEWkPVvY2cnDcsKyD6aZzXw=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=loTmRyQgG4UQe9vYrAypCCJxU7nXw8rYQw0Lksj+iRknnz9kdysNYEbLUXWeQyMGFmq7jkNWYK33V5e2wZfe+HkYL6YB3rN+hxwF4+kLOdrkhkz0HrLdnSR/X3Cbf1w1tjgIs3pIFFH5k4J/fALSohpUBi4GroLScce0IwKLhOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bsTLrN2f; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250825124615epoutp02316db7723c2d9a9eda128acbf38da42a~fA0VPJqSB2076220762epoutp02G
-	for <linux-clk@vger.kernel.org>; Mon, 25 Aug 2025 12:46:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250825124615epoutp02316db7723c2d9a9eda128acbf38da42a~fA0VPJqSB2076220762epoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1756125975;
-	bh=B3ggiGG3zGwf6IwROz+KzPW9tQZQRZy1LRUC1d2oO7M=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=bsTLrN2fmBI3qons8febwMl4Kuo6F04Wrr59HZpCwC+XWAHKvlUECmiO5eosy6067
-	 L9iKzGVTrP0s2rKPCBIBrOPo8T4CwvYrjbED1UdLZCm6RRw/isyaO9+qLvdggTuOM7
-	 AMkoneyn0EQBttsRbgpkDEfgZL3rA/wY+au2vK/Y=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20250825124614epcas5p2ae7004efd1bd437a7c96737bb944d2df~fA0T3T3Eb0139601396epcas5p2h;
-	Mon, 25 Aug 2025 12:46:14 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.93]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4c9VsK3Nzhz3hhT4; Mon, 25 Aug
-	2025 12:46:13 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250825124612epcas5p1bd59a975b75029ee366a424379ad6dee~fA0SV3_FU1396413964epcas5p1g;
-	Mon, 25 Aug 2025 12:46:12 +0000 (GMT)
-Received: from FDSFTE196 (unknown [107.116.189.214]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250825124608epsmtip2bfc35ca4c6d5c979e37d4c4cca04ef7c~fA0Oi-Efs2384823848epsmtip2R;
-	Mon, 25 Aug 2025 12:46:08 +0000 (GMT)
-From: "Inbaraj E" <inbaraj.e@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, <mturquette@baylibre.com>,
-	<sboyd@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <s.nawrocki@samsung.com>, <s.hauer@pengutronix.de>,
-	<shawnguo@kernel.org>, <cw00.choi@samsung.com>, <rmfrfs@gmail.com>,
-	<laurent.pinchart@ideasonboard.com>, <martink@posteo.de>,
-	<mchehab@kernel.org>, <linux-fsd@tesla.com>, <will@kernel.org>,
-	<catalin.marinas@arm.com>, <pankaj.dubey@samsung.com>,
-	<shradha.t@samsung.com>, <ravi.patel@samsung.com>
-Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <alim.akhtar@samsung.com>,
-	<linux-samsung-soc@vger.kernel.org>, <kernel@puri.sm>,
-	<kernel@pengutronix.de>, <festevam@gmail.com>,
-	<linux-media@vger.kernel.org>, <imx@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>
-In-Reply-To: <4af38093-007e-4bfc-8439-0c3dc84012d8@kernel.org>
-Subject: RE: [PATCH v2 12/12] media: fsd-csis: Add support for FSD CSIS DMA
-Date: Mon, 25 Aug 2025 18:16:07 +0530
-Message-ID: <016201dc15be$3d032ca0$b70985e0$@samsung.com>
+	s=arc-20240116; t=1756126221; c=relaxed/simple;
+	bh=UVJPdiqJAwlNJSMs+WTVCoHBLtI29kqg/HsLe9G8lgk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PAT7QVRjmhIMhDOdtB7Kgis2F3guh6cWupBchtlGr/ipf9JW9lQGsta5hTSd1gqdys5wVxcpGpnAHkcJxYWwt/w4a4WeBq6hircSocjnVNKcU2bSq8HWPP1nBM2Fw07I82qpRYRjwljFWqDoPZOuYyS1w9dJ+TbbfEfkhK991Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fb/dQwQE; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1756126218;
+	bh=UVJPdiqJAwlNJSMs+WTVCoHBLtI29kqg/HsLe9G8lgk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fb/dQwQEQErrvatkebCZRMmRsZ9gWRIfTk/rSJvIMBEyKLGM/iLeiV9CMeQnf7VGS
+	 quo5slxDPnXNxaIIhkYrs9GGWjuSuPKJ2BJfqj8VsEzNZkW+DQalvdvJSE6/yySxfb
+	 clXVceBVCD07LsjoUfLY3S+0hRyn1s9ixkuTYdj42px8KxDReqPtw/E3L1eWFOs+ll
+	 WTmcAi9YeiEvzSjZXSeXGBJBPQiujdxzNKYolhLIRNs3/AuTtnHL+KTTq3Vz5GIeY4
+	 WoMuz3uZZXtIvqa+ndgImrQVhf1E5WN6SmFnrJR3cRv+vgT5fvvgsg+4AOT0N2hU8X
+	 r8mWiW9xneSLw==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:b1df:895a:e67b:5cd4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1FB9317E0478;
+	Mon, 25 Aug 2025 14:50:17 +0200 (CEST)
+From: Laura Nao <laura.nao@collabora.com>
+To: wenst@chromium.org
+Cc: angelogioacchino.delregno@collabora.com,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	guangjie.song@mediatek.com,
+	kernel@collabora.com,
+	krzk+dt@kernel.org,
+	laura.nao@collabora.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	matthias.bgg@gmail.com,
+	mturquette@baylibre.com,
+	netdev@vger.kernel.org,
+	nfraprado@collabora.com,
+	p.zabel@pengutronix.de,
+	richardcochran@gmail.com,
+	robh@kernel.org,
+	sboyd@kernel.org
+Subject: Re: [PATCH v4 06/27] clk: mediatek: clk-gate: Refactor mtk_clk_register_gate to use mtk_gate struct
+Date: Mon, 25 Aug 2025 14:49:00 +0200
+Message-Id: <20250825124900.209515-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <CAGXv+5GxJs03EcMt0jm-x_fDuy_RtCrnOmyJvVVgAP9O9R6E2Q@mail.gmail.com>
+References: <CAGXv+5GxJs03EcMt0jm-x_fDuy_RtCrnOmyJvVVgAP9O9R6E2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQK5oFMD+tt4mLQU5V9KgVyIDaUIUQLOIzgLAmiUCqAC0LEeUQJu3YaUAdjFWtWyVbegcA==
-Content-Language: en-in
-X-CMS-MailID: 20250825124612epcas5p1bd59a975b75029ee366a424379ad6dee
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-541,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250814141103epcas5p14516cbe45c21d28ba9e231da99940aa1
-References: <20250814140943.22531-1-inbaraj.e@samsung.com>
-	<CGME20250814141103epcas5p14516cbe45c21d28ba9e231da99940aa1@epcas5p1.samsung.com>
-	<20250814140943.22531-13-inbaraj.e@samsung.com>
-	<b1f59033-12d0-4395-85f1-e296a5dbca5f@kernel.org>
-	<00e301dc1424$033ed5a0$09bc80e0$@samsung.com>
-	<4af38093-007e-4bfc-8439-0c3dc84012d8@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 8/15/25 05:42, Chen-Yu Tsai wrote:
+> On Tue, Aug 5, 2025 at 10:55 PM Laura Nao <laura.nao@collabora.com> wrote:
+>>
+>> MT8196 uses a HW voter for gate enable/disable control, with
+>> set/clr/sta registers located in a separate regmap. Refactor
+>> mtk_clk_register_gate() to take a struct mtk_gate instead of individual
+>> parameters, avoiding the need to add three extra arguments to support
+>> HW voter register offsets.
+>>
+>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>> ---
+>>  drivers/clk/mediatek/clk-gate.c | 35 ++++++++++++---------------------
+>>  1 file changed, 13 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-gate.c b/drivers/clk/mediatek/clk-gate.c
+>> index 67d9e741c5e7..0375ccad4be3 100644
+>> --- a/drivers/clk/mediatek/clk-gate.c
+>> +++ b/drivers/clk/mediatek/clk-gate.c
+>> @@ -152,12 +152,9 @@ const struct clk_ops mtk_clk_gate_ops_no_setclr_inv = {
+>>  };
+>>  EXPORT_SYMBOL_GPL(mtk_clk_gate_ops_no_setclr_inv);
+>>
+>> -static struct clk_hw *mtk_clk_register_gate(struct device *dev, const char *name,
+>> -                                        const char *parent_name,
+>> -                                        struct regmap *regmap, int set_ofs,
+>> -                                        int clr_ofs, int sta_ofs, u8 bit,
+>> -                                        const struct clk_ops *ops,
+>> -                                        unsigned long flags)
+>> +static struct clk_hw *mtk_clk_register_gate(struct device *dev,
+>> +                                               const struct mtk_gate *gate,
+>> +                                               struct regmap *regmap)
+>>  {
+>>         struct mtk_clk_gate *cg;
+>>         int ret;
+>> @@ -167,17 +164,17 @@ static struct clk_hw *mtk_clk_register_gate(struct device *dev, const char *name
+>>         if (!cg)
+>>                 return ERR_PTR(-ENOMEM);
+>>
+>> -       init.name = name;
+>> -       init.flags = flags | CLK_SET_RATE_PARENT;
+>> -       init.parent_names = parent_name ? &parent_name : NULL;
+>> -       init.num_parents = parent_name ? 1 : 0;
+>> -       init.ops = ops;
+>> +       init.name = gate->name;
+>> +       init.flags = gate->flags | CLK_SET_RATE_PARENT;
+>> +       init.parent_names = gate->parent_name ? &gate->parent_name : NULL;
+>> +       init.num_parents = gate->parent_name ? 1 : 0;
+>> +       init.ops = gate->ops;
+>>
+>>         cg->regmap = regmap;
+>> -       cg->set_ofs = set_ofs;
+>> -       cg->clr_ofs = clr_ofs;
+>> -       cg->sta_ofs = sta_ofs;
+>> -       cg->bit = bit;
+>> +       cg->set_ofs = gate->regs->set_ofs;
+>> +       cg->clr_ofs = gate->regs->clr_ofs;
+>> +       cg->sta_ofs = gate->regs->sta_ofs;
+>> +       cg->bit = gate->shift;
+>
+> I'd rather see |struct mtk_clk_gate| (the runtime data) gain a pointer
+> to the static data |struct mtk_gate| instead of doing all the copying.
+> This is just needless duplication.
+>
 
-Hi Krzysztof,
+Ack - I'll refactor this in the next revision.
 
-> >> Even more questions why?
-> >
-> > If CONFIG_PM is enabled, the clocks are enabled manually in the driver
-> > through fsd_csis_runtime_resume API.
-> >
-> > If CONFIG_PM is enabled, the clocks are managed through the PM runtime
-> > framework.
-> >
-> > Can you please help me understand what wrong here?
->=20
-> I think I see such code for the first time, so wrong is doing something
-> common in completely unusual way.
->=20
+Thanks,
 
-Driver should ensure a device can be also used normally when runtime
-PM is disabled. So enabling clocks manually in probe, if CONFIG_PM is
-disabled.
+Laura
 
-A Couple of other drivers also doing it in same way
-drivers/media/platform/nxp/imx-mipi-csis.c and=20
-drivers/media/platform/samsung/exynos4-is/fimc-core.c
-
-> >
-> > I'll fix in next patchset.
-> >
-> >>> +
-> >>> +	ret =3D fsd_csis_async_register(csis);
-> >>> +	if (ret)
-> >>> +		goto err_media_cleanup;
-> >>> +
-> >>> +	return 0;
-> >>> +
-> >>> +err_media_cleanup:
-> >>> +	fsd_csis_media_cleanup(csis);
-> >>
-> >> Also this...
-> >>
-> >
-> > if fsd_csis_media_init fails, the cleanup is handled internally.
->=20
-> What does it mean internally?
-
-I mean that in case fsd_csis_media_init fails, the cleanup of resources is =
-handled
-Within the same function itself.
-
->=20
-> > Here, cleanup is used only for fsd_csis_async_register failure.
-> >
-> > can you please help me understand what is wrong here?
->=20
-> Yeah, you leak clock resources.
-
-I'll fix in next patchset
-
-Regards,
-Inbaraj E
-
+> ChenYu
+>
+>>         cg->hw.init = &init;
+>>
+>> @@ -228,13 +225,7 @@ int mtk_clk_register_gates(struct device *dev, struct device_node *node,
+>>                         continue;
+>>                 }
+>>
+>> -               hw = mtk_clk_register_gate(dev, gate->name, gate->parent_name,
+>> -                                           regmap,
+>> -                                           gate->regs->set_ofs,
+>> -                                           gate->regs->clr_ofs,
+>> -                                           gate->regs->sta_ofs,
+>> -                                           gate->shift, gate->ops,
+>> -                                           gate->flags);
+>> +               hw = mtk_clk_register_gate(dev, gate, regmap);
+>>
+>>                 if (IS_ERR(hw)) {
+>>                         pr_err("Failed to register clk %s: %pe\n", gate->name,
+>> --
+>> 2.39.5
+>>
 
