@@ -1,156 +1,110 @@
-Return-Path: <linux-clk+bounces-26928-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26930-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB86AB3B8B3
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 12:29:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B6F2B3B9E5
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 13:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 048E91C27FEE
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 10:29:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE2C4467338
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 11:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75AB3081AE;
-	Fri, 29 Aug 2025 10:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6063054DB;
+	Fri, 29 Aug 2025 11:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXZriuDk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FkNPPWmd"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DA72BEFF6;
-	Fri, 29 Aug 2025 10:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C6E288CA3
+	for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 11:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756463349; cv=none; b=WtlTeykeNQFNiw7slbfcRDecbOIk6HwirwRNNtSuq/fnwCwJOIXND4uAS4aCwa7FjdbeBS5BNiGWy7Sj6nwmF4hSFrcEWJFvG1GF5/bjqffTTnanmEPir2svNsSg5KnnT6Uoz7FFwjmCHDTrxdzvU0lCtFv2f8GbFVlljaLK+2U=
+	t=1756466708; cv=none; b=PhBigWPTla6+wzgpEmJOTnxn1A3bZdLR2sLIplvYvNcnnFlEt95dFMGbC+aj40ccQhw0aVcnOxiuy63SWzIDRCs3/AadDNfRysgwkADlFLUt1Uc6h1GRrIt+sKC3PeTWlyiI7SuE+Vghhve49gh4HO9icYnYgKyiAD4SEdoWkxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756463349; c=relaxed/simple;
-	bh=rK4qkpQLHD4YV+ZOv6+7UA3F3GsCJ78MecmyuokwNhA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PATegCY43OUlNEY0hbHyc28z8kCUYN1bHafnmxWmeCgbpiqcrRIi3zcqmbMI5ZMyaj62P3UDdM3fiDYQSbos9BSq99KOa0s6D7KcxR4CZnNev4ZeHMDXvYM/Gzv5NMzlGOw+lC9Trk+F9RJbIX8NGmFVr/xUh3p6aNYaaWY0TLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXZriuDk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE17C4CEF0;
-	Fri, 29 Aug 2025 10:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756463349;
-	bh=rK4qkpQLHD4YV+ZOv6+7UA3F3GsCJ78MecmyuokwNhA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oXZriuDkwQAQm9ce6gw+R5rqIDEB/OI+h2EsdRTbbciLZPFIKjLWfZfByzZNRVA0/
-	 4kwLvxPLFMjjcU7FhE23E4Nb788MSU9ScxDDFIqS1smxYrFHr4wvR75K9+EfvLht2v
-	 gAbbRULk70G1qnvHBT5yGLzNPic1WyvHUlehmuoL1pcVv3mfbOmpZ5gURvCtFC1bdX
-	 X6PkDrK7o2KywWgHhuJ1040CwOh+EOM2n02isZCWgSfyVnYcD+2j07j3km+PklsRab
-	 0qkA+5nZqsZREwAS9LYlPX2+0CiFCSATA9bC5niYDb7zTwA8+LOTQtrnrVtpcO6gmi
-	 ZHvq9jYIv/Qpg==
-Message-ID: <32dedafd-df52-48fe-a9b2-be96127bb9b7@kernel.org>
-Date: Fri, 29 Aug 2025 12:28:57 +0200
+	s=arc-20240116; t=1756466708; c=relaxed/simple;
+	bh=6BFQxgM0oh5DVS5xIr9d7exSQK21yLoo9WBRstJGdHI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=q5z6P6WR/3Nmmgn14Kl7rxgQ6xLQVINERj9F6JaKlrdMZ2qnldA1nKRztK/GBGGNT16zdawtWOWqm+WfzuvMlZTsewSCI++U4+8X3L2Fsyui2FwZYoEnLi9ll6SmcfdPcHwqo26jr8uQSWOELCosB/sTyUjfdQC0LK/Xe9vQDnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FkNPPWmd; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756466706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=H5DSrH7S/YL0DhZrQaaJj+H/G5K8+6JE30rwyPkkkH8=;
+	b=FkNPPWmdZBAryhAHtAJGGETQ6DJiUG+mBKliriIvEvdgzQtOtYA+ghg1JiOS0bZNi2+9wO
+	p0H4XilmEwS+e87IWQrz2phJwHtHgk3DhtDNGKyp29+eKU6tlbKg2mntd4o5e/tj5BDw/M
+	sNBWREqB8guG9ujrzkCjGMwWzwVZj2I=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-275-WHbU2cmUMm6U0r3Sfz8k9w-1; Fri, 29 Aug 2025 07:25:04 -0400
+X-MC-Unique: WHbU2cmUMm6U0r3Sfz8k9w-1
+X-Mimecast-MFC-AGG-ID: WHbU2cmUMm6U0r3Sfz8k9w_1756466703
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-afcb7a3a160so182991966b.2
+        for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 04:25:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756466703; x=1757071503;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H5DSrH7S/YL0DhZrQaaJj+H/G5K8+6JE30rwyPkkkH8=;
+        b=TIMdJi1RwUyFW/EiZjF4+zTcju6XShzqdVYjzoyZ8dppILweO6WQuPVmGbGbBn4DuK
+         /VP56OJL6R/L6fJnedWO1Rvarbb/Nc+Vbr6ZfsADE/VwZ3rLvp/Q4nvdGFJCoPNXh4vw
+         /qkDP69wSukC0KeNwXdNQizxSkaCoZT8jdG0wEurHQBcXlKVbhyT3x2/rj5jz5rXg0M2
+         9pWB8HjZm2OIoUvvH7bYX+QH77z2DhNGJ3Dd3SoZ6xFphHd8eGUVGopKXlyGakiLylQ5
+         R1NxCq4xOvOadNgJIOtffdIyI9kH00uo+xyrbav4QEHbMh4gMHxXIz0V57XyVTxTEgBT
+         MnWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/zL9M8wRKvsrm0LkPsJxNAxJ09M3/LWL+vCl+RRcBbIIWSfGZ/RtYY36uuRRW6EuLYqaCka0IiIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaVtMEsO+IijYvWz0zmkXAWVqla35YQ+vP2Qnba2joZBSufZUs
+	vb8T5Rrcyov15C6U7B2IzWhXSKYfHu5oW71IGXKMNpTN1goWg3B/aAiblps8rX51kbpgKoQDAwg
+	tbc7TU/zyXFC4qpdqEsv18LmPjaJaJzgfgFNt5NvLIpu9VRauj23G+Q810pMmpkLR+xvX2Z9cbj
+	mjjV0VIl7IprApxJrWmgRTQet0Ln5nqtNsRqCE
+X-Gm-Gg: ASbGnctRaP00ZyrigKCROSXKUcVjiYCM2vIK5ADuKo5/1u2c+OKVylBsB8qdOEnKwvR
+	+KBzCXMrifeW47pWoFhc2z6KfaOrD2bxiH1Qaw2RLswPphVloOGyefNr2eeiF2Xb1rW2WwqCKTm
+	68rthimtDG6bbInhh8uRVWBI1QOAFPQb3WaRx0SlcIRpUINqAkzSjR
+X-Received: by 2002:a17:907:7248:b0:afe:839e:d10 with SMTP id a640c23a62f3a-afe839e3cecmr1780883266b.31.1756466703353;
+        Fri, 29 Aug 2025 04:25:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHDUAydazSnnhFhQ2IS/7xxn5zNZxC7KkqkPr1qBMJMM9fvjQWnwmefjaIofovb26bMZHJC4dwIv5EeZ0pSjP0=
+X-Received: by 2002:a17:907:7248:b0:afe:839e:d10 with SMTP id
+ a640c23a62f3a-afe839e3cecmr1780881266b.31.1756466702991; Fri, 29 Aug 2025
+ 04:25:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/10] pinctrl: samsung: Add ARTPEC-8 SoC specific
- configuration
-To: Linus Walleij <linus.walleij@linaro.org>,
- Ravi Patel <ravi.patel@samsung.com>
-Cc: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- s.nawrocki@samsung.com, cw00.choi@samsung.com, alim.akhtar@samsung.com,
- tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org,
- arnd@arndb.de, ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com,
- gwk1013@coasia.com, hgkim05@coasia.com, mingyoungbo@coasia.com,
- smn1196@coasia.com, pankaj.dubey@samsung.com, shradha.t@samsung.com,
- inbaraj.e@samsung.com, swathi.ks@samsung.com, hrishikesh.d@samsung.com,
- dj76.yang@samsung.com, hypmean.kim@samsung.com,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@axis.com,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-gpio@vger.kernel.org, soc@lists.linux.dev,
- Priyadarsini G <priya.ganesh@samsung.com>
-References: <CGME20250825120720epcas5p491e16bbfbdbcd751acbb0c0e55f9e2a2@epcas5p4.samsung.com>
- <20250825114436.46882-1-ravi.patel@samsung.com>
- <20250825114436.46882-6-ravi.patel@samsung.com>
- <CACRpkdZwz8C=MRgo1tQrkQzNtKMLV+P-LK8XyRA3eSFW-cbFCg@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CACRpkdZwz8C=MRgo1tQrkQzNtKMLV+P-LK8XyRA3eSFW-cbFCg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Brian Masney <bmasney@redhat.com>
+Date: Fri, 29 Aug 2025 07:24:51 -0400
+X-Gm-Features: Ac12FXyyk3VCSqAncN0P6PmazJ4uiOf2K-91_nf2hLatGLxa_FrGw2-c_4CbC0k
+Message-ID: <CABx5tqJ0+1bjoMM4qPS94coa0wyQaae1gJP14pUKk+xVgD5kaQ@mail.gmail.com>
+Subject: Bouncing email for Renesas Versaclock 7 Clock Driver maintainer
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/08/2025 12:11, Linus Walleij wrote:
-> Hi Ravi / SeonGu,
-> 
-> thanks for your patch!
-> 
-> On Mon, Aug 25, 2025 at 2:07 PM Ravi Patel <ravi.patel@samsung.com> wrote:
-> 
->> From: SeonGu Kang <ksk4725@coasia.com>
->>
->> Add Axis ARTPEC-8 SoC specific configuration data to enable pinctrl.
->>
->> Signed-off-by: SeonGu Kang <ksk4725@coasia.com>
->> Signed-off-by: Priyadarsini G <priya.ganesh@samsung.com>
->> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
-> 
-> Please avoid CC to soc@kernel.org on these patches, they end up in the
-> patchwork for immediate merging for SoC:
-> https://patchwork.kernel.org/project/linux-soc/patch/20250825114436.46882-6-ravi.patel@samsung.com/
+Hi Geert,
 
-Yeah, that's odd - most likely old CC-list. This could happen if using
-b4 but there is no b4 being used here, so why Cc-ing according to some
-old files?
+The MAINTAINERS file has the following entry and Alex's email address bounces.
 
-> 
-> I think this is not you intention, the pinctrl portions will be merged by
-> Krzysztof who sends it to me once that part is finished reviewing.
-Version for review should not be merged via soc@, so that's wrong
-process in any case. But you are right that I will be taking everything,
-thus soc@ is not involved at all.
+RENESAS VERSACLOCK 7 CLOCK DRIVER
+M:     Alex Helms <alexander.helms.jy@renesas.com>
+S:     Maintained
+F:     Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
+F:     drivers/clk/clk-versaclock7.c
 
-Best regards,
-Krzysztof
+Should this driver, along with clk-versaclock3.c and clk-versaclock5.c
+be moved under the drivers/clk/renesas/ directory?
+
+If not, is there anyone else from Renesas that should be listed as a
+maintainer instead?
+
+Thanks,
+Brian
+
 
