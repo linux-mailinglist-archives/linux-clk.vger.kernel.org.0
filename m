@@ -1,147 +1,167 @@
-Return-Path: <linux-clk+bounces-26882-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26884-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6653B3B527
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 10:00:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB974B3B539
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 10:01:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2D163A5AE4
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 07:59:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EA81C872ED
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Aug 2025 08:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F5028BABB;
-	Fri, 29 Aug 2025 07:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7ED2C235B;
+	Fri, 29 Aug 2025 07:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThUpyuCE"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LXJuG4K3"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35A12857CB;
-	Fri, 29 Aug 2025 07:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7952C2340
+	for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 07:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756454170; cv=none; b=AYy9rFT6FwA+DSGDNpxzhtkTyexNz6Ye/MTuFXA7SZ9KRGuAS80Ob3AXCdJ0WDBRNMjGFkS+dh1lXtqbkNrFjfm+ZmyJnhu9rbbL6PR72bQ+GHuTCNXA91f37AiySPFTabbdqMwXXwmXM83L9acgc7KPJWl+I0az6XRmQxdQmAE=
+	t=1756454299; cv=none; b=Abqv/Wb55EjpzgHltyhE0Z9g67BNyAI8i6/DAfU2RkVgxtgm3/TSuO5H7wu5gms+hCCVzgX4t9Ts8jYxCiJMzOo2eXEjQUcBqoAowS8K01rmUnf7RH6YI21bLVYshJvKTQ/knTsiTvwggI0nSCLfORfPoo70KtewPkf18tdf6u4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756454170; c=relaxed/simple;
-	bh=gEVY2TEOLXWuc/PylIHeYa0ayOzElTCYmrn2BP+q/ow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aPnnwgkBHgPfoaAf24C5C2OcBp8ylnMLSv6wANo0mBtUMCHMDITHUnZjlqZwiqA69yM+56U6439vLcyEDHkE5Z8rKLsGap08lCA4kt+ig23fqszudhD9flifUb5ySgV+SASPfJ7nuAeANGKLaxDfu4zChR8MIyuieD9m6G01ILE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ThUpyuCE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA52BC4CEF0;
-	Fri, 29 Aug 2025 07:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756454169;
-	bh=gEVY2TEOLXWuc/PylIHeYa0ayOzElTCYmrn2BP+q/ow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ThUpyuCEt+rHjGchX/jdas1nJIAeIqJ6AnMYOF9cySZOYAnrJZYC/QcNcxw2bHsMR
-	 f1bS5mUqF9syMOLObU9aoV97mJjLf4lbHaYNHo2UrzxWImgkd3rV7YWUeRrqiu5ujd
-	 zdBpWZrXThODYKC6Yay5tyTon+RB67NHLqQYKCalVyKw98bTZgRb927gWS14SJwVS+
-	 v+iAlJSdNA69eV935f/yCfNPpnUtlbxGk7DaTpnRylJJJwdhvVh3EJOOo2IRZXw7Va
-	 UCO8AhPWZTjqDZXc2LWD7ROB8k2Gtf9BrFLnJNtLT9l+JJEt8BTHB1UXGdssEAkXzj
-	 mRAxskbk1f3YA==
-Date: Fri, 29 Aug 2025 09:56:06 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ravi Patel <ravi.patel@samsung.com>
-Cc: jesper.nilsson@axis.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, s.nawrocki@samsung.com, 
-	cw00.choi@samsung.com, alim.akhtar@samsung.com, linus.walleij@linaro.org, 
-	tomasz.figa@gmail.com, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	ksk4725@coasia.com, kenkim@coasia.com, pjsin865@coasia.com, gwk1013@coasia.com, 
-	hgkim05@coasia.com, mingyoungbo@coasia.com, smn1196@coasia.com, 
-	pankaj.dubey@samsung.com, shradha.t@samsung.com, inbaraj.e@samsung.com, 
-	swathi.ks@samsung.com, hrishikesh.d@samsung.com, dj76.yang@samsung.com, 
-	hypmean.kim@samsung.com, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-arm-kernel@axis.com, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	soc@lists.linux.dev
-Subject: Re: [PATCH v3 08/10] arm64: dts: exynos: axis: Add initial ARTPEC-8
- SoC support
-Message-ID: <20250829-attentive-watchful-guan-b79ccc@kuoka>
-References: <20250825114436.46882-1-ravi.patel@samsung.com>
- <CGME20250825120735epcas5p3c86b9db5f17c0938f1d53ef6014ab342@epcas5p3.samsung.com>
- <20250825114436.46882-9-ravi.patel@samsung.com>
+	s=arc-20240116; t=1756454299; c=relaxed/simple;
+	bh=2PKGQycBUFlWqOeCmczdNYF3bcFIHeNZBIXA8HRAk4E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qybwTPdFBvm2tWG6oZx00H/+PkK4RQo8qiA92hV12YjcipCMRvGgayxAvAwsvDlJmTc3SsrDMJL94pC7cG82zTL3Wm+QVp7jFpJ6DOWGncC+W6e2cGsXeMSRztyzIcD+B7HGnbBi6+oPw1JLY9u9YDs+slDbQySWXE8R8qFx9zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LXJuG4K3; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57T5sfUP003594
+	for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 07:58:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=nMmvvuBBHOBvmrBWmarNJi
+	Kf7qrOg4JEex2f2Ps3aKM=; b=LXJuG4K3BgRrfeZMimgCglFvWnzC3A6JB0c5b1
+	gWZAlKyZD1vBDheU1lkx2rB7d86lUE6d8hZMb7hzJ2dYvgVmpOrfddeR9oVHFmRp
+	qD4EtZbCxAIWzC7vEta6BXyasLicDH0iYYIFySMPxFlUIIs8kfTr9lJ7QXEOe3VY
+	uQTNShypSf92R2zOpM7NTtiAQGxqaR4skZMEP0btSOnQpAgurJ5lNQeNhpo/9OdS
+	lZYGdh8DuGL6z5OeuPxKu3iKb6BEA9uRmmIgpcv0UCMgo/XEHyaDRi2haDWIdJ26
+	cKognMvQdFp56GC3U2sapYvWcsMUUZDa4Gz5YU907J/N7VjA==
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48q5weawu3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 07:58:16 +0000 (GMT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b47174c667aso1535137a12.2
+        for <linux-clk@vger.kernel.org>; Fri, 29 Aug 2025 00:58:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756454295; x=1757059095;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nMmvvuBBHOBvmrBWmarNJiKf7qrOg4JEex2f2Ps3aKM=;
+        b=hKJGr4NRud+4aXgkXcOFMvuEPop0B7n9SwAY4yPxhajcBFtUJsT3jFZHszh9z9iZFY
+         9H/w/R7SBiHthqFQmVdSOOzwDb6ji8X7FDGj3zeoNvqOVyY+REbWeq6cQ1Zna0rgX1Zi
+         WaBYnwnbUDv/0DKJL7G/U+3yxvf1agv7Algf8xTU4M7V2TB/9kR7mtizCWaX11Ea+OYb
+         vC8l1yg7ct5/1wUGEOQdGZpA2fwhs7fByrFD1jN8sdIpe8lhnancCUDkYQmjZQ6s9mQC
+         KYx5GC2MSD9d5IhoqiWTbtqZ1kHLK74PNWsTBDPQ/DjCha9r4M4ZZvNCK+0hgX7kHF5q
+         z1MA==
+X-Forwarded-Encrypted: i=1; AJvYcCWV5YxPPPaqGkHgrr875P4QLdUwtOcGGAoY3fe0w3eLbt3SmYn+6iQZtw3/iyMNu5/LX1UILoJWN20=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpyMMfNJmZU9I1+bSfGQmYj1Q5YFSZGDJyuMrcy3fhhQRDsmut
+	nvsTJfOVlANgbGZop69/AgKxZeotaBXg3Hp6DZrFClUGdH3Sf8iPjCNVrFXym1r9FRA2WciNHwA
+	kxXZ4Ml5b976+RtD9NNvGu/xqRZS9HHuILa8qWESfN+gc/RPm5FS7DR9kQBlp3N8=
+X-Gm-Gg: ASbGncucf+mOIg14UHE+kPzFBcNfW2HhJW2nHMe8VR31Ak9ZCWEKh91GhpE53lzCDxR
+	7hA1VZ0DdrQTDmRg5dOcG266HHBmASvx1GtZAEsBSxeHrLRODVdMqW4CR6b43hapKHUli4hR19m
+	1HvTHBNy3opeOKTZsr7vioe4MXAoE91He019MoTWZ6AKiWINI5TCxYADeUwNMNdiRZNRGItFrMe
+	LjdfxWZLF8cxcZB/Qfdi1rm0sk9nXGat3kVMM7Bja+o3HtwQ2asJoNR6ZV5M5TL1j46Tty9eJ5T
+	Kp1YfcZxRIlTswZQ1gitUUo9KgITkSwe/9u0rAXXRFv9xvCkRpmFIRrQh/3l6CCL
+X-Received: by 2002:a05:6a20:3d08:b0:243:7136:2fee with SMTP id adf61e73a8af0-24371363240mr24723745637.16.1756454295484;
+        Fri, 29 Aug 2025 00:58:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHfNF9XR64zX9+kWe4I9diEOKRZ4goaSDhqBkb/7GI5U8d7hw0kot9p8BjaG3AyVB9EFyxlvA==
+X-Received: by 2002:a05:6a20:3d08:b0:243:7136:2fee with SMTP id adf61e73a8af0-24371363240mr24723722637.16.1756454295007;
+        Fri, 29 Aug 2025 00:58:15 -0700 (PDT)
+Received: from hu-tdas-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a4bb5dasm1554416b3a.55.2025.08.29.00.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 00:58:14 -0700 (PDT)
+From: Taniya Das <taniya.das@oss.qualcomm.com>
+Subject: [PATCH 0/2] Add support for Display clock controllers for Glymur
+ SoC
+Date: Fri, 29 Aug 2025 13:28:02 +0530
+Message-Id: <20250829-glymur-disp-clock-controllers-v1-0-0ce6fabd837c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250825114436.46882-9-ravi.patel@samsung.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIpdsWgC/yWNSW4DIRAAvzLiHCRgFpr5SuRDd9PYKLMFxlEiy
+ 38Pso9Vh6qHqlKyVDV3D1XkJ9e8bw3sR6f4httVdI6NlTNuNOCCvi5/673omOuhedn5S/O+nWV
+ fFilVjyZ5BwCeUFRrHEVS/n31Py9vLvJ9b5vzLdWBJ9/aZO6SBe8QrBiKCQI5cVMffAShKbJl8
+ SLI9tUlrNLG65rPuTNp4NAnLwSTRUYaex9JwjAMFqxH500zlNTl+fwHS8mF//EAAAA=
+X-Change-ID: 20250829-glymur-disp-clock-controllers-50f728887bae
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <taniya.das@oss.qualcomm.com>
+X-Mailer: b4 0.15-dev-aa3f6
+X-Proofpoint-GUID: ijIndvLJtLjtMJo5BZmKzUTg9FXYwXTC
+X-Proofpoint-ORIG-GUID: ijIndvLJtLjtMJo5BZmKzUTg9FXYwXTC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAzMyBTYWx0ZWRfXyvbhBxMuD96m
+ jcbC3fWp1GNxmb6KVdlVk+2CAdCVWH+R4DQsT4ngpKj2oqt1HbFccd9VYnvf5/8l6uCpO7k/85W
+ U68WMFXJ32ja2aULaWKN4OOMmiO3YuPyzvePEaGACzqDYl90yinNtgRnDeugohZfmcY1m2X0Gtd
+ hJKfSC/qOULjCzTIx1QV+q2JdrjwZ4APIhD2xQm/X1bU3jKLfZS6fpvMBiciAUXOG/Z42IpvX0v
+ dKlg13pPrNGt2UlQ8RR/pGHiWyAr61Nzp2e7b4zob4diNUU9VndQ98ZOwooGChLzlaw9Cs6+tnt
+ il0NrI+++H3NUTofjIfTK6IuAyuHYzE7csDLisYfPZRbV9mZo3DnCZEnqUkCqGK6OGMKbZ794/m
+ z9CiFJg7
+X-Authority-Analysis: v=2.4 cv=BJazrEQG c=1 sm=1 tr=0 ts=68b15d98 cx=c_pps
+ a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=01lUyKRgbtoGor2CX9EA:9 a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-29_02,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 priorityscore=1501 clxscore=1015 impostorscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 spamscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508230033
 
-On Mon, Aug 25, 2025 at 05:14:34PM +0530, Ravi Patel wrote:
->  config ARCH_AXIADO
->  	bool "Axiado SoC Family"
->  	select GPIOLIB
-> diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-> index bdb9e9813e50..bcca63136557 100644
-> --- a/arch/arm64/boot/dts/exynos/Makefile
-> +++ b/arch/arm64/boot/dts/exynos/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +subdir-y += axis
->  subdir-y += google
->  
->  dtb-$(CONFIG_ARCH_EXYNOS) += \
-> diff --git a/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
-> new file mode 100644
-> index 000000000000..70bd1dcac85e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
-> @@ -0,0 +1,36 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+Introduce the support for Display clock controller(DISPCC) for
 
-Does not match rest of licenses.
+Qualcomm's next gen compute SoC - Glymur.
 
-> +/*
-> + * Axis ARTPEC-8 SoC device tree pinctrl constants
-> + *
-> + * Copyright (c) 2025 Samsung Electronics Co., Ltd.
-> + *             https://www.samsung.com
-> + * Copyright (c) 2025  Axis Communications AB.
-> + *             https://www.axis.com
-> + */
-> +
-> +#ifndef __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
-> +#define __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
-> +
-> +#define ARTPEC_PIN_PULL_NONE		0
-> +#define ARTPEC_PIN_PULL_DOWN		1
-> +#define ARTPEC_PIN_PULL_UP		3
-> +
-> +#define ARTPEC_PIN_FUNC_INPUT		0
-> +#define ARTPEC_PIN_FUNC_OUTPUT		1
-> +#define ARTPEC_PIN_FUNC_2		2
-> +#define ARTPEC_PIN_FUNC_3		3
-> +#define ARTPEC_PIN_FUNC_4		4
-> +#define ARTPEC_PIN_FUNC_5		5
-> +#define ARTPEC_PIN_FUNC_6		6
-> +#define ARTPEC_PIN_FUNC_EINT		0xf
-> +#define ARTPEC_PIN_FUNC_F		ARTPEC_PIN_FUNC_EINT
-> +
-> +/* Drive strength for ARTPEC */
-> +#define ARTPEC_PIN_DRV_SR1		0x8
-> +#define ARTPEC_PIN_DRV_SR2		0x9
-> +#define ARTPEC_PIN_DRV_SR3		0xa
-> +#define ARTPEC_PIN_DRV_SR4		0xb
-> +#define ARTPEC_PIN_DRV_SR5		0xc
-> +#define ARTPEC_PIN_DRV_SR6		0xd
-> +
-> +#endif /* __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__ */
-> diff --git a/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
-> new file mode 100644
-> index 000000000000..8d239a70f1b4
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
-> @@ -0,0 +1,120 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+Device tree changes aren't part of this series and will be posted separately after the
+official announcement of the Glymur SoC.
 
-This is Dual license, so why pincltr header is not?
+This series has a dependency on the GCC clock controller series posted
+https://lore.kernel.org/all/20250825-glymur-clock-controller-v5-v5-0-01b8c8681bcd@oss.qualcomm.com/
+
+Compilation of the series is dependent on which has been added as
+dependency.
+https://lore.kernel.org/all/20250825-glymur-clock-controller-v5-v5-5-01b8c8681bcd@oss.qualcomm.com/
+
+Signed-off-by: Taniya Das <taniya.das@oss.qualcomm.com>
+---
+Taniya Das (2):
+      dt-bindings: clock: Add DISPCC and reset controller for GLYMUR SoC
+      clk: qcom: dispcc-glymur: Add support for Display Clock Controller
+
+ .../bindings/clock/qcom,glymur-dispcc.yaml         |   99 +
+ drivers/clk/qcom/Kconfig                           |   10 +
+ drivers/clk/qcom/Makefile                          |    1 +
+ drivers/clk/qcom/dispcc-glymur.c                   | 1982 ++++++++++++++++++++
+ include/dt-bindings/clock/qcom,glymur-dispcc.h     |  114 ++
+ 5 files changed, 2206 insertions(+)
+---
+base-commit: 0f4c93f7eb861acab537dbe94441817a270537bf
+change-id: 20250829-glymur-disp-clock-controllers-50f728887bae
+prerequisite-patch-id: f1872a81e0bdf89b2e26397d8eb6dc1ce7eeac1e
 
 Best regards,
-Krzysztof
+-- 
+Taniya Das <taniya.das@oss.qualcomm.com>
 
 
