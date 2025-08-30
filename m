@@ -1,119 +1,206 @@
-Return-Path: <linux-clk+bounces-26976-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26982-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012F3B3CDE1
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Aug 2025 19:10:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 917A1B3D003
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 00:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6A82562E10
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Aug 2025 17:10:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C06B5E6043
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Aug 2025 22:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FCF2D6E52;
-	Sat, 30 Aug 2025 17:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F90821C194;
+	Sat, 30 Aug 2025 22:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwFLUfxl"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="V525SsJG";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="ObrS52SG"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF002D6406;
-	Sat, 30 Aug 2025 17:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBBA6F53E;
+	Sat, 30 Aug 2025 22:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756573762; cv=none; b=er8lLiGO3ET4gDXWXetN3Sgl0bSF3fqhlVFR1o0MIBf+OOJkDe/BVH6behHsuI25hEYvOqPrqrLNCwb+bQo0av23Oir7KkFbmIAcHsTZvrSnu9JliMWaVd5rjBcEoLS5q5BoBYosR1ZSVzwzuX6C/qhHIJcQ29xZ1y34fgRbuzI=
+	t=1756594014; cv=none; b=lMTbhpbU72+Y2MIwHa8dmxCLYnq8M0xHkyWhuTxKtUwmFXkBbbzbspvpYLG76C1guqrFiOK8JRCEhLhlqvibXMkWdNY9f+NylS/sTgMWwaOCrYASGFylEt2wSNRlAdVHD4fYR+BBL/ah5f3+PRLjghmxg6r0/3Q9duentz4P+KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756573762; c=relaxed/simple;
-	bh=X9UravRZTkYO/S1t31DyRCOSep0v8TZbjoIrBK1EKNA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NzP0q4eJPn42+F8X/8O0wvkeh4/Odjs9JnY+Il498DokVmJ2id7GAfGDe4j9NTJj+Cx7b01OclVvDj0zzTi9nS0BO7iADToHCLp70DIhFr6rc+Xd9ANjvU6QUqPNk+uZ0xpvAO1LKSjAjHyMNLVizJAoECSo8XZbiWeKmuiNUWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwFLUfxl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84C8C4CEF8;
-	Sat, 30 Aug 2025 17:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756573762;
-	bh=X9UravRZTkYO/S1t31DyRCOSep0v8TZbjoIrBK1EKNA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iwFLUfxlJFRuEDCHufRML+UIZZxkrkNLuW9Jorcc8xsw9v1WoDX0KJAJ8NHXNMfk+
-	 yh/ifCmuennI9zj0KjV/5voVETLt/qc+ZxPVJ5xAZ2vSPBfijwsMjXdF8p9agJMWpD
-	 k2nwhPQEotMppPXpGxzPrFxKQmaEoTvdbZq6DFEFbQIwvI7PIpEshjdgXOsI7CHavy
-	 YUhA2F4y1pxYWGxRhGNu8u5b5aSp/NhW8ib3aRF/FZDXZHJrel6uweKlQtTXbsJJmf
-	 avfDBFenDBvxkH7gnmYNXvNWFt5CmAb3+SLuz8cv2PTAe/B/3noF205eW3jxwRoJuz
-	 KlphCMUjLomaA==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 78ADF5FF44; Sun, 31 Aug 2025 01:09:17 +0800 (CST)
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>
-Cc: Andre Przywara <andre.przywara@arm.com>,
-	linux-sunxi@lists.linux.dev,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] arm64: dts: allwinner: a523: Add NPU device node
-Date: Sun, 31 Aug 2025 01:09:01 +0800
-Message-Id: <20250830170901.1996227-9-wens@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250830170901.1996227-1-wens@kernel.org>
-References: <20250830170901.1996227-1-wens@kernel.org>
+	s=arc-20240116; t=1756594014; c=relaxed/simple;
+	bh=IuNo5LYqCPvx/bmG5bVEJ7GNfYLU2l5PW8pqqLvr0FA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZclEtDvTyL/Xu1e8UJWTBVVHt9z/bi7pyPthvBdXpvt2ZXGXjBgzJYRmrfygs0aWjcdDbNcHKDJFrfFW/kpIv2jnSi6HgTeUL1Y2ePv0U2dYUvpyUcWALF3kw2UrLbTMtsrEOyYnzjrrBbbESHNXNHKLGVPbydkQDPAc+qK14gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=V525SsJG; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=ObrS52SG; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1756593500; bh=sJBbh12ISrJRahnF37YRfUd
+	ntH2Zj/Dof0WzSnco3wM=; b=V525SsJGaAnwPq+t9xAPlVv0j9F8sS1QAB0b6Ow9//Lg/DesHT
+	sYjew1Mk7b2Am7dSbJ3pkhoJ1WRcjwv/maOUH3JZymZBTscAcw30NZnter5ZBrhMMthnXLQgKDO
+	Qf5zuNVQ00/i5EQu8+5reQ0H5nsmLUSN0+d6U51QuzGd2j/f0BtRrynWDe13V+dYRb0XS5JakTf
+	H4MvG0o2ddn9dRMLLHVtcSD06skEknXSIbW2SICQFKc+iZT64zgQV0/mis9pvsSXGLWMRGRyXsh
+	YocEgIkTL/U2ggT30iQdudiSl96iRz8RjfIjr5oHXdBUzej1ThpZ/QBFE7XSxNv0wlQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1756593500; bh=sJBbh12ISrJRahnF37YRfUd
+	ntH2Zj/Dof0WzSnco3wM=; b=ObrS52SGDuDkUG7OYrYEfVVSl5WFuyGMCQBb2cR8mQZyipBfif
+	jq1RZwNg/9vBaWPOaMAnnsz3nN54i1HMGqAg==;
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v7 0/6] Initial support of MSM8937 and Xiaomi Redmi 3S
+Date: Sun, 31 Aug 2025 00:38:12 +0200
+Message-Id: <20250831-msm8937-v7-0-232a9fb19ab7@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFR9s2gC/23QwWrEIBAG4FdZPNeio3G0p75H6SHRMSs0yWKKt
+ Cx595qF1kBz/Ae/n3HubKWcaGUvlzvLVNKalrkGfLowf+3nkXgKNTMQ0AmQgk/rZJ1CDmApiuA
+ Vecfq61ummL4eTW/vNV/T+rnk70dxkfv0t0P+dRTJBccASMFgRGFfpz7NH2lO8/i85JHtRQUOG
+ FTDUPHgHNahURTUKVZHrBtWFYc+oJcWvPfDKdYNK9k1rCuWUSogi6LX7hR3DWs4/Lnb147OoqM
+ odTjHpmEL7ejF7Fg4MUDvB4P0D2/b9gPKPdAX1AEAAA==
+X-Change-ID: 20250210-msm8937-228ef0dc3ec9
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, Lee Jones <lee@kernel.org>, 
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+ Robin Murphy <robin.murphy@arm.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+ Sean Paul <sean@poorly.run>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Dmitry Baryshkov <lumag@kernel.org>, 
+ Adam Skladowski <a_skl39@protonmail.com>, 
+ Sireesh Kodali <sireeshkodali@protonmail.com>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Abhinav Kumar <abhinav.kumar@linux.dev>, 
+ Jessica Zhang <jessica.zhang@oss.qualcomm.com>, 
+ Srinivas Kandagatla <srini@kernel.org>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Dmitry Baryshkov <lumag@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, iommu@lists.linux.dev, 
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ linux@mainlining.org, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Daniil Titov <daniilt971@gmail.com>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Dang Huynh <danct12@riseup.net>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756593498; l=3677;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=IuNo5LYqCPvx/bmG5bVEJ7GNfYLU2l5PW8pqqLvr0FA=;
+ b=JmEkgEoQFTvoyzCT4SGtdSTtC7G04pIOn1TLJGFJbeQ8s6TOaK2UASahhtHzNkP6Sa0MkCDCg
+ eufnpkXrgzzAPg26B3aFppdfWenkSFLpvWJWKWwm9JbzQQlfQJecky2
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-From: Chen-Yu Tsai <wens@csie.org>
+This patch series add initial support for MSM8937 SoC
+and Xiaomi Redmi 3S (land).
 
-The Allwinner T527 SoC has an NPU built in. Based on identifiers found
-in the BSP, it is a Vivante IP block. After enabling it, the etnaviv
-driver reports it as a GC9000 revision 9003.
+The series is extending the MSM8917 gcc and pinctrl drivers
+because they are sibling SoCs.
+MSM8937 have 4 more A53 cores and have one more dsi port then
+MSM8917.
+It implements little-big architecture and uses Adreno 505.
 
-The standard bindings are used as everything matches directly. There is
-no option for DVFS at the moment. That might require some more work,
-perhaps on the efuse side to map speed bins.
-
-It is unclear whether the NPU block is fused out at the hardware level
-or the BSP limits use of the NPU through software, as the author only
-has boards with the T527.
-
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Changes in v7:
+- gpu.yaml: update adreno 505 pattern
+- Link to v6: https://lore.kernel.org/r/20250820-msm8937-v6-0-b090b2acb67e@mainlining.org
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-index b6e82d53af54..1ab5b87ec78e 100644
---- a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-@@ -850,6 +850,18 @@ mcu_ccu: clock-controller@7102000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 		};
-+
-+		npu: npu@7122000 {
-+			compatible = "vivante,gc";
-+			reg = <0x07122000 0x1000>;
-+			interrupts = <GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&mcu_ccu CLK_BUS_MCU_NPU_ACLK>,
-+				 <&ccu CLK_NPU>,
-+				 <&mcu_ccu CLK_BUS_MCU_NPU_HCLK>;
-+			clock-names = "bus", "core", "reg";
-+			resets = <&mcu_ccu RST_BUS_MCU_NPU>;
-+			power-domains = <&ppu PD_NPU>;
-+		};
- 	};
- 
- 	thermal-zones {
+Changes in v6:
+- msm8937:
+  - Fix nodes ordering.
+  - Format clocks, reg, dmas and -names properties.
+  - Add gpu_speedbin.
+- Describe A505 clocks.
+- Link to v5: https://lore.kernel.org/r/20250421-msm8937-v5-0-bf9879ef14d9@mainlining.org
+
+Changes in v5:
+- msm8937:
+  - Remove wrongly defined idle-states.
+  - Fix thermal zones.
+  - Use the header with DSI phy clock IDs.
+  - Fix the nodes order.
+  - Fix the pinctrls style.
+  - Follow gcc header changes.
+- msm8937-xiaomi-land:
+  - Remove headphone switch and speaker amplifier bindings.
+  - Unify status property style.
+- gcc bindings:
+  - Expand MSM8953 gcc schema with MSM8937.
+  - Add MSM8937 prefix for MSM8937 specific clocks.
+- gcc:
+  - Follow the bindings changes.
+- Drop alwayson clock documentation it will be handled in another
+  patchset.
+- Link to v4: https://lore.kernel.org/r/20250315-msm8937-v4-0-1f132e870a49@mainlining.org
+
+Changes in v4:
+- Add missing rpmcc include for qcom,gcc-msm8937 dtbinding exmaple.
+- msm8937: add missing space after s9-p1@230
+- msm8937-xiaomi-land: replace LED_FUNCTION_INDICATOR to LED_FUNCTION_STATUS
+- Remove applied patches
+- Link to v3: https://lore.kernel.org/r/20250224-msm8937-v3-0-dad7c182cccb@mainlining.org
+
+Changes in v3:
+- Fix qcom,gcc-msm8937 dtbinding example 
+- Link to v2: https://lore.kernel.org/r/20250223-msm8937-v2-0-b99722363ed3@mainlining.org
+
+Changes in v2:
+- drop applied patches
+- drop gcc schema commits infavor of a new schema for gcc-msm8937
+- document always on clock for adreno 505/506/510
+- msm8937:
+  - set cache size
+  - rename cpu labels
+  - fix style issues addressed by review
+- msm8937-xiaom-land:
+  - remove unused serial0 alias
+  - remove regulator-always-on from pm8937_l6
+  - add blue indicator led for aw2013
+- Link to v1: https://lore.kernel.org/r/20250211-msm8937-v1-0-7d27ed67f708@mainlining.org
+
+---
+Barnabás Czémán (4):
+      dt-bindings: clock: qcom: Add MSM8937 Global Clock Controller
+      dt-bindings: display/msm/gpu: describe A505 clocks
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 3S
+      arm64: dts: qcom: Add Xiaomi Redmi 3S
+
+Dang Huynh (1):
+      arm64: dts: qcom: Add initial support for MSM8937
+
+Daniil Titov (1):
+      clk: qcom: gcc: Add support for Global Clock controller found on MSM8937
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    6 +
+ .../bindings/clock/qcom,gcc-msm8953.yaml           |   11 +-
+ .../devicetree/bindings/display/msm/gpu.yaml       |    2 +-
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts   |  381 ++++
+ arch/arm64/boot/dts/qcom/msm8937.dtsi              | 2134 ++++++++++++++++++++
+ drivers/clk/qcom/Kconfig                           |    6 +-
+ drivers/clk/qcom/gcc-msm8917.c                     |  617 +++++-
+ include/dt-bindings/clock/qcom,gcc-msm8917.h       |   19 +
+ 9 files changed, 3166 insertions(+), 11 deletions(-)
+---
+base-commit: 3cace99d63192a7250461b058279a42d91075d0c
+change-id: 20250210-msm8937-228ef0dc3ec9
+
+Best regards,
 -- 
-2.39.5
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
 
