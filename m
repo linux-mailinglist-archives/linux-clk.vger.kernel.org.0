@@ -1,138 +1,137 @@
-Return-Path: <linux-clk+bounces-26989-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26993-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8483B3D230
-	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 12:43:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A3CB3D252
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 12:56:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C069189DEA5
-	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 10:43:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD9C63A1C57
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 10:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50773254AE1;
-	Sun, 31 Aug 2025 10:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09A42459C9;
+	Sun, 31 Aug 2025 10:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIDFJE5N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ez8eIlYR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F64021ABAA;
-	Sun, 31 Aug 2025 10:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E62A190685;
+	Sun, 31 Aug 2025 10:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756636974; cv=none; b=KI1iYd6lMD5p3TeWTp1xfMndo4uPN1XWbl7QwYRts98hvIeTibqry2sqJLLECqe0YBhJ1NEa3MSA/Ba6OLJ0xEv7tnsJZQmKPl0npgtUnmbDezZR0iOj+ACXwTnVTPP0PPpFB5dnEelJ/+RwJ7G/HMX7hs42CG667vFFK29K/40=
+	t=1756637785; cv=none; b=kBis3xfy4cR0VSYvfNP+3kK5+jniDUGs2/h/T2ny/OcJbqS22gYrZ3fI2+NhzzzyUwoStB8cte8TP9FeG4JScqJPgx65kLoOEc9XoBZ1aeA9SBdymbGh9SVFGLc5JGurBdq8F+fWJ4RPu7C5y5EwKixeKQ7ujH8GzrubmR8r+DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756636974; c=relaxed/simple;
-	bh=rk8osyH0jerAtAjsd9/Rx1VkjdNOptUOyMlEF0j+/CA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KrlO4cxCvMdrH0mcS8jsn8Uh/OroyqKi9MeJUZd9LByLXjOn+XYgSCM+fEADx3YsakRqRPY54fKQ75hISbyBGcD3RmRqMR7xCazBzCkzX6NrVE2o136SODZ3cl+I8vclrJR6SAJJBSgtqkstUEoZR6fiVJcAtn0tt+L2iXtQP00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIDFJE5N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F76C4CEED;
-	Sun, 31 Aug 2025 10:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756636973;
-	bh=rk8osyH0jerAtAjsd9/Rx1VkjdNOptUOyMlEF0j+/CA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YIDFJE5NzzaSS53dSAsC7IGGRDU7sRPr8o+IMvjzLzByU4nnYpFeD68X6N2ZBN8PO
-	 5MFYZUTaj6fwJUXdzCl4/Uvjy1v4LQFCnwwLo/gGXvsf2zuUBUrcQ0sbfXfFQxGOLt
-	 nzjYsn37YcnjS3t7FRR04X5TKDIb31Mh1jirVkXXm1HnHFOyCBqXhSBjvnVDIf29Rt
-	 4lMR1e2S6ENRSat//wvem8XGL7u++Vm9sWlk6qSpYivuBn3I2v6Rgpc8Lz/R9ZPbaP
-	 jVHxMZuNUy4+h7jvdV9+5bBXX7qvdRGR4REdnfQZFlx+jEVM4pJzr/RVJv0eBpXrSw
-	 vpDUzsUzywH1w==
-Message-ID: <28b5b033-76de-4fed-af6b-6d8342362c47@kernel.org>
-Date: Sun, 31 Aug 2025 12:42:46 +0200
+	s=arc-20240116; t=1756637785; c=relaxed/simple;
+	bh=pKMihHNeoIjexSn5j98+F6SYvhhQp72++66ZBaIXjoo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fde81FRK9w8OLEvuVwaJ7DrJyw6YBshQ0CQVeaQVhzp6vRGhNZjQw/+vt2g4VqeIycibULy+i3t99/73/ZP5hM/1M/mhtgUS6AVZUCntXcEua39oJnEN8KneQK7HJT+XUnrBmhtzC7l1T1dPKiB47p8/Un+YRX5kA3R2P9KLITQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ez8eIlYR; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b49cf21320aso3808590a12.1;
+        Sun, 31 Aug 2025 03:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756637783; x=1757242583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Apk6KML4dyqZBQ1Buqld5ww4xwE9iSu82US2UzeUrjc=;
+        b=Ez8eIlYRO8DAIJqwKqKjz1mP/wFmGYKxqPc6rrcfhBZ05scAhY8y8k0M57iIfRApmK
+         umd0byRuVYTlHKYhc1hDscAZK6+3O67HtBNpxErp6ow8A3VKWomtQfFDZB8X9nlcfUDA
+         GCCjokf8p6W1U/qkBYU32o7IYjITSqrQ3L/WzgPsXB75RWvc1oGB4jvXTHkZZ+4HZ+On
+         mwp3fzhdavjR6bhyvjtDxhR+Nd9KxSz/D4N8sRQ2vDoFYX0BCnZ8KVXk/KH8rfrPxabQ
+         F7EMXG+NaMlYdqDMNeXPNlQpMwd+3c0nnAiFf8uSTdoB2OLdqDb9SGzIjhTGP92kAqCr
+         4Vkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756637783; x=1757242583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Apk6KML4dyqZBQ1Buqld5ww4xwE9iSu82US2UzeUrjc=;
+        b=CpY+6lVyoQwXziG3hKjtb/Mpd6vr+oivniPH29BjgxNby9jyY4UAb8CyDjYK70Plud
+         R/LC3IOrkD6jWXrCVQc0CCvk0TdolcZUcbIAb3Vz87SYFkHLwFHbGuNLOaDTmMbZa38j
+         Gj+Ysnym2c9uthtkgAN5qynKbbE2xlu80eOxncNnDZ//DNQGEzkT4QHeBjOxD1D1IjMN
+         c6x75ome1KQSNW+VodEGWc6c0kJKvPLVGlSHPEef8cLPyd+uBInINKlOor7CI4OiPltU
+         TpBDW8xnbMPsRYGVsjO84SjHXZTtTc0NH/qh+BZ79uOIRgd71m+j7piug28K5GI/RTkS
+         SfXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrVX6e/gU2bO8Ec28G3wx9S8qT2gfwoHyDlj9iwSAEx+20R6zJNRinnZH5I65Ptus8tVjP4w6DNehu@vger.kernel.org, AJvYcCW7Kp3lxvmVs8jhh80ISFjaQqRIVeu8FVn9pjzRxwyCdcii8UDsh1D0cIiopigLgpLAmvbHWnmLpLny@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVaz6LdQMiOMuLB1+HjbQGTl25/Zdy3cWWEyssw/q6pJaVKtK+
+	zwJ6T8uejFVBpDxJKN/RuvAq0752gLkWqMqqMSOYjUdOI6T+r5arIx6Q
+X-Gm-Gg: ASbGncv4ukYYmyfJO1p/YD99Iv5gHyJ+Oh+rmdC/OCgDulg2aXXypkLNd3LrCMj5QRF
+	MEM9mXyG20RNVOIL3MPL4AIVECefEBQ7vJ4jbmxkrjTiXw7Rwzg63vOEBKHg90PWmR0+6HQvlsy
+	Dw/q3hzJbUBRCT80sMb8gjsmWgTeRqYsT3SXpCIH+bvoKzwFWrTLTR9j5P9I1uvSR90J/Gscax2
+	rwAUPW0LHYzjR1dq8tGxAmc8VTlOo/zP0IEOHnU0fdStGGnYG8BGVHtiK8SzYAxq9z6K3nB8lf/
+	6PWcqshduO8zvuOU+9hi/Eu79V/9ksro2lcacIRyzB3xbx+eqtpTCwVDwAxteJqQfOvIUwo3asY
+	niBjUO8nZiAu0cB6quEppDWjBeMIh4Q27dR54Om41dGTPQxn5zg==
+X-Google-Smtp-Source: AGHT+IErGK7FJc+FCPGEwd2GnQFzRtcOpYSLZTpB8rjH79fTnlx1bOGmzhq6mdWM8W7i0rZcH9ZkcQ==
+X-Received: by 2002:a05:6a20:9191:b0:243:9824:26f0 with SMTP id adf61e73a8af0-243d6f3b97cmr7135848637.46.1756637783407;
+        Sun, 31 Aug 2025 03:56:23 -0700 (PDT)
+Received: from localhost.localdomain ([240e:478:1c78:352d:7cf7:15e8:f0c:9846])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd3669d76sm6638260a12.49.2025.08.31.03.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Aug 2025 03:56:22 -0700 (PDT)
+From: WeiHao Li <cn.liweihao@gmail.com>
+To: heiko@sntech.de,
+	robh@kernel.org
+Cc: hjc@rock-chips.com,
+	andy.yan@rock-chips.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	WeiHao Li <cn.liweihao@gmail.com>
+Subject: [PATCH v1 0/7] drm/rockchip: Add MIPI DSI support for RK3368
+Date: Sun, 31 Aug 2025 18:48:48 +0800
+Message-ID: <20250831104855.45883-1-cn.liweihao@gmail.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] exynos-acpm: add DVFS protocol and clock driver
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, willmcvicker@google.com, kernel-team@android.com
-References: <20250827-acpm-clk-v2-0-de5c86b49b64@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250827-acpm-clk-v2-0-de5c86b49b64@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 27/08/2025 14:42, Tudor Ambarus wrote:
-> The Alive CLock and Power Manager (ACPM) firmware exposes clocks that
-> are variable and index based. These clocks don't provide an entire range
-> of values between the limits but only discrete points within the range.
-> The firmware also manages the voltage scaling appropriately with the
-> clock scaling. Make the ACPM node a clock provider.
-> 
-> Add support for the ACPM DVFS protocol. It translates clock frequency
-> requests to messages that can be interpreted by the ACPM firmware.
-> Add an ACPM clock driver to model the clocks exposed by the ACPM firmware.
-> 
-> All patches can go through the samsung tree.
+This series adds MIPI DSI support for the Rockchip RK3368 SoC, enabling
+native display connectivity through the MIPI DSI host controller and
+PHY. The changes span multiple subsystems, including clock control,
+DRM/VOP integration, DSI controller binding, and PHY driver updates.
 
-You really should have explained the dependencies instead of me trying
-to decipher how to handle this patch. It's really not trivial.
+Key changes:
+  - Update the Rockchip MIPI DSI PHY driver to preperly handle RK3368
+    phy initialization.
+  - Add missing lut_size of vop_data for RK3368.
+  - Add missing clock ID SCLK_MIPIDSI_24M to the RK3368 CRU driver,
+    which is required for enabling the 24MHz reference clock.
+  - Add MIPI DSI node to rk3368.dtsi with correct clocks, resets,
+    and register mappings.
 
-You do understand that clock is completely different subsystem (Stephen
-Boyd)?
+These changes were tested on a RK3368-based board with a MIPI DSI
+panel [1]. The display boots successfully with console output.
 
+[1] https://ieiao.github.io/wiki/embedded-dev/rockchip/rk3368
 
-Best regards,
-Krzysztof
+Tested-by: WeiHao Li <cn.liweihao@gmail.com>
+Signed-off-by: WeiHao Li <cn.liweihao@gmail.com>
+
+WeiHao Li (7):
+  drm/rockchip: dsi: Add support for RK3368
+  drm/rockchip: vop: add lut_size for RK3368 vop_data
+  dt-bindings: clock: rk3368: Add SCLK_MIPIDSI_24M
+  clk: rockchip: use clock ids for SCLK_MIPIDSI_24M on rk3368
+  ARM: dts: rockchip: Add display subsystem for RK3368
+  ARM: dts: rockchip: Add D-PHY for RK3368
+  ARM: dts: rockchip: Add DSI for RK3368
+
+ arch/arm64/boot/dts/rockchip/rk3368.dtsi      | 79 +++++++++++++++++++
+ drivers/clk/rockchip/clk-rk3368.c             |  2 +-
+ .../gpu/drm/rockchip/dw-mipi-dsi-rockchip.c   | 20 +++++
+ drivers/gpu/drm/rockchip/rockchip_vop_reg.c   |  1 +
+ include/dt-bindings/clock/rk3368-cru.h        |  1 +
+ 5 files changed, 102 insertions(+), 1 deletion(-)
+
+-- 
+2.47.2
+
 
