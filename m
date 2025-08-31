@@ -1,512 +1,370 @@
-Return-Path: <linux-clk+bounces-26984-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26986-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89ECB3D011
-	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 00:49:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00571B3D0DE
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 06:07:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AEFE1898B91
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Aug 2025 22:49:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B572417BA95
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Aug 2025 04:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B6B258EEF;
-	Sat, 30 Aug 2025 22:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC392135CE;
+	Sun, 31 Aug 2025 04:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="d+HFCZ80";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="SvpyXsCq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LbFk+MFW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D10253B59;
-	Sat, 30 Aug 2025 22:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61965433B3;
+	Sun, 31 Aug 2025 04:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756594138; cv=none; b=ENUdAQe9gDVAbNeYjRUrndnLfEBck1ovvoS5McHOFOY0cQSW3W6Cj5T7CwTebGF/Xn0dl5YasK1pxKCe+GWRubdGv/pinu549sqv4PXWehWk+EqZnw3hE9rPvVH7nO/QBDdGQrNPN18T3cXS1H8A6ArMNHXDnbEFpxy2N+7wZxs=
+	t=1756613248; cv=none; b=PiJT/8RqrGv8gHo+FouVUMIJKJw/bPP9GBB34v64TyX+5vsGSdh3QmxAnzkbM+w+Ci6NF6ihsgQoplwXvVRHlJnAE2HOqi9w/S5P6bqfokiadl7/jFYlmRirvAWlm52uE1Da781RzeJb2FWfsUjc+c1vLGgDHXvj7nkhi66ubds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756594138; c=relaxed/simple;
-	bh=k9YfYoLnWgowizoNFCgdYGssyc1KlF97HQd/e1o9DWU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LKp5mKgZIyurk3wNroZEG4RjXGKMByQv+zUOXUdMjppnNS9WwgBzHTXcNbZG7ILiJ7NzACsMBp+V9whVl4/KdNSraVwO6xtsce93ZBsY+NChwgW4NDhI1psO8wpxx8xKz7EfdO6aaqMYm1yt6ePqPYmivPt2B6b/OcMtQSEB4zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=d+HFCZ80; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=SvpyXsCq; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1756593512; bh=PhlYyLCSQI1w4nlhX5YFydD
-	ascZlczZAAO/YONVQlCY=; b=d+HFCZ80+pIGVPzpq1Wu3/oF6SvwfbPu27tqgb1rStfMt1pXZ4
-	wz7dU6UVg0ByIX59J8SksZ82kb5fZiJ9Ngrf784Fjx6YsqYV+tikq0+5/ckNILrNumbak/96uAq
-	+nwHSGIlugsXA06c3ioUVF1l5l1qGhYFL0wSHCFq9MsBO+reJzmg0c3mrYYf9tVHshHuh1wgWyc
-	lKbVnAC+kxt9QSBYJiovCCAr9zTU9JkbmuYAKXSeMSpgKto+W+r/iZIgANDDs+W2MmjS+tyqzRx
-	Iu4wjvhBGVF6DP5E8Op2JNPJqRj40ZcFioYWmFs1JBIcw8gTbCpNX6Oy6js9krbIWAQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1756593512; bh=PhlYyLCSQI1w4nlhX5YFydD
-	ascZlczZAAO/YONVQlCY=; b=SvpyXsCqhT32JzVoDQkeXRu5Bhm53LA6gtEZ6FIWXZ63zvYRZQ
-	PrPc0pH4OLdx6ZHrO56zuD0oWIMSnPwo3IAg==;
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Sun, 31 Aug 2025 00:38:18 +0200
-Subject: [PATCH v7 6/6] arm64: dts: qcom: Add Xiaomi Redmi 3S
+	s=arc-20240116; t=1756613248; c=relaxed/simple;
+	bh=LptXLD1zwFlWZSHFVxFcX1U/UXwMN65+JMNh3/oeSoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ju2AaBttehZSOk1AbzSfGVJMK1Lt88bx1SpRACNhjtkqbg6X6gRBzM3YbC4d5FMpKYOc5BVAktRakKX7OlHQqX+iXij5qEEd6Lga5BuWEIr+r444X8kzR2JCizk6TP4m+8jNVY5jnxSRIRSaoAiyVEUvc5V0v1sWnD57UojqBRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LbFk+MFW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFE8C4CEED;
+	Sun, 31 Aug 2025 04:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756613247;
+	bh=LptXLD1zwFlWZSHFVxFcX1U/UXwMN65+JMNh3/oeSoI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LbFk+MFWyECQgwWN/R2B7l0hcZN7hA2vUQVDt1Z3vI+4xJ3whKk9FXHuOSLrhh68P
+	 HgDKzytxI9JEgGTqLShXuxO5gzSXveAhj/0L+tAk3KhXz+RWTt4YyXJeDE3WTswKVQ
+	 AqyW+cv2P79nBkjorkKxY8lhHwuLTsXTNYrIOvJWNTT8hLKaVaG/JT0Buj1ZluwEGZ
+	 0T9Z0g99KxMdPVAJcY7C+z1Oy0MCGyqXkXjNLTAsLMbeJ2bxsyknjvLi81LciN82+c
+	 uFx/JoVnTWTTtlvAqGEvpG+08cvISOMgCy7Y7MTumCDyV7Fg+QKPdRJyqiN3KXtr1Q
+	 QzC86xUv46DfQ==
+Date: Sun, 31 Aug 2025 09:37:17 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: bhelgaas@google.com, lpieralisi@kernel.org, kwilczynski@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be, 
+	magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, lizhi.hou@amd.com, 
+	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v3 5/9] PCI: rzg3s-host: Add Initial PCIe Host Driver for
+ Renesas RZ/G3S SoC
+Message-ID: <zsgncwvhykw4ja3bbqaxwupppjsqq4pcrdgrsduahokmt72xsm@twekpse6uzzh>
+References: <20250704161410.3931884-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250704161410.3931884-6-claudiu.beznea.uj@bp.renesas.com>
+ <ddxayjj5wcuuish4kvyluzrujkes5seo7zlusmomyjfjcgzcyj@xe3zzzmy2zaj>
+ <8ef466aa-b470-4dcb-9024-0a9c36eb9a6a@tuxon.dev>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250831-msm8937-v7-6-232a9fb19ab7@mainlining.org>
-References: <20250831-msm8937-v7-0-232a9fb19ab7@mainlining.org>
-In-Reply-To: <20250831-msm8937-v7-0-232a9fb19ab7@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
- Linus Walleij <linus.walleij@linaro.org>, Lee Jones <lee@kernel.org>, 
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Konrad Dybcio <konradybcio@kernel.org>, 
- Sean Paul <sean@poorly.run>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Adam Skladowski <a_skl39@protonmail.com>, 
- Sireesh Kodali <sireeshkodali@protonmail.com>, 
- Rob Clark <robin.clark@oss.qualcomm.com>, 
- Abhinav Kumar <abhinav.kumar@linux.dev>, 
- Jessica Zhang <jessica.zhang@oss.qualcomm.com>, 
- Srinivas Kandagatla <srini@kernel.org>, 
- Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, iommu@lists.linux.dev, 
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
- linux@mainlining.org, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756593498; l=9618;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=k9YfYoLnWgowizoNFCgdYGssyc1KlF97HQd/e1o9DWU=;
- b=dISGbnv7wMJoaTroCs1g4ClzL4r58Qzhfohu0WUlafF7DBePqYV7gQz7T/QC0hFp2rFzNKWjM
- A+2xrsMoygTCHBKmVVge2lSE22cpHUQh/CL/PALdL9J6pivvTNbTtac
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+In-Reply-To: <8ef466aa-b470-4dcb-9024-0a9c36eb9a6a@tuxon.dev>
 
-Add initial support for Xiaomi Redmi 3S (land).
+On Sat, Aug 30, 2025 at 02:22:45PM GMT, Claudiu Beznea wrote:
+> 
+> 
+> On 30.08.2025 09:59, Manivannan Sadhasivam wrote:
+> > On Fri, Jul 04, 2025 at 07:14:05PM GMT, Claudiu wrote:
+> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>
+> >> The Renesas RZ/G3S features a PCIe IP that complies with the PCI Express
+> >> Base Specification 4.0 and supports speeds of up to 5 GT/s. It functions
+> >> only as a root complex, with a single-lane (x1) configuration. The
+> >> controller includes Type 1 configuration registers, as well as IP
+> >> specific registers (called AXI registers) required for various adjustments.
+> >>
+> >> Hardware manual can be downloaded from the address in the "Link" section.
+> >> The following steps should be followed to access the manual:
+> >> 1/ Click the "User Manual" button
+> >> 2/ Click "Confirm"; this will start downloading an archive
+> >> 3/ Open the downloaded archive
+> >> 4/ Navigate to r01uh1014ej*-rzg3s-users-manual-hardware -> Deliverables
+> >> 5/ Open the file r01uh1014ej*-rzg3s.pdf
+> >>
+> >> Link: https://www.renesas.com/en/products/rz-g3s?queryID=695cc067c2d89e3f271d43656ede4d12
+> >> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >> ---
+> >>
+> > 
+> > [...]
+> > 
+> >> +static bool rzg3s_pcie_child_issue_request(struct rzg3s_pcie_host *host)
+> >> +{
+> >> +	u32 val;
+> >> +	int ret;
+> >> +
+> >> +	rzg3s_pcie_update_bits(host->axi, RZG3S_PCI_REQISS,
+> >> +			       RZG3S_PCI_REQISS_REQ_ISSUE,
+> >> +			       RZG3S_PCI_REQISS_REQ_ISSUE);
+> >> +	ret = readl_poll_timeout_atomic(host->axi + RZG3S_PCI_REQISS, val,
+> >> +					!(val & RZG3S_PCI_REQISS_REQ_ISSUE),
+> >> +					5, RZG3S_REQ_ISSUE_TIMEOUT_US);
+> >> +
+> >> +	return !!ret || (val & RZG3S_PCI_REQISS_MOR_STATUS);
+> > 
+> > You don't need to do !!ret as the C11 standard guarantees that any scalar type
+> > stored as bool will have the value of 0 or 1.
+> 
+> OK, will drop it anyway as suggested in another thread.
+> 
+> > 
+> >> +}
+> >> +
+> > 
+> > [...]
+> > 
+> >> +static void __iomem *rzg3s_pcie_root_map_bus(struct pci_bus *bus,
+> >> +					     unsigned int devfn,
+> >> +					     int where)
+> >> +{
+> >> +	struct rzg3s_pcie_host *host = bus->sysdata;
+> >> +
+> >> +	if (devfn)
+> >> +		return NULL;
+> > 
+> > Is it really possible to have devfn as non-zero for a root bus?
+> 
+> I will drop it.
+> 
+> > 
+> >> +
+> >> +	return host->pcie + where;
+> >> +}
+> >> +
+> > 
+> > [...]
+> > 
+> >> +static int rzg3s_pcie_msi_setup(struct rzg3s_pcie_host *host)
+> >> +{
+> >> +	size_t size = RZG3S_PCI_MSI_INT_NR * sizeof(u32);
+> >> +	struct rzg3s_pcie_msi *msi = &host->msi;
+> >> +	struct device *dev = host->dev;
+> >> +	int id, ret;
+> >> +
+> >> +	msi->pages = __get_free_pages(GFP_KERNEL | GFP_DMA, 0);
+> >> +	if (!msi->pages)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	msi->dma_addr = dma_map_single(dev, (void *)msi->pages, size * 2,
+> >> +				       DMA_BIDIRECTIONAL);
+> >> +	if (dma_mapping_error(dev, msi->dma_addr)) {
+> >> +		ret = -ENOMEM;
+> >> +		goto free_pages;
+> >> +	}
+> >> +
+> >> +	/*
+> >> +	 * According to the RZ/G3S HW manual (Rev.1.10, section 34.4.5.2 Setting
+> >> +	 * the MSI Window) the MSI window need to be within any AXI window. Find
+> >> +	 * an AXI window to setup the MSI window.
+> > 
+> > Are you really finding the AXI window or just making sure that the MSI window
+> > falls into one of the AXI window?
+> 
+> I'm making sure the MSI windows falls into one of the enabled AXI windows.
+> 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- arch/arm64/boot/dts/qcom/Makefile                |   1 +
- arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts | 381 +++++++++++++++++++++++
- 2 files changed, 382 insertions(+)
+Then you need to reword the comment as such. Currently, it is not clear.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 94a84770b0802a9dc0c56ce6c59eea20967a5d89..0476a87636584216ba359714ab46a6f085620286 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -66,6 +66,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8937-xiaomi-land.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-samsung-a7.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts b/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..91837ff940f1b6b13a9ef519519f471a7a4cdac0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts
-@@ -0,0 +1,381 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2024, Barnabas Czeman
-+ */
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+#include "msm8937.dtsi"
-+#include "pm8937.dtsi"
-+#include "pmi8950.dtsi"
-+
-+/delete-node/ &qseecom_mem;
-+
-+/ {
-+	model = "Xiaomi Redmi 3S (land)";
-+	compatible = "xiaomi,land", "qcom,msm8937";
-+	chassis-type = "handset";
-+
-+	qcom,msm-id = <QCOM_ID_MSM8937 0x0>;
-+	qcom,board-id = <0x1000b 1>, <0x2000b 1>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1;
-+		mmc1 = &sdhc_2;
-+	};
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+
-+		charge-full-design-microamp-hours = <4100000>;
-+		constant-charge-current-max-microamp = <1000000>;
-+		voltage-min-design-microvolt = <3400000>;
-+		voltage-max-design-microvolt = <4400000>;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "framebuffer0";
-+
-+		framebuffer0: framebuffer@8dd01000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x8dd01000 0x0 (720 * 1280 * 3)>;
-+			width = <720>;
-+			height = <1280>;
-+			stride = <(720 * 3)>;
-+			format = "r8g8b8";
-+
-+			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_MDSS_AXI_CLK>,
-+				 <&gcc GCC_MDSS_VSYNC_CLK>,
-+				 <&gcc GCC_MDSS_MDP_CLK>,
-+				 <&gcc GCC_MDSS_BYTE0_CLK>,
-+				 <&gcc GCC_MDSS_PCLK0_CLK>,
-+				 <&gcc GCC_MDSS_ESC0_CLK>;
-+			power-domains = <&gcc MDSS_GDSC>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&gpio_keys_default>;
-+		pinctrl-names = "default";
-+
-+		key-volup {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	irled {
-+		compatible = "gpio-ir-tx";
-+		gpios = <&tlmm 45 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	reserved-memory {
-+		reserved@84a00000 {
-+			reg = <0x0 0x84a00000 0x0 0x1900000>;
-+			no-map;
-+		};
-+
-+		framebuffer: memory@8dd01000 {
-+			reg = <0x0 0x8dd01000 0x0 (720 * 1280 * 3)>;
-+			no-map;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&blsp1_i2c2 {
-+	status = "okay";
-+
-+	led-controller@45 {
-+		compatible = "awinic,aw2013";
-+		reg = <0x45>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		vcc-supply = <&pm8937_l10>;
-+		vio-supply = <&pm8937_l5>;
-+
-+		led@0 {
-+			reg = <0>;
-+			function = LED_FUNCTION_STATUS;
-+			led-max-microamp = <5000>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+
-+		led@1 {
-+			reg = <1>;
-+			function = LED_FUNCTION_STATUS;
-+			led-max-microamp = <5000>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+
-+		led@2 {
-+			reg = <2>;
-+			function = LED_FUNCTION_STATUS;
-+			led-max-microamp = <5000>;
-+			color = <LED_COLOR_ID_BLUE>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c3 {
-+	status = "okay";
-+
-+	touchscreen@3e {
-+		compatible = "edt,edt-ft5306";
-+		reg = <0x3e>;
-+
-+		interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+		vcc-supply = <&pm8937_l10>;
-+		iovcc-supply = <&pm8937_l5>;
-+
-+		pinctrl-0 = <&tsp_int_rst_default>;
-+		pinctrl-names = "default";
-+
-+		touchscreen-size-x = <720>;
-+		touchscreen-size-y = <1280>;
-+	};
-+};
-+
-+&pm8937_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+
-+	status = "okay";
-+};
-+
-+&pm8937_spmi_regulators {
-+	/* APC */
-+	pm8937_s5: s5 {
-+		regulator-min-microvolt = <1050000>;
-+		regulator-max-microvolt = <1350000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&pmi8950_wled {
-+	qcom,num-strings = <2>;
-+	qcom,external-pfet;
-+	qcom,current-limit-microamp = <20000>;
-+	qcom,ovp-millivolt = <29600>;
-+
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8937-regulators";
-+
-+		vdd_s1-supply = <&vph_pwr>;
-+		vdd_s2-supply = <&vph_pwr>;
-+		vdd_s3-supply = <&vph_pwr>;
-+		vdd_s4-supply = <&vph_pwr>;
-+
-+		vdd_l1_l19-supply = <&pm8937_s3>;
-+		vdd_l2_l23-supply = <&pm8937_s3>;
-+		vdd_l3-supply = <&pm8937_s3>;
-+		vdd_l4_l5_l6_l7_l16-supply = <&pm8937_s4>;
-+		vdd_l8_l11_l12_l17_l22-supply = <&vph_pwr>;
-+		vdd_l9_l10_l13_l14_l15_l18-supply = <&vph_pwr>;
-+
-+		pm8937_s1: s1 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8937_s3: s3 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8937_s4: s4 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8937_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8937_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l8: l8 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8937_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+			regulator-allow-set-load;
-+			regulator-system-load = <200000>;
-+		};
-+
-+		pm8937_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8937_l13: l13 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8937_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l17: l17 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l19: l19 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8937_l22: l22 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+		};
-+
-+		pm8937_l23: l23 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+	};
-+};
-+
-+&sdc2_cmd_default {
-+	drive-strength = <12>;
-+};
-+
-+&sdc2_data_default {
-+	drive-strength = <12>;
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8937_l8>;
-+	vqmmc-supply = <&pm8937_l5>;
-+
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&pm8937_l11>;
-+	vqmmc-supply = <&pm8937_l12>;
-+	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32768>;
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <0 4>, <20 4>;
-+
-+	gpio_keys_default: gpio-keys-default-state {
-+		pins = "gpio91";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio67";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_rst_default: tsp-int-rst-default-state {
-+		pins = "gpio64", "gpio65";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&wcnss {
-+	vddpx-supply = <&pm8937_l5>;
-+
-+	status = "okay";
-+};
-+
-+&wcnss_iris {
-+	compatible = "qcom,wcn3620";
-+	vddxo-supply = <&pm8937_l7>;
-+	vddrfa-supply = <&pm8937_l19>;
-+	vddpa-supply = <&pm8937_l9>;
-+	vdddig-supply = <&pm8937_l5>;
-+};
-+
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
-+&xo_board {
-+	clock-frequency = <19200000>;
-+};
+> > 
+> > And I believe it is OK to have more than one MSI window within an AXI window.
+> 
+> This IP supports a single MSI window that need to fit into one of the
+> enabled AXI windows.
+> 
+
+[...]
+
+> >> +
+> >> +	/* Update vendor ID and device ID */
+> > 
+> > Are you really updating it or setting it? If you are updating it, are the
+> > default IDs invalid?
+> 
+> Default IDs are valid (at least on RZ/G3S) but Renesas specific. Renesas
+> wants to let individual users to set their own IDs.
+> 
+
+So they are optional then? But the binding treats them as required, which should
+be changed if the default IDs are valid.
+
+> > 
+> >> +	writew(host->vendor_id, host->pcie + PCI_VENDOR_ID);
+> >> +	writew(host->device_id, host->pcie + PCI_DEVICE_ID);
+> >> +
+> >> +	/* HW manual recommends to write 0xffffffff on initialization */
+> >> +	writel(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00L);
+> >> +	writel(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00U);
+> >> +
+> >> +	/* Update bus info. */
+> >> +	writeb(primary_bus, host->pcie + PCI_PRIMARY_BUS);
+> >> +	writeb(secondary_bus, host->pcie + PCI_SECONDARY_BUS);
+> >> +	writeb(subordinate_bus, host->pcie + PCI_SUBORDINATE_BUS);
+> >> +
+> >> +	/* Disable access control to the CFGU */
+> >> +	writel(0, host->axi + RZG3S_PCI_PERM);
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> > 
+> > [...]
+> > 
+> >> +static int rzg3s_pcie_host_init(struct rzg3s_pcie_host *host, bool probe)
+> >> +{
+> >> +	u32 val;
+> >> +	int ret;
+> >> +
+> >> +	/* Initialize the PCIe related registers */
+> >> +	ret = rzg3s_pcie_config_init(host);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	/* Initialize the interrupts */
+> >> +	rzg3s_pcie_irq_init(host);
+> >> +
+> >> +	ret = reset_control_bulk_deassert(host->data->num_cfg_resets,
+> >> +					  host->cfg_resets);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	/* Wait for link up */
+> >> +	ret = readl_poll_timeout(host->axi + RZG3S_PCI_PCSTAT1, val,
+> >> +				 !(val & RZG3S_PCI_PCSTAT1_DL_DOWN_STS),
+> >> +				 PCIE_LINK_WAIT_SLEEP_MS,
+> >> +				 PCIE_LINK_WAIT_SLEEP_MS *
+> >> +				 PCIE_LINK_WAIT_MAX_RETRIES * MILLI);
+> >> +	if (ret) {
+> >> +		reset_control_bulk_assert(host->data->num_cfg_resets,
+> >> +					  host->cfg_resets);
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	val = readl(host->axi + RZG3S_PCI_PCSTAT2);
+> >> +	dev_info(host->dev, "PCIe link status [0x%x]\n", val);
+> >> +
+> >> +	val = FIELD_GET(RZG3S_PCI_PCSTAT2_STATE_RX_DETECT, val);
+> >> +	dev_info(host->dev, "PCIe x%d: link up\n", hweight32(val));
+> >> +
+> >> +	if (probe) {
+> >> +		ret = devm_add_action_or_reset(host->dev,
+> >> +					       rzg3s_pcie_cfg_resets_action,
+> >> +					       host);
+> > 
+> > Oh well, this gets ugly. Now the devm_add_action_or_reset() is sprinkled
+> > throughout the driver :/
+> > 
+> > As I said earlier, there are concerns in unloading the driver if it implements
+> > an irqchip. So if you change the module_platform_driver() to
+> > builtin_platform_driver() for this driver, these devm_add_action_or_reset()
+> > calls become unused.
+> 
+> They can still be useful in case the probe fails. As the initialization
+> path is complicated, having actions or resets looks to me that makes the
+> code cleaner as the rest of devm_* helpers.
+> 
+> I can drop it and replace with gotos and dedicated functions but this will
+> complicate the code, AFAICT.
+> 
+> Please let me know how would you like me to proceed.
+> 
+
+It is generally preferred to cleanup the resources in err path using goto
+labels.
+
+> > 
+> >> +	}
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +
+
+[...]
+
+> >> +	ret = pm_runtime_resume_and_get(dev);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> > 
+> > Do you really need to do resume_and_get()? If not, you should do:
+> 
+> It it's needed to enable the clock PM domain the device is part of.
+> 
+
+I've replied below.
+
+> > 
+> > 	pm_runtime_set_active()
+> > 	pm_runtime_no_callbacks()
+> > 	devm_pm_runtime_enable()
+> > 
+> >> +	ret = devm_add_action_or_reset(dev, rzg3s_pcie_pm_runtime_put, dev);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	raw_spin_lock_init(&host->hw_lock);
+> >> +
+> >> +	ret = rzg3s_pcie_host_setup(host, rzg3s_pcie_intx_setup,
+> >> +				    rzg3s_pcie_msi_enable, true);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	msleep(PCIE_RESET_CONFIG_WAIT_MS);
+> >> +
+> >> +	bridge->sysdata = host;
+> >> +	bridge->ops = &rzg3s_pcie_root_ops;
+> >> +	bridge->child_ops = &rzg3s_pcie_child_ops;
+> >> +	ret = pci_host_probe(bridge);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return devm_add_action_or_reset(dev, rzg3s_pcie_host_remove_action,
+> >> +					host);
+> >> +}
+> >> +
+> >> +static int rzg3s_pcie_suspend_noirq(struct device *dev)
+> >> +{
+> >> +	struct rzg3s_pcie_host *host = dev_get_drvdata(dev);
+> >> +	const struct rzg3s_pcie_soc_data *data = host->data;
+> >> +	struct regmap *sysc = host->sysc;
+> >> +	int ret;
+> >> +
+> >> +	ret = pm_runtime_put_sync(dev);
+> >> +	if (ret)
+> >> +		return ret;
+> > 
+> > Since there are no runtime callbacks present, managing runtime PM in the driver
+> > makes no sense.
+> 
+> The PCIe device is part of a clock power domain. Dropping
+> pm_runtime_enable()/pm_runtime_put_sync() in this driver will lead to this
+> IP failing to work as its clocks will not be enabled/disabled. If you don't
+> like the pm_runtime_* approach that could be replaced with:
+> 
+> devm_clk_get_enabled() in probe and clk_disable()/clk_enable() on
+> suspend/resume. W/o clocks the IP can't work.
+> 
+
+Yes, you should explicitly handle clocks in the driver. Runtime PM makes sense
+if you have a power domain attached to the IP, which you also do as I see now.
+So to conclude, you should enable/disable the clocks explicitly for managing
+clocks and use runtime PM APIs for managing the power domain associated with
+clock controller.
+
+But please add a comment above pm_runtime_resume_and_get() to make it clear as
+most of the controller drivers are calling it for no reason.
+
+- Mani
 
 -- 
-2.51.0
-
+மணிவண்ணன் சதாசிவம்
 
