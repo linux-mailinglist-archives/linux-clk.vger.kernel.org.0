@@ -1,133 +1,174 @@
-Return-Path: <linux-clk+bounces-27037-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27039-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F0AB3D748
-	for <lists+linux-clk@lfdr.de>; Mon,  1 Sep 2025 05:33:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A53AB3D751
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Sep 2025 05:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A13871898000
-	for <lists+linux-clk@lfdr.de>; Mon,  1 Sep 2025 03:33:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F45C17881D
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Sep 2025 03:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153E519F41C;
-	Mon,  1 Sep 2025 03:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C883223707;
+	Mon,  1 Sep 2025 03:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r61O3p9i"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dxpygT4g"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BB210F2;
-	Mon,  1 Sep 2025 03:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C372206A6
+	for <linux-clk@vger.kernel.org>; Mon,  1 Sep 2025 03:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756697583; cv=none; b=TZZmElhgXiBlUvWgDyp1rxIBWAO0eLYvdoLQ/jSf/2pNWNjVDV5xsEIQoKLhmbPXY7R9pq/wT5I3b/UCRD6gRIdrIynLm0KGQPcyAdtAfWTsiPJLhJ1dWbyOTJx5B+khQWw6mAFBjr+/F3Zc238zGavYLaw/AOTMM/wwvlJg9CU=
+	t=1756697650; cv=none; b=YxCbFQ0sv1y0IYIshuEl2aupcyhRvg9wwcGE/A9UHstRMMRxngI8Ivzi2ipbuHilEVjrrOE/V4NM/JqA/qP91d8e6cJgh5pne5AJTvWRbphB4irP9iy5dOuP7KAn3aj8vJdCrilchQQ2RNh3UkOnya5spqMfg4u374G9hmwiFzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756697583; c=relaxed/simple;
-	bh=xR/jjE25Ao+BdAatMaMjOo9qLuJFyaz/aryuYb/IMnQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=twHqSy3C+Rp04f+L1StlZC5guaA2zX2oZifzaZdY/N9Ki8X1WtFt2u7o7HytdJG2gUJPtjKEDHmWl4Vbc9YGxyGgPvpN8htSxoi76Vuy3UDDXmn7qu6gHysT0MMQTUD7iJ3jhQr4VpXdw6sY7k+4XEPjmy6gmVeWKRa0S15S+kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r61O3p9i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E533AC4CEF0;
-	Mon,  1 Sep 2025 03:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756697582;
-	bh=xR/jjE25Ao+BdAatMaMjOo9qLuJFyaz/aryuYb/IMnQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r61O3p9ioLFTblgtvQj+JtahXqW2VoRyQceVr9j4LlT2on90SjuG3rhgtwWF4v3FI
-	 Qn5cSr8fJ8pjyW7RO8zr/dsS6ikNs+AP+C6VBfcTHLKl9q/me01secKQP1GtDLsXOf
-	 Km5+66AwT7UE/mW2x8L6X2L9IY6d1v74rOPmjv6SNsH0Ko8p8WD6AI7RzUZcM0vsWT
-	 4EtKp/vxi1HoAewgZW7F8uIOnNxPEZAubhZ7bLQGVqq2AK3TtX3NZ3J65Scf4gHcaC
-	 PbnDMy/cew0t6uc6L/AcZey05/K7J42ZbjfZsSgBjYxugB+NTk9wfksw0TGXoOW+WY
-	 rF6RJvVEKDJiQ==
-Message-ID: <d802bcea-d81f-49eb-96ce-5d89dddca7c3@kernel.org>
-Date: Mon, 1 Sep 2025 05:32:55 +0200
+	s=arc-20240116; t=1756697650; c=relaxed/simple;
+	bh=qtZoxAkXv495MzlPMfGyn54WlNk7BPz08rPmn2O5hoI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=HbnqPah5AkBnKt6lXGFGmG2b0sgDLyXM8g2LGha6Z+Wb398hmkMiNz64zeS7TqZYXxjua/v9M1L/4hEMT/Q18HSRMxb/hFxtFzqu1fRCLlV3KCglfs/0qxzCvmya+zzuucOCR+t6sPsvfmLWNGEzyd4u9j/fPCl5Ipra0EhPeGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dxpygT4g; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250901033400epoutp02fb3edc117ffd380182e93c5c24e42d17~hCzJ1IN8d2642026420epoutp02p
+	for <linux-clk@vger.kernel.org>; Mon,  1 Sep 2025 03:34:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250901033400epoutp02fb3edc117ffd380182e93c5c24e42d17~hCzJ1IN8d2642026420epoutp02p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1756697641;
+	bh=uU0UrKirjvX5fa8m8MUKd9RwSD+yLy9b8io3irBzxG8=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=dxpygT4gWAUUKJDRI4VWQHqVa+8eUzjre26YsG4Ptm4PqPBDH51a58f513uU8Atr1
+	 BgOyW0SMz+bc6D0x2mhIaeDy8euSza/RGRx2aquPIM1Uet1PCcLr+WfJWcfaUepqPZ
+	 UWO/H7BKnKwtS0Vb2SLUGcWp6AnhnWnrVMk3zgvs=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250901033359epcas5p1c283a30d1db11caef94473d360e336f5~hCzI40H2Z2963529635epcas5p1V;
+	Mon,  1 Sep 2025 03:33:59 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.90]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4cFZGt6tycz6B9mB; Mon,  1 Sep
+	2025 03:33:58 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250901033358epcas5p155659ad43787629cdd3221f359b8a72a~hCzHQdwnE2963529635epcas5p1R;
+	Mon,  1 Sep 2025 03:33:58 +0000 (GMT)
+Received: from FDSFTE411 (unknown [107.122.81.184]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250901033353epsmtip17c5fa910804d2969d332336802e28da9~hCzCu9gwp0939709397epsmtip1E;
+	Mon,  1 Sep 2025 03:33:53 +0000 (GMT)
+From: "Ravi Patel" <ravi.patel@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzk@kernel.org>
+Cc: <jesper.nilsson@axis.com>, <mturquette@baylibre.com>,
+	<sboyd@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <s.nawrocki@samsung.com>, <cw00.choi@samsung.com>,
+	<alim.akhtar@samsung.com>, <linus.walleij@linaro.org>,
+	<tomasz.figa@gmail.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+	<arnd@arndb.de>, <ksk4725@coasia.com>, <kenkim@coasia.com>,
+	<pjsin865@coasia.com>, <gwk1013@coasia.com>, <hgkim05@coasia.com>,
+	<mingyoungbo@coasia.com>, <smn1196@coasia.com>, <shradha.t@samsung.com>,
+	<inbaraj.e@samsung.com>, <swathi.ks@samsung.com>,
+	<hrishikesh.d@samsung.com>, <dj76.yang@samsung.com>,
+	<hypmean.kim@samsung.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-arm-kernel@axis.com>, <linux-clk@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<soc@lists.linux.dev>
+In-Reply-To: <20250829-attentive-watchful-guan-b79ccc@kuoka>
+Subject: RE: [PATCH v3 08/10] arm64: dts: exynos: axis: Add initial ARTPEC-8
+ SoC support
+Date: Mon, 1 Sep 2025 09:03:52 +0530
+Message-ID: <000001dc1af1$4026d700$c0748500$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] dts: arm64: freescale: move imx9*-clock.h
- imx9*-power.h into dt-bindings
-To: E Shattow <e@freeshell.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>
-Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
- devicetree@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20250831200516.522179-1-e@freeshell.de>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250831200516.522179-1-e@freeshell.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHHo9j0Rv1rvZf0N1R8AXn4x9PYUAJmRP9VAu8V1FcBMgRwRbRyXiFg
+Content-Language: en-in
+X-CMS-MailID: 20250901033358epcas5p155659ad43787629cdd3221f359b8a72a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-541,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250825120735epcas5p3c86b9db5f17c0938f1d53ef6014ab342
+References: <20250825114436.46882-1-ravi.patel@samsung.com>
+	<CGME20250825120735epcas5p3c86b9db5f17c0938f1d53ef6014ab342@epcas5p3.samsung.com>
+	<20250825114436.46882-9-ravi.patel@samsung.com>
+	<20250829-attentive-watchful-guan-b79ccc@kuoka>
 
-On 31/08/2025 22:04, E Shattow wrote:
-> Move imx9*-{clock,power}.h headers into
-> include/dt-bindings/{clock,power}/ and fix up the DTs
 
-Huh? Why?
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzk@kernel.org>
+> Sent: 29 August 2025 13:26
+...
+> Subject: Re: [PATCH v3 08/10] arm64: dts: exynos: axis: Add initial ARTPEC-8 SoC support
+> 
+> On Mon, Aug 25, 2025 at 05:14:34PM +0530, Ravi Patel wrote:
+> >  config ARCH_AXIADO
+> >  	bool "Axiado SoC Family"
+> >  	select GPIOLIB
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
+> > index bdb9e9813e50..bcca63136557 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -1,4 +1,5 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > +subdir-y += axis
+> >  subdir-y += google
+> >
+> >  dtb-$(CONFIG_ARCH_EXYNOS) += \
+> > diff --git a/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
+> > new file mode 100644
+> > index 000000000000..70bd1dcac85e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/axis/artpec-pinctrl.h
+> > @@ -0,0 +1,36 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> Does not match rest of licenses.
+> 
+> > +/*
+> > + * Axis ARTPEC-8 SoC device tree pinctrl constants
+> > + *
+> > + * Copyright (c) 2025 Samsung Electronics Co., Ltd.
+> > + *             https://www.samsung.com
+> > + * Copyright (c) 2025  Axis Communications AB.
+> > + *             https://www.axis.com
+> > + */
+> > +
+> > +#ifndef __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
+> > +#define __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__
+> > +
+> > +#define ARTPEC_PIN_PULL_NONE		0
+...
+> > +#define ARTPEC_PIN_DRV_SR6		0xd
+> > +
+> > +#endif /* __DTS_ARM64_SAMSUNG_EXYNOS_AXIS_ARTPEC_PINCTRL_H__ */
+> > diff --git a/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
+> > new file mode 100644
+> > index 000000000000..8d239a70f1b4
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/axis/artpec8-pinctrl.dtsi
+> > @@ -0,0 +1,120 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> 
+> This is Dual license, so why pincltr header is not?
+
+Thanks for the review.
+I will update the Dual license in pinctrl header in the next version.
+
+Thanks,
+Ravi
 
 > 
-> Reported-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-
-What sort of bug are you fixing? Nothing in commit msg explains that at all.
-
-> Signed-off-by: E Shattow <e@freeshell.de>
+> Best regards,
+> Krzysztof
 
 
-Best regards,
-Krzysztof
 
