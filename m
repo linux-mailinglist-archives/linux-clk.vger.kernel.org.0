@@ -1,82 +1,87 @@
-Return-Path: <linux-clk+bounces-27230-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27233-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7953B422AE
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 15:57:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8788B424DD
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 17:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDE4D205D68
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 13:57:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 707AA7BB9DD
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 15:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269BB3126B1;
-	Wed,  3 Sep 2025 13:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADC422D4C3;
+	Wed,  3 Sep 2025 15:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gu3DBpJq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZdBMsYOc"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3429530F7EB
-	for <linux-clk@vger.kernel.org>; Wed,  3 Sep 2025 13:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C765228CB0
+	for <linux-clk@vger.kernel.org>; Wed,  3 Sep 2025 15:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756907812; cv=none; b=WPZFI8zcv44bshZnWr63D8qL7djOrBLoXv/7gyArYnHsIPBvuwTpIEFqC6GQjTxh2F8+YyNSSpmNbTeLjVihAoX2TUFO8ymFrMjefZY1OKRuDltaFU/iwuyL+apcx8lsWkfhuI1cni0PpMvddq9SQM1m5l96PWnvBtIbAn3kuFU=
+	t=1756912536; cv=none; b=V37vRH1baSJ7uI15gNeU4tZpgP0Q8YU5y9VdC0BAGqnVokrJf4LQZmj2+jCBwrctXt472jcH+ezlFBVtK9RUAxyWsvMfZlsRrAtoNbhZrnVVTZS08imBasNmeLYuScioLf82kS7UEav0YZ8yP9UPzlEY1ya3toufWJtjTIi7YDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756907812; c=relaxed/simple;
-	bh=jmSGd1LEiJi/OzRrbMT0IdOTY/EPAZZsAFW195MpqOM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UK8gnpN+79qGmmYwgz2qMp4f+pxrD95DwagKV0Wn2yVjqZP7x9g8qTGASax+87Iwk+D18XA7R0Y6PJnEVGzpjeAk9d5e/acOiXIg1myD9n/5r3llaBK2pozCc/uIsdbRf+Mz3YNTpAsVnutoe9eT7oo9xefboQA4+Nqd/Rl771s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gu3DBpJq; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45cb659e858so4549405e9.2
-        for <linux-clk@vger.kernel.org>; Wed, 03 Sep 2025 06:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756907807; x=1757512607; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=knWYmZlS1tcNLIvNHwra67g63fbf9sRjO2H/UvMZ5D0=;
-        b=Gu3DBpJqJIkDwXMJR+3BFOmT1ZwdlnBG+T5WxgqkanYALyWEifLQkMzZi6F92t4ZfN
-         ugfWuT0KOUvLTz1emDszCCsgZcBwobQ+9OIFBBNq0H5oNHN2s+Owhv0m48HDreG3EYUb
-         uxtoDd8djgQi6RZ3x0gCToLphTDMSwq6Hw0CxpuczLMmwpjqzJ8uO559eKufYAsSRLQK
-         3hows0RUQUf8chR33mbXPqyzDCkfvX6eLnMaj/oIWkFbhcoC5CxR0NUM66x85+EfRbbT
-         zE3J0TdW48iTGmCQ22lIshOkSqy6GOOfrdbmwoHsahoctH2Vl4wDHrSt8arJnVHeJSDR
-         HBbA==
+	s=arc-20240116; t=1756912536; c=relaxed/simple;
+	bh=Xu0cBEqi7Psy9OdAnHfnNSejeDcVKnoUS6N7NxTCby8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dwe2W51sRoRoMqoH4s+gdFDATKZgXH68VtfchaEniATBejrtByTLjY5gB5PBMTzntt7XCBoI07kJ45KBTOm8cmvDHdI/R0yJRVdGOBmorp0ivrgXKE+esESc2oNCCxncHJXdEYJkiqkVIz4E160WqNpgmcyZhKtz+XZgl2syqLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZdBMsYOc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756912533;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LdY3eJT+Y0XdvlnzE2zEJKsg9kAaBz/9qglzunIg0gk=;
+	b=ZdBMsYOcltOqwkhXXj5Ykm6rmvvwDeP+YcmFgMM7Txs+74M1BvIN9zXR8+ajadCvfgQeUK
+	ZcCWaf9qKLPsPFFkQqeF2Iil/ccQuZLe41f83TJ+82dj5H/5AqgSWzA5yR6aotDhSFI6JV
+	gNDF6NJ+pYWMTzzmkZ/7/v/wQ4MLOXY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-558-1k8Smu0VPHuvEHfkQvfX4g-1; Wed, 03 Sep 2025 11:15:32 -0400
+X-MC-Unique: 1k8Smu0VPHuvEHfkQvfX4g-1
+X-Mimecast-MFC-AGG-ID: 1k8Smu0VPHuvEHfkQvfX4g_1756912532
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-726aec6cf9fso10789346d6.1
+        for <linux-clk@vger.kernel.org>; Wed, 03 Sep 2025 08:15:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756907807; x=1757512607;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=knWYmZlS1tcNLIvNHwra67g63fbf9sRjO2H/UvMZ5D0=;
-        b=R9PCgXocBWKU0FPWOZn6Nb66UW4oRo62m2BO95l7FWWJa4cpgOHGSblyLnfgA1qPtA
-         +dm3nfg87+a4k/CFqQC9IDKhd7XqPgI79kBKG8YwJ8HoZDG5q+vJLhOOUZVHwWXZcXnm
-         bqwJW3mtkNamRUjjerJu+tDnxSbjyNPcPNJZ5BPxkRwfL8yeLycFLejdxwiafjJFad+K
-         uct/Kq/v0HjWjDGx5OdvV+MkF7DxJXYkxhJRCAw1gZ+nDgYxKO4kKfv54SwifqccVdmS
-         QfcHYVFXeAwYepq3YSo+2GZr/EhZ6gP3tuQd9xprkfYSmtosqniwkYLpfmAHW3PVp6Bu
-         rtbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXs6Ka877/sArUutcwaDHCo99HLOq51TjHtZbXVSL2CLy5/4heAxY68udr0FOzYqE1oC3CR7CWeRAw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUEWkedq6ZhZGk9tNJnB206PElMXI3vqAiuGSteNSdeoNHH8/3
-	rnn2L3lzW+o7+crBsS/fyNlgt/uskmZrijqHOVIWVIjX7ECocLzrnqFM+Y/pydBdo/c=
-X-Gm-Gg: ASbGncu8sYT43ZzK0TJu4FP/Xx126sTQHayrcwOh+Wz0OlDQ2y6sSHeenqr/KJ/V4g1
-	7vEmj+9mEQS/x9sWFJ7GC1aWHKni74I5EQKQKzhAnPSyotKNoAMpO7rFNoE1B6JyFA0scFnvbM+
-	LfKY3XSLD4wheLO/ZOjNL/PkBUf5asfk9Qmm7wBlAfyq2c3Vl9jdLTv5v+8UDIPeaZ/RqIe82/O
-	47V3lvNKgu1NLpXA0q4Uh1wQn1aygfR6FxswErVUZTEdK/IKwkhd9YOw8Z8fCi7K8byTV78SnoU
-	rfiDkZwtnK6E9gDWZekaG6j7msIZ0GuOeoUb1ofSuw15HAKJB8nOI2AMx5N0vNsREkfNPgCTQRi
-	ft5dmoKg7lGPHgDlVtxtNlj5vJ1HOpLWeGfecGTfWlJYEZx1cqHfhIjxGF/W5If7EW7CFXl8VZq
-	k5uL3d4kGgPYP8
-X-Google-Smtp-Source: AGHT+IEEbe9zmys+SdHs+R+yvKPrY3H8cKyU1UJgBhivbEglt1LnfQ35e5S95bN5Q3yU4Jw1QrwtWA==
-X-Received: by 2002:a05:600c:5253:b0:45d:98be:ee91 with SMTP id 5b1f17b1804b1-45d98bef030mr1077085e9.9.1756907807066;
-        Wed, 03 Sep 2025 06:56:47 -0700 (PDT)
-Received: from ta2.c.googlers.com (219.43.233.35.bc.googleusercontent.com. [35.233.43.219])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b87632365sm197257135e9.16.2025.09.03.06.56.46
+        d=1e100.net; s=20230601; t=1756912532; x=1757517332;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LdY3eJT+Y0XdvlnzE2zEJKsg9kAaBz/9qglzunIg0gk=;
+        b=S18t4+XkVvNAS9aLXTC7pVUfqUDkJXWBZaDkvTjw4NHNFS+ENZPPVn9ip5Gf8y0xsI
+         kct1o0Bwihq01Dgo2+obpM2Uz2LDpltMKXzqNQyIjQiZ7gUHiWDJs1eKjAiMCUu5dbJt
+         BAF8Ec45Yi+F5tQ4r9uC+OIkrFMKgu3gBR4C35hZPr2+XydTMs9iiPVQGhrFzGXDvfho
+         aU5yvsUN3HVT1oA3ubRwb+GHiI75tuegtuYUtnCzNiTJ8XBvD7S+Me0lzVpwSboGOwJl
+         zHY1SZ7IYjFguy1WsEmXpl9ndRaSdVOoyN8GJKhv85e2vF0Iiz3nUw4l4WPWNDocOOrq
+         /PBw==
+X-Gm-Message-State: AOJu0Yyc6kGDFq7Qy96QK6FDoG/ouoq49x/ImzV6M9cCtkBUphG/Fpo2
+	/fUFGfW6uDkEqWzpxQ1JW05J4Wi8YWIRJNprgIm0xfoC/6RVIiUST154BGeplo2O7LEbfrOoiGH
+	T9bDCy7Kb6NCbHbLiIFCeMdqP1MTocEO3Khw41v0tYHxYuHd/uMW2rW+ySB9e7Q==
+X-Gm-Gg: ASbGncsPRSzfoXrWv8zc6MKAW3qNSA4IgULC0E/oqcgxYpXsZ3uCa91R4KSDYfiFG3H
+	d9O33n7w+zQLx+mTdriYweCYxMG3s8DlVJrbDFuiE/GEg/WcDP1TH2jKBkibO9p+mtCboqJgGGb
+	6kF/nBTgQGjtbxFyrP98YPgnr+omIXlQjSEqSVo45MCu5vJUZ6j9lvYZCBIZaqddnaqfqvdO3YT
+	mRAd0EsLLYivO9kbGt7Ty7XCH/N6Q3MleCR93QlwyLDfi0nAcjMstjPUugyIP+DapndrqpDpHW9
+	/de4KcG6FfghZ48q1jUDOnws12n0SFHqyl9LQoh5WT4xMDKM73LYUvkVdbAQZ0MCGoA3r37ekGI
+	=
+X-Received: by 2002:a05:6214:76d:b0:716:17e0:2466 with SMTP id 6a1803df08f44-71617e02b67mr159465786d6.34.1756912528862;
+        Wed, 03 Sep 2025 08:15:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEkWebP2Qk177v4NSM1pvKjg7uVb9XRiSsSjX1ArIElnPlsqqP/rGsp6ulP8idla98+4xureg==
+X-Received: by 2002:a05:6214:76d:b0:716:17e0:2466 with SMTP id 6a1803df08f44-71617e02b67mr159461546d6.34.1756912525636;
+        Wed, 03 Sep 2025 08:15:25 -0700 (PDT)
+Received: from [10.12.114.224] ([2600:382:850c:786a:ff8e:13a:e47c:3472])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-720ac16de16sm30827706d6.3.2025.09.03.08.15.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 06:56:46 -0700 (PDT)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date: Wed, 03 Sep 2025 13:56:42 +0000
-Subject: [PATCH v3 5/5] arm64: defconfig: enable Exynos ACPM clocks
+        Wed, 03 Sep 2025 08:15:24 -0700 (PDT)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH v2 0/6] clk: tegra: convert from clk round_rate() to
+ determine_rate()
+Date: Wed, 03 Sep 2025 11:15:01 -0400
+Message-Id: <20250903-clk-tegra-round-rate-v2-v2-0-3126d321d4e4@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -85,55 +90,189 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250903-acpm-clk-v3-5-65ecd42d88c7@linaro.org>
-References: <20250903-acpm-clk-v3-0-65ecd42d88c7@linaro.org>
-In-Reply-To: <20250903-acpm-clk-v3-0-65ecd42d88c7@linaro.org>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+X-B4-Tracking: v=1; b=H4sIAHVbuGgC/x2MQQ5AMBAAvyJ7tkkVB74iDqsWG1KypZGIv2scJ
+ 5mZBwKrcIA2e0A5SpDdJ7B5Bm4hPzPKmBissbVpTIluW/HkWQl1v/yISidjtEhTMgZyTeUKSPW
+ hPMn9n7v+fT+G+jpKaQAAAA==
+X-Change-ID: 20250903-clk-tegra-round-rate-v2-af025bac94c1
+To: Peter De Schrijver <pdeschrijver@nvidia.com>, 
+ Prashant Gaikwad <pgaikwad@nvidia.com>, 
  Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-clk@vger.kernel.org, willmcvicker@google.com, kernel-team@android.com, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
+ Stephen Boyd <sboyd@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756907802; l=820;
- i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
- bh=jmSGd1LEiJi/OzRrbMT0IdOTY/EPAZZsAFW195MpqOM=;
- b=uHbQ7xT3bV6lIp0HqgAN0MLCg6QtXHzra5fcYf5Lk5NwyHh5UfcdGdrFyQvIdgzD6dfszLV11
- AJJjST6HJPrAxYtlucE/6MSFIODMgces/93QGOxMCFOl2jtohAP2doq
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
- pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756912523; l=5345;
+ i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
+ bh=Xu0cBEqi7Psy9OdAnHfnNSejeDcVKnoUS6N7NxTCby8=;
+ b=NcgiVd9SVHO/Mdpi8r0JCLnx5fe5/PII/AMdsLbqulhKFwkgOZbUK4cYUnd4Ko03VbNBh82L/
+ Qy2Al6Q9Ao2DpmVWLyPovFd8KUFwookPysJXxiff6BX58YhhLTFZuza
+X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
+ pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 
-Enable the Exynos ACPM clocks driver. Samsung Exynos platforms
-implement ACPM to provide support for clock configuration, PMIC
-and temperature sensors.
+The round_rate() clk ops is deprecated in the clk framework in favor
+of the determine_rate() clk ops, so let's go ahead and convert the
+drivers in the clk/tegra subsystem using the Coccinelle semantic patch
+posted below. I did a few minor cosmetic cleanups of the code in a
+few cases.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Changes since v1:
+- Fix merge conflict against drivers/clk/tegra/clk-periph.c since
+  v1 was posted.
+https://lore.kernel.org/linux-clk/20250710-clk-tegra-round-rate-v1-0-e48ac3df4279@redhat.com/T/
+
+Coccinelle semantic patch:
+
+    virtual patch
+
+    // Look up the current name of the round_rate function
+    @ has_round_rate @
+    identifier round_rate_name =~ ".*_round_rate";
+    identifier hw_param, rate_param, parent_rate_param;
+    @@
+
+    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
+                  unsigned long *parent_rate_param)
+    {
+    	...
+    }
+
+    // Rename the route_rate function name to determine_rate()
+    @ script:python generate_name depends on has_round_rate @
+    round_rate_name << has_round_rate.round_rate_name;
+    new_name;
+    @@
+
+    coccinelle.new_name = round_rate_name.replace("_round_rate", "_determine_rate")
+
+    // Change rate to req->rate; also change occurrences of 'return XXX'.
+    @ chg_rate depends on generate_name @
+    identifier has_round_rate.round_rate_name;
+    identifier has_round_rate.hw_param;
+    identifier has_round_rate.rate_param;
+    identifier has_round_rate.parent_rate_param;
+    identifier ERR =~ "E.*";
+    expression E;
+    @@
+
+    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
+                  unsigned long *parent_rate_param)
+    {
+    <...
+    (
+    -return -ERR;
+    +return -ERR;
+    |
+    - return rate_param;
+    + return 0;
+    |
+    - return E;
+    + req->rate = E;
+    +
+    + return 0;
+    |
+    - rate_param
+    + req->rate
+    )
+    ...>
+    }
+
+    // Coccinelle only transforms the first occurrence of the rate parameter
+    // Run a second time. FIXME: Is there a better way to do this?
+    @ chg_rate2 depends on generate_name @
+    identifier has_round_rate.round_rate_name;
+    identifier has_round_rate.hw_param;
+    identifier has_round_rate.rate_param;
+    identifier has_round_rate.parent_rate_param;
+    @@
+
+    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
+                  unsigned long *parent_rate_param)
+    {
+    <...
+    - rate_param
+    + req->rate
+    ...>
+    }
+
+    // Change parent_rate to req->best_parent_rate
+    @ chg_parent_rate depends on generate_name @
+    identifier has_round_rate.round_rate_name;
+    identifier has_round_rate.hw_param;
+    identifier has_round_rate.rate_param;
+    identifier has_round_rate.parent_rate_param;
+    @@
+
+    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
+                  unsigned long *parent_rate_param)
+    {
+    <...
+    (
+    - *parent_rate_param
+    + req->best_parent_rate
+    |
+    - parent_rate_param
+    + &req->best_parent_rate
+    )
+    ...>
+    }
+
+    // Convert the function definition from round_rate() to determine_rate()
+    @ func_definition depends on chg_rate @
+    identifier has_round_rate.round_rate_name;
+    identifier has_round_rate.hw_param;
+    identifier has_round_rate.rate_param;
+    identifier has_round_rate.parent_rate_param;
+    identifier generate_name.new_name;
+    @@
+
+    - long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
+    -               unsigned long *parent_rate_param)
+    + int new_name(struct clk_hw *hw, struct clk_rate_request *req)
+    {
+        ...
+    }
+
+    // Update the ops from round_rate() to determine_rate()
+    @ ops depends on func_definition @
+    identifier has_round_rate.round_rate_name;
+    identifier generate_name.new_name;
+    @@
+
+    {
+        ...,
+    -   .round_rate = round_rate_name,
+    +   .determine_rate = new_name,
+        ...,
+    }
+
+Note that I used coccinelle 1.2 instead of 1.3 since the newer version
+adds unnecessary braces as described in this post.
+https://lore.kernel.org/cocci/67642477-5f3e-4b2a-914d-579a54f48cbd@intel.com/
+
+Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Brian Masney (6):
+      clk: tegra: audio-sync: convert from round_rate() to determine_rate()
+      clk: tegra: divider: convert from round_rate() to determine_rate()
+      clk: tegra: periph: divider: convert from round_rate() to determine_rate()
+      clk: tegra: pll: convert from round_rate() to determine_rate()
+      clk: tegra: super: convert from round_rate() to determine_rate()
+      clk: tegra: tegra210-emc: convert from round_rate() to determine_rate()
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 58f87d09366cd12ae212a1d107660afe8be6c5ef..4255bc885545fb3bb7e9cf02760cac35bf2872fa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1445,6 +1445,7 @@ CONFIG_CLK_GFM_LPASS_SM8250=m
- CONFIG_SM_VIDEOCC_8450=m
- CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
- CONFIG_CLK_RENESAS_VBATTB=m
-+CONFIG_EXYNOS_ACPM_CLK=m
- CONFIG_CLK_SOPHGO_CV1800=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_OMAP=m
+ drivers/clk/tegra/clk-audio-sync.c   | 10 +++----
+ drivers/clk/tegra/clk-divider.c      | 28 ++++++++++++-------
+ drivers/clk/tegra/clk-periph.c       |  8 +-----
+ drivers/clk/tegra/clk-pll.c          | 52 +++++++++++++++++++++---------------
+ drivers/clk/tegra/clk-super.c        |  9 +------
+ drivers/clk/tegra/clk-tegra210-emc.c | 24 +++++++++++------
+ 6 files changed, 72 insertions(+), 59 deletions(-)
+---
+base-commit: 5d50cf9f7cf20a17ac469c20a2e07c29c1f6aab7
+change-id: 20250903-clk-tegra-round-rate-v2-af025bac94c1
 
+Best regards,
 -- 
-2.51.0.338.gd7d06c2dae-goog
+Brian Masney <bmasney@redhat.com>
 
 
