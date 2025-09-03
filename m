@@ -1,142 +1,226 @@
-Return-Path: <linux-clk+bounces-27252-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27260-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E8F2B42A6D
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 22:03:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10929B42BE8
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 23:28:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497497C0BF8
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 20:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5145171946
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Sep 2025 21:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BBEE258EE1;
-	Wed,  3 Sep 2025 20:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7520E2EB5D4;
+	Wed,  3 Sep 2025 21:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XpunDJ7M"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="m9Kwi8LT";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="VKxRCq3G"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7962B32F754;
-	Wed,  3 Sep 2025 20:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AC732F755;
+	Wed,  3 Sep 2025 21:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756929800; cv=none; b=H9lFnH4qh/a7EeJNuUeCCPznQ4iHtSfrfjb4FTCkUUHof1Rq5Ai/o72bX3IIb5O4wQ7yz2kMnYoVX4f1hEKxVmFdsc2adY4BzL12cUMdyflAS0zCQ9Xau8+E7uLWxCIywEWQM4qEz2YepSRr4+n0PPlAapx/4IbWRxPjt8fx3QY=
+	t=1756934903; cv=none; b=pqV5BBpIhCaEFKVUIDrln4sovlMfuHqwSlJRC7O3gZl5FgAoyg+YYq7N+OPMYq59eW+Gznqb/ByLt09lHKDtuXUI+MlYkIVCH3ayq3S+VhWaJwhUqOYIDk7w/2BOVOn3e/8S8xAo+Zy2MN4j5DWKeKHI6kN9jmxC2/79KGnqCeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756929800; c=relaxed/simple;
-	bh=/GnEnyvIds6NMEuy70lyQ7iozsauSfnagRTg05Nb+2E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kJSBG2bG4HaKvjU88IATu3YOXXmq2FlnF2Y74nzgQw9tAx/Q15A9GD8xMTF7M9jyA2GD/5afZTkva4lUpuLlwAzTwZZJpikb69ic1A3axEmvKc9WADKHBCWm9jSMfreXRyqeqUJvkqZPuCfCaZSBSox8uyOkwNmJs0fo9YyAkCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XpunDJ7M; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55ce508d4d6so200519e87.0;
-        Wed, 03 Sep 2025 13:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756929797; x=1757534597; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVCyKPOHSsiPuZSH2bGLKwR4+CtPnqenhzlKImlxxGM=;
-        b=XpunDJ7MD1CqNCh5kb8wvcCicyNH6saZxcy30Hr5B9WtNbM3CPCYMIskxtJiSKDqf6
-         tbvuh9E8EsGi78GUSmF8dbYkwJ0vsMnvYSzSc1iJJleiYTHniW3J0HmFKZl5EupMyL90
-         8KPuEoI1PsJyZe6WLrJcocAMGpVCorr/RdxfVecqjQKv0Q1yGt7OV3KrirRHa4SPgMTb
-         /f/qNA4WiOJol7BDpQ+JLGJ/Ania/tAosYtsZep/5GugouAvVA+YLu/sjPuCjlf+sinn
-         HpyIRpW2dyPiaJ3Pm1NcfLCufr18Zjv8Bzi8jqzO4qlnDD/XzLQ0BWRel17bMcsNg68a
-         1pMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756929797; x=1757534597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OVCyKPOHSsiPuZSH2bGLKwR4+CtPnqenhzlKImlxxGM=;
-        b=ruT+epKLBGVOyqj3O2CDbn9BySTLV6/ZYmIwPuQZBp3e5ir+itRtpCuPJ5JudXXVLD
-         Cg/KTJbyfD9PoVVxYBxOXZMV4QU5ldAG8HEIaeksGo5Jt8muUFyb7VUo20W5GXXIXHL1
-         w8wahAxFMsNSLSvjNyAfnhoRr6Uj6SCw/YWW/EO+1FJJUTs33kVdvp7xryo0Iu5FF5F3
-         511tVWQH3TAcQe/OKAjGrs7CgStdZ3RwYT+93/uuXZVJoBfhMa0EXzTEvIJejiMogIIM
-         Rb4XDy2zsVjIVv790nEiITfrlUUU5dxJk7BNGYHoiQctISmFK7ESoLrmFJ3iH5fqT8n/
-         qzXw==
-X-Forwarded-Encrypted: i=1; AJvYcCUulxwvq2K+sl2CBqoPVfY2rmQzlVkmu3YqH894bdg/NwQvFiDRbU4g7qN/Am82YtARw9hVpXIf79ItdqfZ@vger.kernel.org, AJvYcCX2K/KNsBiPxD83Jig1DXtcVQArRTXs653CaFHdoko3pFK73T70EIquTgnaeuorquqkAI1lHKLdfrggXBo=@vger.kernel.org, AJvYcCXfbY7uDkEVCgInimjaKJhKkh5tvO0Nmv9m0SwTorh6IW/yEk/NHIWZqzBtzrkXdgRj9cc9vpM1ROAD@vger.kernel.org, AJvYcCXgSAx8KFmxndWZrVBM+I3HdNWYHoT7t35Aub91VaU4/mYRvAdNB26EdPgwHRryGY29pHZovkkZc86i@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2NuLCxooek7bvIqEb+UqMmmZTGjzwYYK2nquM0okg/Go1d37z
-	83JOIPKLe1a5kreUJsR9jiej6lSwTbFq9xatvkR6VDOvh9QsnpeYdRJF8NSBQatOzJzu2LKXTgq
-	4pB73hxwOFU4xszAShGL115IDV8lim3M=
-X-Gm-Gg: ASbGncv6alX9EytDyB1oQ/PepmPJOYJ3mYTt7odHsNuC6u0EKxpTHAdv2W/yjWAcxWI
-	GvrnxHvWuqPpvQuRaaYj/dvJEWwwa7lRfiP6WSiDpPkoFTq7uArBZ2WtJFy60TItInQHD7MdjVF
-	n5FFi4u/ayWMIjLW/y57vJ067t1ri+UkWrTYgQYS//kdPYSxA/8t9GwWPoVy1aGJ4XLln+jQmuP
-	A7+VWupczbFWKvI7emw0p02GIxF
-X-Google-Smtp-Source: AGHT+IGQ+MSQmso+WRSx4PehMSzyC243Ed59bXozsvm2C9c3duCkAx99xM+64CNu/YaQvU0yXQneMAeWEzI0NJeRFiY=
-X-Received: by 2002:a05:6512:eaa:b0:55f:4321:4ad6 with SMTP id
- 2adb3069b0e04-55f70948893mr5066121e87.44.1756929796386; Wed, 03 Sep 2025
- 13:03:16 -0700 (PDT)
+	s=arc-20240116; t=1756934903; c=relaxed/simple;
+	bh=e1gjdWn0vKRwDlsZj/ZBmgG7bHXaMkWeD/hnuty2IY0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=az8AAQ0wG7rM7tjLgqW5TeEpi68bnpG28LQOgq6lhSmDYEbALQwTqgUOfcGNm+oHzp/+EtiSG0SZwpNQFov7NQ5Y4Ke8P7JAjgKb8S3bu1vLiKTjMg314G6mj/EYbmTinBRWv5CLzbagorKe2WQUA3QbuUoEPFqXOpAilFY2YvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=m9Kwi8LT; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=VKxRCq3G; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1756933741; bh=bqzHAqPKSIfqbGTnCGmLkW+
+	yGY7a0Pdl1meacZYhxxA=; b=m9Kwi8LTmBFMnmoU7p1Qafwr25r/1A1zb91u0Ke/4xTxVWtsUF
+	Krn22Yj3cma5ReSQ2KuVNuHtQRh8jz91JI7DYBwy2+EhtK5F0r/kauMFctbDrgk5h3WVwi3qnXJ
+	3+Nk4ihPR63UlAT4stOREltJ21dRqwKtORAS0yxH880qC+B0BuTwG0PB13KXhzEkCG2dqobSPOt
+	QV3fyDKIwhiPqMiDr4mOC8AybZg4eUcgUyX6QkDNzlxYoHRF3LrnwVV8zY2az43kWRrCAqfmcVa
+	zPyfBA3AET57O+LvsjAm8eatRvlc813GBb8ioKLU0TsOd+Kl7S8S9StIY9ulbTcAxeQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1756933741; bh=bqzHAqPKSIfqbGTnCGmLkW+
+	yGY7a0Pdl1meacZYhxxA=; b=VKxRCq3GfZGFxVtbP/7IcagYnTUr5Tj5DXSGGMtNbx8u+ib1I2
+	bKC9+ypFN/NjXUiiTSVOplkNzLREuBKzuOCA==;
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v9 0/7] Initial support of MSM8937 and Xiaomi Redmi 3S
+Date: Wed, 03 Sep 2025 23:08:20 +0200
+Message-Id: <20250903-msm8937-v9-0-a097c91c5801@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250903-tegra210-speedo-v2-0-89e6f86b8942@gmail.com> <20250903-tegra210-speedo-v2-1-89e6f86b8942@gmail.com>
-In-Reply-To: <20250903-tegra210-speedo-v2-1-89e6f86b8942@gmail.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Wed, 3 Sep 2025 15:03:04 -0500
-X-Gm-Features: Ac12FXyxjeI6n6U06P265p3zT3OBNoc4LSPzdOdF_n2VtoVV-v4DkdQvlgmhS_Y
-Message-ID: <CALHNRZ83jeMbudD9LfddEntkLDgygsg_D5LAovXXpFnZie9D7w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: tegra124-dfll: Add property to
- limit frequency
-To: webgeek1234@gmail.com
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Joseph Lo <josephl@nvidia.com>, Peter De Schrijver <pdeschrijver@nvidia.com>, 
-	Prashant Gaikwad <pgaikwad@nvidia.com>, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thierry Reding <treding@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAESuuGgC/3XQzU7FIBAF4Fe5YW0NzFAGXPkexgW/vSS2Na1pN
+ Dd9d+lNlCbi8kz4zgA3tsYlx5U9XW5siVte8zyVYB4uzF/tNMQuh5IZcOg5CN6N66gNUgegY+L
+ BY/SGldPvS0z589708lryNa8f8/J1L97EMf3pEL8dm+h4RwEoBkWJuH4ebZ7e8pSn4XFeBnYUb
+ XDCgBVDwc4YKkOFMWAT4xnLirHgYAN5ocF775pYVoyir1gWLJJAiJq4laaJ+4olnN7cH9dORpO
+ JScjQxqpiDfXTN3VgbrgD652i2MR0wnjaTAUDgjXJCWMdNbH+B+tjMwUfFHprrf+D933/BkWfB
+ ytOAgAA
+X-Change-ID: 20250210-msm8937-228ef0dc3ec9
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, Lee Jones <lee@kernel.org>, 
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+ Robin Murphy <robin.murphy@arm.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+ Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Dmitry Baryshkov <lumag@kernel.org>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Abhinav Kumar <abhinav.kumar@linux.dev>, 
+ Jessica Zhang <jessica.zhang@oss.qualcomm.com>, 
+ Robert Marko <robimarko@gmail.com>, 
+ Adam Skladowski <a_skl39@protonmail.com>, 
+ Sireesh Kodali <sireeshkodali@protonmail.com>, 
+ Das Srinagesh <quic_gurus@quicinc.com>, 
+ Srinivas Kandagatla <srini@kernel.org>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Dmitry Baryshkov <lumag@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, iommu@lists.linux.dev, 
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ linux@mainlining.org, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Daniil Titov <daniilt971@gmail.com>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Dang Huynh <danct12@riseup.net>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756933738; l=4333;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=e1gjdWn0vKRwDlsZj/ZBmgG7bHXaMkWeD/hnuty2IY0=;
+ b=xwPgJP+tj3ynGr1IcC2se1Xgm9RgJVHOyt8jT9LlbvM1HeYAYCt2hye+dVRU398Ye36vwSn/K
+ BazDpx0Wtu/BwBi+rx/yasMb4aEiWsWaYPh6+39glEPuVl3bM2lKBA/
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-On Wed, Sep 3, 2025 at 2:30=E2=80=AFPM Aaron Kling via B4 Relay
-<devnull+webgeek1234.gmail.com@kernel.org> wrote:
->
-> From: Aaron Kling <webgeek1234@gmail.com>
->
-> The dfll driver generates opp tables based on internal CVB tables
-> instead of using dt opp tables. Some devices such as the Jetson Nano
-> require limiting the max frequency even further than the corresponding
-> CVB table allows in order to maintain thermal limits.
->
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
->  Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll=
-.txt b/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
-> index f7d347385b5775ddd702ecbb9821acfc9d4b9ff2..8a049b684f962f2b06209a478=
-66711b92c15c085 100644
-> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
-> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-dfll.txt
-> @@ -70,6 +70,9 @@ Required properties for PWM mode:
->    - dvfs_pwm_enable: I/O pad configuration when PWM control is enabled.
->    - dvfs_pwm_disable: I/O pad configuration when PWM control is disabled=
-.
->
-> +Optional properties for limiting frequency:
-> +- nvidia,dfll-max-freq: Maximum scaling frequency in hertz.
-> +
->  Example for I2C:
->
->  clock@70110000 {
->
-> --
-> 2.50.1
->
->
+This patch series add initial support for MSM8937 SoC
+and Xiaomi Redmi 3S (land).
 
-Yes, I know this still needs to be converted to json before it can be
-merged, but I wanted to get an updated revision of this and another
-series that depends on it out for everything else to be reviewed. I'd
-still like to see Thierry's conversion pushed, then I can stack this
-on top of that.
+The series is extending the MSM8917 gcc and pinctrl drivers
+because they are sibling SoCs.
+MSM8937 have 4 more A53 cores and have one more dsi port then
+MSM8917.
+It implements little-big architecture and uses Adreno 505.
 
-Aaron
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v9:
+- msm8937:
+  - Update vbif size to 0x3000.
+  - Update qfprom size to 0x3000.
+  - Remove extra line below wcnss-wlan2-pins.
+  - Update gpu_speedbin address to 0x201b.
+- qcom.yaml: Rebase on latest next.
+- Link to v8: https://lore.kernel.org/r/20250831-msm8937-v8-0-b7dcd63caaac@mainlining.org
+
+Changes in v8:
+- msm8937:
+  - Fix scm compatible.
+  - Fix position of sram@60000 node.
+- Document qcom,scm-msm8937 compatible
+- Link to v7: https://lore.kernel.org/r/20250831-msm8937-v7-0-232a9fb19ab7@mainlining.org
+
+Changes in v7:
+- gpu.yaml: update adreno 505 pattern
+- Link to v6: https://lore.kernel.org/r/20250820-msm8937-v6-0-b090b2acb67e@mainlining.org
+
+Changes in v6:
+- msm8937:
+  - Fix nodes ordering.
+  - Format clocks, reg, dmas and -names properties.
+  - Add gpu_speedbin.
+- Describe A505 clocks.
+- Link to v5: https://lore.kernel.org/r/20250421-msm8937-v5-0-bf9879ef14d9@mainlining.org
+
+Changes in v5:
+- msm8937:
+  - Remove wrongly defined idle-states.
+  - Fix thermal zones.
+  - Use the header with DSI phy clock IDs.
+  - Fix the nodes order.
+  - Fix the pinctrls style.
+  - Follow gcc header changes.
+- msm8937-xiaomi-land:
+  - Remove headphone switch and speaker amplifier bindings.
+  - Unify status property style.
+- gcc bindings:
+  - Expand MSM8953 gcc schema with MSM8937.
+  - Add MSM8937 prefix for MSM8937 specific clocks.
+- gcc:
+  - Follow the bindings changes.
+- Drop alwayson clock documentation it will be handled in another
+  patchset.
+- Link to v4: https://lore.kernel.org/r/20250315-msm8937-v4-0-1f132e870a49@mainlining.org
+
+Changes in v4:
+- Add missing rpmcc include for qcom,gcc-msm8937 dtbinding exmaple.
+- msm8937: add missing space after s9-p1@230
+- msm8937-xiaomi-land: replace LED_FUNCTION_INDICATOR to LED_FUNCTION_STATUS
+- Remove applied patches
+- Link to v3: https://lore.kernel.org/r/20250224-msm8937-v3-0-dad7c182cccb@mainlining.org
+
+Changes in v3:
+- Fix qcom,gcc-msm8937 dtbinding example 
+- Link to v2: https://lore.kernel.org/r/20250223-msm8937-v2-0-b99722363ed3@mainlining.org
+
+Changes in v2:
+- drop applied patches
+- drop gcc schema commits infavor of a new schema for gcc-msm8937
+- document always on clock for adreno 505/506/510
+- msm8937:
+  - set cache size
+  - rename cpu labels
+  - fix style issues addressed by review
+- msm8937-xiaom-land:
+  - remove unused serial0 alias
+  - remove regulator-always-on from pm8937_l6
+  - add blue indicator led for aw2013
+- Link to v1: https://lore.kernel.org/r/20250211-msm8937-v1-0-7d27ed67f708@mainlining.org
+
+---
+Barnabás Czémán (5):
+      dt-bindings: clock: qcom: Add MSM8937 Global Clock Controller
+      dt-bindings: firmware: qcom,scm: Add MSM8937
+      dt-bindings: display/msm/gpu: describe A505 clocks
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 3S
+      arm64: dts: qcom: Add Xiaomi Redmi 3S
+
+Dang Huynh (1):
+      arm64: dts: qcom: Add initial support for MSM8937
+
+Daniil Titov (1):
+      clk: qcom: gcc: Add support for Global Clock controller found on MSM8937
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    6 +
+ .../bindings/clock/qcom,gcc-msm8953.yaml           |   11 +-
+ .../devicetree/bindings/display/msm/gpu.yaml       |    2 +-
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |    3 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts   |  381 ++++
+ arch/arm64/boot/dts/qcom/msm8937.dtsi              | 2133 ++++++++++++++++++++
+ drivers/clk/qcom/Kconfig                           |    6 +-
+ drivers/clk/qcom/gcc-msm8917.c                     |  617 +++++-
+ include/dt-bindings/clock/qcom,gcc-msm8917.h       |   19 +
+ 10 files changed, 3168 insertions(+), 11 deletions(-)
+---
+base-commit: 5d50cf9f7cf20a17ac469c20a2e07c29c1f6aab7
+change-id: 20250210-msm8937-228ef0dc3ec9
+
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
+
 
