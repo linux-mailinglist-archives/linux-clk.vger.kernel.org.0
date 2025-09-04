@@ -1,112 +1,121 @@
-Return-Path: <linux-clk+bounces-27268-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27270-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE65FB4344E
-	for <lists+linux-clk@lfdr.de>; Thu,  4 Sep 2025 09:39:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D08ABB4365E
+	for <lists+linux-clk@lfdr.de>; Thu,  4 Sep 2025 10:58:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7F7E586EA1
-	for <lists+linux-clk@lfdr.de>; Thu,  4 Sep 2025 07:39:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A718416D63C
+	for <lists+linux-clk@lfdr.de>; Thu,  4 Sep 2025 08:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F392BE7AB;
-	Thu,  4 Sep 2025 07:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8572E2D1F7C;
+	Thu,  4 Sep 2025 08:58:01 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960E42BE651
-	for <linux-clk@vger.kernel.org>; Thu,  4 Sep 2025 07:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7AF2D1925;
+	Thu,  4 Sep 2025 08:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756971281; cv=none; b=AOLIGY7fLqri7kfIotfj3NAFuN16BRyGVQCe0WJcakkXiLspABufDvGe06vEjVfku4Q1wjkfogp74gDPp1t62gKb/N93aImXplFkRjW/00UZZ19KdYp7LKf3cD4zP5Yj9tzIp2WQ0p/NSlCcyAAgzA8oiiAOVLkQ8zJ3uk6GOGU=
+	t=1756976281; cv=none; b=P7q9aKP+uhi51dFPCzpcca8EQgBvyhBXJKBtYQelsk4Eh9SzA3VgK5LeV57LxFKewV+eFilMXyEvHKeC9sgVHv8KZZIOr5RutFst7fyhq8suHKCi2+WdnUws5/78XRSeR5aHsKHqoyCfdPJy99vxJHyyOTL42nZXnqgBqadxGyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756971281; c=relaxed/simple;
-	bh=9Lfs7x06aYUGDh170BRagUu5k+P060o70Hk6IG+sLGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=atiKBGywaj3BZchQKnD6Etw+zkCt0JR/MBafhAShpJPsGZTRTW7A22jk4p6jTp32cPiIZR4Bq92E/jEE//deBsctEVGSyJ47EQ8i89XDjH3UaNtmOzAeVKyBPTvtpY6ANRWPun1p41P/3LUY2TZeaTnjZd3Lm28czbhSA/L6fmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <sha@pengutronix.de>)
-	id 1uu4UF-0006Gq-DD; Thu, 04 Sep 2025 09:34:27 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <sha@pengutronix.de>)
-	id 1uu4UE-003gug-3D;
-	Thu, 04 Sep 2025 09:34:27 +0200
-Received: from sha by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <sha@pengutronix.de>)
-	id 1uu4UE-0025QG-2n;
-	Thu, 04 Sep 2025 09:34:26 +0200
-Date: Thu, 4 Sep 2025 09:34:26 +0200
-From: Sascha Hauer <s.hauer@pengutronix.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	kernel@pengutronix.de, Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org,
-	Alvin =?iso-8859-15?Q?=A6ipraga?= <alsi@bang-olufsen.dk>
-Subject: Re: [PATCH v6 1/2] dt-bindings: clock: add TI CDCE6214 binding
-Message-ID: <aLlBAuYoHIJZLfiE@pengutronix.de>
-References: <20250903-clk-cdce6214-v6-0-b2cc0a6f282b@pengutronix.de>
- <20250903-clk-cdce6214-v6-1-b2cc0a6f282b@pengutronix.de>
- <20250904-arboreal-upbeat-iguana-aebba6@kuoka>
+	s=arc-20240116; t=1756976281; c=relaxed/simple;
+	bh=uJlZsSoTRN+PNDEIO2cmsHo1sMd7N9tzGTzQXDvoozE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P15i1PN5htB1U/Y3yMs1UGnzJ2eRsQIsq9PbVWMVYRGdN6eI3mjPa2Ru1nylpeBAeW03MSp6GtP07V8zCn6a77e6ugViauKqixkezR3O30eq00mK7IzvzOlJsYXs5g8aV4NU7nNpSaDgpIbkq3eDZIaWDVR9E9KwqEQyR7RCAX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-544a59e1e87so214182e0c.1;
+        Thu, 04 Sep 2025 01:57:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756976278; x=1757581078;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VQ38eglfsyJ+jBD6L5ZChIcNKuaetDWRgesngh0HUwc=;
+        b=X9N4wMVFL4I0GQR+K4vuowYQspsZjysdcKwuvyYuBFPnUxHIU+ZtKb6+Zr+AQ1hF/y
+         8kUEzldF/gv9TMCeklESBt5gbn0Wcj8g75MgNPyl2XYzcidYJ5tEt25FnuoUXDZ+7Cx8
+         zWranRiw73rKPFn3zuM2nBvM7QSuxch6eV6M9ugltWHS6aI7TbVWLDrggDRpE4WhoKSD
+         63YxXIk34Fr1w82QH2UNOu3Ma7o9jXfJmP6vLq4SzTKlkqRzhoeVW4R8MsPI3jnGJSQD
+         Y0E3gdjE/nwaXlkgpX1EO9p0cbEDf6JG8UzUwfnzHZL34jpf6+fORVDbHoE8PRAfHaVb
+         /gfg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1J25dDGVs5X8R+BL3y0rkz1UN4ED5qo07s2hesCAgdaf76i6jWsnYCTlzcSIG6Itmbv3M0pI9C0qcUePf7FgyHnw=@vger.kernel.org, AJvYcCVsqYMZHHR7rHDAqSEOP2CASrDVj7CwKzOmEGVjBQ5imxPdfWo8a+yXOMVuW/mOC3Ink40eE3YfRpc4@vger.kernel.org, AJvYcCVwEINbV3EOoXnqZm7DIQcmxe0TDmr0J5Co1qi9NdNqaIG4vC3CzLwhT8XvUy3JOm609f+f8/QqyCfBG/HW@vger.kernel.org, AJvYcCXPBYVANiLUDf4EWcXQFnpzq3OUjHeY3KWwNDmJex6CcQ3VV8t0/FmtgsR9K4EzqHSKBeRxMTX6PsVw@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzk9VePloPPVkvU3ZF2r1Cp59vmHUB8e3DBvJe3+AWdhrlGhFU6
+	ibJYQWK9q06VdmkEIK6nuBsAfpTTLcoTUlLPMwXOSuUSbEcMDHGzFcyRig/zNG/7
+X-Gm-Gg: ASbGnctXg1hkACo+zEyaYO4k+eq6fSZwZS4f7XlkTNpFdDpDYHrC2V7ELct3tbMeIWL
+	KXmJOEJ3MNw7xcz4x/YpaCHC8RnWBM3mqEwJQuXxB73+GBBAlSEdY1YcOjX5lKLibb+bBe09e06
+	DIX/OtWngY+ClA1ajPfu/xC4JQie4f1vPjXCxrmxOa1KYWpwoZq/8snHMBU/cvhNbErUavE01qv
+	d+T+UG47qEtcsH7uozj/cQQk6zsN7nK5VoS3/Dft0Y3ZLffSnNBZMePP5HEcl0w4v6cwCfqUqhp
+	lKvFtVz48/IuvSEPrdJ5NrwXphloiR8G1nRIqZh7yHrTqY/y1rgpReuU/Kwzd1XJ+gRPxn8wz0S
+	jt6xOnKUdkotryPVh13TiNjSmp/BgsSPH8AqtZF+jTTQJjaXI4WwUBn2qiO8F
+X-Google-Smtp-Source: AGHT+IFqbfAerr3f6r1NVOFBMacaqG0X113OY/AhMDqYKY04wK9+OevlJ6iLmBFvS7i2q3WtvLx59w==
+X-Received: by 2002:a05:6122:90b:b0:53f:7828:16c7 with SMTP id 71dfb90a1353d-544a02f4ce9mr6346952e0c.15.1756976278394;
+        Thu, 04 Sep 2025 01:57:58 -0700 (PDT)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-544ad6f8047sm5350156e0c.25.2025.09.04.01.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Sep 2025 01:57:58 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-50f8af3517eso263862137.2;
+        Thu, 04 Sep 2025 01:57:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUHjOr/sHVaoaYwIAl33Xk8nrcmueZ2PrgNjO5eBmGnkAc1rZCem/oP0GyfX6WOb4YBwmcAAl2e+K6T@vger.kernel.org, AJvYcCUbEqZ1YFq9XC25RH1MLrjfbODBOOtYYjwMYqmF5OpgeRe94meq30NDVYxPV2vIy2kmid6Ii//UjHvZBZ5EVHol0Ko=@vger.kernel.org, AJvYcCVgML8qrmQQ9CwmNMWoxIUtoM/h+tRkL3QtPV7OXoqziIuCp5VanzqoTxtajX9FmNQUOeqws/7Sfa5+@vger.kernel.org, AJvYcCWKzvdl5e1U7CAmSynF+AqIk1G/63nnGWzwDbpeWFFOQYs+LEKskURQ0BlQXwWzZR8Elr8FnXqyhOiQaGOw@vger.kernel.org
+X-Received: by 2002:a05:6102:3713:b0:529:1815:ae9b with SMTP id
+ ada2fe7eead31-52b1c33cc1bmr6200990137.32.1756976277976; Thu, 04 Sep 2025
+ 01:57:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250904-arboreal-upbeat-iguana-aebba6@kuoka>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+References: <20250904071954.3176806-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250904071954.3176806-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250904071954.3176806-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 4 Sep 2025 10:57:47 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUTXVJyhJ1p5Juef9j3P=oiyCo1NLuu9YZ8DC+x+JhPbQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxiM14ATP9BOkVKnNyTpukPFDdmwRYmPo57DaHlMkCwtQIc-5weKTBKTh0
+Message-ID: <CAMuHMdUTXVJyhJ1p5Juef9j3P=oiyCo1NLuu9YZ8DC+x+JhPbQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: clock: renesas,r9a09g077/87: Add
+ Ethernet clocks
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 04, 2025 at 09:18:13AM +0200, Krzysztof Kozlowski wrote:
-> On Wed, Sep 03, 2025 at 03:55:45PM +0200, Sascha Hauer wrote:
-> > Add device tree binding for the CDCE6214, an Ultra-Low Power Clock
-> > Generator With One PLL, Four Differential Outputs, Two Inputs, and
-> > Internal EEPROM.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  .../devicetree/bindings/clock/ti,cdce6214.yaml     | 198 +++++++++++++++++++++
-> >  include/dt-bindings/clock/ti,cdce6214.h            |  24 +++
-> >  2 files changed, 222 insertions(+)
-> > 
-> 
-> I don't understand what is happening here.
-> 
-> Patch changed in weird and unexplained way - nothing in the changelog
-> explains dropping SPDX - and does not pass even checkpatch.
+On Thu, 4 Sept 2025 at 09:20, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add clock definitions for Ethernet (ETCLK A-E) to both R9A09G077 and
+> R9A09G087 SoCs. These definitions are required for describing Ethernet
+> devices in DT.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> v2->v3:
+> - Dropped R9A09G077_GMAC* clock definitions.
+> - Updated commit message to reflect changes.
 
-I removed the SPDX by accident, will add it back of course.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in a branch shared by renesas-clk for v6.18 and DTS.
 
-Other than that, what's weird? Changelog says I now use the pinctrl
-subsystem to configure pins. OK, that also changes the binding, I could
-have mentioned that explicitly, sorry for that.
+Gr{oetje,eeting}s,
 
-Sascha
+                        Geert
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
