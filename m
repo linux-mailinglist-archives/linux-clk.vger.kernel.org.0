@@ -1,340 +1,173 @@
-Return-Path: <linux-clk+bounces-27352-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27355-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E8DFB45296
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 11:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD6F9B452B9
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 11:14:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6FB1188347A
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 09:10:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775D11C87AED
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 09:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872FE30507F;
-	Fri,  5 Sep 2025 09:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A8331077A;
+	Fri,  5 Sep 2025 09:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZG5blmF"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LCCV0YbE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8B028A704;
-	Fri,  5 Sep 2025 09:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757063206; cv=none; b=MACspXxJKhJYTtGhp0OG7adgLIZWgfYe6BHhs4nFskNscRe3q53CaoX/F54Jp5MuFU9OOcf6ucyEec9ExPEFkT5wcMkLPHbI/OueRd6QM0sv1oO/2p1IyhuTus8wOCc3s9BPNcW3CpaKrLmsV5kRM0OViID+tuMnVoxWbhj8IBI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757063206; c=relaxed/simple;
-	bh=Nf4BNlj92A6Gq2vl04S2lCAj8pMT1QldYLkShSHu178=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ofrnjJg9D/o3NwZOvGH5Aq725uyhXDrP+0v2xZdjeiEKB6Hauzhyu5d+P4VLxLP0JYH6WOlg3Csttmh11ayq/G6DhSD1g35Doibhg2SfjqLYhjaiMFVNNvuIV9pNOK6pwHUt97rXlazVbuooECcqq0bLTVk4OGVCbhz87Ucja0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZG5blmF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 05E21C4CEFB;
-	Fri,  5 Sep 2025 09:06:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757063206;
-	bh=Nf4BNlj92A6Gq2vl04S2lCAj8pMT1QldYLkShSHu178=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=JZG5blmFIaQPAQuViZoIXaY17JqFnqoY8c2N+iP+QeRohxocLqKH87oqTW9nbwPmD
-	 KWUwdhbFbpB0jpyfHMKwnmCG0HaAG9j33NBFA1gIB4zEcYDxLeOc5u86px77UNhxbc
-	 o8onfsUJZHn3fctc5XqZ454u3DQQhIFG0g5dIn7oITXlPcgDRKtkwc/bRT2kiL0Jrl
-	 l9jsA8kPH8lUCPtt4jdpYPJx6QpqPjDDtlzlwO+JYGHTu3jyhv158qRiLytrvTPkqR
-	 JoOvle+gBwCMbeQqEPuQ0tzalH/wHj5VW97cW5YYqqzDn1t12pVMN23zmS0/mMSkeM
-	 ocgzayxkwtTZA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBC38CA0FED;
-	Fri,  5 Sep 2025 09:06:45 +0000 (UTC)
-From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
-Date: Fri, 05 Sep 2025 17:06:39 +0800
-Subject: [PATCH v3 2/2] clk: amlogic: add video-related clocks for S4 SoC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35F6310762;
+	Fri,  5 Sep 2025 09:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757063431; cv=fail; b=WXh3JQqyXFCTkO0ZLlY4Zr3QsgbPZ+eTO1R8RC2/Unr4BfAjKdEf/WWmoLXvpPnC5tNXIkex++yd31E7SF8L6DlcsRwOUQ4Z5pVK5qz+YFLbFLmnNqEpaEDggDmqU74TwgIJ+Zn1FUlAd7EkJWXdosbnuIljgGOVMxA5mMihLQo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757063431; c=relaxed/simple;
+	bh=N86CgzFGUICeut7z1xZoOwNUY/iYwLPGmZpFmqs78WY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nnqvXLUCfRyjkma0EkxjLDOeqeTXyfK7PwjE50vQv/37/Jf539MmSdw01eQBSbFRTJYgTvTFZT5IF7opHChBQRVAivWmcXQAIl8bSMIqBlY5BukKFzUaDFywuNMOp9DHnmSbu2+kR45K1t+82fpK0TdqWWXcYEmj1h+u5M2xiAU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LCCV0YbE; arc=fail smtp.client-ip=40.107.95.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=USc+hw9iwFdPAUIQpGC8qlcAwPP61cZMErgvbr8T5AtcBY2fqcaB/EfmmSAZrGCNtiQL3z/IRlQdhpCWDoupWO8Jd8u7xua5eTCgxbopF8sJ/nGb9M40spR6lsla24iBGH1zeRoDPtbXHsfdP5NrnaUFqF/yFWj2dKB4w6mwRrBLvw5Jk1I3e9QLIuK0DcUaUh4SbvV1D0lx6R+8o296Eqbk/S6w8tR5bYkrK9c/cwrHzWyKNOCyifb2y2TCb8Dpqh3auTuAJJVOhw9cK2fPHQNceAyKsqA873G0+uu9Lt66AT1ANsr+xKs8H+ft1rU5+muQr9/h3EDXug4sZvXAmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rr6avTZaJi4XNZNb8+vSs9XWMD22+YdNNTfK6OlUp7w=;
+ b=Eq/DMbqYDDfJeeokDtAPae/PYGA3A3pqx6LyvKTUmhERvJMplrcDC6JBBJER4Yxbl5arvxhlNsM0hTnQapDisndRacJA7jgq0yRZAbLKZJ1ugclFD1zeGUgEmxjvYGcstObchDX47OwhLsqw7X5LGB5XCftEbplMEoIQ/AhYl7PImiyk4KvtM8SPgC5CqsvAnWkruXbqh1H//2gbSTYISqI0dJLUjx7qdxbg029fX5i8Npsh76ri6mpLxcyyE//w35xNxsw81h1Vi6wROWM4wri0BVHUhZqMv/SCUlo4qwR8SY7hn+157n7N7rdBm5VDTiEOeCMig2caKfKBbZ+CAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rr6avTZaJi4XNZNb8+vSs9XWMD22+YdNNTfK6OlUp7w=;
+ b=LCCV0YbEQF4s6mZ5tUMjEzW1lk5f9DMCsmPNGpOwK7JyQTtZ1SPCWltRJ6UbC4ulAE6gallBb03+/AbJ3hwWpD6Vegk5gilPWMqkgcnUcF1EYFRrOQflNPn0XG0gFVWU+mKmeTxzhMrMoneQzZUTpmHg3HWOxmImXEE/FF6/hQo=
+Received: from BL0PR0102CA0059.prod.exchangelabs.com (2603:10b6:208:25::36) by
+ SA1PR12MB6995.namprd12.prod.outlook.com (2603:10b6:806:24e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.19; Fri, 5 Sep
+ 2025 09:10:25 +0000
+Received: from BL6PEPF0002256F.namprd02.prod.outlook.com
+ (2603:10b6:208:25:cafe::b7) by BL0PR0102CA0059.outlook.office365.com
+ (2603:10b6:208:25::36) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.18 via Frontend Transport; Fri,
+ 5 Sep 2025 09:11:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0002256F.mail.protection.outlook.com (10.167.249.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9094.14 via Frontend Transport; Fri, 5 Sep 2025 09:10:25 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 5 Sep
+ 2025 04:10:06 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Fri, 5 Sep
+ 2025 02:10:05 -0700
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Fri, 5 Sep 2025 04:10:03 -0500
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <git@amd.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+	<sboyd@kernel.org>, Michal Simek <michal.simek@amd.com>, Shubhrajyoti Datta
+	<shubhrajyoti.datta@amd.com>
+Subject: [PATCH] clk: clocking-wizard: Fix output clock register offset for Versal platforms
+Date: Fri, 5 Sep 2025 14:40:02 +0530
+Message-ID: <20250905091002.28203-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250905-add_video_clk-v3-2-8304c91b8b94@amlogic.com>
-References: <20250905-add_video_clk-v3-0-8304c91b8b94@amlogic.com>
-In-Reply-To: <20250905-add_video_clk-v3-0-8304c91b8b94@amlogic.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, Chuan Liu <chuan.liu@amlogic.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757063204; l=7141;
- i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=kLmXzk491eV2x81ro4ZED7Iyt5KXxTTTzbVBOuqxLYA=;
- b=QmC/l58/sloPfIy5YK9Z1FVq75GuUgALvxzAREqNgwP7JwIOzanXydlUyAE4u1or3EOQq5eVN
- MpGpDf+BwBiD0KSvE5uuhqf0aHUOGVezhejOxbUq2YEBTrSd1PA2etz
-X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
- pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
-X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
- auth_id=203
-X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
-Reply-To: chuan.liu@amlogic.com
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0002256F:EE_|SA1PR12MB6995:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba96f505-bc65-407a-1a99-08ddec5c0ce3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4rGQhUNefH9UnL5rETDfHsH/BIEPyXAKtWza9xtD0SFwYxu36lbS045gSPSG?=
+ =?us-ascii?Q?Bp3YMQBWwbvwQrGb2FSiH2TNniLG+FjDID4xb/Fd8McJ6QKEUl9ei9Li+Cqx?=
+ =?us-ascii?Q?JaFzGcxDLuATfp8rISW7BlxIPNvajR3ctNtfA5r+N3zLFZ+/bcVsCoWiO0zW?=
+ =?us-ascii?Q?cfWp7Yadcx/PLiD1lIjdTv06L3g693ibn/Rxg+QznJE/YDPz/CHn/VaQcsI9?=
+ =?us-ascii?Q?CArcFsvLmvZITJkoDL4pCSIz9UXiado4LlAQ9FlmKafUj2v543Z55Etu96Ep?=
+ =?us-ascii?Q?R3FA/eqboeLAu1uhabIj0eA42f5eAAZo9suK9fK7cqylzBgbSN9CcDXr8+EE?=
+ =?us-ascii?Q?+CzyXnsBa2ZbmipP2d00xC8K6NCaMJ8v99eRY6juQjGZuxhT3QWADyuSMlwl?=
+ =?us-ascii?Q?HL+vLPaiVYsIixyj/6JdY4OGp99y0ZAoWUW9WVkPmXkWYFRHW/IHi3HhYc8h?=
+ =?us-ascii?Q?/r+DAFkPRW4jTRXfM7FKaKLSem82vJc0Vl3yMgM3i63dZZnVjmSqzZ1iuukM?=
+ =?us-ascii?Q?V8Pnp/CO2TrucTxhIBqyyru9ICA25eruvdvz3lsz7ePxlWl0NDHsiji4U/69?=
+ =?us-ascii?Q?+2e2mkDUDZoElj9oiU4pbQvMF+r/hDrELrbiQvcbnnL31GWnOKueoh2rWa5b?=
+ =?us-ascii?Q?qd7gREgcwSPnMZnv/9PuNH3deAwEhxRMxZ0jcFjQrUPo+7RhSd71DQpekumD?=
+ =?us-ascii?Q?V1ezP7M+PT5S+/599fb7XBa2iD1txEwA2UBnBbBU4gGvZ8hGmgL4Ysf8wk+b?=
+ =?us-ascii?Q?eO+Q7ObDh4Zej2skW+3tEIecZjAJMfRg1SUn5cjs5KN83aSVv/5WKtfK7In2?=
+ =?us-ascii?Q?S+5sBZ0FEjNA1BwsNXjkARnEl8uex4azx9+2rnz2Y11EJfC9KJeC2vh36DFO?=
+ =?us-ascii?Q?9QqWSCZXIT4V0Q22DlLBmYdH7fz0o9vwcCgNvHciZziGuIDjbbF/S41XolDB?=
+ =?us-ascii?Q?1jjOsR7G65QJQ84Sda/QZwZth3vvNNt8VYl65ubYamBAH6R8xMqMltt1X6Dq?=
+ =?us-ascii?Q?VOoxXYPE4d1Y/rM6Q1t5N5Mb3JkW26pazAHXJFP277pgDMR/uen4snN2agJj?=
+ =?us-ascii?Q?YEE1RvXFvO8GKfgm4no1u4jCyu6+XVLaAkChbmq+4WiXJ9MPgqELxAgOUd87?=
+ =?us-ascii?Q?rGadagmrhjA42rwHxwN3WbhRJQHopp2aT0Arq0kzRMm+jtBXgEy6Adnzqe/u?=
+ =?us-ascii?Q?wOLS4QLRAKoXpHHGb32PUSldDZ/ZPTVJb6IHiTzHpybexcy/GjLOXSyV/5us?=
+ =?us-ascii?Q?iN2qIKoOnxFiJV6lHX8wgsoXXtJF7BTmjMQOKBz4NTM4jvlsbp376ICtI/sx?=
+ =?us-ascii?Q?rwncV+g37pHshuELr6XWO5NvAXZ1MjYWQaIz5OHHS/wvRLsrxlSO+V20beAA?=
+ =?us-ascii?Q?bSgjJ0Q7ncq9sjpCxT+gbL+IyZHXLMk4i36pl3XF02Cn14bHOOEmw6rGeNfN?=
+ =?us-ascii?Q?L2mUNPchKRqLANkIy3zyeposk7E/9n6+PqHWALKG1vTKPWF1dctJ48YOJR+A?=
+ =?us-ascii?Q?4FN7Gy/bJozp046cGr5OungsN79XV2mqv2Wo?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2025 09:10:25.3400
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba96f505-bc65-407a-1a99-08ddec5c0ce3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0002256F.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6995
 
-From: Chuan Liu <chuan.liu@amlogic.com>
+The output clock register offset used in clk_wzrd_register_output_clocks
+was incorrectly referencing 0x3C instead of 0x38, which caused
+misconfiguration of output dividers on Versal platforms.
 
-Add video encoder, demodulator and CVBS clocks.
+Correcting the off-by-one error ensures proper configuration of output
+clocks.
 
-Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 ---
- drivers/clk/meson/s4-peripherals.c | 203 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 203 insertions(+)
 
-diff --git a/drivers/clk/meson/s4-peripherals.c b/drivers/clk/meson/s4-peripherals.c
-index 6d69b132d1e1..c0f877ce0993 100644
---- a/drivers/clk/meson/s4-peripherals.c
-+++ b/drivers/clk/meson/s4-peripherals.c
-@@ -44,6 +44,7 @@
- #define CLKCTRL_VDIN_MEAS_CLK_CTRL                 0x0f8
- #define CLKCTRL_VAPBCLK_CTRL                       0x0fc
- #define CLKCTRL_HDCP22_CTRL                        0x100
-+#define CLKCTRL_CDAC_CLK_CTRL                      0x108
- #define CLKCTRL_VDEC_CLK_CTRL                      0x140
- #define CLKCTRL_VDEC2_CLK_CTRL                     0x144
- #define CLKCTRL_VDEC3_CLK_CTRL                     0x148
-@@ -1126,6 +1127,22 @@ static struct clk_regmap s4_cts_encp_sel = {
- 	},
- };
- 
-+static struct clk_regmap s4_cts_encl_sel = {
-+	.data = &(struct clk_regmap_mux_data){
-+		.offset = CLKCTRL_VIID_CLK_DIV,
-+		.mask = 0xf,
-+		.shift = 12,
-+		.table = mux_table_cts_sel,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "cts_encl_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_hws = s4_cts_parent_hws,
-+		.num_parents = ARRAY_SIZE(s4_cts_parent_hws),
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
- static struct clk_regmap s4_cts_vdac_sel = {
- 	.data = &(struct clk_regmap_mux_data){
- 		.offset = CLKCTRL_VIID_CLK_DIV,
-@@ -1205,6 +1222,22 @@ static struct clk_regmap s4_cts_encp = {
- 	},
- };
- 
-+static struct clk_regmap s4_cts_encl = {
-+	.data = &(struct clk_regmap_gate_data){
-+		.offset = CLKCTRL_VID_CLK_CTRL2,
-+		.bit_idx = 3,
-+	},
-+	.hw.init = &(struct clk_init_data) {
-+		.name = "cts_encl",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_cts_encl_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
- static struct clk_regmap s4_cts_vdac = {
- 	.data = &(struct clk_regmap_gate_data){
- 		.offset = CLKCTRL_VID_CLK_CTRL2,
-@@ -2735,6 +2768,165 @@ static struct clk_regmap s4_gen_clk = {
- 	},
- };
- 
-+/* CVBS DAC */
-+static struct clk_regmap s4_cdac_sel = {
-+	.data = &(struct clk_regmap_mux_data) {
-+		.offset = CLKCTRL_CDAC_CLK_CTRL,
-+		.mask = 0x3,
-+		.shift = 16,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "cdac_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_data = (const struct clk_parent_data []) {
-+			{ .fw_name = "xtal", },
-+			{ .fw_name = "fclk_div5" },
-+		},
-+		.num_parents = 2,
-+	},
-+};
-+
-+static struct clk_regmap s4_cdac_div = {
-+	.data = &(struct clk_regmap_div_data) {
-+		.offset = CLKCTRL_CDAC_CLK_CTRL,
-+		.shift = 0,
-+		.width = 16,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "cdac_div",
-+		.ops = &clk_regmap_divider_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_cdac_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap s4_cdac = {
-+	.data = &(struct clk_regmap_gate_data) {
-+		.offset = CLKCTRL_CDAC_CLK_CTRL,
-+		.bit_idx = 20,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "cdac",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_cdac_div.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap s4_demod_core_sel = {
-+	.data = &(struct clk_regmap_mux_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.mask = 0x3,
-+		.shift = 9,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "demod_core_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_data = (const struct clk_parent_data []) {
-+			{ .fw_name = "xtal" },
-+			{ .fw_name = "fclk_div7" },
-+			{ .fw_name = "fclk_div4" }
-+		},
-+		.num_parents = 3,
-+	},
-+};
-+
-+static struct clk_regmap s4_demod_core_div = {
-+	.data = &(struct clk_regmap_div_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.shift = 0,
-+		.width = 7,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "demod_core_div",
-+		.ops = &clk_regmap_divider_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_demod_core_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap s4_demod_core = {
-+	.data = &(struct clk_regmap_gate_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.bit_idx = 8
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "demod_core",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_demod_core_div.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+/* CVBS ADC */
-+static struct clk_regmap s4_adc_extclk_in_sel = {
-+	.data = &(struct clk_regmap_mux_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.mask = 0x7,
-+		.shift = 25,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "adc_extclk_in_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_data = (const struct clk_parent_data []) {
-+			{ .fw_name = "xtal" },
-+			{ .fw_name = "fclk_div4" },
-+			{ .fw_name = "fclk_div3" },
-+			{ .fw_name = "fclk_div5" },
-+			{ .fw_name = "fclk_div7" },
-+			{ .fw_name = "mpll2" },
-+			{ .fw_name = "gp0_pll" },
-+			{ .fw_name = "hifi_pll" }
-+		},
-+		.num_parents = 8,
-+	},
-+};
-+
-+static struct clk_regmap s4_adc_extclk_in_div = {
-+	.data = &(struct clk_regmap_div_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.shift = 16,
-+		.width = 7,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "adc_extclk_in_div",
-+		.ops = &clk_regmap_divider_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_adc_extclk_in_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap s4_adc_extclk_in = {
-+	.data = &(struct clk_regmap_gate_data) {
-+		.offset = CLKCTRL_DEMOD_CLK_CTRL,
-+		.bit_idx = 24
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "adc_extclk_in",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&s4_adc_extclk_in_div.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
- static const struct clk_parent_data s4_pclk_parents = { .hw = &s4_sys_clk.hw };
- 
- #define S4_PCLK(_name, _reg, _bit, _flags) \
-@@ -3028,6 +3220,17 @@ static struct clk_hw *s4_peripherals_hw_clks[] = {
- 	[CLKID_HDCP22_SKPCLK_SEL]	= &s4_hdcp22_skpclk_sel.hw,
- 	[CLKID_HDCP22_SKPCLK_DIV]	= &s4_hdcp22_skpclk_div.hw,
- 	[CLKID_HDCP22_SKPCLK]		= &s4_hdcp22_skpclk.hw,
-+	[CLKID_CTS_ENCL_SEL]		= &s4_cts_encl_sel.hw,
-+	[CLKID_CTS_ENCL]		= &s4_cts_encl.hw,
-+	[CLKID_CDAC_SEL]		= &s4_cdac_sel.hw,
-+	[CLKID_CDAC_DIV]		= &s4_cdac_div.hw,
-+	[CLKID_CDAC]			= &s4_cdac.hw,
-+	[CLKID_DEMOD_CORE_SEL]		= &s4_demod_core_sel.hw,
-+	[CLKID_DEMOD_CORE_DIV]		= &s4_demod_core_div.hw,
-+	[CLKID_DEMOD_CORE]		= &s4_demod_core.hw,
-+	[CLKID_ADC_EXTCLK_IN_SEL]	= &s4_adc_extclk_in_sel.hw,
-+	[CLKID_ADC_EXTCLK_IN_DIV]	= &s4_adc_extclk_in_div.hw,
-+	[CLKID_ADC_EXTCLK_IN]		= &s4_adc_extclk_in.hw,
- };
- 
- static const struct meson_clkc_data s4_peripherals_clkc_data = {
+ drivers/clk/xilinx/clk-xlnx-clock-wizard.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+index 8abf12f88eb2..4f8ed6d1e5fd 100644
+--- a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
++++ b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+@@ -1138,7 +1138,7 @@ static int clk_wzrd_register_output_clocks(struct device *dev, int nr_outputs)
+ 						(dev,
+ 						 clkout_name, clk_name, 0,
+ 						 clk_wzrd->base,
+-						 (WZRD_CLK_CFG_REG(is_versal, 3) + i * 8),
++						 (WZRD_CLK_CFG_REG(is_versal, 2) + i * 8),
+ 						 WZRD_CLKOUT_DIVIDE_SHIFT,
+ 						 WZRD_CLKOUT_DIVIDE_WIDTH,
+ 						 CLK_DIVIDER_ONE_BASED |
 -- 
-2.42.0
-
+2.17.1
 
 
