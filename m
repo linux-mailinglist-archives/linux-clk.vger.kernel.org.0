@@ -1,233 +1,145 @@
-Return-Path: <linux-clk+bounces-27376-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27381-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75EA6B45C64
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 17:23:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 662B7B45E90
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 18:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEAD4176C90
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 15:20:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D50D5A0480
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Sep 2025 16:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B2F32F7AAE;
-	Fri,  5 Sep 2025 15:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF76306B2B;
+	Fri,  5 Sep 2025 16:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qjmV76Of"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YLRK4UfD"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3EA23D7F4;
-	Fri,  5 Sep 2025 15:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E855279780;
+	Fri,  5 Sep 2025 16:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757085591; cv=none; b=AzaQAkZOqLxScHXnF/iyaNt4MpvSdRlLs967sVQ5M9L8C5fLiuhj/3Th/NBv36wm9Aau2m5DBzhlZIZt+/83qGvcQuqIc3kBBjeuvARGQF1rfWKusS3mRFY25jHQcsqfmLJQqeBm3vfwWzCVo9f/W6uhWYa8VUS+e8Oju7mrK4I=
+	t=1757090804; cv=none; b=m+CFkGszWCpLxwhOb7Ebcf/aZvnlSloZNd41w43C8c2Ej5QUUah0i0EuEN5cAZDO4U1HI/xyJ2GRwsMcmNDIO26VWjpFcGtbOucg85T7joNohae0vC1r7pU683ila0Ug+NY7IVeYqCTI+WlqhtBwGZq8aqEVAD4Iv1hEYmmioCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757085591; c=relaxed/simple;
-	bh=y5FWRAJBx3f/xXiDDwXlkp5hhXm0zlSYbUucIyHKar4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bwv2Pa74CAPYkbydtRY9so/2ZmPeF1W8hJfU8m2Ovz9F8nXtjighpEEsZXcMhbIpNSDSZReOJr4CSao0calxgNOYIhbHUnTZWMd3UKTBbmrjTKU3ydc1Cho5gEueJZRh81a5YdWpR3bT+kQcKeopbpeV3ho0G014EQFzPjUg+3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qjmV76Of; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002FCC4CEFA;
-	Fri,  5 Sep 2025 15:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757085591;
-	bh=y5FWRAJBx3f/xXiDDwXlkp5hhXm0zlSYbUucIyHKar4=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=qjmV76OfZ4aFiVBxWMcc28e9cu8DpRCFGWaTUiodlQ//bhKP2NpP8O0Tzl/+ehHti
-	 HN/v1y1hL0NQtYQF7jLa4leC1Mof5lL0SeAMqPyfqbk3eBiLc8ur9JxhIEMZl1RItX
-	 sHVJNKr2Krivkm+B/kvc3ILpCGPRVj52q2uB2UxBU7iTVQus2G1TNOH8iQtVM+Mw5p
-	 8wz12P04C0GeEW74/nNScQxjKHJbygQOZHGgo16bNoseCCZGefUSQ8ODGo7CGnnAoz
-	 dlBoYkatZqGqP2w4Clvgn3XZYSxYiUlAFG0CHWxPsroZEeVQ12tpFbFO75BiYO38uQ
-	 dlxfSDXBKx5qg==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-33730e1cda7so21639001fa.3;
-        Fri, 05 Sep 2025 08:19:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVoXOWPJLIh4IiCRURx6d0GUGlZZO9UtLdTEY9DdcLB+pFl6gYG3dC5kguBEwtwsp6/SFfVf9ieROYcXq5c@vger.kernel.org, AJvYcCWM/+m5S5OKA4567K3GU6fiO6qM7qCD6/8A6sNv8s3MSGLab2dA9SET1Evdp+kXz9QIryy8x9NT1k7E@vger.kernel.org, AJvYcCWouPurGDfGpHgzjgeQxArp4DbRejJNjWc9vT9QidUCup8MBauGVTBHyfpjQAhRIVU4WIPspG8zsZQi@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws0YMszrLogTgKzkey2/Bd6u1RfFDWmJnXD5Osrp36Spqljc6J
-	6qu3SBjygkvbGM5KFuSlFb+Dixdn/HElnuiZrjqhHJ818/1IsMmwWs2TBBxhUSKpNycbWEZsYbk
-	NpqF8PQg5zP6SeG4EoVPxKmoYNONJi58=
-X-Google-Smtp-Source: AGHT+IGw5JL+ddMtdE3BQh71M7lhvXq9J8ApGrLUEWl3SKfWxfjfiN2RBYCBDlu9iDRVCU4h8u56mOEq1l3VDv70LW8=
-X-Received: by 2002:a2e:a7ca:0:b0:338:1286:bc77 with SMTP id
- 38308e7fff4ca-3381286c3cfmr19018051fa.42.1757085589283; Fri, 05 Sep 2025
- 08:19:49 -0700 (PDT)
+	s=arc-20240116; t=1757090804; c=relaxed/simple;
+	bh=n7lgFTuAaHvirVe2HxCgamU69/Yv2hAYIZ80fnvRVso=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yc2BC9w+ToX9rhUwRzP4yT/rk9r4B6FObwB79KP+zZa/zlH2gZ5al2i3Fn6JfCWxbD35VwWUQs7tXmRtygNp5TFc26VqZWFHdXCGSWxKAAdRQ5B1t3v3XTMv+kMyFnh3twlt4MFus0wvDb31uU3KHsK9qFlHUpC5pooiDeKelZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YLRK4UfD; arc=none smtp.client-ip=217.70.178.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id 2C87C585463;
+	Fri,  5 Sep 2025 15:59:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6310B1F74B;
+	Fri,  5 Sep 2025 15:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1757087961;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NFFOsoL+0XB5VITOYkkT3Ujt/8Fw5vWv70yMLAox1vw=;
+	b=YLRK4UfDca2Z1SERSnWpY/5xU/0+E26t3jjeluQS906xxdoUWfgaysjGz2IvnsSkjIGb4e
+	9gcLy0PkCLWkl31aI+PhbvcmWZjhFmcva1tHgwYHIIxNSU15ArMgkzKOGosXgDLZjMuimH
+	55R52ga5aHzQdcUIzCIim48qLCgGE9RAsAhsH1PCNO5C5h/MT1z4JA57tTEzgJJf225nCD
+	pY1Vp5T7Bdd28lQ+LSemVgjBMLR0I5goURkdCklfeb7aKUINAgHsVHxaCGpiWFj/Qagiun
+	FT3m/Smxy9CblMIttmXedXwC2jhzZmMA2GD502u1WSOQJkENXjXGnDvAqT1ePA==
+Date: Fri, 5 Sep 2025 17:59:15 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>, Thierry Reding
+ <treding@nvidia.com>, Mikko Perttunen <mperttunen@nvidia.com>, Jonathan
+ Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni
+ <skomatineni@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
+ <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter De
+ Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad
+ <pgaikwad@nvidia.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
+ Boyd <sboyd@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Osipenko
+ <digetx@gmail.com>, Charan Pedumuru <charan.pedumuru@gmail.com>,
+ linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-staging@lists.linux.dev
+Subject: Re: [PATCH v1 09/19] staging: media: tegra-video: vi: add flip
+ controls only if no source controls are provided
+Message-ID: <20250905175915.2d7e02a7@booty>
+In-Reply-To: <20250819121631.84280-10-clamor95@gmail.com>
+References: <20250819121631.84280-1-clamor95@gmail.com>
+	<20250819121631.84280-10-clamor95@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250830170901.1996227-1-wens@kernel.org> <20250830170901.1996227-5-wens@kernel.org>
- <20250905161418.30562637@donnerap>
-In-Reply-To: <20250905161418.30562637@donnerap>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Fri, 5 Sep 2025 23:19:34 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64DmDXaduf7RrYynb+v7TCFA+ni6xPHfyCrwduYW0g=HA@mail.gmail.com>
-X-Gm-Features: Ac12FXz4TVFzN3HD-VOVeq3SjMBNL_nE1S2Xp7SCIBD9qEo_VYAnoswTc0k_Tws
-Message-ID: <CAGb2v64DmDXaduf7RrYynb+v7TCFA+ni6xPHfyCrwduYW0g=HA@mail.gmail.com>
-Subject: Re: [PATCH 4/8] clk: sunxi-ng: sun55i-a523-ccu: Add missing NPU
- module clock
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev, 
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdelfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdelpdhrtghpthhtoheptghlrghmohhrleehsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhihgvrhhrhidrrhgvughinhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhrvgguihhnghesnhhvihguihgrrdgtohhmpdhrt
+ ghpthhtohepmhhpvghrthhtuhhnvghnsehnvhhiughirgdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhhhsehnvhhiughirgdrtghomhdprhgtphhtthhopehskhhomhgrthhinhgvnhhisehnvhhiughirgdrtghomhdprhgtphhtthhopegrihhrlhhivggusehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthh
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Fri, Sep 5, 2025 at 11:14=E2=80=AFPM Andre Przywara <andre.przywara@arm.=
-com> wrote:
->
-> On Sun, 31 Aug 2025 01:08:57 +0800
-> Chen-Yu Tsai <wens@kernel.org> wrote:
->
-> Hi,
->
-> > From: Chen-Yu Tsai <wens@csie.org>
-> >
-> > The main clock controller on the A523/T527 has the NPU's module clock.
-> > It was missing from the original submission, likely because that was
-> > based on the A523 user manual; the A523 is marketed without the NPU.
->
-> Ah, sorry, I missed that one. I think I spotted writable bits in that
-> register, but didn't find a clue what this clock was about. Anyway, check=
-ed
-> the bits against the T527 manual, they match up.
->
-> > Also, merge the private header back into the driver code itself. The
-> > header only contains a macro containing the total number of clocks.
-> > This has to be updated every time a missing clock gets added. Having
-> > it in a separate file doesn't help the process. Instead just drop the
-> > macro, and thus the header no longer has any reason to exist.
->
-> Interesting, looks nice, and solves Krzysztof's complaint the other
-> day about the binding header inclusion missing from the driver as well.
-> Just one thought:
->
-> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> > ---
-> >  drivers/clk/sunxi-ng/ccu-sun55i-a523.c | 21 ++++++++++++++++++---
-> >  drivers/clk/sunxi-ng/ccu-sun55i-a523.h | 14 --------------
-> >  2 files changed, 18 insertions(+), 17 deletions(-)
-> >  delete mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.h
-> >
-> > diff --git a/drivers/clk/sunxi-ng/ccu-sun55i-a523.c b/drivers/clk/sunxi=
--ng/ccu-sun55i-a523.c
-> > index 1a9a1cb869e2..88405b624dc5 100644
-> > --- a/drivers/clk/sunxi-ng/ccu-sun55i-a523.c
-> > +++ b/drivers/clk/sunxi-ng/ccu-sun55i-a523.c
-> > @@ -11,6 +11,9 @@
-> >  #include <linux/module.h>
-> >  #include <linux/platform_device.h>
-> >
-> > +#include <dt-bindings/clock/sun55i-a523-ccu.h>
-> > +#include <dt-bindings/reset/sun55i-a523-ccu.h>
-> > +
->
-> Should we have the number #define here, at a more central location? Seems=
- a
-> bit buried down in there. And then use a plural name while at it:
->
-> #define NUM_CLOCKS      CLK_NPU + 1
->
-> Alternatively, put .num behind .hws below, so that the last clock and the
-> number definition are close together?
+Hello Svyatoslav,
 
-I think this works better. One less place to look at.
+On Tue, 19 Aug 2025 15:16:21 +0300
+Svyatoslav Ryhel <clamor95@gmail.com> wrote:
 
-ChenYu
+> Add HFLIP and VFLIP from SoC only if camera sensor does not provide those
+> controls.
+> 
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  drivers/staging/media/tegra-video/vi.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index 4f67adc395ac..61b65a2c1436 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -961,6 +961,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+>  	}
+>  #else
+>  	struct v4l2_subdev *subdev;
+> +	struct v4l2_ctrl *hflip, *vflip;
+>  
+>  	/* custom control */
+>  	v4l2_ctrl_new_custom(&chan->ctrl_handler, &syncpt_timeout_ctrl, NULL);
+> @@ -986,11 +987,13 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+>  		return ret;
+>  	}
+>  
+> -	if (chan->vi->soc->has_h_v_flip) {
+> +	hflip = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_HFLIP);
+> +	if (chan->vi->soc->has_h_v_flip && !hflip)
+>  		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
+> -		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
+> -	}
+>  
+> +	vflip = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_VFLIP);
+> +	if (chan->vi->soc->has_h_v_flip && !vflip)
+> +		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
 
-> Cheers,
-> Andre
->
-> >  #include "../clk.h"
-> >
-> >  #include "ccu_common.h"
-> > @@ -25,8 +28,6 @@
-> >  #include "ccu_nkmp.h"
-> >  #include "ccu_nm.h"
-> >
-> > -#include "ccu-sun55i-a523.h"
-> > -
-> >  /*
-> >   * The 24 MHz oscillator, the root of most of the clock tree.
-> >   * .fw_name is the string used in the DT "clock-names" property, used =
-to
-> > @@ -486,6 +487,18 @@ static SUNXI_CCU_M_HW_WITH_MUX_GATE(ve_clk, "ve", =
-ve_parents, 0x690,
-> >
-> >  static SUNXI_CCU_GATE_HWS(bus_ve_clk, "bus-ve", ahb_hws, 0x69c, BIT(0)=
-, 0);
-> >
-> > +static const struct clk_hw *npu_parents[] =3D {
-> > +     &pll_periph0_480M_clk.common.hw,
-> > +     &pll_periph0_600M_clk.hw,
-> > +     &pll_periph0_800M_clk.common.hw,
-> > +     &pll_npu_2x_clk.hw,
-> > +};
-> > +static SUNXI_CCU_M_HW_WITH_MUX_GATE(npu_clk, "npu", npu_parents, 0x6e0=
-,
-> > +                                 0, 5,       /* M */
-> > +                                 24, 3,      /* mux */
-> > +                                 BIT(31),    /* gate */
-> > +                                 CLK_SET_RATE_PARENT);
-> > +
-> >  static SUNXI_CCU_GATE_HWS(bus_dma_clk, "bus-dma", ahb_hws, 0x70c, BIT(=
-0), 0);
-> >
-> >  static SUNXI_CCU_GATE_HWS(bus_msgbox_clk, "bus-msgbox", ahb_hws, 0x71c=
-,
-> > @@ -1217,6 +1230,7 @@ static struct ccu_common *sun55i_a523_ccu_clks[] =
-=3D {
-> >       &bus_ce_sys_clk.common,
-> >       &ve_clk.common,
-> >       &bus_ve_clk.common,
-> > +     &npu_clk.common,
-> >       &bus_dma_clk.common,
-> >       &bus_msgbox_clk.common,
-> >       &bus_spinlock_clk.common,
-> > @@ -1343,7 +1357,7 @@ static struct ccu_common *sun55i_a523_ccu_clks[] =
-=3D {
-> >  };
-> >
-> >  static struct clk_hw_onecell_data sun55i_a523_hw_clks =3D {
-> > -     .num    =3D CLK_NUMBER,
-> > +     .num    =3D CLK_NPU + 1,
-> >       .hws    =3D {
-> >               [CLK_PLL_DDR0]          =3D &pll_ddr_clk.common.hw,
-> >               [CLK_PLL_PERIPH0_4X]    =3D &pll_periph0_4x_clk.common.hw=
-,
-> > @@ -1524,6 +1538,7 @@ static struct clk_hw_onecell_data sun55i_a523_hw_=
-clks =3D {
-> >               [CLK_FANOUT0]           =3D &fanout0_clk.common.hw,
-> >               [CLK_FANOUT1]           =3D &fanout1_clk.common.hw,
-> >               [CLK_FANOUT2]           =3D &fanout2_clk.common.hw,
-> > +             [CLK_NPU]               =3D &npu_clk.common.hw,
-> >       },
-> >  };
-> >
-> > diff --git a/drivers/clk/sunxi-ng/ccu-sun55i-a523.h b/drivers/clk/sunxi=
--ng/ccu-sun55i-a523.h
-> > deleted file mode 100644
-> > index fc8dd42f1b47..000000000000
-> > --- a/drivers/clk/sunxi-ng/ccu-sun55i-a523.h
-> > +++ /dev/null
-> > @@ -1,14 +0,0 @@
-> > -/* SPDX-License-Identifier: GPL-2.0 */
-> > -/*
-> > - * Copyright 2024 Arm Ltd.
-> > - */
-> > -
-> > -#ifndef _CCU_SUN55I_A523_H
-> > -#define _CCU_SUN55I_A523_H
-> > -
-> > -#include <dt-bindings/clock/sun55i-a523-ccu.h>
-> > -#include <dt-bindings/reset/sun55i-a523-ccu.h>
-> > -
-> > -#define CLK_NUMBER   (CLK_FANOUT2 + 1)
-> > -
-> > -#endif /* _CCU_SUN55I_A523_H */
->
+Based on my understanding of V4L2, this should not be done.
+AFAIK subdevs should expose what the hardware block can do,
+independently from other subdevs. It is up to userspace (e.g.
+libcamera) to use the most appropriate control when there are redundant
+ones.
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
