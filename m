@@ -1,109 +1,86 @@
-Return-Path: <linux-clk+bounces-27553-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27555-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CC5B502D0
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 18:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56C42B50366
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 18:57:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0072F5E2FD7
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 16:39:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F9FD3B31AD
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 16:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E02352FC2;
-	Tue,  9 Sep 2025 16:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6837B35CED4;
+	Tue,  9 Sep 2025 16:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIU2Bh1Y"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D7F33CEBE;
-	Tue,  9 Sep 2025 16:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD0035FC16;
+	Tue,  9 Sep 2025 16:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757435950; cv=none; b=p90fYoGjvdZeVQ1/NZWDNyXkVp5Px4mKfJqPg5pfb4WNM3+JUOoWZMl2b3hI3sz8wanFbfGtiJLS5tIfhBARjSbCG/Ew/SZmXyzIryAwrMIA4P9jbDbiyE46P+DG7judHkqeeDfJwPGNI0qUhkRkYBm4MicbfZA+6hjadkQVNmQ=
+	t=1757437005; cv=none; b=PxPQOyvDOFHTN7+pwVhhTWlZMf/SyGJTTYKwjGwgmR8ML6MJMBknzr2K2kCBuTYnW+4Hc0uUVYRrSLVMTqv9W+anZe+EHfC188bnp9+g84ILnvDyvf2cv2pz69r8HeaPZRFEaCuru+FFPA2HA8/hGQiYe2O1ZahG3TlEtIIcgz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757435950; c=relaxed/simple;
-	bh=sa+YtCD3kLuoHOYbn1YCfWKsVdW9XBp8FtQkfySgPZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sd6nkBECYEg8r3dsI2zMyS9leCgehW4ssggSUymJBDX2KfF+lRI1bvo36qSZXQpdtgPGhZ5/DT/iuS1A6QQvY1or8RhKVvoU9UoJR37/I1cHaNRZ1+1Qusg+9/jqyzj7Obwh4bhECcYI5ruOg3ebOk5V3cGdwKM0fBkUx1ECrUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC05515A1;
-	Tue,  9 Sep 2025 09:38:59 -0700 (PDT)
-Received: from donnerap (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C6853F66E;
-	Tue,  9 Sep 2025 09:39:05 -0700 (PDT)
-Date: Tue, 9 Sep 2025 17:39:02 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Chen-Yu Tsai <wens@csie.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
- <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
- Mikhail Kalashnikov <iuncuim@gmail.com>
-Subject: Re: [PATCH 2/5] clk: sunxi-ng: generalise update bit
-Message-ID: <20250909173903.6b78cd9c@donnerap>
-In-Reply-To: <CAGb2v66DEh3ZGTsBkX6RELRs+0ZPbMq7bsNQhdUcpxHHMxDhhQ@mail.gmail.com>
-References: <20250903000910.4860-1-andre.przywara@arm.com>
-	<20250903000910.4860-3-andre.przywara@arm.com>
-	<CAGb2v65rRqTWvn2NR-OSeP-zVJzheJ=L0YeG5DOrCTPJ8Haiyg@mail.gmail.com>
-	<CAGb2v66DEh3ZGTsBkX6RELRs+0ZPbMq7bsNQhdUcpxHHMxDhhQ@mail.gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1757437005; c=relaxed/simple;
+	bh=NDBYSCYbtRCm4phNag8K2MQGByUHik360jxAXcazG+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OW5l6VKo9Rh2T0mAHiCckunjld1mk5K0+AF4j3Xld2scncSpv0QeqqPvwp9XfsGeyYmeZFunfM6gF5gw+Hn8MNFQFLELrfn0JqkxhSGoo+G/O/6pKwr+qGSzpTI/dUmYQOLdySOo/+G2M5wTLdopWaUzyqoKryzCtuITxMs2n/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIU2Bh1Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17380C4CEF8;
+	Tue,  9 Sep 2025 16:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757437004;
+	bh=NDBYSCYbtRCm4phNag8K2MQGByUHik360jxAXcazG+w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uIU2Bh1YgjFUCFsAX68lYI4IIVfIBbiepz/DNP1EorTkQ5f8rHiBpCZKR2pc8Zk2N
+	 HuLrEvsjH4oM1J3B4Ycijnnx6zGc0Cji7xvmVHFI/8RT68K033pROaXKETB98Y65vT
+	 VITJcSwDq2MTziqHHoWFzppALEeD8Qlro0Ao7jV5D+Sq51IiTEsxzsxmojAloQ+LAm
+	 uHBehz1cAmmYpPBJ/GOlBXoljS7c3WDsMTjp+TQW1qbubqKxogKfRSFWbQYgD+i8Uv
+	 rboo+SrL2OcnhHJpVldEULIdyqi6at0WIQAq7oNapXx/12sUncyM0pMACmPCxMnlhU
+	 S2yIT20AojPLw==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Imran Shaik <imran.shaik@oss.qualcomm.com>
+Cc: Jagadeesh Kona <quic_jkona@quicinc.com>,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ajit Pandey <quic_ajipan@quicinc.com>,
+	Taniya Das <taniya.das@oss.qualcomm.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] clk: qcom: dispcc-glymur: Constify 'struct qcom_cc_desc'
+Date: Tue,  9 Sep 2025 11:56:32 -0500
+Message-ID: <175743699537.2735486.10308266027746150259.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250909-constify-dispcc-glymur-desc-fix-v1-1-6cb59730863f@oss.qualcomm.com>
+References: <20250909-constify-dispcc-glymur-desc-fix-v1-1-6cb59730863f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Sep 2025 00:06:07 +0800
-Chen-Yu Tsai <wens@csie.org> wrote:
 
-> On Sat, Sep 6, 2025 at 12:15=E2=80=AFPM Chen-Yu Tsai <wens@csie.org> wrot=
-e:
-> >
-> > On Wed, Sep 3, 2025 at 8:09=E2=80=AFAM Andre Przywara <andre.przywara@a=
-rm.com> wrote: =20
-> > >
-> > > A few of the Allwinner A523 CCU clock registers introduced an "update=
-" bit,
-> > > which must be set for changes to the other bits to take effect.
-> > > Of the three clocks where this was used, it was always bit 27, so we =
-just
-> > > encoded this as a single bit feature flag.
-> > >
-> > > Now the CPU PLL also features the update bit, but puts it at bit 26, =
-so
-> > > this flag trick won't work anymore.
-> > >
-> > > Add an "update_bit" field to the common sunxi clock struct, which tak=
-es a
-> > > bitmask, so we can encode any bit to use, even potentially multiple of
-> > > them. As uninitialised fields are set to 0, we can use this as a defa=
-ult
-> > > bitmask to set, so can OR this in unconditionally.
-> > >
-> > > Change the existing update bit users to use this new encoding, and add
-> > > support for the ccu_nm clock on the way, since we will need it there
-> > > shortly.
-> > >
-> > > Signed-off-by: Andre Przywara <andre.przywara@arm.com> =20
-> >
-> > Reviewed-by: Chen-Yu Tsai <wens@csie.org> =20
->=20
-> Hmm, actually, we also have the "key field" feature. Maybe we should
-> generalize that one and merge the two?
+On Tue, 09 Sep 2025 15:17:59 +0530, Imran Shaik wrote:
+> 'struct qcom_cc_desc' is passed to qcom_cc_map() and
+> qcom_cc_really_probe() only as pointer to const, so make the memory
+> const for safety.
+> 
+> 
 
-Ah, that's a good idea! Somewhat obvious now when looking at the code in
-ccu_mux.c, where there are two "reg |=3D MAGIC_VALUE;" lines next to each o=
-ther.
-Will hack something up for this.
+Applied, thanks!
 
-Thanks,
-Andre
+[1/1] clk: qcom: dispcc-glymur: Constify 'struct qcom_cc_desc'
+      commit: 9ff39b0468c3e04fee05d4e005d2fc03d28b1538
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
