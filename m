@@ -1,149 +1,125 @@
-Return-Path: <linux-clk+bounces-27498-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27501-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 114A9B4A2D4
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 09:03:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ABF8B4A385
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 09:29:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB8B8166282
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 07:03:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 236A63BB8F8
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 07:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DDF03019B3;
-	Tue,  9 Sep 2025 07:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99A430748D;
+	Tue,  9 Sep 2025 07:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQwNxFTW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7E84502F;
-	Tue,  9 Sep 2025 07:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4E030597C;
+	Tue,  9 Sep 2025 07:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757401398; cv=none; b=TQJSa7tECNUsqP6pWNieNh+HHQmrjIIs9NGBcdDbPsna7XhDut3sR/i9ClWZd4fsUX0MPkO0ecP7NsAE98KEQHXd23Hv1YJD+pNiPHMqmdMQ1/WeYAUKbNvF+RUefZdzVdmW0W+9mndpO0KQzDTnB8c7RxNyFSEQ+4mRofzbgoc=
+	t=1757402978; cv=none; b=iuyUZglkL0yzjtYDquhu0TBXcDCGpe7JmGXHnexXfilFahpC/rYKz6t2ksVA4iix3IEEGsUXKVESEVOwZQ8myn+yD66Kc31YawQrgNR7XVGdRUeXRha4Q+1kJo/hWaBCUO83lTHCd4H74nONlzhuFucbjZE7vN1s+OLmVQ1dP1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757401398; c=relaxed/simple;
-	bh=G3l0j0yDGkwnJ5+na5g4DIY/7rGmXIaiDhhDbpx1czQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=joGjZr9BL2zeNDHrejPHds+8ZZaqh4wg8nvp9rprNQ8CjBCygqf4IXKsSOoIwcQKzTcch+PdE3nadhRAhxFHehfqq970U2/B53PAkOl8mNV1snkbj068/1vtZ25/PvAqf/Jv/ekxfswHFUBPcFQGZsvoBIViK0bJYbbxmOgz3ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from [192.168.0.102] (unknown [114.241.87.235])
-	by APP-05 (Coremail) with SMTP id zQCowABH6RIf0b9o6DPiAQ--.22178S2;
-	Tue, 09 Sep 2025 15:02:56 +0800 (CST)
-Message-ID: <8ca70773-42b0-4dcc-8b54-338594e9a8ea@iscas.ac.cn>
-Date: Tue, 9 Sep 2025 15:02:55 +0800
+	s=arc-20240116; t=1757402978; c=relaxed/simple;
+	bh=VdFf4gK8OI+xzT6h3uwJdXQFG43m8vn/Jt66A+K1OhI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QvUn8yQEwXtokQtisXV3gspd3KW9scWHYXkkiP5WVtvy3ZcZFWjgdCwFn2EGXJoW9iBSYGOo0hGGDwjLxLdU2jQYs2b1Jizwn+BAD8L0bagn+ioPV9ltrKRSuXlCMzAaVxiWtbtuYiUvJ0DZulPpIF1huRtyWzj5cNA3j/rHwDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQwNxFTW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 123A7C4CEF4;
+	Tue,  9 Sep 2025 07:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757402978;
+	bh=VdFf4gK8OI+xzT6h3uwJdXQFG43m8vn/Jt66A+K1OhI=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=XQwNxFTWA/dDsH9e48VAHeXRxDa/spqK5t3LaBcEwWkJnu9Tr39fMDZ0sq9azFWg3
+	 h0NyMcIWwIp8CTeNK9EgPnwjuDx3fSyhIWuykTiqN0gpsN2U69U1CtnyOfhazaZ/r1
+	 ZY29qB96gM6eKGmzk9t3DpV4RN2uIg2CZ5iF+3058hFisIYzlpB9YdGyqiWpFWskiA
+	 chxxs0Y4InzHJQOBL4KBOJOO1u4XkVG7mf80NNKa+Zs5/w6Injxmqcc+G/sSQJnaSN
+	 JnXNnWlx0fwAQa+/uMwZh8V2GV+AuaO+pfiQxzTKlXaT0l1cGcxN4a1wos1hAd1IdP
+	 HGFqvcbURn0Ew==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F252ACAC589;
+	Tue,  9 Sep 2025 07:29:37 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Subject: [PATCH v4 0/2] clk: amlogic: add video-related clocks for S4 SoC
+Date: Tue, 09 Sep 2025 15:29:10 +0800
+Message-Id: <20250909-add_video_clk-v4-0-5e0c01d47aa8@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/3] clk: canaan: Add clock driver for Canaan K230
-To: Xukai Wang <kingxukai@zohomail.com>, Yao Zi <ziyao@disroot.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- Samuel Holland <samuel.holland@sifive.com>,
- Troy Mitchell <TroyMitchell988@gmail.com>
-References: <20250905-b4-k230-clk-v8-0-96caa02d5428@zohomail.com>
- <20250905-b4-k230-clk-v8-2-96caa02d5428@zohomail.com> <aLz4Q7LZFEfQQGUj@pie>
- <0947d9cc-86ba-46e0-92aa-04f4714e7a20@zohomail.com>
-Content-Language: en-US
-From: Vivian Wang <wangruikang@iscas.ac.cn>
-In-Reply-To: <0947d9cc-86ba-46e0-92aa-04f4714e7a20@zohomail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zQCowABH6RIf0b9o6DPiAQ--.22178S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF1rWr4xAFW3Zr1fWr18Grg_yoW5GFWkpr
-	yIgFy8tF4DJF17Cw12va9rWr1Yyws0qa4SkrykGFyxJ3Z0k34IqF1Skrn5uayUArnrt3WS
-	v3y5try7CFZYyFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-	c7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjxU3QzVUUUUU
-X-CM-SenderInfo: pzdqw2pxlnt03j6l2u1dvotugofq/
+X-B4-Tracking: v=1; b=H4sIAEbXv2gC/3XNSwqDMBSF4a2UjJuSpyYddR+lSJ4aqqZoCS3i3
+ hudCEqH58L33wmMbghuBNfTBAaXwhhinwc7n4BpVF87GGzegCDCUYk5VNZWKVgXK9M+oTVUaM6
+ 4RFiAbF6D8+Gz9u6PvJswvuPwXfMJL9d/pYQhggy50heUelrgm+raWAdzMbEDSyuRzQvM9p5kr
+ zXRXHFPJGJHTzcv0eE/zV5QxIzEWmi58/M8/wA0WCiRLAEAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, Chuan Liu <chuan.liu@amlogic.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757402973; l=1370;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=VdFf4gK8OI+xzT6h3uwJdXQFG43m8vn/Jt66A+K1OhI=;
+ b=VqbrJOceJlc/Q2NatDtM8IYSiB6c80Qzc90doSqPAWs5h9HtoADXKA1PAXlWHugPJQNONaby2
+ WNjm62jEbQyDJ/Z9+9A/Wxx0CTEbzXU7A8PNFgDUer2L7djydKqW7T/
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
+This patch introduces new clock support for video processing components
+including the encoder, demodulator and CVBS interface modules.
 
-On 9/8/25 22:13, Xukai Wang wrote:
->>> [...]
->>>
->>> +
->>> +static int k230_clk_set_rate_mul_div(struct clk_hw *hw, unsigned long rate,
->>> +				     unsigned long parent_rate)
->>> +{
->>> +	struct k230_clk_rate *clk = hw_to_k230_clk_rate(hw);
->>> +	struct k230_clk_rate_self *rate_self = &clk->clk;
->>> +	u32 div, mul, div_reg, mul_reg;
->>> +
->>> +	if (rate > parent_rate)
->>> +		return -EINVAL;
->>> +
->>> +	if (rate_self->read_only)
->>> +		return 0;
->>> +
->>> +	if (k230_clk_find_approximate_mul_div(rate_self->mul_min, rate_self->mul_max,
->>> +					      rate_self->div_min, rate_self->div_max,
->>> +					      rate, parent_rate, &div, &mul))
->>> +		return -EINVAL;
->>> +
->>> +	guard(spinlock)(rate_self->lock);
->>> +
->>> +	div_reg = readl(rate_self->reg + clk->div_reg_off);
->>> +	div_reg |= ((div - 1) & rate_self->div_mask) << (rate_self->div_shift);
->>> +	div_reg |= BIT(rate_self->write_enable_bit);
->>> +	writel(div_reg, rate_self->reg + clk->div_reg_off);
->>> +
->>> +	mul_reg = readl(rate_self->reg + clk->mul_reg_off);
->>> +	mul_reg |= ((mul - 1) & rate_self->mul_mask) << (rate_self->mul_shift);
->>> +	mul_reg |= BIT(rate_self->write_enable_bit);
->>> +	writel(mul_reg, rate_self->reg + clk->mul_reg_off);
->>> +
->>> +	return 0;
->>> +}
->> There are three variants of rate clocks, mul-only, div-only and mul-div
->> ones, which are similar to clk-multiplier, clk-divider,
->> clk-fractional-divider.
->>
->> The only difference is to setup new parameters for K230's rate clocks,
->> a register bit, described as k230_clk_rate_self.write_enable_bit, must
->> be set first.
-> Actually, I think the differences are not limited to just the
-> write_enable_bit. There are also distinct mul_min, mul_max, div_min, and
-> div_max values, which are not typically just 1 and (1 << bit_width) as
-> in standard clock divider or multiplier structures.
+The related clocks have passed clk-measure verification.
 
-So the part I have been thinking about is, consider just checking the
-{mul,div}_{min,max} values to determine which kind it is? As is this is
-just redundant information, since you can infer whether there is a
-configurable multiplier by checking if mul_{min,max} are equal. Same for
-div_{min,max}.
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+---
+Changes in v4:
+- Add Acked-by tags from Rob and Krzysztof.
+- Fix compilation errors.
+- Link to v3: https://lore.kernel.org/r/20250905-add_video_clk-v3-0-8304c91b8b94@amlogic.com
 
-Vivian "dramforever" Wang
+Changes in v3:
+- Rebase with Jerome's latest code base.
+- Link to v2: https://lore.kernel.org/r/20250814-add_video_clk-v2-0-bb2b5a5f2904@amlogic.com
 
-> For example, the div_min for hs_sd_card_src_rate is 2, not 1. This
-> affects the calculation of the approximate divider, and cannot be fully
-> represented if we only use the clk_divider structure.
->
-> Another example is ls_codec_adc_rate, where mul_min is 0x10, mul_max is
-> 0x1B9, div_min is 0xC35, and div_max is 0x3D09. These specific ranges
-> cannot be described using the normal clk_fractional_divider structure.
->
+Changes in v2:
+- Removed lcd_an clock tree (previously used in meson series but obsolete in
+newer chips).
+- Removed Rob's 'Acked-by' tag due to dt-binding changes (Is it necessary?).
+- Link to v1: https://lore.kernel.org/r/20250715-add_video_clk-v1-0-40e7f633f361@amlogic.com
+
+---
+Chuan Liu (2):
+      dt-bindings: clock: add video clock indices for Amlogic S4 SoC
+      clk: amlogic: add video-related clocks for S4 SoC
+
+ drivers/clk/meson/s4-peripherals.c                 | 203 +++++++++++++++++++++
+ .../clock/amlogic,s4-peripherals-clkc.h            |  11 ++
+ 2 files changed, 214 insertions(+)
+---
+base-commit: 01f3a6d1d59b8e25a6de243b0d73075cf0415eaf
+change-id: 20250715-add_video_clk-dc38b5459018
+
+Best regards,
+-- 
+Chuan Liu <chuan.liu@amlogic.com>
+
 
 
