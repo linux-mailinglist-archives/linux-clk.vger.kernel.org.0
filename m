@@ -1,186 +1,234 @@
-Return-Path: <linux-clk+bounces-27538-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27541-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E4EB4FD70
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 15:38:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F856B4FDC8
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 15:45:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2F151890D91
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 13:36:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8587A5E49DD
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Sep 2025 13:40:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB9C3451C7;
-	Tue,  9 Sep 2025 13:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756633451CD;
+	Tue,  9 Sep 2025 13:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Q76V/bW9"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D73F340D84;
-	Tue,  9 Sep 2025 13:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A13433CE90;
+	Tue,  9 Sep 2025 13:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757424797; cv=none; b=Ybl2itFwYlaPEFCP0RtgGNC7SiLsVpbahOXG5Tu8imqXx3eSvHO2Y0YUa5NM90svYpom2ObWY3jPD8lgI7pytn6cW7/CdsVNdJIB8ya2gVByunjQmuigmJ4+uEc8IR084COLoxbiq3GDH2eWLl1AVsz9C9bUa4yUO3zqrip3LZM=
+	t=1757425224; cv=none; b=l3ere0AtRzwxcsVZ+YJCgxwaeSSYxfCyJQVSe1Ujp7PPcwBJ8AgweSdG/uWM8J9Z1Po7+OUm8Nmx6q5UFE7TdCwVt2j0IgIBMz76yCmkfpk5DHNHFJIeJ51nOo3ZEe3brnWBYvzQGW4Utsl/SODM85I4LhXc+uL0bA8fQv+XpUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757424797; c=relaxed/simple;
-	bh=HvqrxfVpH7iJhCYu7YCrbtWJo9St/OC+LmsQzVrb2yI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q2N/NP2w2mL65d9cVsGznmrAVLlR281klvYqggzCHajm8HEK6zUaW4yPvEqcc2OJr7N7tYpbQpZYbgMl7xP859aA0n//4eIyxFm9AEtJr2d67DwJpqo7KYg4fZ2+6brSk1sPpd8YK7TqI1w2gCLGdS5W2aP3Ymt9pnECqlB+SZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55f7c0fb972so6121511e87.3;
-        Tue, 09 Sep 2025 06:33:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757424792; x=1758029592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OiPDvR6ZseDfZONnWJWsyImGvwysMua8qOuAT6/itt0=;
-        b=lgW1xP7/qJO8Ae/ua3obAsNR6BXYFdiQd2uHT7wTyjYrWIa9WMPmpglWP38BmtwNg5
-         y2EKt+NyteRwhYLCl4WQ3Vcp8skWqQ5ls4KGv4tQ7T3U7FyRMWihPxGGEl3x6MDVvb7N
-         k4HhOKReHMPGIlTNGZlK9AXPKWn09BI3d141h9avvpNuTS1k/pAWFAbipnHbj3HT4Q5k
-         CHR8jkKT9yYcyGaW+ty26vMuhBLwrFoSTSouoy5KRG6TxYnNb5d9Tmm+EMAXdBsTvmHx
-         6Vpd/VEC3FV6DtHp7a6gG1gcOk0EA7VaA2OEBKaj5Ee+CHEsrnff96jZcN0uO5aIYSio
-         cgyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8w2rJmE6XxQG+W/5EvfkddRV9LLq+AnUaeCc2FLKUQhncblDZMwHwRcXx7HfPHoOd1TziXzpB7XcY@vger.kernel.org, AJvYcCX2o2aFjkJoQSPiXHo6skAFtoIGjD+lECiMbfJd6jQsFzk8BgY/LzSTCYD35kE+pbkQajVI3ax93NbG@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoktbY0U7HDrP9I+C2faPxFO/G/m+YiYLUh5EFxKWsrP3f5b13
-	uFKd2jisuY0LXl5kGci+NeFJPf4eIwOj6oetQ/IvADcwDSckgfzLmyTVaLAs9WaL
-X-Gm-Gg: ASbGncsUmp7AZSNuTx9CzThLSaZwbCty7qY5ILkdkddZEz8eknSCcsKjG21KBQmtK0k
-	9GCuCs0p4BdrF/bhMhmk3xiE87nJ+y6qaDDQQvyqb+HNz40z15I1fJjMPaq6w4of48itQgFGNPP
-	Lybl8eLNsWY8iKMhU/058nQTb/puZokaihDAkXBvKq2rpLHlcKlZwuVTn3mCsGj/QQhfGTC2stI
-	O6myjReIlhotuJG87H9zScfRk7miH/KegCZrO0JkIq4G8nzHPvxwCPAAw91mEtGp0ttWxPK+S18
-	XFXSQTqDfbFKb1VQCp/pUzE4zzSxpZODLCQDQpli0xFn6xGVvk85nq+yRdrqAJW7Eq+/t6ypaUB
-	7f8vEX7HhT2FfBzePgYe9RnpQsZPi7PKmWnGvobaZIKs6RS7KedAMe1mf0nGzU5pj4Q==
-X-Google-Smtp-Source: AGHT+IGofTC5HeARuqmuZ4nFlnyJ/oOrYNFZNubfat4FWSuE8OQiiAorhnhjuHYlLfWmznsANDyTdg==
-X-Received: by 2002:a05:6512:124a:b0:55f:33d5:5bbd with SMTP id 2adb3069b0e04-56261314a11mr3544620e87.1.1757424792081;
-        Tue, 09 Sep 2025 06:33:12 -0700 (PDT)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5680c424fa5sm534524e87.25.2025.09.09.06.33.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Sep 2025 06:33:10 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-336d2b0ea8dso43580951fa.3;
-        Tue, 09 Sep 2025 06:33:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUf2fTQa+HIaGkqFRTa4DQlFafzcp8BHCclu7pm81l1QEsm53tRLqpyOm62wDCPjjKSo/CIyM+4dhIU@vger.kernel.org, AJvYcCUkFt8zIbOjSy7FqbcN5fu8Qm5NnN7qzcufgUfMuE59SzvogDuqJi6rq6Ig4ZGWYaRu/UQ3mTs9xWzb@vger.kernel.org
-X-Received: by 2002:a2e:a54a:0:b0:338:a33:96e0 with SMTP id
- 38308e7fff4ca-33b52891786mr32184271fa.21.1757424790514; Tue, 09 Sep 2025
- 06:33:10 -0700 (PDT)
+	s=arc-20240116; t=1757425224; c=relaxed/simple;
+	bh=8TUfSfsjcjeJinpxlZlLjr7NUdnn33y4lspuTRNsq8c=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=cEyuvtjzblaongyJylFWuZf9LqizyqyTasJWOD1GuHnJXBAZvEHqQkwWU3A0j1zZRJBenq6gyGril3M6GEIfbiaMDo4kX4zuBBuLMvBGOEpzEsD3fH8+jM3TPNduVoeGf6BloKxhmmYpbp9T3ysDkDGyQqIaDBZbHuw31boeWFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Q76V/bW9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5899LmhT024975;
+	Tue, 9 Sep 2025 13:39:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=44rV39RuM0t4i4ZwNFg5Mi
+	2/lQovCw3o/lMEzZuoNzo=; b=Q76V/bW99GRic7nSBlEGNovxMJh/04T8FfI7aw
+	tUM0bK+vBpzBWYxjGCx4uJ2Jf45a36pH2bBxRDUhs+YvFntgBhoM/xQrYr5VkLjx
+	8K2kY/uhXyx9I/TtYDcnizYSTZ5oOz+UHFylev/I6E2lFyb/Wpkevr1f0ygFJfdS
+	VsunEMsI7NSdhPYyyyB+/1Y8tW5V+CeeOL52L3bjI1gxjU+Q22Nk9hg/PaykYd8p
+	tbPsIAnKHbB16iRZIR7FVeYvRsWQ+CAoUff42mpaHEZa8n8Duzwd1RvDjpQkaFkh
+	GzpDfHqrdEOxNuZwAo2viREfmHbGsy+JfKhBB2T3+F32XJrQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490by90ds7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Sep 2025 13:39:29 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 589DdSe9030446
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 9 Sep 2025 13:39:28 GMT
+Received: from nsssdc-sh01-lnx.ap.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.24; Tue, 9 Sep 2025 06:39:22 -0700
+From: Luo Jie <quic_luoj@quicinc.com>
+Subject: [PATCH v5 00/10] Add Network Subsystem (NSS) clock controller
+ support for IPQ5424 SoC
+Date: Tue, 9 Sep 2025 21:39:09 +0800
+Message-ID: <20250909-qcom_ipq5424_nsscc-v5-0-332c49a8512b@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250903000910.4860-1-andre.przywara@arm.com> <20250903000910.4860-4-andre.przywara@arm.com>
- <CAGb2v66DHvE5gcWDvHwoiiCgNEnPiGjB6ash407PwJr8oMwyhw@mail.gmail.com> <20250903112054.173fe7b8@donnerap>
-In-Reply-To: <20250903112054.173fe7b8@donnerap>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Tue, 9 Sep 2025 21:32:57 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64Cv4BUiwq2kX4OSeRcMU=YC=-CxQTtnQG_-0=B=tsaYg@mail.gmail.com>
-X-Gm-Features: Ac12FXwVCVC7-rgwvVDgpfgKJIONLlDmlW4y0Cq7K_8SdacVRdO0XPJ7BtdhumE
-Message-ID: <CAGb2v64Cv4BUiwq2kX4OSeRcMU=YC=-CxQTtnQG_-0=B=tsaYg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] clk: sunxi-ng: mp: support clocks with just a shift register
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	Mikhail Kalashnikov <iuncuim@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAP0twGgC/3XOQQ7CIBAF0KsY1mKAgi2uvIcxTZmCnYW0BSWap
+ neX1oUx0eWfzH8zE4k2oI3ksJlIsAkj9j4Htd0Q6Bp/sRTbnIlgQrFKVHSE/lrjMCopZO1jBKC
+ tdtI2TvBSK5KLQ7AOHyt6OufcYbz14bneSMUyfXMlZ7+4VFBGHZe6BbnngovjeEdAD7u8SxYwy
+ Q/y56ckMwJG88IIpgyYb2Se5xcQl4ZN+wAAAA==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Varadarajan
+ Narayanan" <quic_varada@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>, "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Anusha Rao <quic_anusha@quicinc.com>,
+        "Manikanta Mylavarapu" <quic_mmanikan@quicinc.com>,
+        Devi Priya
+	<quic_devipriy@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Richard
+ Cochran" <richardcochran@gmail.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <quic_kkumarcs@quicinc.com>, <quic_linchen@quicinc.com>,
+        <quic_leiwei@quicinc.com>, <quic_pavir@quicinc.com>,
+        <quic_suruchia@quicinc.com>, Luo Jie
+	<quic_luoj@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757425161; l=4620;
+ i=quic_luoj@quicinc.com; s=20250209; h=from:subject:message-id;
+ bh=8TUfSfsjcjeJinpxlZlLjr7NUdnn33y4lspuTRNsq8c=;
+ b=1gm5wvhkKAiVeWSrgmLNUTU1OiUyhYA+Iiad1StfCEnft5O3j/q3EY3qUh1LkjguYpfGrfKsB
+ U0DxUScUE7sAcHefcx8QwJOH+VbIXCzQPopYKsC1IGlYLKRI/pHX8zM
+X-Developer-Key: i=quic_luoj@quicinc.com; a=ed25519;
+ pk=pzwy8bU5tJZ5UKGTv28n+QOuktaWuriznGmriA9Qkfc=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=Yv8PR5YX c=1 sm=1 tr=0 ts=68c02e11 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8
+ a=COk6AnOGAAAA:8 a=7tda8KZc5G6-a3B2-a8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: 7MXtuW5MNahNoeweuYpK9XpZbT6UCTur
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAxOCBTYWx0ZWRfX58P7X6umouR1
+ WzJudk2LU7zvg1/ey+xLH+gSiPeZUz3833AXy5+IH0DJ4ankYOJT2VJQIBACMCPRaDbhEMr6KMn
+ T/IhqoqHEbljCY6nit6d1L6K4SsgZTD0xbBDPCd8USTwOhOvsz3bynyjOCQIi0tEH73UDorqn3/
+ BoeBt/RqMOFQvtxpNVwWKOQdBlX8Ej1Wt+LcK8OfwKkovTe/q8N1h1LavK3CvEeAuk/GZrQimBk
+ 8Ix4+g5fWPxwwGoe5uV6r9mjdzw+OIK0yrGSJ+S80bQnTIYAdBpYCFTOhr/qv5PZbcdv7pWiGWU
+ QIF1b+ZW4xG7RXq1ewJZcT3fBw1gHv6kKXYfezhvqk/oflK4C+ljhoRce4DN+5g3BZGsm8Nht6Y
+ HZMEhRo1
+X-Proofpoint-ORIG-GUID: 7MXtuW5MNahNoeweuYpK9XpZbT6UCTur
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-09_01,2025-09-08_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060018
 
-On Wed, Sep 3, 2025 at 6:21=E2=80=AFPM Andre Przywara <andre.przywara@arm.c=
-om> wrote:
->
-> On Wed, 3 Sep 2025 12:20:55 +0800
-> Chen-Yu Tsai <wens@csie.org> wrote:
->
-> > On Wed, Sep 3, 2025 at 8:09=E2=80=AFAM Andre Przywara <andre.przywara@a=
-rm.com> wrote:
-> > >
-> > > The "mp" clock models a mod clock with divider and a shift field. At
-> > > least one clock in the Allwinner A523 features just a power-of-2 divi=
-der
-> > > field, so support an initialisation of the clock without providing an
-> > > actual divider field.
-> > >
-> > > Add a check whether the "width" field is 0, and skip the divider
-> > > handling in this case, as the GENMASK macro will not work with a zero
-> > > length.
-> > >
-> > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > > ---
-> >
-> > In my series I have a patch that adds this to the divider clocks,
-> > thus adding a P-clock type to the M-clock bits.
->
-> Yeah, I saw that, but wasn't convinced this would be better. Hence wanted
-> to post my version as an alternative.
->
-> > Maybe use that instead? I prefer we use actual matching types instead
-> > of disabling one part of a complex clock type.
->
-> Good that you bring up that topic: when looking for matching clocks I saw
-> we have a lot of them, though often one is just a subset of some others,
-> with some code duplication. And we use the pattern of "use type A, but
-> without feature X" already, for instance for "NKMP without the K".
->
-> So I was wondering if we should revisit this and clean this up. IIUC thos=
-e
-> clocks were all modelled after the H3 and earlier generation, and the
-> clocks have changed since then. For instance I don't see PLLs with two
-> multipliers (NK) after the A64 anymore.
->
-> So what about we consolidate the various types into just a few distinct
-> ones, like NKMP for all PLLs, for instance, and provides macros that
-> disable fields as needed? This could ideally be done under the hood,
-> leaving the per-SoC drivers mostly alone, hopefully.
->
-> What do people think about that?
+The NSS clock controller on the IPQ5424 SoC provides clocks and resets
+to the networking related hardware blocks such as the Packet Processing
+Engine (PPE) and UNIPHY (PCS). Its parent clocks are sourced from the
+GCC, CMN PLL, and UNIPHY blocks.
 
-I guess we could combine the NK* types, since those are relatively few.
+Additionally, register the gpll0_out_aux GCC clock, which serves as one
+of the parent clocks for some of the NSS clocks.
 
-I would like to keep the basic ones, those with just one multiplier or
-one divider, possibly combined with a mux and/or a gate, alone. These
-are based on core clk helpers. We only add features like fixed post
-dividers or update bit support on top of them.
+The NSS NoC clocks are also enabled to use the icc-clk framework, enabling
+the creation of interconnect paths for the network subsystem’s connections
+with these NoCs.
 
+The NSS clock controller receives its input clocks from the CMN PLL outputs.
+The related patch series which adds support for IPQ5424 SoC in the CMN PLL
+driver is listed below.
+https://lore.kernel.org/all/20250610-qcom_ipq5424_cmnpll-v3-0-ceada8165645@quicinc.com/
 
-ChenYu
+Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
+---
+Changes in v5:
+- Reorder the fixes patch "Add required "interconnect-cells" property"
+  to the beginning of the series.
+- Enhance the commit message to clearly explain the necessity of the
+  #interconnect-cells property for interconnect providers, and why
+  there is no ABI breakage for currently supported SoC IPQ9574.
+- Collect the reviewed-by tags.
+- Link to v4: https://lore.kernel.org/r/20250828-qcom_ipq5424_nsscc-v4-0-cb913b205bcb@quicinc.com
 
-> Cheers,
-> Andre
->
-> > >  drivers/clk/sunxi-ng/ccu_mp.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/clk/sunxi-ng/ccu_mp.c b/drivers/clk/sunxi-ng/ccu=
-_mp.c
-> > > index 354c981943b6f..a03dac294d048 100644
-> > > --- a/drivers/clk/sunxi-ng/ccu_mp.c
-> > > +++ b/drivers/clk/sunxi-ng/ccu_mp.c
-> > > @@ -236,9 +236,11 @@ static int ccu_mp_set_rate(struct clk_hw *hw, un=
-signed long rate,
-> > >         spin_lock_irqsave(cmp->common.lock, flags);
-> > >
-> > >         reg =3D readl(cmp->common.base + cmp->common.reg);
-> > > -       reg &=3D ~GENMASK(cmp->m.width + cmp->m.shift - 1, cmp->m.shi=
-ft);
-> > > +       if (cmp->m.width)
-> > > +               reg &=3D ~GENMASK(cmp->m.width + cmp->m.shift - 1, cm=
-p->m.shift);
-> > >         reg &=3D ~GENMASK(cmp->p.width + cmp->p.shift - 1, cmp->p.shi=
-ft);
-> > > -       reg |=3D (m - cmp->m.offset) << cmp->m.shift;
-> > > +       if (cmp->m.width)
-> > > +               reg |=3D (m - cmp->m.offset) << cmp->m.shift;
-> > >         if (shift)
-> > >                 reg |=3D ilog2(p) << cmp->p.shift;
-> > >         else
-> > > --
-> > > 2.46.3
-> > >
->
+Changes in v4:
+- Add new, generic clock names "nss" and "ppe" in DT bindings to support
+  the newer SoC such as IPQ5424 SoC, while retaining existing clock names
+  for IPQ9574.
+- Register all necessary NoC clocks as interconnect paths.
+- Separate the fix for correcting icc_first_node_id into its own patch.
+- Separate the fix requiring the "#interconnect-cells" property for NSS
+  clock controller node.
+- Update commit titles from "clock:" to "clk:" for consistency.
+- Update copyright to remove year as per guidelines in all driver files.
+- Remove the Acked-by tag from the "Add Qualcomm IPQ5424 NSSNOC IDs" patch"
+  as the new NOC IDs are added.
+- Link to v3: https://lore.kernel.org/r/20250710-qcom_ipq5424_nsscc-v3-0-f149dc461212@quicinc.com
+
+Changes in v3:
+- Remove frequency suffix from clock names for PPE and NSS clocks in
+  IPQ9574 DT binding and DTS.
+- Update IPQ5424 DT bindings and DTS to as per new PPE and NSS clock names.
+- Expand the register region of IPQ5424 NSSCC to utilize the entire 0x100_000
+  address range, ensuring inclusion of the wrapper region.
+- Collect the reviewed-by tags.
+- Link to v2: https://lore.kernel.org/r/20250627-qcom_ipq5424_nsscc-v2-0-8d392f65102a@quicinc.com
+
+Changes in v2:
+- Add new, separate clock names "nss" and "ppe" in dtbindings to support
+  the IPQ5424 SoC.
+- Wrap the commit message body at 75 columns.
+- Fix the indentation issue in the `IPQ_NSSCC_5424` Kconfig entry.
+- Enhance the commit message for the defconfig patch to clarify the requirement
+  for enabling `IPQ_NSSCC_5424`.
+- Link to v1: https://lore.kernel.org/r/20250617-qcom_ipq5424_nsscc-v1-0-4dc2d6b3cdfc@quicinc.com
+
+---
+Luo Jie (10):
+      clk: qcom: gcc-ipq5424: Correct the icc_first_node_id
+      dt-bindings: clock: Add required "interconnect-cells" property
+      dt-bindings: interconnect: Add Qualcomm IPQ5424 NSSNOC IDs
+      clk: qcom: gcc-ipq5424: Enable NSS NoC clocks to use icc-clk
+      dt-bindings: clock: gcc-ipq5424: Add definition for GPLL0_OUT_AUX
+      clk: qcom: gcc-ipq5424: Add gpll0_out_aux clock
+      dt-bindings: clock: qcom: Add NSS clock controller for IPQ5424 SoC
+      clk: qcom: Add NSS clock controller driver for IPQ5424
+      arm64: dts: qcom: ipq5424: Add NSS clock controller node
+      arm64: defconfig: Build NSS clock controller driver for IPQ5424
+
+ .../bindings/clock/qcom,ipq9574-nsscc.yaml         |   64 +-
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi              |   32 +-
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/clk/qcom/Kconfig                           |   11 +
+ drivers/clk/qcom/Makefile                          |    1 +
+ drivers/clk/qcom/gcc-ipq5424.c                     |   28 +-
+ drivers/clk/qcom/nsscc-ipq5424.c                   | 1340 ++++++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq5424-gcc.h       |    3 +-
+ include/dt-bindings/clock/qcom,ipq5424-nsscc.h     |   65 +
+ include/dt-bindings/interconnect/qcom,ipq5424.h    |   33 +
+ include/dt-bindings/reset/qcom,ipq5424-nsscc.h     |   46 +
+ 11 files changed, 1613 insertions(+), 11 deletions(-)
+---
+base-commit: 8cd53fb40a304576fa86ba985f3045d5c55b0ae3
+change-id: 20250828-qcom_ipq5424_nsscc-d9f4eaf21795
+
+Best regards,
+-- 
+Luo Jie <quic_luoj@quicinc.com>
+
 
