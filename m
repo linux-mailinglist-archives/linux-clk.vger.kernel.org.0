@@ -1,117 +1,236 @@
-Return-Path: <linux-clk+bounces-27664-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27666-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD83BB53AAB
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 19:48:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFC5B53B07
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 20:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B830188F0B9
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 17:48:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A74F35A26DD
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 18:07:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9872C369993;
-	Thu, 11 Sep 2025 17:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A3336809B;
+	Thu, 11 Sep 2025 18:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAixnrkK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZtdmKSK"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69977369983;
-	Thu, 11 Sep 2025 17:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F9E3629B5
+	for <linux-clk@vger.kernel.org>; Thu, 11 Sep 2025 18:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757612836; cv=none; b=RGL9fiWsBo2AsdcGFWE3m/eIQLQed231a8+Zoxgk/D5mU/ew0ISWYWEESjy4Id357mOo0dCZkYvC/FCMMKcfUOd7xIf/HXX5bemSz8dDheOlg1fmWRzMQBU2hOwYclviOviCUvPYVU42EjtwEL1caxCq/8vzGhsg7QwtIk+/WMo=
+	t=1757614030; cv=none; b=hvZTtDdEpaX5t98cJOg9HYM2dEvTPAJLYgNph1OYV5JpdM1sXyPijKGosOMGJ60/5jljXXIRBB0PdqdamWrHU6EHTd8A9SPzVPyTSpi+t8G42VT+KBCr6mqXQTYcROh9THb8Gha0rF2iyMdDfYjGKDqGlLTOgKEXJybVhnjJKVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757612836; c=relaxed/simple;
-	bh=WzFwdnb/weY1BfCYsn8nBeYLnmC5YscOBh1kWZFapkI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uFDezeDi3SajlMrzbOZC9tXXra/eIeeqE6wglkHltTb0ACjX8HzxfwKW8oK2i7K2HZT5z6Mgx6VlYjFzACHBA+0WZIvObnp+2m+PwuD/Py3kF1g5zIq2u8OHvEMxhpJ5KM99zu4A6YFKu1kxe4xtoBps2JQjBrshpHK37I43RQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAixnrkK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE50C113CF;
-	Thu, 11 Sep 2025 17:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757612836;
-	bh=WzFwdnb/weY1BfCYsn8nBeYLnmC5YscOBh1kWZFapkI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aAixnrkK6ogY1UdA6Cjp6ThQtGasFtjjg7sxdNkWSd9Bzoi7Ywv8jyy+YKxjk4PZB
-	 NCra51SZcYII02kG/CZqAumdBg5f8gzKlrLFZ+g8aHT3ev2763V+Mn3tIenDlABlBd
-	 j+st1A3dxxpzf+Pm+B8VqvzhqTEzS2LfbIKZzcxFnbY3qlWWj8tEhOtjFrC8SG9+PY
-	 QjlWs6lqRm/8I8cx5OkqZRttMYErGjuZiI3HEIuE+BdJ1oit+wx12NgkEK1TKFAm/C
-	 H0QCpV/ocb0h6IfOOqjHJUX4B4/a2KF9u/C6HMJOOaBYaPUESczovx+Pjm0v4qVJcU
-	 Hjqm/FjFSpftQ==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 112515FEEE; Fri, 12 Sep 2025 01:47:12 +0800 (CST)
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>
-Cc: Andre Przywara <andre.przywara@arm.com>,
-	linux-sunxi@lists.linux.dev,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] arm64: dts: allwinner: a523: Add NPU device node
-Date: Fri, 12 Sep 2025 01:47:10 +0800
-Message-Id: <20250911174710.3149589-8-wens@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250911174710.3149589-1-wens@kernel.org>
-References: <20250911174710.3149589-1-wens@kernel.org>
+	s=arc-20240116; t=1757614030; c=relaxed/simple;
+	bh=cgUcYv/Eh4Qq22HkbanZ6zJHJ3E+UBu28WTayReVPdU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zd3ZgO6O++6RccyUW44rwexmPdFBXtmxlBoA4b53Mn76J1YDZZKLn0zOdXqdC+r4EPvGQMWhiF7lA02TPR6d40VfHIGMXmrLmuhst7ZKGuVJIc+H+1vkP/TtN093PQ22jB0MOvGCTyX9OdMj9MOnhYQNJloVYnWBnHIvCR2Kpbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZtdmKSK; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3dae49b117bso897306f8f.1
+        for <linux-clk@vger.kernel.org>; Thu, 11 Sep 2025 11:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757614027; x=1758218827; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mYHb2ePbP/cSM3RYmLN5AkN0s21xSd8WU5SVhx9urGw=;
+        b=JZtdmKSK6yIcRJrOlz0rX9i1Wn37tMNHdFkAcDYDD1GVzWcn8SxAGKCXmTxvJJBVUS
+         dSWGl+sjJbKXAS/p/VWJvQBmOt1HXzZ1fIZMPK/rlfbl5lb+AP8ZINHw33jQ1OoDWTxZ
+         BgIvJ8lAk4cJ5STZewva9lNFOb8gmGmAWN0qa4keDxN0BrAjvGTqv/ZqqxWU9u6hjOlv
+         qbwUNlxjfSseYBsSuK+o/GIGVvOXUeu1kyEG12xGqYDFOrEeOn03WB2EKLo4YOAEpPHJ
+         3Y0fYUqyZFeRq3TFtQ9UvT3fRQGy4umi8m4TnIljyBaSxIGrL2ZPqOy+AbdnU7HXp6m5
+         xl+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757614027; x=1758218827;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mYHb2ePbP/cSM3RYmLN5AkN0s21xSd8WU5SVhx9urGw=;
+        b=HWsrtDWg8jBr7lvFhTxpsIhNqT4vS6ZAo8fD+QHQztqIBfg+nRpNF9MX6RkfQf4Q/0
+         qZWKcz3/q9Nw4V2iuTnaSV//VeX2Y/MEUytX678LRFiODxyPhHvDwQhUvBRkuGZjxIP5
+         UddR6dY2thbzJW/XGt/bBMHmDpRyLTpBVlBxfFgWu3BFYc541Qbav/TKflgQFfGAzm2m
+         yJ2hTRwKabsX3i+A5qOsoINSUk7P39wHN+TT6cOYEsnBS+5xCv+KrQltmP3A1yp8xODm
+         qmKWaycoWSXQPU4cJp+ssvZ1TxHS2OislmXRCtXsuwKIQrqUerUzbppnKo0DR6Y1CNrS
+         kYTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOc8ZpEQ8C3wqgvHeWovPa0obQrdLkl8T4Hou+dIYKn5p8q3Q+oyFa6vxHmnJs06N3r62NIoBJlqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAYy2FLbQ3qq1954X44bkHtjYCqBoq01n51OqWjpn3WdL2hPT2
+	1NVBmgxyPtwd868vn0jKyn3J9ppGHhRW/HFTJv1H6mgFIhHl6mto2IyH
+X-Gm-Gg: ASbGncvBhHSJlmmgbpKjwNdIYRmUYSjLIX0iEEyj3x+jci3pxkJ6IG9rC2+Bnc4A2Q7
+	ct1cSgGfRVfJK354z6fJtExMn8s1ney1EuBZoxaNpuiN0IbxNCiBNV+FdgdlmptBi+rZ3XmRuTi
+	+1Oe8LCo/wgVg77ba0WsO8AVRJGw6US9nA0Rtx8xnCyEviyl/L1tzb6AdSpe6V4FAvRTj98+MoC
+	tm4N8FvyKHEEx+tc80rSy57XEKAg8zSR+lAs6UYX6dmkID6Ge4415xXaTa5ofY7vW5fQd6cPD+c
+	sZsjJXI/Lu2vquI12FAzJMv7hdK3OTjwQyvgUMWnRUXpsmEzjSUNRjxMrFs9qk1FlxbnG9I1Er3
+	pHrtQjgfusRmC8eCH0zLVtAfRB2faBdDaKq21tLhLcO57u/ln+n9FUW9tUNrjHepP/JgQRXSWs5
+	+uCGaM+bXeNg==
+X-Google-Smtp-Source: AGHT+IHR6gKFBxF/Amrl+hTiQqEAGO5RUJG7DroNK0beFvilU6FlAdKcfqOOFlfA2Rioywi+kGhMlA==
+X-Received: by 2002:a05:6000:2f87:b0:3e6:e931:b42c with SMTP id ffacd0b85a97d-3e7659e9785mr284823f8f.39.1757614026548;
+        Thu, 11 Sep 2025 11:07:06 -0700 (PDT)
+Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e015775f1sm35637425e9.8.2025.09.11.11.07.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 11:07:06 -0700 (PDT)
+From: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej@kernel.org>, Samuel Holland <samuel@sholland.org>,
+ Chen-Yu Tsai <wens@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>, linux-sunxi@lists.linux.dev,
+ linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH v2 3/7] clk: sunxi-ng: sun55i-a523-ccu: Add missing NPU module
+ clock
+Date: Thu, 11 Sep 2025 20:07:04 +0200
+Message-ID: <2795929.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20250911174710.3149589-4-wens@kernel.org>
+References:
+ <20250911174710.3149589-1-wens@kernel.org>
+ <20250911174710.3149589-4-wens@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-From: Chen-Yu Tsai <wens@csie.org>
+Dne =C4=8Detrtek, 11. september 2025 ob 19:47:06 Srednjeevropski poletni =
+=C4=8Das je Chen-Yu Tsai napisal(a):
+> From: Chen-Yu Tsai <wens@csie.org>
+>=20
+> The main clock controller on the A523/T527 has the NPU's module clock.
+> It was missing from the original submission, likely because that was
+> based on the A523 user manual; the A523 is marketed without the NPU.
+>=20
+> Also, merge the private header back into the driver code itself. The
+> header only contains a macro containing the total number of clocks.
+> This has to be updated every time a missing clock gets added. Having
+> it in a separate file doesn't help the process. Instead just drop the
+> macro, and thus the header no longer has any reason to exist.
+>=20
+> Also move the .num value to after the list of clks to make it obvious
+> that it should be updated when new clks are added.
+>=20
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 
-The Allwinner T527 SoC has an NPU built in. Based on identifiers found
-in the BSP, it is a Vivante IP block. After enabling it, the etnaviv
-driver reports it as a GC9000 revision 9003.
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-The standard bindings are used as everything matches directly. There is
-no option for DVFS at the moment. That might require some more work,
-perhaps on the efuse side to map speed bins.
+Best regards,
+Jernej
 
-It is unclear whether the NPU block is fused out at the hardware level
-or the BSP limits use of the NPU through software, as the author only
-has boards with the T527.
+> ---
+> Changes since v1:
+> - Move .num to after list of clks
+> ---
+>  drivers/clk/sunxi-ng/ccu-sun55i-a523.c | 21 ++++++++++++++++++---
+>  drivers/clk/sunxi-ng/ccu-sun55i-a523.h | 14 --------------
+>  2 files changed, 18 insertions(+), 17 deletions(-)
+>  delete mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.h
+>=20
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun55i-a523.c b/drivers/clk/sunxi-n=
+g/ccu-sun55i-a523.c
+> index 1a9a1cb869e2..acb532f8361b 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun55i-a523.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun55i-a523.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> =20
+> +#include <dt-bindings/clock/sun55i-a523-ccu.h>
+> +#include <dt-bindings/reset/sun55i-a523-ccu.h>
+> +
+>  #include "../clk.h"
+> =20
+>  #include "ccu_common.h"
+> @@ -25,8 +28,6 @@
+>  #include "ccu_nkmp.h"
+>  #include "ccu_nm.h"
+> =20
+> -#include "ccu-sun55i-a523.h"
+> -
+>  /*
+>   * The 24 MHz oscillator, the root of most of the clock tree.
+>   * .fw_name is the string used in the DT "clock-names" property, used to
+> @@ -486,6 +487,18 @@ static SUNXI_CCU_M_HW_WITH_MUX_GATE(ve_clk, "ve", ve=
+_parents, 0x690,
+> =20
+>  static SUNXI_CCU_GATE_HWS(bus_ve_clk, "bus-ve", ahb_hws, 0x69c, BIT(0), =
+0);
+> =20
+> +static const struct clk_hw *npu_parents[] =3D {
+> +	&pll_periph0_480M_clk.common.hw,
+> +	&pll_periph0_600M_clk.hw,
+> +	&pll_periph0_800M_clk.common.hw,
+> +	&pll_npu_2x_clk.hw,
+> +};
+> +static SUNXI_CCU_M_HW_WITH_MUX_GATE(npu_clk, "npu", npu_parents, 0x6e0,
+> +				    0, 5,	/* M */
+> +				    24, 3,	/* mux */
+> +				    BIT(31),	/* gate */
+> +				    CLK_SET_RATE_PARENT);
+> +
+>  static SUNXI_CCU_GATE_HWS(bus_dma_clk, "bus-dma", ahb_hws, 0x70c, BIT(0)=
+, 0);
+> =20
+>  static SUNXI_CCU_GATE_HWS(bus_msgbox_clk, "bus-msgbox", ahb_hws, 0x71c,
+> @@ -1217,6 +1230,7 @@ static struct ccu_common *sun55i_a523_ccu_clks[] =
+=3D {
+>  	&bus_ce_sys_clk.common,
+>  	&ve_clk.common,
+>  	&bus_ve_clk.common,
+> +	&npu_clk.common,
+>  	&bus_dma_clk.common,
+>  	&bus_msgbox_clk.common,
+>  	&bus_spinlock_clk.common,
+> @@ -1343,7 +1357,6 @@ static struct ccu_common *sun55i_a523_ccu_clks[] =
+=3D {
+>  };
+> =20
+>  static struct clk_hw_onecell_data sun55i_a523_hw_clks =3D {
+> -	.num	=3D CLK_NUMBER,
+>  	.hws	=3D {
+>  		[CLK_PLL_DDR0]		=3D &pll_ddr_clk.common.hw,
+>  		[CLK_PLL_PERIPH0_4X]	=3D &pll_periph0_4x_clk.common.hw,
+> @@ -1524,7 +1537,9 @@ static struct clk_hw_onecell_data sun55i_a523_hw_cl=
+ks =3D {
+>  		[CLK_FANOUT0]		=3D &fanout0_clk.common.hw,
+>  		[CLK_FANOUT1]		=3D &fanout1_clk.common.hw,
+>  		[CLK_FANOUT2]		=3D &fanout2_clk.common.hw,
+> +		[CLK_NPU]		=3D &npu_clk.common.hw,
+>  	},
+> +	.num	=3D CLK_NPU + 1,
+>  };
+> =20
+>  static struct ccu_reset_map sun55i_a523_ccu_resets[] =3D {
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun55i-a523.h b/drivers/clk/sunxi-n=
+g/ccu-sun55i-a523.h
+> deleted file mode 100644
+> index fc8dd42f1b47..000000000000
+> --- a/drivers/clk/sunxi-ng/ccu-sun55i-a523.h
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -/*
+> - * Copyright 2024 Arm Ltd.
+> - */
+> -
+> -#ifndef _CCU_SUN55I_A523_H
+> -#define _CCU_SUN55I_A523_H
+> -
+> -#include <dt-bindings/clock/sun55i-a523-ccu.h>
+> -#include <dt-bindings/reset/sun55i-a523-ccu.h>
+> -
+> -#define CLK_NUMBER	(CLK_FANOUT2 + 1)
+> -
+> -#endif /* _CCU_SUN55I_A523_H */
+>=20
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
----
- arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-index f93376372aba..9676caf9bd4e 100644
---- a/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-@@ -852,6 +852,18 @@ mcu_ccu: clock-controller@7102000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 		};
-+
-+		npu: npu@7122000 {
-+			compatible = "vivante,gc";
-+			reg = <0x07122000 0x1000>;
-+			interrupts = <GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&mcu_ccu CLK_BUS_MCU_NPU_ACLK>,
-+				 <&ccu CLK_NPU>,
-+				 <&mcu_ccu CLK_BUS_MCU_NPU_HCLK>;
-+			clock-names = "bus", "core", "reg";
-+			resets = <&mcu_ccu RST_BUS_MCU_NPU>;
-+			power-domains = <&ppu PD_NPU>;
-+		};
- 	};
- 
- 	thermal-zones {
--- 
-2.39.5
+
 
 
