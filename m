@@ -1,199 +1,125 @@
-Return-Path: <linux-clk+bounces-27608-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27609-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74043B520BA
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Sep 2025 21:17:36 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B0ACB52592
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 03:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC7AF7B9209
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Sep 2025 19:15:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A8D6E4E105A
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Sep 2025 01:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117992D5949;
-	Wed, 10 Sep 2025 19:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E791FF7D7;
+	Thu, 11 Sep 2025 01:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CH06cekx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iEQFzSJE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C35010E3
-	for <linux-clk@vger.kernel.org>; Wed, 10 Sep 2025 19:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22241A8412
+	for <linux-clk@vger.kernel.org>; Thu, 11 Sep 2025 01:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757531844; cv=none; b=eFkxSJe7Q0haB7EOI2o85VV5gU9M9vDdHYi0gAcKxBHvVSjwVD48v4o7UbiaM43zi3ZBAkRRx0S+4PCqiC09cSmrNsGQJejFaW175I5+OO4gEMAVKnw9IDX/OMXiquePOmGOye0RSCjXak3Dp63i3edKdAp8MqNTxVpW0M6OdCQ=
+	t=1757553147; cv=none; b=egzeqzJh7UuL3P3T/saGdWaO3hntx/u9JYVeY6jmsxTk6mFq4/8SbaZQjmnjjd1trtRDSThRTObZAYEG8HGRppg2+36LPT85Kr7bYXmtP10UFm+1VrPbyfAQXITrfshiLjQg7NIjLQlZYr4QmHVvD6xXfm2I++JIK2eP7yPPD2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757531844; c=relaxed/simple;
-	bh=SCwHNEdMA8MEn00BiFAEH+58S7M3dIzW3LxE3UwmJtE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ey13OF6OFE7hW8s4c65wLyNYcnJpQmwdIn+FPb9vjsKMBWSaYITTsX40HfwoOsLyEi1HnNupqD5jBmq/gtaNojLWRjelIwqps/b/hN2chGKk822Ht392mHh4XHgHDq122EGSYlxYSpo5ADdK2uuH7v4paRSJMASR/BXu2++8fPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CH06cekx; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-80a59f06a4fso1057026285a.2
-        for <linux-clk@vger.kernel.org>; Wed, 10 Sep 2025 12:17:21 -0700 (PDT)
+	s=arc-20240116; t=1757553147; c=relaxed/simple;
+	bh=jRIu0W1JuXkE/BIb2o38vY5micOCt0sjxd4/0huHplY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nkzvT0aNwhRUe+2sERj8UrWGaSvs5meNfbsbL/NQ/ooUpAZyhWkoEBKoky+Z+KhiG4aSLU18PYJop7F60cQdafrn8bphg/Lxd++qY+N3krCQfO/P/gHAjy7KErLM0lmf1v/rN/ofc4TnZtkHznJZIdunh2XIpQkGVo3wcz1MKqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iEQFzSJE; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-337e43f9c20so380591fa.1
+        for <linux-clk@vger.kernel.org>; Wed, 10 Sep 2025 18:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757531840; x=1758136640; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7snMmseLVBcfubyQhVWOsGdoU6rRK3K5ZVTv8Xsb4Kw=;
-        b=CH06cekxPOyCvZx6yIU5SYzBawHUX7+Ou9ol6PsbLwgQMoxVU/XSh5CCgN4hFYWiOf
-         anUv3FzI2ew7vmF2m6/M5LEWmQuVo8ri6AhRqBL7L7o6yr4NxAFfBg6lvAOWynrhsCXB
-         Kiq0OfhRAa/gLlZLDrWduev0vokcxAu5cifZX8A4B76uQqZs3wpuv9xuqLyL/6XSGo84
-         7bS8rPRw5Xm//UADI0zPEusNm3gj7DJv1tWZsCRkqHM7RLXClDmNIPewLje2KvcG3A/g
-         vbwrREuN1aDQwzBnXaa741+z1/D57fOVQBdMLAzSXtPwx94a7yk4Nqou5OOpx207vnHS
-         EcEw==
+        d=linaro.org; s=google; t=1757553143; x=1758157943; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+o6r5L1XUbiBxCB1fojD2F0CMjkyCBE1OL+/oMjXBI=;
+        b=iEQFzSJEKMepG3aAUbfnunbfMFi2C1grULp4zUadbSAtbRctsjKyPLcycwXlSU/j1v
+         PgPk1yuGDEzMNrli6Zr1AwzQvpWF6S+UUHdpaH+w4GRi1uQMcs0WMdE6V3rE2LIlOpWW
+         NVQB7IMRgtFd7yvHhdd7vUHkkizWDA20LIteUJ/Def6B90ktLlXYCteqdsUSq/Vuf4eo
+         y9Nmp327zX2XaXT9i2e/fvBh+OWN/DjkyOXDpNH4msuAZXvhR2IgCXgYjQ96uSV2Ry3j
+         bSKEVbxBG9+VimS9rzma0j+YrowpIssOwdpTuyOUq+F6iMiIdoR7mmLvvzfw/1N5KtqG
+         HSSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757531840; x=1758136640;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7snMmseLVBcfubyQhVWOsGdoU6rRK3K5ZVTv8Xsb4Kw=;
-        b=HHhRCxIGntlcVGnZ9DT8T3atdwob34yqgSzGGGrc7bFPpr33Lms9VhTpUaOfTPJfrp
-         WDzJifcsP5p5MtpbJzfz9cPVDkQT4YVIcyPI27TK2fcAMSoEB+RGW7lZLlhcwa4gjoca
-         ZVNuUcv7Jbsjlp2gjWdpr1n4As0Ix2Ogt1i9S84jd9Qai49LGC//HEBIS+hQL061C6Af
-         N5xvtRVs1Dcp5GJjVSmE9UQa5B1tSTR18x6pZ7gcGVxCMFx7rB3aIi0IXMZlVXO9Dmy/
-         qCzYuWjc9Or9s6V0nKOsfpVLnxOYU6Kp5eSM5edHyX7GQbZ1rQKofaW2xmcJRciUNeiZ
-         CtWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVagmDPlHXWn0+KXmt2ZfRzJpBgO7UlEJQyNa+eER9d1SnExt1a4ye76sSoiDm8EhT+hz1yVq6rJAs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeryNPFAMYZNTdiXrkCadDDZ2JfX2whBmkjYQaILRcazvQPhXv
-	uL4txyEcDI+K6+zWZGKAchtwhr72X507uQoUf7qA00wRdzAOlf/TcKtk
-X-Gm-Gg: ASbGncvnkQap6/0e9aya+lBRh1CM420+p0d+Ua5LabwNKedRIoVHIOSi3YEOHMUFQrT
-	bcl4Qe/9uFToq6czNJ5tFOzeWITH42HRV8hHATQylpprw+mrDKGkiNfcKVnxyZICEJ8e42vvPBR
-	vax1AiqCP0xLdsDP1qInfU+iwfqsBeuM5CqlVGJMYBuov7ZMCNBJ5VOHLRWwJCc+Ce97tcUrBsD
-	43jBN/Q/hDz5mcBYD2HebrLfjrXpAkAgKv0iq+RTdIIl7/OeAEytR+l1vbIhlYk1aEpxYMB/gcs
-	Vb7cAhma0RYlXDIWFMaUiPK3Sf7zCZWYJLsXUFcxL3hCMmwJ7RhCqnkXIdIN26Im3RA6WeRdLTm
-	ELlxWhlLs/pOJRes9Biwva1dAsmplqrnnhRzVTjLy8sYXYTER8k8pOkGRtPayKHLxHPW6KohtPX
-	6R2f113x00w6HU/LRcYNGeE1SAVLij4UNx9g==
-X-Google-Smtp-Source: AGHT+IFLKs6Z9Get2FJtBN4ng6d/qG2NCMDW+y5NcESyPYI9AIJUrHThVuklIbRDXM58AvJuPVzh/A==
-X-Received: by 2002:a05:620a:1aa0:b0:81f:65ec:81c4 with SMTP id af79cd13be357-81f65ec834cmr243699785a.30.1757531840153;
-        Wed, 10 Sep 2025 12:17:20 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-81b5f715c0bsm339500585a.61.2025.09.10.12.17.19
+        d=1e100.net; s=20230601; t=1757553143; x=1758157943;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T+o6r5L1XUbiBxCB1fojD2F0CMjkyCBE1OL+/oMjXBI=;
+        b=GVw4hU4nUYdu/7Q2WVG7yVQIX4K5HDHR/mwxLs433nhLXEo9Ovd0EPaN6Sy1Tz27qo
+         sIHUpqbKwA/poKl3mR27Ft7ifADQOkFv/Id5coOLhpi3NBQbcqI/Xw6H9ln6F1IvHoZo
+         7nNfvVaf1o7uXf9+RKC2yyjmzJ8kFHU6zUFSA9hNUmZfOHdmA+ri0n5CjagAzZiHcEOi
+         nlEj44AznRU2HECTYyrmniJKi8+PXYKi2DcC99ggAdvhi1gxtd3CXgsFM66kPgUXht0v
+         UXPMQtDWHsSioC0QR+tNNH9M3SGdknZ06npMwW++XeOvNMBO3OKTeqr1q4ZyhbnQ60ms
+         ZrJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZywOlKEqweR/0q/Zh9PQRi0H1wpbrIdtvV3u5GerIODIh00PZnpQILtq6kwOP04gs1XNNS46sLjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsw7c9HrFfapdi2CYZ4KkH64FJglKquRnf0f8DgFfoLfg9gRXh
+	8qVioPO3nqHC24rO8y8ipYkiww3BBrRjQd6U2WmkS98eXCxX4ZlVidlIkKH4qSGJ33f8CbUspMK
+	9HuNt
+X-Gm-Gg: ASbGncv5dSINNZ5zIG83/duUnumzO+jA74ZO7ERGPRTmEKHgSyRbu+2BQTJRKHLDPUC
+	aq35r5WnH639cLa4PpwCvNDEZoddJZXbBG/4Hhq9BiH4SRCUdtu6vQ7+kIxJqW+xmAqHKudhKsr
+	C3WYzYZZGRuqklSlocTMD5eYBrBIvvswll4TnFpuQV41odfmuBDU5AK8TACRi+PgCpwYRWVydmL
+	PofNpHQtjpn/vY0cQR9+ZbhwB/k2uFp+j29QodOb0W6GeSaiQYnIiY6YXRo+T1AHWPwD/106Hjy
+	SeKvATN/xW6V2GC5v9NqYlH7SvzDlXFCvfO7TWFGFN6Mkpq9jeRFxZp+TAbfnGP2mJPZvPwh3P4
+	1LlUUPy8I//6xpCRM06SWba8d3xKV+hMmDqdpYnGgb+VmdbelYcyU5LTBR20GLizwefY6ufjJSd
+	F316ecbg==
+X-Google-Smtp-Source: AGHT+IFVdqTcDiCzur0w1bVAWzy/bLKra6iG62K6s8w3CEbwZmYv0G51c/W/3EcnWcWyujF0k+gzZg==
+X-Received: by 2002:a05:6512:3a96:b0:55f:7066:ce87 with SMTP id 2adb3069b0e04-5626058cd0dmr3089123e87.1.1757553142729;
+        Wed, 10 Sep 2025 18:12:22 -0700 (PDT)
+Received: from thyme.local (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e63c63f3esm45786e87.67.2025.09.10.18.12.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 12:17:19 -0700 (PDT)
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0ABE3F40068;
-	Wed, 10 Sep 2025 15:17:19 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Wed, 10 Sep 2025 15:17:19 -0400
-X-ME-Sender: <xms:vs7BaMrfJnJJaKjAwwUZFjHkcowQFr90Uappl8VwGH64mC1icAr97A>
-    <xme:vs7BaEEXxLMrRI7bjn4Vx5gMJ6SdBnKTuuPAoDkfBp8nePt7ar2Z2zzsOA8tyLloq
-    elTF9DA04Tjxz5OPQ>
-X-ME-Received: <xmr:vs7BaMmEBKriaFO-_h-Vq16kCQl0nuR_1_HSE710wuBgF44U_F2gE-nrTArSgEqObqyZFWWOL5JvsYa_dXXI4VfziYP1bWow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgedutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddunecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhepieffjeehjeeludekfeeikefgteevjeeitdevkefghfetkedvieejfeegtdffvefg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
-    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
-    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
-    udelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegurghnihgvlhdrrghlmhgvih
-    gurgestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvges
-    sggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghl
-    vgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrh
-    ihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghi
-    lhdrtghomhdprhgtphhtthhopehlohhsshhinheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:vs7BaA8U5EQtHz1zKERGJb3k6OGLdrfsoPQffVVwmIp89t-BgJD88A>
-    <xmx:vs7BaNnbxzvsQ2CljPyMOb-M9oOnOvxNIDjN_TL6X8Q8UZeMm9g5zQ>
-    <xmx:vs7BaOnZ9RBsFZtQviMk7wSNXq29pqqscy0DO2Xp4m8Vs94YcOpgNA>
-    <xmx:vs7BaBttROfvd0vxfGSIjSVq41YX6UMukAVvWxkvR6V4zeZfFxoCTg>
-    <xmx:v87BaIKdIPqWmathmBQEKcgLgWc0tBCAB1qBhIe0axQDGa39kPZhkm0H>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Sep 2025 15:17:18 -0400 (EDT)
-Date: Wed, 10 Sep 2025 12:17:17 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Daniel Almeida <daniel.almeida@collabora.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-clk@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rust: clk: implement Send and Sync
-Message-ID: <aMHOvYI6VKAnh6WE@tardis-2.local>
-References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
- <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
- <aMG6JVMcMxVuX7De@tardis-2.local>
- <3D936C1B-FBA9-4964-859C-84BB665BBE3B@collabora.com>
+        Wed, 10 Sep 2025 18:12:21 -0700 (PDT)
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To: Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: Taniya Das <quic_tdas@quicinc.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Jagadeesh Kona <quic_jkona@quicinc.com>,
+	linux-clk@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/6] Specify Titan GDSC power domain as a parent to other
+Date: Thu, 11 Sep 2025 04:12:12 +0300
+Message-ID: <20250911011218.861322-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <3D936C1B-FBA9-4964-859C-84BB665BBE3B@collabora.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 10, 2025 at 03:47:30PM -0300, Daniel Almeida wrote:
-> Hi Boqun,
-> 
-> > On 10 Sep 2025, at 14:49, Boqun Feng <boqun.feng@gmail.com> wrote:
-> > 
-> > On Wed, Sep 10, 2025 at 02:28:27PM -0300, Daniel Almeida wrote:
-> >> From: Alice Ryhl <aliceryhl@google.com>
-> >> 
-> >> These traits are required for drivers to embed the Clk type in their own
-> >> data structures because driver data structures are usually required to
-> >> be Send. See e.g. [1] for the kind of workaround that drivers currently
-> >> need due to lacking this annotation.
-> >> 
-> >> Link: https://lore.kernel.org/rust-for-linux/20250812-tyr-v2-1-9e0f3dc9da95@collabora.com/ [1]
-> >> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
-> >> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> >> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
-> >> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> >> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-> > 
-> > This tag list looks a bit weird to me. Why is there a SoB from you
-> > before Alice's SoB? At least for the usage I'm familiar with, outside
-> > the case of Co-developed-bys, multiple SoBs is used for recording how
-> > the patches are routed. For example, if I have a patch that has my SoB
-> > and I send it to you, you queue in your tree and then send out to other
-> > maintainers for merging, in general you would put your SoB after mine in
-> > that case. But I don't think that's case here? Alice's patch has only
-> > her SoB:
-> > 
-> > https://lore.kernel.org/rust-for-linux/20250904-clk-send-sync-v1-1-48d023320eb8@google.com/
-> > 
-> > What's the intention of the SoB tag here?
-> > 
-> > Otherwise the patch looks good to me. If we get the tag list resolved,
-> > feel free to add:
-> > 
-> > Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> > 
-> > Regards,
-> > Boqun
-> > 
-> 
-> You have to include your SOB when submitting patches from others.
-> 
-> This is something I tend to forget often, so I made sure it was there. The
-> order may be indeed off though.
-> 
+Make Titan GDSC power domain as a parent of all other GDSC power domains
+provided by the Qualcomm camera clock controller to enforce a correct
+sequence of enabling and disabling power domains by the consumers.
 
-I mean you can just use `b4 shazam -s` to apply the patch and add your
-SoB at the end ;-)
+Only two Fixes tags are given, because so far there is no any consumers
+of IPEx, BPS or SBI GDSC power domains, however the changes of making
+an explicit PD hierarchy with Titan on the top will be helpful in future.
 
-Regards,
-Boqun
+Vladimir Zapolskiy (6):
+  clk: qcom: camcc-sm8550: Specify Titan GDSC power domain as a parent to other
+  clk: qcom: camcc-sm6350: Specify Titan GDSC power domain as a parent to other
+  clk: qcom: camcc-sdm845: Specify Titan GDSC power domain as a parent to other
+  clk: qcom: camcc-sm7150: Specify Titan GDSC power domain as a parent to IPEx and BPS
+  clk: qcom: camcc-sm8250: Specify Titan GDSC power domain as a parent to IPE/BPS/SBI
+  clk: qcom: camcc-sm8450: Specify Titan GDSC power domain as a parent to IPE/BPS/SBI
 
-> - Daniel
-> 
+ drivers/clk/qcom/camcc-sdm845.c |  3 +++
+ drivers/clk/qcom/camcc-sm6350.c |  7 +++++++
+ drivers/clk/qcom/camcc-sm7150.c |  3 +++
+ drivers/clk/qcom/camcc-sm8250.c |  3 +++
+ drivers/clk/qcom/camcc-sm8450.c |  3 +++
+ drivers/clk/qcom/camcc-sm8550.c | 10 ++++++++++
+ 6 files changed, 29 insertions(+)
+
+-- 
+2.49.0
+
 
