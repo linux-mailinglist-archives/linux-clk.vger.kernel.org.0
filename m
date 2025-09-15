@@ -1,1230 +1,273 @@
-Return-Path: <linux-clk+bounces-27802-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-27818-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F1FB570D8
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Sep 2025 09:06:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E356B572E1
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Sep 2025 10:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A1D16DF2F
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Sep 2025 07:06:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DAEC188AC5C
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Sep 2025 08:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7DD2C21E5;
-	Mon, 15 Sep 2025 07:06:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DC12EE60F;
+	Mon, 15 Sep 2025 08:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="hE9g8lJd"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="jkBjcDFG"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013012.outbound.protection.outlook.com [52.101.72.12])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011002.outbound.protection.outlook.com [40.107.130.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F552550AF;
-	Mon, 15 Sep 2025 07:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398F02ED85D;
+	Mon, 15 Sep 2025 08:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.2
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757920007; cv=fail; b=KDDCSLDfl35Shz7OO9Sin8tkfRTWdtK8fhEpWYuDr3nwwe1B5K2CrWrvf9oIt/u4z5zmaThw8cDtaP4zWvZg30fpF9MW3mxCZc6bBrudsZSE3Kcbm6cUoDZvxkGnNBWRhdjNC2n7FQvYi4WHDyAWPoIfFB0rI+A0cUXrNQOkCBo=
+	t=1757925021; cv=fail; b=DtHzaNH55VtIyYGZOtmrmJC4WTQ8K6MCKBqvid//BO5vimZCXSeGAHtiORLZPH2beyNVIIXJPL4Ts2OzSDcaXaTUT7dIh/k8osmbzYDJSnGULI2Jr36NTasaD/YXJdcTfwcMULHFpTjUPHK5zoN50Bpz+vSf0/AhEKMnNHiwh8M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757920007; c=relaxed/simple;
-	bh=Cin2opBxjOAmoxMRCztNhXo9s5xccpttGnWbQIFMUSI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=lbSj4FVVb/lr9DGbhE3i8psCywyZd1jJ2n/52Blk5DtQkRhaB5sDsfhHlXTj7Exm1QLcmMBM5jpVUOOohCegyrUI8MEbKCS6vYwF/fv9IMUGynDz8ur8JofHoNKUsKbtnkwgjTFy3THQhYL6HJSi4kJ4CkurZenm5AN+FXpCZJQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=hE9g8lJd; arc=fail smtp.client-ip=52.101.72.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	s=arc-20240116; t=1757925021; c=relaxed/simple;
+	bh=J5itaEqqunD00+BEa5RkxRSc2ZFxgjVuzwpmYs0j44I=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=OEfqsKPIZJXuPDDoavEe7XrfbzR0pP9GiXYP+hX+OpJJpHHFG2ZHoyOJxX0vFYuR9JHPmTvPCFN54NEM4D8EI65/RHvDZALnoUlRmbQFKUzN0azCP2wYsdIap6s/xoAn2U4DtAyKGpxFHIITshTDI+Z7gOZ+h+vO+wfGY+CHTrs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=jkBjcDFG; arc=fail smtp.client-ip=40.107.130.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nXGqel3CYun+uBHCSnRyklgHv0gw29xXoPnJC9n4m3tNwHRZmd/1UZz7nITjolsgw2DY5gGLjJijXTkk/taFENNIH8GkGULD6bsKnmTZXQz13soZdpILhx4blHcYma/5DOuIGAn5RpO+5C1MVHtolQEzGawxnuCk2ktpe7FYWF40K1adiYLv41V/UWqi2ydzpeKnzHvuNZ/ub9K5xgP22hOzMyAm9AK94SZGcTlUxesD7tOwrLVhl039HZRinwcJJtkJMWx+gGXk7EEMJmvBUpi8y3PCtVMr7Gn/0J+VhA8ALYwJG/WIsIKE+AZbAqDwGW2fRud5ee5P3uCgbDNQRw==
+ b=AQvVMeo8IxIT9qVl6eNRrff0hqzwBVHW1+i7GuH7tY1FXsT7XFxF0jh+WzG+V7MKKGV33nz0W98fTHFak+HjuG95F3I7W2KvVd8jTnd870rFdEvtoAINu3FQq5mEffE19LzgVHlWZ2FN6XCuWjLFHambgB4dRXgjwVZE1gb8VuzYOGkOiieJQdtSdyHYZUjuM8GH3ecYRwn2fjDEjG5utcgCSCUVyZO4pfu3Vg2Rb/ROFLmoA1iUL7f99AQjkXzuznSeSxAACk6dWh0fCn3d7w5AjCFxvHhKjy32kMXaad8VVGYrjnJtA3RSRCwk2gMZIp8/81BCscbhWoTCduFReQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vJpl8eIhVqg9MjGTywUe8u0LjjFHU0kJE4Ce2VJsawI=;
- b=tMdb8KEFHWjfJ3JMWUJQ8weNRArubIy95VthnQ5LTEmavLiyHp2ZUtHLyKhfNjrp08yJsA5L3fqlhmF0X2WjVFGR2LmpN908Sw5j7lhTSvdwfBbkubLtWJj0AsjL06fLJMoCs4BvQBs1oZ+zIdzk3h6dRncss5BQmBtTKnoGfMdANjCoGMPoMXWnZvHxiyH4zf0vTC9CJKlrBXCMzy6Y2K1j9UXJmZ8ixxQx44RpiSjd8GhmCJD2+47wX6ow3IMzDv5SKOuRIRE/19F/8NWzCYke/9/4Yg0nhwXS9e08NKUIKiRN/5fuRfrwC4Ly1eqsiF1iElo2jjsZhkqEyLtJAA==
+ bh=u4LD9cbR87q9wxsWuZoHSJF8/fdAZRIkGTenx5oUXVM=;
+ b=XvYTod9V/0qD7ZtP45T8tctA3/lZE/URNSAL6cDu/ret6s37xj+wkeKTm6VklSE9LxvDTV0zqoFYNPqvUaEW7PeslKJLu877OdhNTWXJDqrnWl6rP9DiEt8S/Lg3e3r43i83zynNO52TLSjIKpxwD2orKfot9mNsl0IWMCb4V8nTm8xjWI7nl5Di/4bVV6ZtvjZlTUt9bJuW23jv/6e//1MlT4hUJFzwMuoEHzJk0oiCtvFpn55qjV17MjDxNLdWbOsWjCIY7PyQe9W2FyfFwsT9IgJAb1aeerHQQZ4NoPbfbfwnjaAHMYRweT/k8XkHttFaeK53d0VRNn6EfBwmLQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vJpl8eIhVqg9MjGTywUe8u0LjjFHU0kJE4Ce2VJsawI=;
- b=hE9g8lJdoeG9Es6Dy8U5qobyCvYAvbA1fd66t7z2QZHX02euTbOPhJa2eE8EfDIK+UyPA4G4B5qHwDEE7du6nbeoR9G929uS1J2kyTr/ag5BvlmX+aJrpZsb9uFx+bEL2kWNPWULqGcpj5GRrFG+27oXBUQcNUI2EMaRGsPBEr1cQ/8xb7ZlMtviVRZHcQqV/OhRJyFLhzlNmwr/RwWOkUIc+NuQwo59eR3gZ8qz/iF5BYKUjWq+eaRHCUlOBqupMrILPcH7DYaEt0I4NtgFYpe2EJWFFgKTCsaAHjrME8zJUa3Alsz//+zCZFFmWesvj+YVau3dtFx2rhQQpXaYEA==
+ bh=u4LD9cbR87q9wxsWuZoHSJF8/fdAZRIkGTenx5oUXVM=;
+ b=jkBjcDFGKG7YILpv9UQPWxuzg8EjbdIzL5eM1jUgCIK+Phv6btq4zOFROAWOfnbSwfHIobtTDXDpVruCyQ0N2//YA9u+uGZOSJjMbADTxBZpMvj2y4KFt1lunYkSY7rj9kcMc/7nho5ue7LpkRCYWhhZz7O3492QKDK5jmEOs9H+W2vfiwbtvs1E7IzpO49XhBw+NoPkeZmAk9b1TN/wxI0F0FQx6AhrPZwR89eAnvfJYb4HhQwQMtnED8+MC4lbz2zIbaNhJnFKHd66jCEn6fn5tJJkDubZPm/S3yf9a33ua8PFSv2p/YqcJDfL5WCsAVnp7gp4SPm2fc+Msn2WRg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by PA4PR04MB9591.eurprd04.prod.outlook.com (2603:10a6:102:270::18) with
+ by VI1PR04MB7181.eurprd04.prod.outlook.com (2603:10a6:800:12a::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.19; Mon, 15 Sep
- 2025 07:06:40 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.11; Mon, 15 Sep
+ 2025 08:30:11 +0000
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9137.010; Mon, 15 Sep 2025
- 07:06:40 +0000
-Date: Mon, 15 Sep 2025 16:18:11 +0800
-From: Peng Fan <peng.fan@oss.nxp.com>
-To: "irving.ch.lin" <irving-ch.lin@mediatek.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	sirius.wang@mediatek.com, vince-wl.liu@mediatek.com,
-	jh.hsu@mediatek.com
-Subject: Re: [PATCH v2 4/4] pmdomain: mediatek: Add power domain driver for
- MT8189 SoC
-Message-ID: <20250915081811.GF8224@nxa18884-linux.ap.freescale.net>
-References: <20250912120508.3180067-1-irving-ch.lin@mediatek.com>
- <20250912120508.3180067-5-irving-ch.lin@mediatek.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250912120508.3180067-5-irving-ch.lin@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: SI2P153CA0028.APCP153.PROD.OUTLOOK.COM (2603:1096:4:190::9)
- To PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ 08:30:11 +0000
+From: Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH v4 0/5] clk: Support spread spectrum and use it in clk-scmi
+Date: Mon, 15 Sep 2025 16:29:34 +0800
+Message-Id: <20250915-clk-ssc-version1-v4-0-5a2cee2f0351@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAG7Ox2gC/33NQQ6CMBAF0KuYrq2ZFizgynsYF6WdkUYF0poGQ
+ 7i7hQ2aEJd/Mu//kQX0DgM77UbmMbrgujaFfL9jptHtDbmzKTMJ8gilkNw87jwEwyP6+VdwbUi
+ RQqptpVhivUdyw1J5uabcuPDq/HtZiGK+/imLggM3SApIgi0KOLdDfzDdk81VUa68ArHBZeLCg
+ s5LZYlQ/fLsi2+uZ4mTFQhFXqhai5VP0/QB7RImKywBAAA=
+X-Change-ID: 20250812-clk-ssc-version1-acf6f6efbd96
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
+ Cristian Marussi <cristian.marussi@arm.com>, 
+ Marco Felsch <m.felsch@pengutronix.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Brian Masney <bmasney@redhat.com>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, linux-clk@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ Peng Fan <peng.fan@nxp.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757925004; l=3955;
+ i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
+ bh=J5itaEqqunD00+BEa5RkxRSc2ZFxgjVuzwpmYs0j44I=;
+ b=RSvB9rT+fOMu0shOtCmqLgUiXotA5OubnFxeRxex+9j178G9MDC+Icd5SJ6YazIKXEOjBvUAa
+ qguzqlbEUfvC4Hr8wBB2lH+esBQoNMu771yVdSHqYKhIHgS02RJjBV9
+X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
+ pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
+X-ClientProxiedBy: SG2PR01CA0115.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::19) To PAXPR04MB8459.eurprd04.prod.outlook.com
+ (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PA4PR04MB9591:EE_
-X-MS-Office365-Filtering-Correlation-Id: e967a1a7-64f8-4a78-c04b-08ddf4266b2d
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|VI1PR04MB7181:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f671fa6-d52b-4810-71bf-08ddf432162d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|19092799006|52116014|7053199007|38350700014;
+	BCL:0;ARA:13230040|19092799006|376014|7416014|52116014|366016|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1pNwqsqbcZvwqEdE01C9URR3ABOFtamRTe8BH6SWhdU4CWo/CksbQIJRZE3O?=
- =?us-ascii?Q?a227z2qku1z2yFqe4ktQVIWChtXyjdH1AIAFiwLhW6Ior1i+j8zykPWIR8SA?=
- =?us-ascii?Q?AMGgrSITvuyDkI1ed3NYCNZtLzndabghjXkMYWz3f8HKkTPWLHpAV+gmX11y?=
- =?us-ascii?Q?dvZcGE/AWEfaQ4sEec0VaOTq9SLcpVk/MsB8kVNRU6G7pGiFdnN/1YbDIHmp?=
- =?us-ascii?Q?VyYMG8ibTVkRqL259oEoBktM09tQ1RT8ULHUbhXKQEs2ODbFz0E9kWTIpLai?=
- =?us-ascii?Q?qb3vHNdNmJl+qVnbLsfG778zvIYUtN6Gvb5uWGan1ax6feLPDaet2+skvRUQ?=
- =?us-ascii?Q?QeiFLalLwu2A1R7vsM7rGigjA65eAueV8oVkuiHroXfz6/N71YsGoMkqFApl?=
- =?us-ascii?Q?of1RYVQOjK3UkHjXhIn7TcBp7vX6oLAvvp/t74yPj5H6qnIGyYdoDEJgCa1D?=
- =?us-ascii?Q?Uzn1Ijo+h3D4Njmv6llw189XPrk8HtXOnWadk3r2rj+Tv6vwh9ei42qIDrkn?=
- =?us-ascii?Q?3oVA5L18reT8hcMUaquSL1cs4b80xXEXTRy9cacYBW32Gx89tGkFQqU4z77Y?=
- =?us-ascii?Q?y8ayLgJc67JYiL92EDlSN5CO3wlOQByK63Jqd2Wbdh2g4SP/z2dLj5OL6K2T?=
- =?us-ascii?Q?Zb6mi81khkuOnur+MxA4w668oRfWbYZ8Y3XLOIhnDh7YGdCoAYK/ylkKshMv?=
- =?us-ascii?Q?mro214FDzDhTsZa/Jh98CyRoNElB8pmU+hfN2w6qteMHTWYZqL2f5U443iwc?=
- =?us-ascii?Q?e//+kVCmbbKYwvyC/7UwKxWNvqKw+nVUoXVP50++F907c87AI/JMNCf3AWDE?=
- =?us-ascii?Q?9P49A6DjVAhEInW845yTFpVsG1r55T9zVv/pH5u56NZXUTBVbArk6Cwbqezd?=
- =?us-ascii?Q?Jm2Uy1hZRwgjuV1uFrvrZgKcgVHSu0JqLpH16vgOqeuRvtB8vYMe57PYFdzA?=
- =?us-ascii?Q?JKoKI/pC42yCRevbkQsQgw2/Hc7JIZeo6dXvJOSJd2FscDbwnzafg2SflvrH?=
- =?us-ascii?Q?ck/N9Isv5KN0k9zaxv0VFYB3c9dhQsnVUJXB8q5Mdx+829dBzicZKPNKPdOw?=
- =?us-ascii?Q?GHF+7Bxi8CjHx5jlYdPcx7oK2oxLJB+QVNYDtzhN4LihIg/DcYOb+gf8vHrP?=
- =?us-ascii?Q?LpbpGOAc+WHVb5dxMVvNSYQajxt4mdImukwyYK6reQ90YwMNsVYZ+RlFPcV2?=
- =?us-ascii?Q?aSQ0Lkp7JUSAti8stTYyjK9fwmkgBMWb5L9QEx3u617DJ2coXCowNMMnc2w4?=
- =?us-ascii?Q?ShPGc9xmUt7jvv+ufH13ZdUkynt68fdN+s26CP8n62GisSV5g1bBWhSehW6B?=
- =?us-ascii?Q?cdF/xz0nGTze0OpPE+Hy926GgFN9bcHcrlAMWd8jtO98gw1pjbT6nW/AKvHa?=
- =?us-ascii?Q?OAt2TYq1ksztcy1DmceJ1gXsLXozxL1fsvXe8CWj+Ww6hW02NAENgxmDy7nn?=
- =?us-ascii?Q?T1aKVcJDTL35Ve8d67i1OSJrdv7qRrnd3ZBt7y3cJmYGDEMDzGmNcg=3D=3D?=
+	=?utf-8?B?QXRsT2pWdjBJaUZGUHd3UkZTLzgvcjZXMFBUR2dDQkc4NHkyVkUvcWxnbmhL?=
+ =?utf-8?B?UmI1TDBHemRUK0ViSkN0ZU1Pa1lhMnRMRGRLYW1TZXV6MkkzMlQ1T2tjN2NX?=
+ =?utf-8?B?U1E2NnJhdFgyM2drN0F5TWdkMEplMmNrWHN0VTZ5ckVpNXdveXU0K2Z3eXJ0?=
+ =?utf-8?B?cmdHOXpoUmZ3TFZlSkpaaHVSL1RUZjl5dlk3WWNHbzZLZU5Ed0l0S2l5Wk50?=
+ =?utf-8?B?U2dqVEJNUndBT1RNKy9YckxkVzAvRXhjMnA1T1JkM3VDSWpReHRzNWtZejh1?=
+ =?utf-8?B?ZXlLL2FqT20rVGs4a1J6U1JldWErZS9HZlhMdGlNWkRPUnlJUzdnRXlmeVZB?=
+ =?utf-8?B?QjdKSmNXZEpHRlpRMWVyNG4xM3hsVkVUNG9BdENUMWhEK3h0ZDVnTkVNWUl1?=
+ =?utf-8?B?dmxpSjNGNWdCQmw1ZiswT2hXTHZOdXpOTk8zWEhvbDB5M1ZqaVlJWmdOeExi?=
+ =?utf-8?B?VG1qYUZzQ3hYZmxwbmhTbjY2bEdQSUxyZVpSemhIZEMwOXpPNDdjMFBoK0ty?=
+ =?utf-8?B?T3pzQytZOW0wcEJJYkNlK3dNWThWd3lNemFaS0ZMZDg4WnhJV2VpRHF4cWJ2?=
+ =?utf-8?B?ZzhMOUdiV0xCQmNSRUh4Z3BweitjbnJBWkJmdzlLUkpnZCtCaURBeHg4SHVZ?=
+ =?utf-8?B?TnBaUlpWMmhJUFBDdzIrRnI2Q0p5R25mS2V0VndCOUhTQlZYMW9KZVBpNTcz?=
+ =?utf-8?B?NzgwTjFNaGhKcUVkSzg4REtnY3QrT3ErUGRieTVSdWpiajJxSzZwL1NFYlBU?=
+ =?utf-8?B?ZGNwSFhLQS9Gd2tEelFlV1FNdG9IT3BUQUJQQW5tTlNCWWh6bGRUeTdPNjBE?=
+ =?utf-8?B?a1JNNkFGankzeHY2RW96K1JrQnpJYlcra2RsUFgxdzAyUE5yZVF4bE1rcHcw?=
+ =?utf-8?B?WjlySFBqVnF4L2FGbUI2N3lYejVmQ2tBMWdsdGRJSzNXZXlDK2tSQTBnb2F6?=
+ =?utf-8?B?Q24weUJXazhJcTlhdEh5WXZuenU1VUx5ODRZQ1QwcHJZWUNLOVpSS2pNKzd6?=
+ =?utf-8?B?UzlhQWdBSjZqQU5PQkFuYkpDOGJvQlJ4U0Z6eWtrRk1rOFNyejhwVWFQMGtl?=
+ =?utf-8?B?N3JHK05DZTJqRnovbEtEeEptbWZMR1puTTU2TGtBaXBXaHNNdGtVbFpJZTVK?=
+ =?utf-8?B?R3p0KzF6KytxNE1FRkJKNEdXMWwvd3hCdmZhNlNLTGZnOXYrS3pCMUdwTlZV?=
+ =?utf-8?B?T3YrdzVtWkd3YnNsT1lVTHg5K01rLzFHWGRvMWFDbk5meXU2eW9OZVM0Nkhl?=
+ =?utf-8?B?NjdxRERtYUJ3S1czZ3BBSjNwNEVsQW1IbVU0VXV2aUxrYXYrblV6dkZaOHF2?=
+ =?utf-8?B?VXo2eUFnQUNqdWtiN2EyTTlxdUZreDJmVGx4YzJzUjBiLzIrUEpUQ3grN1BX?=
+ =?utf-8?B?cTN0b0N6WDYvZ3ZHaXhUa0c4ZjNOV2Z6UU9WLys0WUFFOW1iSThqSTFFTXNS?=
+ =?utf-8?B?OWlSZUxTZjFXbDc4U2pXSmk5MWdEbTF6V0NQaHVjR3ovVGpwQUJVZWJ1UU9R?=
+ =?utf-8?B?VDlNSi9GdHNxUnJ3YlBrWEw2ekZpOGU1MDBsQ0NJZVVrOU1VVkpBdDVLcTcy?=
+ =?utf-8?B?STMxMW5wVnY1OU5wWW53NThneXFRUEZ5K29WUXQ3S0MxSkZ5bm1DMGtIVE1x?=
+ =?utf-8?B?SFE1WnJJamZEcy9TNnVzSDR0bitIaWFSZWxEMDRMeXdsSVplTUpHQ1ZlMXBZ?=
+ =?utf-8?B?UHA3WDYxQkxKalVuMnFWOU5VcWtuYmpEOU5QbkhjQWFYMCswRW1Ba0pBTmpB?=
+ =?utf-8?B?NGZWZXZYOUdFbHkzanE0QVVNZTlkUnJvQkFEQ3ViWm9lWGpFeGNwdTgrRHFN?=
+ =?utf-8?B?bGZPYWJpRGlCdE5IK0ZGMm1QdFFJanJ1N0JCa1M2VWUzSVBLbmpzb0MyRnN3?=
+ =?utf-8?B?dGxtR093S2VLN2xXTjQySGdZeFN5L0F0N3Y3YzBOWGVsL1poM1lMcDNSaXNo?=
+ =?utf-8?B?eWtuemV2bUoxQzN6Lyt6bitOVnk5QlRobm8vSSttL1hpL2VlMDRwSGhubXlD?=
+ =?utf-8?Q?3eoTQ7whNXh9+YMTncxYTrVf5wtC6g=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(19092799006)(52116014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(376014)(7416014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1UGNrdIcIeT/OGPVPVWWYhRApFutm/T4CSw+LLs7+hjd+m3qdXTflSJyw2Dj?=
- =?us-ascii?Q?RCECKrdr4WEhEX9i4GEXvqWRxZFz5qSB/OwbmmDJJ5JMr/PHZe1FPjTwe3RY?=
- =?us-ascii?Q?z65x+/3y0G52zGjhnJrlmhLa7ON1lDwzq9ufZ2PrazACJWSiSUOmVGLvdVts?=
- =?us-ascii?Q?dkSBi2uyYjmddlRIKX3qCJL3tBIh0ZBGouSSeiI7mbmpE9EYh0UQKB4KZETs?=
- =?us-ascii?Q?X79A+yXutAP13tmfB7N5FKCZPq25zy8Gpm4bzbDBI5TWUAs3MuL2wcZUOLY8?=
- =?us-ascii?Q?uvY+6bp+2N7/qo+aUuspL/vofCFdBGWmlDwf3xr7xZcW0XqqxdwJiArLIcO4?=
- =?us-ascii?Q?Dcn7CwX5jRJQv0G2FXjGsNo9W3E/dNdLJ4SX5vyVbHQug+5ii+fcChgmOXCw?=
- =?us-ascii?Q?DaAGI8cFWi0NJmhRHuTzlGhOjSVuCJZ5KPCtcu0jy4Nbwok27Z2+xrlzU6C1?=
- =?us-ascii?Q?XM6MHUR47xgtYWHt900B6d0EzoGqGe3MpfQ9aEQ0EeSZTrfmQ0cMCgCP52fC?=
- =?us-ascii?Q?AXukquJwWLOtKzv/0ZBJj+VhAJ7MxeaeCuaLz8fX1vZyC/+aa2/owvGYuGxQ?=
- =?us-ascii?Q?J/Glj/NE9vW7i5HgilXIH/yz+LrbMFmWXFcWajSU43aPp8wzLbYIGUIXvPKv?=
- =?us-ascii?Q?rSCUNEWKfQPK7pYKxmDUGq/HZsrFLwpNbWJ0fBhDda9lDFaiNoRrMKpUnNAS?=
- =?us-ascii?Q?Nj4gQiKmPT04snLckw0XbnIJU3t5+jt8QEqCEfYaQk6yKY2FDMCyvyFgLskA?=
- =?us-ascii?Q?0PeMxh8vmXP2igizzQiCJuEmqlyJgU74ahnoJqUvdDfPy9JFO4AwKoVy/e8H?=
- =?us-ascii?Q?keht3JN7A0zOwduy3XXb41MCsFNjtZtAuLqIiWh8LicZ/TRM2mnCM1PNa/F5?=
- =?us-ascii?Q?9n5l6ckslKRmc9IqfKRHg12FDtZmRv2cRAJWbtoFRm8dvDUwS6u7RA2A2p8R?=
- =?us-ascii?Q?AhMAqZE7VIUlpM4D+X9U5U7tzY48AvC8Mkf7OUKpqIm8wUGiM2DwwrIdJKJa?=
- =?us-ascii?Q?fQFpJAErFuwxT/WU1FP+BLD/uzUFe9OPqjg9ogTTW02nrdZWY+jx6t5twFAW?=
- =?us-ascii?Q?iY+V6MjGFb7qzDvWlCtcc2bzrg+VBs1BpUWo6ETClZTO+bAUN+w4KwLC2lCP?=
- =?us-ascii?Q?5vV0cgXe7ZKqkkf5DSyciamxuB2XVm1R/wOcPp8/LeD7s3eAh8pBTX0rHMqS?=
- =?us-ascii?Q?GllZrX1js+ouQTH8yksbGVcSKvKIxp+WglJJl4rH6IcF/Zun+EAyD38loO5a?=
- =?us-ascii?Q?uka47RDM7sMlVKEmYTv8zjkA3CWyDXVGcMSQVL+CG3pKwFg8vhfgH2/9B0kr?=
- =?us-ascii?Q?xH6Tl6RWqXb89qv1bCKRZ00OXnPU8tf8lmf6RwLn6r1MLmlqRf5aRgPCgxCN?=
- =?us-ascii?Q?VM2YH37JbDs5dgvmTz218R5Pav045kXfj2h+MXQSF5M98elTM16LZeoWLmxL?=
- =?us-ascii?Q?yI27k/hyvgDtX+Sd4HapdZWj+swi0ujYJzP4rfs7rVw9IITjJDMA/sdDef3Y?=
- =?us-ascii?Q?Gr+yZcC4r0wdHhrxJTkUmGwyyUFXPY++JqS8oqKnFWgPYCS45w5QplUiqdGt?=
- =?us-ascii?Q?b5Q2oaHw+RQwjQiQrVAEGbso3VsXbF/HUykgAabT?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e967a1a7-64f8-4a78-c04b-08ddf4266b2d
+	=?utf-8?B?YjZQYlFQcHFHVFN0WW43dzZCNk9LS0locjcxSGxTWmt4ZUdORzVmcjI1R1lq?=
+ =?utf-8?B?WEYyZ2lCNDl2WjZWaHo2ZWlLNk9MNUV3QzB2QmNVd1doNzFSZDVnV1d6UnV1?=
+ =?utf-8?B?M0MrQXBhblRrdXNYRHdYR216L0NpQU9XNmxybitXVDJGcS9ET0FKb1M3SjdW?=
+ =?utf-8?B?a3BpcTVMZ1pjM3VSZ1RsN2hIUExIZVA4ZVJTZlRSSUl0d0NxSmhsMktTd0Ur?=
+ =?utf-8?B?VGg1YWpLOFNZY3ZsV0hOM3JTZ0FJTkhTZGp0RDVZckhTWEFUNm85TmdKR1B1?=
+ =?utf-8?B?S1JUbGdEeUtHME9TNGY5S2dGWGtGWU1QSk5RL2FqVW80UWloOElDaEx4SXQ2?=
+ =?utf-8?B?aGNlaTliZmd4cUFIdEVKdU9DbUFaaU1CZml1dkV6alBnOS9oa0czaHpFT0JF?=
+ =?utf-8?B?OS9JbnlBQTYxSmlUU0s0WTRXUG1GT1Q5Rnptc05uMThheUNoc3l1d1F2RHd1?=
+ =?utf-8?B?RWFvSW81ZzdONnRTZnorY1ZJeGhBMVVINjZZY2ZSYnlRL0lRTnY1TTdVYkxp?=
+ =?utf-8?B?bmV2ZkRuclY5QUVLbnc3UGo3empYaEdoa25UTXlNTzNOSElReDNGTjVnMTIv?=
+ =?utf-8?B?VmtBZFFwZUR3TUR4Mlg5aGpoV1RCRlpOc1Fka1NGYk42QUhQQVRkRjRBQjhF?=
+ =?utf-8?B?WFUxV2E1aGJRWUl2Z091MjJ0RlBxT2FXcXlBQkF0NVJmV1p6YkhaY2dURXFi?=
+ =?utf-8?B?dTdNRHBhWUx5TnlPMy9EczZlaVkvRy9CaDQ4VUdSRi94ejlGYm5HMzVwK3J0?=
+ =?utf-8?B?VFlOZklFNVJxRUt2RUhjZkl0aGlCUmJhMWptTEFFM0NEUUFZNFFGKzJLUkU5?=
+ =?utf-8?B?TWNuUGpvNVh3dEgva094YjdETjJTWlVTVnBINGRLMXkyVmprVG1uMXpCYXJl?=
+ =?utf-8?B?ZGd1YU9LaVdQenI3YVFpb1h3eUpMNTkweFRtR1RyeUI4b2p0VTdHZjNRa1k5?=
+ =?utf-8?B?R0FVTEthTGIwLzRCUHlzVEtQbGpQTW5WTWhiVTFnbWtkV04xOS9BYy9uU1FT?=
+ =?utf-8?B?Vk5FeUY3b2NQcEIzd0xjazhwaFV5WEs2c3JIb0hKU1ZjM3ZmU2ZTTDVLM0t1?=
+ =?utf-8?B?aXI3dFkxMndIRy9pVlk5NFRWaU1uN0xSVnF4YmEyekRtaGQ3WVpjaC94ZzFr?=
+ =?utf-8?B?WUlVb1VvZDN6K01YWUd4ZXFUaFpSNzI5dDBLUlpKcyswZnlxUmh4Q0xBNmQz?=
+ =?utf-8?B?YS96VnZNcEJmQjdicDJ1SlZFVFd6ZmlmZGdSZmg3b0N2Q3R4Y09hSm5aQkZY?=
+ =?utf-8?B?bElXWC9vWHJRd0Zad0ptKzk2THd6ZGxWTk44dUNIRHBSTnRkRHhOY2pQYlJz?=
+ =?utf-8?B?Z0RGRHhaeU1SNzVMQ1dQY3EycXZuYTF6aG1SYkY3VG1HZThFWkFVc1laV2Uy?=
+ =?utf-8?B?dTNzL08vMzJSanE2QkcvNlYyQlR6QU5CUndMNVdMakJGOEZ6VjNQWVFQcmdW?=
+ =?utf-8?B?MmsrNWl1cDk1bDh4OFlxdmRHUkczUXB6LzlQV1BoZEFySTJTSEhtOEJKRGtD?=
+ =?utf-8?B?c1Z4MGF1M1N1V2R2VVlQUFYrV3lKYVAyMmhkcEpKR2duNVFHeDAvMi9abWUr?=
+ =?utf-8?B?aXpkeklxRkFOUjJOZW1NNW51WG9PUWcrYnVhVWw3VUdFUWZha05FNWpqUWFW?=
+ =?utf-8?B?eWRzaXRIVFBNZFU2SzlrTVBxdmdOT2tvd0czakZCSnB1bzJEcUxnWVJ2czky?=
+ =?utf-8?B?cjU3emJvS2EwbWkxODU5Zk9rR2xoTVBUOHh1aDByYmVGM1dGTEZadVpyNWhn?=
+ =?utf-8?B?NFlnRVh5eU1qbUV4bVhPL1Evc0wxMG9FODlRUmVyMldyTzBwTnBRcW9lRlZI?=
+ =?utf-8?B?bWtiTWZtM3dvQXJGbjd2SG1uTVJiQXdzc0JHKyt5eVZndUd1c2R2WmViR3dz?=
+ =?utf-8?B?SHpiTFM4dXU2QWswUFZTZFcwMGVpSDlWOUNNSnBQVHAxbVNNK2lvZVB5cDJm?=
+ =?utf-8?B?RmNJRlQvb1RpTWFRSDZZREdERUphd2F2dXlPOTdDeitaYTR3Y2poZE9nVTVl?=
+ =?utf-8?B?dHJ0S1ZGY2VOOFF6SHZWZkJXTWdGb2NDb2dvVGRUTDJxRFdHRDI5R1Qxa0Jv?=
+ =?utf-8?B?TVFtMy9lNHBuaENoSU1qUXdtRG5ES1ZHcEc2THFuWUZ5cDh6bnV6YllUNzNq?=
+ =?utf-8?Q?+vNeDk48F0TIf0jUrTsG8TTWl?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f671fa6-d52b-4810-71bf-08ddf432162d
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2025 07:06:40.5273
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2025 08:30:11.5401
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0bz07N0ddDP9T83GrfJRRCfLamkFnpA5S5ETjcI7z7guqZusbJ+ioY4YXrkwbK7tI7upnzZz12knup7NAk29lA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9591
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3S0xSU2XD/fuPYYmN9+npY2/NHbvmlmoDBe9EWWznA3UsuzJ2T8dNig/QP7VMJax40B3HPUU0zetWIs5vT0sgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7181
 
-On Fri, Sep 12, 2025 at 08:04:53PM +0800, irving.ch.lin wrote:
->From: Irving-ch Lin <irving-ch.lin@mediatek.com>
->
->Introduce a new power domain (pmd) driver for the MediaTek mt8189 SoC.
->This driver ports and refines the power domain framework, dividing
->hardware blocks (CPU, GPU, peripherals, etc.) into independent power
->domains for precise and energy-efficient power management.
+Since the assigned-clock-sscs property [1] has been accepted into the device
+tree schema, we can now support it in the Linux clock driver. Therefore,
+I’ve picked up the previously submitted work [2] titled “clk: Support
+spread spectrum and use it in clk-pll144x and clk-scmi.”
+As more than six months have passed since [2] was posted, I’m treating this
+patchset as a new submission rather than a v3.
 
-This seems also mix cleanup and add new support into one patch.
+- Introduce clk_set_spread_spectrum to set the parameters for enabling
+  spread spectrum of a clock.
+- Parse 'assigned-clock-sscs' and configure it by default before using the
+  clock. This property is parsed before parsing clock rate.
+- Enable this feature for clk-scmi on i.MX95.
 
->
->Signed-off-by: Irving-ch Lin <irving-ch.lin@mediatek.com>
->---
->+ */
->+#ifndef __PMDOMAIN_MEDIATEK_MT8189_SCPSYS_H
->+#define __PMDOMAIN_MEDIATEK_MT8189_SCPSYS_H
->+
->+#define MT8189_SPM_CONN_PWR_CON			0xe04
->+#define MT8189_SPM_AUDIO_PWR_CON		0xe18
->+#define MT8189_SPM_ADSP_TOP_PWR_CON		0xe1c
-...
->+#define MT8189_PROT_EN_MMSYS_STA_1_VDE0			(BIT(13))
->+#define MT8189_PROT_EN_MMSYS_STA_0_VEN0			(BIT(12))
->+#define MT8189_PROT_EN_MMSYS_STA_1_VEN0			(BIT(12))
->+#define MT8189_PROT_EN_PERISYS_STA_0_AUDIO		(BIT(6))
->+#define MT8189_PROT_EN_PERISYS_STA_0_SSUSB		(BIT(7))
+Because SCMI spec will not include spread spectrum as a standard
+extension, we still need to use NXP i.MX OEM extension.
 
-Nit: align all the macro definitions.
+[1] https://github.com/devicetree-org/dt-schema/pull/154
+[2] https://lore.kernel.org/all/20250205-clk-ssc-v2-0-fa73083caa92@nxp.com/
 
->+
->+enum {
-> #include <dt-bindings/power/mt7623a-power.h>
-> #include <dt-bindings/power/mt8173-power.h>
-> 
->+#include "mt8189-scpsys.h"
->+
-> #define MTK_POLL_DELAY_US   10
-> #define MTK_POLL_TIMEOUT    USEC_PER_SEC
->+#define MTK_POLL_TIMEOUT_300MS		(300 * USEC_PER_MSEC)
->+#define MTK_POLL_IRQ_TIMEOUT		USEC_PER_SEC
->+#define MTK_POLL_HWV_PREPARE_CNT	2500
->+#define MTK_POLL_HWV_PREPARE_US		2
->+#define MTK_ACK_DELAY_US		50
->+#define MTK_RTFF_DELAY_US		10
->+#define MTK_STABLE_DELAY_US		100
->+
->+#define MTK_BUS_PROTECTION_RETY_TIMES	10
-> 
-> #define MTK_SCPD_ACTIVE_WAKEUP		BIT(0)
-> #define MTK_SCPD_FWAIT_SRAM		BIT(1)
->+#define MTK_SCPD_SRAM_ISO		BIT(2)
->+#define MTK_SCPD_SRAM_SLP		BIT(3)
->+#define MTK_SCPD_BYPASS_INIT_ON		BIT(4)
->+#define MTK_SCPD_IS_PWR_CON_ON		BIT(5)
->+#define MTK_SCPD_HWV_OPS		BIT(6)
->+#define MTK_SCPD_NON_CPU_RTFF		BIT(7)
->+#define MTK_SCPD_PEXTP_PHY_RTFF		BIT(8)
->+#define MTK_SCPD_UFS_RTFF		BIT(9)
->+#define MTK_SCPD_RTFF_DELAY		BIT(10)
->+#define MTK_SCPD_IRQ_SAVE		BIT(11)
->+#define MTK_SCPD_ALWAYS_ON		BIT(12)
->+#define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(13)
-> #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
-> 
-> #define SPM_VDE_PWR_CON			0x0210
->@@ -56,6 +82,15 @@
-> #define PWR_ON_BIT			BIT(2)
-> #define PWR_ON_2ND_BIT			BIT(3)
-> #define PWR_CLK_DIS_BIT			BIT(4)
->+#define PWR_SRAM_CLKISO_BIT		BIT(5)
->+#define PWR_SRAM_ISOINT_B_BIT		BIT(6)
->+#define PWR_RTFF_SAVE			BIT(24)
->+#define PWR_RTFF_NRESTORE		BIT(25)
->+#define PWR_RTFF_CLK_DIS		BIT(26)
->+#define PWR_RTFF_SAVE_FLAG		BIT(27)
->+#define PWR_RTFF_UFS_CLK_DIS		BIT(28)
->+#define PWR_ACK				BIT(30)
->+#define PWR_ACK_2ND			BIT(31)
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+Changes in v4:
+- Add R-b for patch 1 from Brian
+- Drop unecessary change in patch 4 Per Brian
+- Link to v3: https://lore.kernel.org/r/20250912-clk-ssc-version1-v3-0-fd1e07476ba1@nxp.com
 
-Align the code
+Changes in v3:
+- New patch 1 for dt-bindings per comment from Brian
+  https://lore.kernel.org/all/aLeEFzXkPog_dt2B@x1/
+  This might not be good to add a new dt-binding file in v3. But this is
+  quite a simple file that just has four macros to encode modulation
+  method. So hope this is fine for DT maintainers.
+- Add Brain's R-b for patch 2
+- New patch 3 to add Kunit test per Brain. Since Brain helped
+  draft part of the code, I added Co-developed-by tag from Brain.
+- Link to v2: https://lore.kernel.org/r/20250901-clk-ssc-version1-v2-0-1d0a486dffe6@nxp.com
 
-> 
-> #define PWR_STATUS_CONN			BIT(1)
-> #define PWR_STATUS_DISP			BIT(3)
->@@ -78,10 +113,39 @@
-> #define PWR_STATUS_HIF1			BIT(26)	/* MT7622 */
-> #define PWR_STATUS_WB			BIT(27)	/* MT7622 */
-> 
->+#define _BUS_PROT(_type, _set_ofs, _clr_ofs,			\
->+		_en_ofs, _sta_ofs, _mask, _ack_mask,		\
->+		_ignore_clr_ack, _ignore_subsys_clk) {		\
->+		.type = _type,					\
->+		.set_ofs = _set_ofs,				\
->+		.clr_ofs = _clr_ofs,				\
->+		.en_ofs = _en_ofs,				\
->+		.sta_ofs = _sta_ofs,				\
->+		.mask = _mask,					\
->+		.ack_mask = _ack_mask,				\
->+		.ignore_clr_ack = _ignore_clr_ack,		\
->+		.ignore_subsys_clk = _ignore_subsys_clk,		\
->+	}
->+
->+#define BUS_PROT_IGN(_type, _set_ofs, _clr_ofs,	\
->+		_en_ofs, _sta_ofs, _mask)		\
->+		_BUS_PROT(_type, _set_ofs, _clr_ofs,	\
->+		_en_ofs, _sta_ofs, _mask, _mask, true, false)
->+
->+#define BUS_PROT_SUBSYS_CLK_IGN(_type, _set_ofs, _clr_ofs,	\
->+		_en_ofs, _sta_ofs, _mask)		\
->+		_BUS_PROT(_type, _set_ofs, _clr_ofs,	\
->+		_en_ofs, _sta_ofs, _mask, _mask, true, true)
->+
->+#define TEST_BP_ACK(bp, val)	((val & bp->ack_mask) == bp->ack_mask)
->+#define scpsys_get_infracfg(pdev)	\
->+	syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "infracfg")
+Changes in v2:
+- Simplify the code in patch 2 per Dan Carpenter and Brian Masney
+- Rebased to next-20250829
+- Link to v1: https://lore.kernel.org/r/20250812-clk-ssc-version1-v1-0-cef60f20d770@nxp.com
 
-There are some mix usage, one place use this marco, others places
-use the API. not understand why introducing this macro.
+---
+Peng Fan (5):
+      dt-bindings: clock: Add spread spectrum definition
+      clk: Introduce clk_hw_set_spread_spectrum
+      clk: conf: Support assigned-clock-sscs
+      clk: Add KUnit tests for assigned-clock-sscs
+      clk: scmi: Support Spread Spectrum for NXP i.MX95
 
->+
-> enum clk_id {
-> 	CLK_NONE,
-> 	CLK_MM,
-> 	CLK_MFG,
->+	CLK_MFG_TOP,
-> 	CLK_VENC,
-> 	CLK_VENC_LT,
-> 	CLK_ETHIF,
->@@ -89,6 +153,9 @@ enum clk_id {
-> 	CLK_HIFSEL,
-> 	CLK_JPGDEC,
-> 	CLK_AUDIO,
->+	CLK_DISP_AO_CONFIG,
->+	CLK_DISP_DPC,
->+	CLK_MDP,
-> 	CLK_MAX,
-> };
-> 
->@@ -96,6 +163,7 @@ static const char * const clk_names[] = {
-> 	NULL,
-> 	"mm",
-> 	"mfg",
->+	"mfg_top",
-> 	"venc",
-> 	"venc_lt",
-> 	"ethif",
->@@ -103,10 +171,27 @@ static const char * const clk_names[] = {
-> 	"hif_sel",
-> 	"jpgdec",
-> 	"audio",
->+	"disp_ao_config",
->+	"disp_dpc",
->+	"mdp",
-> 	NULL,
-> };
-> 
-> #define MAX_CLKS	3
->+#define MAX_STEPS	4
->+#define MAX_SUBSYS_CLKS 20
->+
->+struct bus_prot {
->+	u32 type;
->+	u32 set_ofs;
->+	u32 clr_ofs;
->+	u32 en_ofs;
->+	u32 sta_ofs;
->+	u32 mask;
->+	u32 ack_mask;
->+	bool ignore_clr_ack;
->+	bool ignore_subsys_clk;
->+};
-> 
-> /**
->  * struct scp_domain_data - scp domain data for power on/off flow
->@@ -115,8 +200,12 @@ static const char * const clk_names[] = {
->  * @ctl_offs: The offset for main power control register.
->  * @sram_pdn_bits: The mask for sram power control bits.
->  * @sram_pdn_ack_bits: The mask for sram power control acked bits.
->+ * @sram_slp_bits: The mask for sram sleep control bits.
->+ * @sram_slp_ack_bits: The mask for sram sleep control acked bits.
->  * @bus_prot_mask: The mask for single step bus protection.
->  * @clk_id: The basic clocks required by this power domain.
->+ * @subsys_clk_prefix: Clock names need to enable before access this subsys.
->+ * @bp_table: Bus protection table for this power domain.
->  * @caps: The flag for active wake-up action.
->  */
-> struct scp_domain_data {
->@@ -125,9 +214,13 @@ struct scp_domain_data {
-> 	int ctl_offs;
-> 	u32 sram_pdn_bits;
-> 	u32 sram_pdn_ack_bits;
->+	u32 sram_slp_bits;
->+	u32 sram_slp_ack_bits;
-> 	u32 bus_prot_mask;
-> 	enum clk_id clk_id[MAX_CLKS];
->-	u8 caps;
->+	const char *subsys_clk_prefix;
->+	struct bus_prot bp_table[MAX_STEPS];
->+	u32 caps;
-> };
-> 
-> struct scp;
->@@ -136,8 +229,11 @@ struct scp_domain {
-> 	struct generic_pm_domain genpd;
-> 	struct scp *scp;
-> 	struct clk *clk[MAX_CLKS];
->+	struct clk *subsys_clk[MAX_SUBSYS_CLKS];
-> 	const struct scp_domain_data *data;
-> 	struct regulator *supply;
->+	bool rtff_flag;
->+	bool boot_status;
-> };
-> 
-> struct scp_ctrl_reg {
->@@ -153,6 +249,8 @@ struct scp {
-> 	struct regmap *infracfg;
-> 	struct scp_ctrl_reg ctrl_reg;
-> 	bool bus_prot_reg_update;
->+	struct regmap **bp_regmap;
->+	int num_bp;
-> };
-> 
-> struct scp_subdomain {
->@@ -167,6 +265,8 @@ struct scp_soc_data {
-> 	int num_subdomains;
-> 	const struct scp_ctrl_reg regs;
-> 	bool bus_prot_reg_update;
->+	const char **bp_list;
->+	int num_bp;
-> };
-> 
-> static int scpsys_domain_is_on(struct scp_domain *scpd)
->@@ -191,6 +291,21 @@ static int scpsys_domain_is_on(struct scp_domain *scpd)
-> 	return -EINVAL;
-> }
-> 
->+static bool scpsys_pwr_ack_is_on(struct scp_domain *scpd)
->+{
->+	u32 status = readl(scpd->scp->base + scpd->data->ctl_offs) & PWR_ACK;
->+
->+	return status ? true : false;
->+}
->+
->+static bool scpsys_pwr_ack_2nd_is_on(struct scp_domain *scpd)
->+{
->+	u32 status = readl(scpd->scp->base + scpd->data->ctl_offs) &
->+		     PWR_ACK_2ND;
->+
->+	return status ? true : false;
->+}
->+
-> static int scpsys_regulator_enable(struct scp_domain *scpd)
-> {
-> 	if (!scpd->supply)
->@@ -233,11 +348,19 @@ static int scpsys_clk_enable(struct clk *clk[], int max_num)
-> static int scpsys_sram_enable(struct scp_domain *scpd, void __iomem *ctl_addr)
-> {
-> 	u32 val;
->-	u32 pdn_ack = scpd->data->sram_pdn_ack_bits;
->+	u32 ack_mask, ack_sta;
-> 	int tmp;
-> 
->-	val = readl(ctl_addr);
->-	val &= ~scpd->data->sram_pdn_bits;
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_SRAM_SLP)) {
->+		ack_mask = scpd->data->sram_slp_ack_bits;
->+		ack_sta = ack_mask;
->+		val = readl(ctl_addr) | scpd->data->sram_slp_bits;
->+	} else {
->+		ack_mask = scpd->data->sram_pdn_ack_bits;
->+		ack_sta = 0;
->+		val = readl(ctl_addr) & ~scpd->data->sram_pdn_bits;
->+	}
->+
-> 	writel(val, ctl_addr);
-> 
-> 	/* Either wait until SRAM_PDN_ACK all 0 or have a force wait */
->@@ -251,35 +374,184 @@ static int scpsys_sram_enable(struct scp_domain *scpd, void __iomem *ctl_addr)
-> 	} else {
-> 		/* Either wait until SRAM_PDN_ACK all 1 or 0 */
-> 		int ret = readl_poll_timeout(ctl_addr, tmp,
->-				(tmp & pdn_ack) == 0,
->+				(tmp & ack_mask) == ack_sta,
-> 				MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> 		if (ret < 0)
-> 			return ret;
-> 	}
-> 
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_SRAM_ISO)) {
->+		val = readl(ctl_addr) | PWR_SRAM_ISOINT_B_BIT;
->+		writel(val, ctl_addr);
->+		udelay(1);
+ drivers/clk/Makefile                               |   6 +
+ drivers/clk/clk-conf.c                             |  69 ++++++++++++
+ drivers/clk/clk-scmi.c                             |  64 ++++++++++-
+ drivers/clk/clk.c                                  |  26 +++++
+ drivers/clk/clk_test.c                             | 121 ++++++++++++++++++++-
+ drivers/clk/kunit_clk_assigned_rates.h             |  10 ++
+ drivers/clk/kunit_clk_assigned_rates_multiple.dtso |   6 +
+ ...kunit_clk_assigned_rates_multiple_consumer.dtso |   6 +
+ drivers/clk/kunit_clk_assigned_rates_one.dtso      |   3 +
+ .../clk/kunit_clk_assigned_rates_one_consumer.dtso |   3 +
+ .../clk/kunit_clk_assigned_rates_u64_multiple.dtso |   6 +
+ ...t_clk_assigned_rates_u64_multiple_consumer.dtso |   6 +
+ drivers/clk/kunit_clk_assigned_rates_u64_one.dtso  |   3 +
+ .../kunit_clk_assigned_rates_u64_one_consumer.dtso |   3 +
+ drivers/clk/kunit_clk_assigned_sscs_null.dtso      |  16 +++
+ .../clk/kunit_clk_assigned_sscs_null_consumer.dtso |  20 ++++
+ drivers/clk/kunit_clk_assigned_sscs_without.dtso   |  15 +++
+ .../kunit_clk_assigned_sscs_without_consumer.dtso  |  19 ++++
+ drivers/clk/kunit_clk_assigned_sscs_zero.dtso      |  12 ++
+ .../clk/kunit_clk_assigned_sscs_zero_consumer.dtso |  16 +++
+ include/dt-bindings/clock/clock.h                  |  14 +++
+ include/linux/clk-provider.h                       |  22 ++++
+ include/linux/scmi_protocol.h                      |   5 +
+ 23 files changed, 464 insertions(+), 7 deletions(-)
+---
+base-commit: 8941e75c0f122fdd76dc54ed45c4ce917587e006
+change-id: 20250812-clk-ssc-version1-acf6f6efbd96
 
-Add a comment on why delay 1us.
+Best regards,
+-- 
+Peng Fan <peng.fan@nxp.com>
 
->+		val &= ~PWR_SRAM_CLKISO_BIT;
->+		writel(val, ctl_addr);
->+	}
->+
-> 	return 0;
-> }
-> 
-> static int scpsys_sram_disable(struct scp_domain *scpd, void __iomem *ctl_addr)
-> {
-> 	u32 val;
->-	u32 pdn_ack = scpd->data->sram_pdn_ack_bits;
->+	u32 ack_mask, ack_sta;
-> 	int tmp;
-> 
->-	val = readl(ctl_addr);
->-	val |= scpd->data->sram_pdn_bits;
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_SRAM_ISO)) {
->+		val = readl(ctl_addr) | PWR_SRAM_CLKISO_BIT;
->+		writel(val, ctl_addr);
->+		val &= ~PWR_SRAM_ISOINT_B_BIT;
->+		writel(val, ctl_addr);
->+		udelay(1);
-
-Ditto.
-
->+	}
->+
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_SRAM_SLP)) {
->+		ack_mask = scpd->data->sram_slp_ack_bits;
->+		ack_sta = 0;
->+		val = readl(ctl_addr) & ~scpd->data->sram_slp_bits;
->+	} else {
->+		ack_mask = scpd->data->sram_pdn_ack_bits;
->+		ack_sta = ack_mask;
->+		val = readl(ctl_addr) | scpd->data->sram_pdn_bits;
->+	}
-> 	writel(val, ctl_addr);
-> 
-> 	/* Either wait until SRAM_PDN_ACK all 1 or 0 */
-> 	return readl_poll_timeout(ctl_addr, tmp,
->-			(tmp & pdn_ack) == pdn_ack,
->+			(tmp & ack_mask) == ack_sta,
-> 			MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> }
-> 
->-static int scpsys_bus_protect_enable(struct scp_domain *scpd)
->+static int set_bus_protection(struct regmap *map, struct bus_prot *bp)
->+{
->+	u32 val = 0;
->+	int retry = 0;
->+	int ret = 0;
->+
->+	while (retry <= MTK_BUS_PROTECTION_RETY_TIMES) {
->+		if (bp->set_ofs)
->+			regmap_write(map,  bp->set_ofs, bp->mask);
->+		else
->+			regmap_update_bits(map, bp->en_ofs,
->+					   bp->mask, bp->mask);
->+
->+		/* check bus protect enable setting */
->+		regmap_read(map, bp->en_ofs, &val);
->+		if ((val & bp->mask) == bp->mask)
->+			break;
->+
->+		retry++;
->+	}
->+
->+	ret = regmap_read_poll_timeout_atomic(map, bp->sta_ofs, val,
-
-Could non atomic version be used?
-
->+					      TEST_BP_ACK(bp, val),
->+					      MTK_POLL_DELAY_US,
->+					      MTK_POLL_TIMEOUT);
->+	if (ret < 0) {
->+		pr_err("%s val=0x%x, mask=0x%x, (val & mask)=0x%x\n",
->+		       __func__, val, bp->ack_mask, (val & bp->ack_mask));
->+	}
->+
->+	return ret;
->+}
->+
->+static int clear_bus_protection(struct regmap *map, struct bus_prot *bp)
->+{
->+	u32 val = 0;
->+	int ret = 0;
->+
->+	if (bp->clr_ofs)
->+		regmap_write(map, bp->clr_ofs, bp->mask);
->+	else
->+		regmap_update_bits(map, bp->en_ofs, bp->mask, 0);
->+
->+	if (bp->ignore_clr_ack)
->+		return 0;
->+
->+	ret = regmap_read_poll_timeout_atomic(map, bp->sta_ofs, val,
-
-Ditto.
-
->+					      !(val & bp->ack_mask),
->+					      MTK_POLL_DELAY_US,
->+					      MTK_POLL_TIMEOUT);
->+	if (ret < 0) {
->+		pr_err("%s val=0x%x, mask=0x%x, (val & mask)=0x%x\n",
->+		       __func__, val, bp->ack_mask, (val & bp->ack_mask));
->+	}
->+	return ret;
->+}
->+
->+static int scpsys_bus_protect_table_disable(struct scp_domain *scpd,
->+					    unsigned int index,
->+					    bool ignore_subsys_clk)
->+{
->+	struct scp *scp = scpd->scp;
->+	const struct bus_prot *bp_table = scpd->data->bp_table;
->+	int ret = 0;
->+	int i;
->+
->+	for (i = index; i >= 0; i--) {
->+		struct regmap *map;
->+		struct bus_prot bp = bp_table[i];
->+
->+		if (bp.type == 0 || bp.type >= scp->num_bp)
->+			continue;
->+
->+		if (ignore_subsys_clk != bp.ignore_subsys_clk)
->+			continue;
->+
->+		map = scp->bp_regmap[bp.type];
->+		if (!map)
->+			continue;
->+
->+		ret = clear_bus_protection(map, &bp);
->+		if (ret)
->+			break;
->+	}
->+
->+	return ret;
->+}
->+
->+static int scpsys_bus_protect_table_enable(struct scp_domain *scpd,
->+					   bool ignore_subsys_clk)
->+{
->+	struct scp *scp = scpd->scp;
->+	const struct bus_prot *bp_table = scpd->data->bp_table;
->+	int ret = 0;
->+	int i;
->+
->+	for (i = 0; i < MAX_STEPS; i++) {
->+		struct regmap *map;
->+		struct bus_prot bp = bp_table[i];
->+
->+		if (bp.type == 0 || bp.type >= scp->num_bp)
->+			continue;
->+
->+		if (ignore_subsys_clk != bp.ignore_subsys_clk)
->+			continue;
->+
->+		map = scp->bp_regmap[bp.type];
->+		if (!map)
->+			continue;
->+
->+		ret = set_bus_protection(map, &bp);
->+		if (ret) {
->+			scpsys_bus_protect_table_disable(scpd, i,
->+							 ignore_subsys_clk);
->+			return ret;
->+		}
->+	}
->+
->+	return ret;
->+}
->+
->+static int scpsys_bus_protect_enable(struct scp_domain *scpd,
->+				     bool ignore_subsys_clk)
-> {
-> 	struct scp *scp = scpd->scp;
-> 
->+	if (scp->bp_regmap && scp->num_bp > 0)
->+		return scpsys_bus_protect_table_enable(scpd,
->+						       ignore_subsys_clk);
->+
-> 	if (!scpd->data->bus_prot_mask)
-> 		return 0;
-> 
->@@ -288,10 +560,15 @@ static int scpsys_bus_protect_enable(struct scp_domain *scpd)
-> 			scp->bus_prot_reg_update);
-> }
-> 
->-static int scpsys_bus_protect_disable(struct scp_domain *scpd)
->+static int scpsys_bus_protect_disable(struct scp_domain *scpd,
->+				      bool ignore_subsys_clk)
-> {
-> 	struct scp *scp = scpd->scp;
-> 
->+	if (scp->bp_regmap && scp->num_bp > 0)
->+		return scpsys_bus_protect_table_disable(scpd, MAX_STEPS - 1,
->+							ignore_subsys_clk);
->+
-> 	if (!scpd->data->bus_prot_mask)
-> 		return 0;
-> 
->@@ -307,6 +584,11 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
-> 	void __iomem *ctl_addr = scp->base + scpd->data->ctl_offs;
-> 	u32 val;
-> 	int ret, tmp;
->+	bool pwr_ack;
->+
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_KEEP_DEFAULT_OFF) &&
->+	    !scpd->boot_status)
->+		return 0;
-> 
-> 	ret = scpsys_regulator_enable(scpd);
-> 	if (ret < 0)
->@@ -320,34 +602,121 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
-> 	val = readl(ctl_addr);
-> 	val |= PWR_ON_BIT;
-> 	writel(val, ctl_addr);
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IS_PWR_CON_ON)) {
->+		ret = readx_poll_timeout_atomic(scpsys_pwr_ack_is_on,
-
-Ditto.
-
->+						scpd, pwr_ack, pwr_ack,
->+						MTK_POLL_DELAY_US,
->+						MTK_POLL_TIMEOUT);
->+		if (ret < 0)
->+			goto err_pwr_ack;
->+
->+		udelay(MTK_ACK_DELAY_US);
->+	}
->+
-> 	val |= PWR_ON_2ND_BIT;
-> 	writel(val, ctl_addr);
-> 
-> 	/* wait until PWR_ACK = 1 */
->-	ret = readx_poll_timeout(scpsys_domain_is_on, scpd, tmp, tmp > 0,
->-				 MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IS_PWR_CON_ON))
->+		ret = readx_poll_timeout_atomic(scpsys_pwr_ack_2nd_is_on,
-
-Ditto.
-
->+						scpd, pwr_ack, pwr_ack,
->+						MTK_POLL_DELAY_US,
->+						MTK_POLL_TIMEOUT);
->+	else
->+		ret = readx_poll_timeout(scpsys_domain_is_on,
->+					 scpd, tmp, tmp > 0,
->+					 MTK_POLL_DELAY_US,
->+					 MTK_POLL_TIMEOUT);
-> 	if (ret < 0)
-> 		goto err_pwr_ack;
-> 
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_PEXTP_PHY_RTFF) && scpd->rtff_flag) {
->+		val |= PWR_RTFF_CLK_DIS;
->+		writel(val, ctl_addr);
->+	}
->+
-> 	val &= ~PWR_CLK_DIS_BIT;
-> 	writel(val, ctl_addr);
-> 
-> 	val &= ~PWR_ISO_BIT;
-> 	writel(val, ctl_addr);
-> 
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_RTFF_DELAY) && scpd->rtff_flag)
->+		udelay(MTK_RTFF_DELAY_US);
->+
-> 	val |= PWR_RST_B_BIT;
-> 	writel(val, ctl_addr);
-> 
->-	ret = scpsys_sram_enable(scpd, ctl_addr);
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_NON_CPU_RTFF)) {
->+		val = readl(ctl_addr);
->+		if (val & PWR_RTFF_SAVE_FLAG) {
->+			val &= ~PWR_RTFF_SAVE_FLAG;
->+			writel(val, ctl_addr);
->+
->+			val |= PWR_RTFF_CLK_DIS;
->+			writel(val, ctl_addr);
->+
->+			val &= ~PWR_RTFF_NRESTORE;
->+			writel(val, ctl_addr);
->+
->+			val |= PWR_RTFF_NRESTORE;
->+			writel(val, ctl_addr);
->+
->+			val &= ~PWR_RTFF_CLK_DIS;
->+			writel(val, ctl_addr);
->+		}
->+	} else if (MTK_SCPD_CAPS(scpd, MTK_SCPD_PEXTP_PHY_RTFF)) {
->+		val = readl(ctl_addr);
->+		if (val & PWR_RTFF_SAVE_FLAG) {
->+			val &= ~PWR_RTFF_SAVE_FLAG;
->+			writel(val, ctl_addr);
->+
->+			val &= ~PWR_RTFF_NRESTORE;
->+			writel(val, ctl_addr);
->+
->+			val |= PWR_RTFF_NRESTORE;
->+			writel(val, ctl_addr);
->+
->+			val &= ~PWR_RTFF_CLK_DIS;
->+			writel(val, ctl_addr);
->+		}
->+	} else if (MTK_SCPD_CAPS(scpd, MTK_SCPD_UFS_RTFF) &&
->+		   scpd->rtff_flag) {
->+		val |= PWR_RTFF_UFS_CLK_DIS;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_NRESTORE;
->+		writel(val, ctl_addr);
->+
->+		val |= PWR_RTFF_NRESTORE;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_UFS_CLK_DIS;
->+		writel(val, ctl_addr);
->+
->+		scpd->rtff_flag = false;
->+	}
->+
->+	ret = scpsys_bus_protect_disable(scpd, true);
-> 	if (ret < 0)
-> 		goto err_pwr_ack;
-> 
->-	ret = scpsys_bus_protect_disable(scpd);
->+	ret = scpsys_clk_enable(scpd->subsys_clk, MAX_SUBSYS_CLKS);
-> 	if (ret < 0)
-> 		goto err_pwr_ack;
-> 
->+	ret = scpsys_sram_enable(scpd, ctl_addr);
->+	if (ret < 0)
->+		goto err_sram_enable;
->+
->+	ret = scpsys_bus_protect_disable(scpd, false);
->+	if (ret < 0)
->+		goto err_sram_enable;
->+
-> 	return 0;
-> 
->+err_sram_enable:
->+	scpsys_clk_disable(scpd->subsys_clk, MAX_SUBSYS_CLKS);
-> err_pwr_ack:
-> 	scpsys_clk_disable(scpd->clk, MAX_CLKS);
-> err_clk:
->@@ -365,8 +734,9 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
-> 	void __iomem *ctl_addr = scp->base + scpd->data->ctl_offs;
-> 	u32 val;
-> 	int ret, tmp;
->+	bool pwr_ack;
-> 
->-	ret = scpsys_bus_protect_enable(scpd);
->+	ret = scpsys_bus_protect_enable(scpd, false);
-> 	if (ret < 0)
-> 		goto out;
-> 
->@@ -374,11 +744,53 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
-> 	if (ret < 0)
-> 		goto out;
-> 
->+	scpsys_clk_disable(scpd->subsys_clk, MAX_SUBSYS_CLKS);
->+
->+	ret = scpsys_bus_protect_enable(scpd, true);
->+	if (ret < 0)
->+		goto out;
->+
-> 	/* subsys power off */
-> 	val = readl(ctl_addr);
->+
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_NON_CPU_RTFF) ||
->+	    MTK_SCPD_CAPS(scpd, MTK_SCPD_PEXTP_PHY_RTFF)) {
->+		val |= PWR_RTFF_CLK_DIS;
->+		writel(val, ctl_addr);
->+
->+		val |= PWR_RTFF_SAVE;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_SAVE;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_CLK_DIS;
->+		writel(val, ctl_addr);
->+
->+		val |= PWR_RTFF_SAVE_FLAG;
->+		writel(val, ctl_addr);
->+	} else if (MTK_SCPD_CAPS(scpd, MTK_SCPD_UFS_RTFF)) {
->+		val |= PWR_RTFF_UFS_CLK_DIS;
->+		writel(val, ctl_addr);
->+
->+		val |= PWR_RTFF_SAVE;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_SAVE;
->+		writel(val, ctl_addr);
->+
->+		val &= ~PWR_RTFF_UFS_CLK_DIS;
->+		writel(val, ctl_addr);
->+		if (MTK_SCPD_CAPS(scpd, MTK_SCPD_UFS_RTFF))
->+			scpd->rtff_flag = true;
->+	}
->+
-> 	val |= PWR_ISO_BIT;
-> 	writel(val, ctl_addr);
-> 
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_RTFF_DELAY) && scpd->rtff_flag)
->+		udelay(1);
-
-Add comment on delay 1us.
-
->+
-> 	val &= ~PWR_RST_B_BIT;
-> 	writel(val, ctl_addr);
-> 
->@@ -388,12 +800,29 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
-> 	val &= ~PWR_ON_BIT;
-> 	writel(val, ctl_addr);
-> 
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IS_PWR_CON_ON)) {
->+		ret = readx_poll_timeout_atomic(scpsys_pwr_ack_is_on,
-
-Non atomic version?
-
->+						scpd, pwr_ack, !pwr_ack,
->+						MTK_POLL_DELAY_US,
->+						MTK_POLL_TIMEOUT);
->+		if (ret < 0)
->+			goto out;
->+	}
->+
-> 	val &= ~PWR_ON_2ND_BIT;
-> 	writel(val, ctl_addr);
-> 
-> 	/* wait until PWR_ACK = 0 */
->-	ret = readx_poll_timeout(scpsys_domain_is_on, scpd, tmp, tmp == 0,
->-				 MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IS_PWR_CON_ON))
->+		ret = readx_poll_timeout_atomic(scpsys_pwr_ack_2nd_is_on,
->+						scpd, pwr_ack, !pwr_ack,
->+						MTK_POLL_DELAY_US,
->+						MTK_POLL_TIMEOUT);
->+	else
->+		ret = readx_poll_timeout(scpsys_domain_is_on,
->+					 scpd, tmp, tmp == 0,
->+					 MTK_POLL_DELAY_US,
->+					 MTK_POLL_TIMEOUT);
-> 	if (ret < 0)
-> 		goto out;
-> 
->@@ -419,54 +848,145 @@ static void init_clks(struct platform_device *pdev, struct clk **clk)
-> 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
-> }
-> 
->+static int init_subsys_clks(struct platform_device *pdev,
->+			    const char *prefix, struct clk **clk)
->+{
->+	struct device_node *node = pdev->dev.of_node;
->+	u32 prefix_len, sub_clk_cnt = 0;
->+	struct property *prop;
->+	const char *clk_name;
->+
->+	if (!node) {
->+		dev_err(&pdev->dev, "Cannot find scpsys node: %ld\n",
->+			PTR_ERR(node));
->+		return PTR_ERR(node);
->+	}
->+
->+	prefix_len = strlen(prefix);
->+
->+	of_property_for_each_string(node, "clock-names", prop, clk_name) {
->+		if (!strncmp(clk_name, prefix, prefix_len) &&
->+		    (strlen(clk_name) > prefix_len + 1) &&
->+		    (clk_name[prefix_len] == '-')) {
->+			if (sub_clk_cnt >= MAX_SUBSYS_CLKS) {
->+				dev_err(&pdev->dev,
->+					"subsys clk out of range %d\n",
->+					sub_clk_cnt);
->+				return -EINVAL;
->+			}
->+
->+			clk[sub_clk_cnt] = devm_clk_get(&pdev->dev, clk_name);
->+
->+			if (IS_ERR(clk[sub_clk_cnt])) {
->+				dev_err(&pdev->dev,
->+					"Subsys clk get fail %ld\n",
->+					PTR_ERR(clk[sub_clk_cnt]));
->+				return PTR_ERR(clk[sub_clk_cnt]);
->+			}
->+			sub_clk_cnt++;
->+		}
->+	}
->+
->+	return sub_clk_cnt;
->+}
->+
->+static int mtk_pd_get_regmap(struct platform_device *pdev,
->+			     struct regmap **regmap,
->+			     const char *name)
->+{
->+	*regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, name);
->+	if (PTR_ERR(*regmap) == -ENODEV) {
->+		dev_notice(&pdev->dev, "%s regmap is null(%ld)\n",
->+			   name, PTR_ERR(*regmap));
->+		*regmap = NULL;
->+	} else if (IS_ERR(*regmap)) {
->+		dev_notice(&pdev->dev, "Cannot find %s controller: %ld\n",
->+			   name, PTR_ERR(*regmap));
->+		return PTR_ERR(*regmap);
->+	}
->+
->+	return 0;
->+}
->+
->+static bool scpsys_get_boot_status(struct scp_domain *scpd)
->+{
->+	if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IS_PWR_CON_ON))
->+		return scpsys_pwr_ack_is_on(scpd) &&
->+		       scpsys_pwr_ack_2nd_is_on(scpd);
->+	return (scpsys_domain_is_on(scpd) > 0) ? true : false;
->+}
->+
-> static struct scp *init_scp(struct platform_device *pdev,
->-			const struct scp_domain_data *scp_domain_data, int num,
->-			const struct scp_ctrl_reg *scp_ctrl_reg,
->-			bool bus_prot_reg_update)
->+		     const struct scp_soc_data *soc)
-
-Align. scripts/checkpatch.pl should be able to report the warnings.
-
-> {
-> 	struct genpd_onecell_data *pd_data;
->+	struct resource *res;
-> 	int i, j;
-> 	struct scp *scp;
-> 	struct clk *clk[CLK_MAX];
->+	int ret;
-> 
-> 	scp = devm_kzalloc(&pdev->dev, sizeof(*scp), GFP_KERNEL);
-> 	if (!scp)
-> 		return ERR_PTR(-ENOMEM);
-> 
->-	scp->ctrl_reg.pwr_sta_offs = scp_ctrl_reg->pwr_sta_offs;
->-	scp->ctrl_reg.pwr_sta2nd_offs = scp_ctrl_reg->pwr_sta2nd_offs;
->+	scp->ctrl_reg.pwr_sta_offs = soc->regs.pwr_sta_offs;
->+	scp->ctrl_reg.pwr_sta2nd_offs = soc->regs.pwr_sta2nd_offs;
-> 
->-	scp->bus_prot_reg_update = bus_prot_reg_update;
->+	scp->bus_prot_reg_update = soc->bus_prot_reg_update;
-> 
-> 	scp->dev = &pdev->dev;
-> 
->-	scp->base = devm_platform_ioremap_resource(pdev, 0);
->+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->+	scp->base = devm_ioremap_resource(&pdev->dev, res);
-
-Not sure why change this. The same range are also mapped by others?
-
-
-> 	if (IS_ERR(scp->base))
-> 		return ERR_CAST(scp->base);
-> 
->-	scp->domains = devm_kcalloc(&pdev->dev,
->-				num, sizeof(*scp->domains), GFP_KERNEL);
->+	scp->domains = devm_kcalloc(&pdev->dev, soc->num_domains,
->+				    sizeof(*scp->domains), GFP_KERNEL);
-> 	if (!scp->domains)
-> 		return ERR_PTR(-ENOMEM);
-> 
-> 	pd_data = &scp->pd_data;
-> 
->-	pd_data->domains = devm_kcalloc(&pdev->dev,
->-			num, sizeof(*pd_data->domains), GFP_KERNEL);
->+	pd_data->domains = devm_kcalloc(&pdev->dev, soc->num_domains,
->+					sizeof(*pd_data->domains),
->+					GFP_KERNEL);
-> 	if (!pd_data->domains)
-> 		return ERR_PTR(-ENOMEM);
-> 
->-	scp->infracfg = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
->-			"infracfg");
->-	if (IS_ERR(scp->infracfg)) {
->-		dev_err(&pdev->dev, "Cannot find infracfg controller: %ld\n",
->+	if (soc->bp_list && soc->num_bp > 0) {
->+		scp->num_bp = soc->num_bp;
->+		scp->bp_regmap = devm_kcalloc(&pdev->dev, scp->num_bp,
->+					      sizeof(*scp->bp_regmap),
->+					      GFP_KERNEL);
->+		if (!scp->bp_regmap)
->+			return ERR_PTR(-ENOMEM);
->+
->+		/*
->+		 * get bus prot regmap from dts node,
->+		 * 0 means invalid bus type
->+		 */
->+		for (i = 1; i < scp->num_bp; i++) {
->+			ret = mtk_pd_get_regmap(pdev, &scp->bp_regmap[i],
->+						soc->bp_list[i]);
->+			if (ret)
->+				return ERR_PTR(ret);
->+		}
->+	} else {
->+		scp->infracfg = scpsys_get_infracfg(pdev);
->+
->+		if (IS_ERR(scp->infracfg)) {
->+			dev_err(&pdev->dev,
->+				"Cannot find infracfg controller: %ld\n",
-> 				PTR_ERR(scp->infracfg));
->-		return ERR_CAST(scp->infracfg);
->+			return ERR_CAST(scp->infracfg);
->+		}
-> 	}
-> 
->-	for (i = 0; i < num; i++) {
->+	for (i = 0; i < soc->num_domains; i++) {
-> 		struct scp_domain *scpd = &scp->domains[i];
->-		const struct scp_domain_data *data = &scp_domain_data[i];
->+		const struct scp_domain_data *data = &soc->domains[i];
-> 
-> 		scpd->supply = devm_regulator_get_optional(&pdev->dev, data->name);
-> 		if (IS_ERR(scpd->supply)) {
->@@ -477,14 +997,14 @@ static struct scp *init_scp(struct platform_device *pdev,
-> 		}
-> 	}
-> 
->-	pd_data->num_domains = num;
->+	pd_data->num_domains = soc->num_domains;
-> 
-> 	init_clks(pdev, clk);
-> 
->-	for (i = 0; i < num; i++) {
->+	for (i = 0; i < soc->num_domains; i++) {
-> 		struct scp_domain *scpd = &scp->domains[i];
-> 		struct generic_pm_domain *genpd = &scpd->genpd;
->-		const struct scp_domain_data *data = &scp_domain_data[i];
->+		const struct scp_domain_data *data = &soc->domains[i];
-> 
-> 		pd_data->domains[i] = genpd;
-> 		scpd->scp = scp;
->@@ -503,11 +1023,26 @@ static struct scp *init_scp(struct platform_device *pdev,
-> 			scpd->clk[j] = c;
-> 		}
-> 
->+		if (data->subsys_clk_prefix) {
->+			ret = init_subsys_clks(pdev,
->+					       data->subsys_clk_prefix,
->+					       scpd->subsys_clk);
->+			if (ret < 0) {
->+				dev_notice(&pdev->dev,
->+					   "%s: subsys clk unavailable\n",
->+					   data->name);
->+				return ERR_PTR(ret);
->+			}
->+		}
-> 		genpd->name = data->name;
-> 		genpd->power_off = scpsys_power_off;
-> 		genpd->power_on = scpsys_power_on;
-> 		if (MTK_SCPD_CAPS(scpd, MTK_SCPD_ACTIVE_WAKEUP))
-> 			genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
->+		if (MTK_SCPD_CAPS(scpd, MTK_SCPD_IRQ_SAVE))
->+			genpd->flags |= GENPD_FLAG_IRQ_SAFE;
->+		if (MTK_SCPD_CAPS(scpd, MTK_SCPD_ALWAYS_ON))
->+			genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-> 	}
-> 
-> 	return scp;
->@@ -530,8 +1065,17 @@ static void mtk_register_power_domains(struct platform_device *pdev,
-> 		 * software.  The unused domains will be switched off during
-> 		 * late_init time.
-> 		 */
->-		on = !WARN_ON(genpd->power_on(genpd) < 0);
->-
->+		if (MTK_SCPD_CAPS(scpd, MTK_SCPD_KEEP_DEFAULT_OFF)) {
->+			scpd->boot_status = scpsys_get_boot_status(scpd);
->+			if (scpd->boot_status)
->+				on = !WARN_ON(genpd->power_on(genpd) < 0);
->+			else
->+				on = false;
->+		} else if (MTK_SCPD_CAPS(scpd, MTK_SCPD_BYPASS_INIT_ON)) {
->+			on = false;
->+		} else {
->+			on = !WARN_ON(genpd->power_on(genpd) < 0);
->+		}
-> 		pm_genpd_init(genpd, NULL, !on);
-> 	}
-> 
->@@ -1009,6 +1553,328 @@ static const struct scp_subdomain scp_subdomain_mt8173[] = {
-> 	{MT8173_POWER_DOMAIN_MFG_2D, MT8173_POWER_DOMAIN_MFG},
-> };
-> 
->+/*
->+ * MT8189 power domain support
->+ */
->+static const char *mt8189_bus_list[MT8189_BUS_TYPE_NUM] = {
->+	[MT8189_BP_IFR_TYPE] = "infra-infracfg-ao-reg-bus",
->+	[MT8189_BP_VLP_TYPE] = "vlpcfg-reg-bus",
->+	[MT8189_VLPCFG_REG_TYPE] = "vlpcfg-reg-bus",
->+	[MT8189_EMICFG_AO_MEM_TYPE] = "emicfg-ao-mem",
->+};
->+
->+static const struct scp_domain_data scp_domain_mt8189_spm_data[] = {
->+	[MT8189_POWER_DOMAIN_CONN] = {
->+		.name = "conn",
->+		.ctl_offs = MT8189_SPM_CONN_PWR_CON,
->+		.bp_table = {
->+			BUS_PROT_IGN(MT8189_BP_IFR_TYPE,
->+				     0x0c94, 0x0c98, 0x0c90, 0x0c9c,
->+				     MT8189_PROT_EN_MCU_STA_0_CONN),
->+			BUS_PROT_IGN(MT8189_BP_IFR_TYPE,
->+				     0x0c54, 0x0c58, 0x0c50, 0x0c5c,
->+				     MT8189_PROT_EN_INFRASYS_STA_1_CONN),
->+			BUS_PROT_IGN(MT8189_BP_IFR_TYPE,
->+				     0x0c94, 0x0c98, 0x0c90, 0x0c9c,
->+				     MT8189_PROT_EN_MCU_STA_0_CONN_2ND),
->+			BUS_PROT_IGN(MT8189_BP_IFR_TYPE,
->+				     0x0c44, 0x0c48, 0x0c40, 0x0c4c,
->+				     MT8189_PROT_EN_INFRASYS_STA_0_CONN),
->+		},
->+		.caps = MTK_SCPD_IS_PWR_CON_ON | MTK_SCPD_KEEP_DEFAULT_OFF,
->+	},
->+	[MT8189_POWER_DOMAIN_AUDIO] = {
->+		.name = "audio",
->+		.ctl_offs = MT8189_SPM_AUDIO_PWR_CON,
->+		.sram_pdn_bits = GENMASK(8, 8),
->+		.sram_pdn_ack_bits = GENMASK(12, 12),
-
-You could use BIT, same applied the below GENMASK usage.
-
->+		.bp_table = {
->+			BUS_PROT_IGN(MT8189_BP_IFR_TYPE,
->+				     0x0c84, 0x0c88, 0x0c80, 0x0c8c,
->+				     MT8189_PROT_EN_PERISYS_STA_0_AUDIO),
->+		},
->+		.clk_id = {CLK_AUDIO},
->+		.caps = MTK_SCPD_IS_PWR_CON_ON,
->+	},
-> /*
->  * scpsys driver init
->  */
->@@ -1098,6 +1977,9 @@ static const struct of_device_id of_scpsys_match_tbl[] = {
-> 	}, {
-> 		.compatible = "mediatek,mt8173-scpsys",
-> 		.data = &mt8173_data,
->+	}, {
->+		.compatible = "mediatek,mt8189-scpsys",
->+		.data = &mt8189_spm_data,
-> 	}, {
-> 		/* sentinel */
-> 	}
->@@ -1113,8 +1995,7 @@ static int scpsys_probe(struct platform_device *pdev)
-> 
-> 	soc = of_device_get_match_data(&pdev->dev);
-> 
->-	scp = init_scp(pdev, soc->domains, soc->num_domains, &soc->regs,
->-			soc->bus_prot_reg_update);
->+	scp = init_scp(pdev, soc);
-
-In the end, better separate your changes into small patches, mix cleanup
-and new support is not easy to review.
-
-Regards
-Peng
 
