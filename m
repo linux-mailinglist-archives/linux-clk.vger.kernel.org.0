@@ -1,190 +1,149 @@
-Return-Path: <linux-clk+bounces-28042-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28044-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10AEEB865AF
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Sep 2025 20:04:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20A6DB86875
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Sep 2025 20:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C08E6585A5B
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Sep 2025 18:03:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C868D1C8415D
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Sep 2025 18:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B117628489D;
-	Thu, 18 Sep 2025 18:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8414B2D77E2;
+	Thu, 18 Sep 2025 18:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="r6kG6ZGg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ATGpncwy"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5274334BA25;
-	Thu, 18 Sep 2025 18:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B85E28CF56;
+	Thu, 18 Sep 2025 18:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758218633; cv=none; b=OxyHciEyma2nK5KVNpNCKi7KH3iRM4oxmSJsyUuhYaSANGywQKy2ZRktSKELCPxckMhgZOtTxZnWz32XWcL1kblvqfqx5EQHxwG38g8bJ/wxpzsbd1h22leAe2OtMMVDsE+EWofEwDLkEWzNejGxKlxvPSUFFGuecU01VrkLyik=
+	t=1758221398; cv=none; b=geCw6kZMzewxtfdC5OtVk4hjpANT0DnwUOLvkzWm6XheuFLIwC4ULPBMqZHh9WcCYYi1GwGllL8Q/hz4NS6wsbeqglyk8MFm+soGel6b2C4x3aLGRAR2p1YGdqRIkG758Xdfc37mbW6dpWbAYcUx0Uq67TVIKH2EXJUaxVgIAPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758218633; c=relaxed/simple;
-	bh=oFc0UUvaTrN00fQCCZR47mEWEgZ0kFqcrNmJXWNIqv0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=acs6t7hPDAOz8j7Pm57Zf1GRxmEe1H+7cKPY7RuB5MuRSMg/fVuh0Cd3e09It4xxLRGhIsOCxjYRENq3JGtvXXQLF3slYtT2+NpXVZvD0hETFAmdhW71wpi13Le/y/lEqJWAhhqqZhxb3BVlRqurBXsqWUhuYySFYvRfKulRzcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=r6kG6ZGg; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58II3JWD065125;
-	Thu, 18 Sep 2025 13:03:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1758218599;
-	bh=t4/cCa5+Es3PK/YLYFtiDyhJrzARI0WStMwJlXvT8cw=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=r6kG6ZGg/ftlCggJnQ2jFUaA93cbiozpp4y5+kEMJ4pzrj78W3ZiPUtuS+pD61doL
-	 0gGfb8CNDDqIxpCpmvTZBobGnNwrl4zExEOebcL5sAhzVcp6VvfAIwMo7anYcYDA4a
-	 f9RzW5MQ/5+obpjSjsJ2R3n5YP0A2z85goCW0ww4=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58II3Ilj1732106
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 18 Sep 2025 13:03:18 -0500
-Received: from DFLE201.ent.ti.com (10.64.6.59) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 18
- Sep 2025 13:03:18 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE201.ent.ti.com
- (10.64.6.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Thu, 18 Sep 2025 13:03:18 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58II3HEI1277187;
-	Thu, 18 Sep 2025 13:03:17 -0500
-Date: Thu, 18 Sep 2025 23:33:16 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Michael Walle <mwalle@kernel.org>
-CC: Kevin Hilman <khilman@kernel.org>, Frank Binns <frank.binns@imgtec.com>,
-        Matt Coster <matt.coster@imgtec.com>,
-        Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth
- Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo
-	<kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Michael
- Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Andrew
- Davis <afd@ti.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 2/3] clk: keystone: don't cache clock rate
-Message-ID: <20250918180316.nze5ak3m5pde44uz@lcpd911>
-References: <20250915143440.2362812-1-mwalle@kernel.org>
- <20250915143440.2362812-3-mwalle@kernel.org>
- <7hv7lhp0e8.fsf@baylibre.com>
- <DCVTYCVUCXWH.LAMARC8K4UNU@kernel.org>
+	s=arc-20240116; t=1758221398; c=relaxed/simple;
+	bh=kZ31Cj+9SlIwCue4nf87udZAy0O4rgTArK6cH8v5gE0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YTcRaeCxWhiiCNRmuIGDslsIMAM1lVEsgdsKNHtQXXJM2h+ELthpaAI+RJ3LucvsLydyjqkb0mBoRX4oQK32YAwhX5QuslE/c4lX1FZPSfthehQ8/7J0et5S90zfHOhaG66HPqckp7rV80u0ggbo5875zSmH5VkAWKATHeZ7OqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ATGpncwy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9BD4C4CEF0;
+	Thu, 18 Sep 2025 18:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758221397;
+	bh=kZ31Cj+9SlIwCue4nf87udZAy0O4rgTArK6cH8v5gE0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=ATGpncwy2bS+wQApNWWCLiBfVItH2WsyhrR5OU2hxOuEYThCgq5qokSue4tke0Sma
+	 9UhVm+nW7/SCeJJQS2Ti2LGwPiungb6RyUjKuG9hHRzrzxfHSlAOJb4NFJfHwZp9QZ
+	 lQWJYNZk7Kfvh5+lIa/IFCuzcVsRlrY7jwzun+mrxv7eAU3JrN3E1go77oeYZp954E
+	 tILkcGL9x9F3KSKp343DZ5TcIPDYxyvRKxa3CmR1JXU/tBLTtSamZtNqc0KlSReeuJ
+	 Blz7hd1ilSLhGOSVGxt2Q+5XH7gl56r746zq7MuwLVqarjjwJy86bblAx71C3ueyE6
+	 tfP97FdQaWD0A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB476CAC597;
+	Thu, 18 Sep 2025 18:49:57 +0000 (UTC)
+From: Dang Huynh via B4 Relay <devnull+dang.huynh.mainlining.org@kernel.org>
+Subject: [PATCH 00/10] RDA8810PL SD/MMC support
+Date: Fri, 19 Sep 2025 01:48:40 +0700
+Message-Id: <20250919-rda8810pl-mmc-v1-0-d4f08a05ba4d@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <DCVTYCVUCXWH.LAMARC8K4UNU@kernel.org>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAhUzGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0ML3aKURAsLQ4OCHN3c3GRd4zRj4yQL42RjQ+MUJaCegqLUtMwKsHn
+ RsbW1ANyU/p1fAAAA
+X-Change-ID: 20250918-rda8810pl-mmc-3f33b83c313d
+To: Manivannan Sadhasivam <mani@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Kees Cook <kees@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, 
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, Dang Huynh <dang.huynh@mainlining.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758221395; l=2690;
+ i=dang.huynh@mainlining.org; s=20250917; h=from:subject:message-id;
+ bh=kZ31Cj+9SlIwCue4nf87udZAy0O4rgTArK6cH8v5gE0=;
+ b=qOqMjxWy0QtL3Ogxpb8gkzjO7d5vmQGyKe+kb/6NkDaSg1BsYLRsnjbZgBDstvASeAx0n2d2c
+ 3shNDl4Z4C4Bf3HZJfK9hqW3+uGf3bq50x8EsDU0gvAu95HssYcfjYM
+X-Developer-Key: i=dang.huynh@mainlining.org; a=ed25519;
+ pk=RyzH4CL4YU/ItXYUurA51EVBidfx4lIy8/E4EKRJCUk=
+X-Endpoint-Received: by B4 Relay for dang.huynh@mainlining.org/20250917
+ with auth_id=526
+X-Original-From: Dang Huynh <dang.huynh@mainlining.org>
+Reply-To: dang.huynh@mainlining.org
 
-Hi Michael,
+This patch series aims to add SDMMC driver and various drivers required
+for SDMMC controller to function.
 
-On Sep 18, 2025 at 11:48:34 +0200, Michael Walle wrote:
-> On Wed Sep 17, 2025 at 5:24 PM CEST, Kevin Hilman wrote:
-> > Michael Walle <mwalle@kernel.org> writes:
-> >
-> > > The TISCI firmware will return 0 if the clock or consumer is not
-> > > enabled although there is a stored value in the firmware. IOW a call to
-> > > set rate will work but at get rate will always return 0 if the clock is
-> > > disabled.
-> > > The clk framework will try to cache the clock rate when it's requested
-> > > by a consumer. If the clock or consumer is not enabled at that point,
-> > > the cached value is 0, which is wrong.
-> >
-> > Hmm, it also seems wrong to me that the clock framework would cache a
-> > clock rate when it's disabled.  On platforms with clocks that may have
-> > shared management (eg. TISCI or other platforms using SCMI) it's
-> > entirely possible that when Linux has disabled a clock, some other
-> > entity may have changed it.
-> >
-> > Could another solution here be to have the clk framework only cache when
-> > clocks are enabled?
-> 
-> It's not just the clock which has to be enabled, but also it's
-> consumer. I.e. for this case, the GPU has to be enabled, until that
-> is the case the get_rate always returns 0. The clk framework already
-> has support for the runtime power management of the clock itself,
-> see for example clk_recalc().
+This also fixed a bug where all the GPIO switched from INPUT to OUTPUT
+after the GPIO driver probed or by reading the GPIO debugfs.
 
-Why did we move away from the earlier approach [1] again?
-[1] https://lore.kernel.org/all/20250716134717.4085567-3-mwalle@kernel.org/
+This patch series is a split from [1] to ease the maintainers.
 
+Tested on Orange Pi 2G-IOT using a Buildroot environment.
 
-> 
-> > > Thus, disable the cache altogether.
-> > >
-> > > Signed-off-by: Michael Walle <mwalle@kernel.org>
-> > > ---
-> > > I guess to make it work correctly with the caching of the linux
-> > > subsystem a new flag to query the real clock rate is needed. That
-> > > way, one could also query the default value without having to turn
-> > > the clock and consumer on first. That can be retrofitted later and
-> > > the driver could query the firmware capabilities.
-> > >
-> > > Regarding a Fixes: tag. I didn't include one because it might have a
-> > > slight performance impact because the firmware has to be queried
-> > > every time now and it doesn't have been a problem for now. OTOH I've
-> > > enabled tracing during boot and there were just a handful
-> > > clock_{get/set}_rate() calls.
-> >
-> > The performance hit is not just about boot time, it's for *every*
-> > [get|set]_rate call.  Since TISCI is relatively slow (involves RPC,
-> > mailbox, etc. to remote core), this may have a performance impact
-> > elsewhere too.
-> 
-> Yes of course. I have just looked what happened during boot and
-> (short) after the boot. I haven't had any real application running,
-> though, so that's not representative.
+[1]: https://lore.kernel.org/all/20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org/
 
-I am not sure what cpufreq governor you had running, but depending on the governor,
-filesystem, etc. cpufreq can end up potentially doing a lot more of
-the clk_get|set_rates which could have some series performance degradation
-is what I'm worried about. Earlier maybe the clk_get_rate part was
-returning the cached CPU freqs, but now it will each time go query the
-firmware for it (unnecessarily)
+Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
+---
+Dang Huynh (10):
+      dt-bindings: gpio: rda: Make interrupts optional
+      dt-bindings: clock: Add RDA Micro RDA8810PL clock/reset controller
+      dt-bindings: dma: Add RDA IFC DMA
+      dt-bindings: mmc: Add RDA SDMMC controller
+      gpio: rda: Make IRQ optional
+      gpio: rda: Make direction register unreadable
+      clk: Add Clock and Reset Driver for RDA Micro RDA8810PL SoC
+      dmaengine: Add RDA IFC driver
+      mmc: host: Add RDA Micro SD/MMC driver
+      ARM: dts: unisoc: rda8810pl: Add SDMMC controllers
 
-I currently don't have any solid data to say how much of an impact
-for sure but I can run some tests locally and find out...
+ .../bindings/clock/rda,8810pl-apsyscon.yaml        |  43 ++
+ Documentation/devicetree/bindings/dma/rda,ifc.yaml |  45 ++
+ .../devicetree/bindings/gpio/gpio-rda.yaml         |   3 -
+ Documentation/devicetree/bindings/mmc/rda,mmc.yaml |  92 +++
+ MAINTAINERS                                        |  18 +
+ .../boot/dts/unisoc/rda8810pl-orangepi-2g-iot.dts  |  20 +
+ .../arm/boot/dts/unisoc/rda8810pl-orangepi-i96.dts |  20 +
+ arch/arm/boot/dts/unisoc/rda8810pl.dtsi            |  47 +-
+ drivers/clk/Kconfig                                |   1 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/rda/Kconfig                            |  14 +
+ drivers/clk/rda/Makefile                           |   2 +
+ drivers/clk/rda/clk-rda8810.c                      | 769 +++++++++++++++++++
+ drivers/dma/Kconfig                                |  10 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/rda-ifc.c                              | 450 +++++++++++
+ drivers/gpio/gpio-rda.c                            |   4 +-
+ drivers/mmc/host/Kconfig                           |  12 +
+ drivers/mmc/host/Makefile                          |   1 +
+ drivers/mmc/host/rda-mmc.c                         | 853 +++++++++++++++++++++
+ include/dt-bindings/clock/rda,8810pl-apclk.h       |  70 ++
+ include/dt-bindings/dma/rda-ifc.h                  |  28 +
+ 22 files changed, 2495 insertions(+), 9 deletions(-)
+---
+base-commit: ae2d20002576d2893ecaff25db3d7ef9190ac0b6
+change-id: 20250918-rda8810pl-mmc-3f33b83c313d
 
-> 
-> > That being said, I'm hoping it's unlikely that
-> > [get|set]_rate calls are in the fast path.
-> >
-> > All of that being said, I think the impacts of this patch are pretty
-> > minimal, so I don't have any real objections.
-> >
-> > Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-> 
-> Thanks!
-> 
-> -michael
-
-
-
--- 
 Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+-- 
+Dang Huynh <dang.huynh@mainlining.org>
+
+
 
