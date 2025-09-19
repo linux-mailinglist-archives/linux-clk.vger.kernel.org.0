@@ -1,123 +1,140 @@
-Return-Path: <linux-clk+bounces-28087-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28089-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91FC7B87582
-	for <lists+linux-clk@lfdr.de>; Fri, 19 Sep 2025 01:16:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4089B87F4D
+	for <lists+linux-clk@lfdr.de>; Fri, 19 Sep 2025 07:59:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDFFB7AB023
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Sep 2025 23:15:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EADF580912
+	for <lists+linux-clk@lfdr.de>; Fri, 19 Sep 2025 05:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAC02222A9;
-	Thu, 18 Sep 2025 23:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28CDC28506B;
+	Fri, 19 Sep 2025 05:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="iFz3ieaZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/qUzZBH"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11BE04A2D;
-	Thu, 18 Sep 2025 23:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF716283FFA;
+	Fri, 19 Sep 2025 05:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758237410; cv=none; b=ngj1sPbzUfVgxoy+mu5pqQHsvktVzpU0baWMcW1yUp5ZYya0vtsYaHeL8q7Nqn6v66RtkpF3FpCaXADej0jgPgmVwybcq0iOpNBLmgHmixzHQZIOpOD4CiO1fHDBshTmzOValBRLtCJHArObTHR+NqBp75hUJVUcKMTR2vgBP6Y=
+	t=1758261551; cv=none; b=YgqeGEJFIJD+4aDayt0FnfZQG+o/5cTT321ibfHmHDRG7X+l65Yu7HZaNPWE3d7G+Mt/44VvLKqqI6wBRr9peoF6kRa2OSl2eSDInYArLTwnXGUlzDnaNHlm8qRlwBlZOrsy6vKCypq9n3j51anbt1Zu3Iy/je3eCDXqMmhFre8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758237410; c=relaxed/simple;
-	bh=uLe3Rs76NuC3iXyCx+i0ugiqXnSkTMOx8ZjqX3d1DYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZdjWUVawcCHjVmCerq8niayigNDaGL9LoQSvGnpf7t9wdi/FOF3NXDOp7sAroRF9rCblafrQWSrI14WkW4oAcTPO4qyWt13fioBE7jxrT7N0i/ssi+SrppnLKI+NaHBvghWEg+p2RNmS93S4tYXa7eupVEFT6yKDBvkryMmY5AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=iFz3ieaZ; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cSWjf6qD8z9sss;
-	Fri, 19 Sep 2025 01:16:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1758237399;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AWpAqgCZ+Kq1EB4cSge6b9M96CwK6u9PPFoE3ETCiRI=;
-	b=iFz3ieaZ6lgdPd4WmncLZbbrMxReE9O39AOS9Y81ZD2w4AQE0ecl24zru2u4eTCB1SiDHi
-	OrBtr6sY8oqL1qJ5Dz8iF7UDbKr0ySC4Mgb+M8uUc2Lb6kLPYLZrxm/1jVZE17+Gjs2tau
-	f+/j7VTG8+v0huPg/oQybpmss64z9KJgs+fh+i38y8WOizOJ5/4Rk7BpZvepwmRRNLUwAE
-	B47c6xpaYBQ4iEpAc3F734DW+5Y0EMDwkexq3o/x2SL84+4F1/EX7mzScWDcwgy3CTWBQB
-	al4xx+8pfzrfh7TRtwktCjrlT2z75aXSJI8vQaG+XDaFsziFY9wp0tJXrnU5kw==
-Message-ID: <9dbc6022-eb97-49af-bda7-1a7a8069609a@mailbox.org>
-Date: Fri, 19 Sep 2025 01:16:37 +0200
+	s=arc-20240116; t=1758261551; c=relaxed/simple;
+	bh=ARN6P9/X424zlXLiKTbeILtanwkQtWd4O4u45ktBDnM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Nl0I/Qsip1YSxHfTGacB3YW8KRJ/km8zoQUtGMPxmegEqroEHjCT1QGIpxjuzsKi29zvHOg/OLXnzWhLKlwsaO2ZmlEG2xCdbzPV7/fEumkTMqKeGeN8dFzZEJhrKoX6SJDdqn2WV9UGEaBbKmlrgvCrjsjULAkHPHXvvjulYFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/qUzZBH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 80730C4CEF0;
+	Fri, 19 Sep 2025 05:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758261550;
+	bh=ARN6P9/X424zlXLiKTbeILtanwkQtWd4O4u45ktBDnM=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=R/qUzZBHIsxOOMKjnRckwsYr37MOnatD+425r/3bMIPTdPagxJds5RmoXdQ1t7PSw
+	 VKC4ys+4Uc9nL8IE8GblocuztHLnidGyWn+8wb1a19Hlb+dz6TDoeQyv2we8B05JEU
+	 u1BFt8RduSHsac4/Qy8o8L0oHtV5TsnoV4ydfE4FxogDz0D3c2M4V7sflb0sX/Gk30
+	 fgIFe2FaZzjgQP5En/DtRwdZjk6xGCa9JI4dq8+nh6fTSBS/zxAxvOeQlVtUu3RwOD
+	 0w8Q1STDbdNCMp/PAJSrRasbDvrE4wPofWtXcP+AFKlIJGDYIYMy5rDycGS1U5k3Xd
+	 jaP8moY3eVaxw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC39CAC592;
+	Fri, 19 Sep 2025 05:59:10 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Subject: [PATCH v6 0/3] clk: amlogic: add video-related clocks for S4 SoC
+Date: Fri, 19 Sep 2025 13:58:58 +0800
+Message-Id: <20250919-add_video_clk-v6-0-fe223161fb3f@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] clk: renesas: cpg-mssr: Read back reset registers to
- assure values latched
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: linux-clk@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, linux-renesas-soc@vger.kernel.org
-References: <20250918030723.331634-1-marek.vasut+renesas@mailbox.org>
- <CA+V-a8sjPx8U+MB3v-SxErRPqbz4irAgZhCvd5CHY=6uO_VoyQ@mail.gmail.com>
- <353db156-e518-49c8-96ac-bd138ee64a01@mailbox.org>
- <CA+V-a8sLxBq8vSuq2HxcchpLqyQxqTRtkWjUKsRN9tBqGhU7mw@mail.gmail.com>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <CA+V-a8sLxBq8vSuq2HxcchpLqyQxqTRtkWjUKsRN9tBqGhU7mw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: 5ubejjp1t796cok6d6cj5kb96qbkbycs
-X-MBO-RS-ID: 4cd4385661fd9ec09cf
+X-B4-Tracking: v=1; b=H4sIACPxzGgC/3XPzWoCMRSG4VuRrBs5+TmZpKveRxHJzxkNVVNmJ
+ LTI3LvRjTKjyy/wvIdc2EhDppF9ri5soJrHXE5tmI8Vi3t/2hHPqW0mQSJ0ArlPaVtzorKNhx+
+ eorIBNToQljXzO1Cf/+69703b+zyey/B/z1dxe31XqoID10Bdb5TqlRFf/ngouxzXsRzZrVXlw
+ 1uh5142H4IM6LGXDvTSq4d3sLivmrcKdHQi2OBeeP3s3dzr5pEggki6894uPT55YeYemyeJ0im
+ 0zsDs/9M0XQHF8HpArAEAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, Chuan Liu <chuan.liu@amlogic.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758261548; l=1984;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=ARN6P9/X424zlXLiKTbeILtanwkQtWd4O4u45ktBDnM=;
+ b=XXP6mQSo6VYw2td4KrrELnplOge6oWnhKcSZSb+u2Xr4OOmy2ahWYAZ3efQOYgziW+ySI+p7C
+ kh9uYnVngwBDttGGcI1ZdGpcOzEN8UVV20TQpALs/I9Lf+4KyV+HqZ7
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
-On 9/18/25 5:05 PM, Lad, Prabhakar wrote:
+This patch introduces new clock support for video processing components
+including the encoder, demodulator and CVBS interface modules.
 
-Hello Prabhakar,
+The related clocks have passed clk-measure verification.
 
->>>> diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
->>>> index 65dfaceea71f..7b52e8235984 100644
->>>> --- a/drivers/clk/renesas/renesas-cpg-mssr.c
->>>> +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
->>>> @@ -688,6 +688,7 @@ static int cpg_mssr_reset(struct reset_controller_dev *rcdev,
->>>>
->>>>           /* Reset module */
->>>>           writel(bitmask, priv->pub.base0 + priv->reset_regs[reg]);
->>>> +       readl(priv->pub.base0 + priv->reset_regs[reg]);
->>> Fyi on the RZ/T2H and RZ/N2H SoCs which uses the same driver we need
->>> to read the reset register `7` times and confirm [0] (as mentioned in
->>> the HW manual). So after reading do we want to confirm the bit is
->>> set/clear?
->> This is interesting, I wonder if the readback is something more common
->> to this reset controller.
->>
->> Why 7 times ? Is this documented in one of the HW manuals ? Are those
->> public and can you share a link to them , with the specific chapter or
->> page I should read about this 7 times read requirement ?
->>
-> Yes this is documented in the HW manual [0] section 6.5.1 Notes on
-> Module Reset Control Register Operation:
-> 
-> 1. To secure processing after release from a module reset, dummy read
-> the same register at least seven times except RTC
-> and LCDC after writing to initiate release from the module reset, and
-> only then proceed with the subsequent processing.
-> For RTC, dummy read the same register at least 300 times and for LCDC,
-> at least 100 times.
-> 
-> 2. When module is reset once and released again, make sure that the
-> target bit of module reset control register is set to 1 by
-> reading the register before releasing from a module reset. Then
-> release from a module reset
+Some potentially unsafe flag configurations were identified in other
+video clocks, and they are cleaned up as part of this patch series.
 
-Thank you for sharing this, but it seems this is not the case for R-Car 
-Gen4. I found out that V4H and V4M has additional "synchronized" and 
-"asynchronized" reset types according to SRCRn_FSRCHRKRAn attachment to 
-the V4H RM. The PCIe resets are "asynchronized". This extra readl() 
-added in this patch is turning all the resets into "synchronized" and 
-therefore makes them behave as expected.
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+---
+Changes in v6:
+- Split the flag removal changes for video clocks into a separate patch.
+- Link to v5: https://lore.kernel.org/r/20250916-add_video_clk-v5-0-e25293589601@amlogic.com
+
+Changes in v5:
+- Add Acked-by tags from Conor.
+- Remove unnecessary flags as suggested by Jerome.
+- Link to v4: https://lore.kernel.org/r/20250909-add_video_clk-v4-0-5e0c01d47aa8@amlogic.com
+
+Changes in v4:
+- Add Acked-by tags from Rob and Krzysztof.
+- Fix compilation errors.
+- Link to v3: https://lore.kernel.org/r/20250905-add_video_clk-v3-0-8304c91b8b94@amlogic.com
+
+Changes in v3:
+- Rebase with Jerome's latest code base.
+- Link to v2: https://lore.kernel.org/r/20250814-add_video_clk-v2-0-bb2b5a5f2904@amlogic.com
+
+Changes in v2:
+- Removed lcd_an clock tree (previously used in meson series but obsolete in
+newer chips).
+- Removed Rob's 'Acked-by' tag due to dt-binding changes (Is it necessary?).
+- Link to v1: https://lore.kernel.org/r/20250715-add_video_clk-v1-0-40e7f633f361@amlogic.com
+
+---
+Chuan Liu (3):
+      dt-bindings: clock: add video clock indices for Amlogic S4 SoC
+      clk: amlogic: add video-related clocks for S4 SoC
+      clk: amlogic: remove potentially unsafe flags from S4 video clocks
+
+ drivers/clk/meson/s4-peripherals.c                 | 206 ++++++++++++++++++++-
+ .../clock/amlogic,s4-peripherals-clkc.h            |  11 ++
+ 2 files changed, 213 insertions(+), 4 deletions(-)
+---
+base-commit: 01f3a6d1d59b8e25a6de243b0d73075cf0415eaf
+change-id: 20250715-add_video_clk-dc38b5459018
+
+Best regards,
+-- 
+Chuan Liu <chuan.liu@amlogic.com>
+
+
 
