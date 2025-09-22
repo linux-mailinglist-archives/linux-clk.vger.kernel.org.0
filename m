@@ -1,184 +1,122 @@
-Return-Path: <linux-clk+bounces-28297-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28291-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65F37B91D25
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Sep 2025 16:56:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7690B91CDA
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Sep 2025 16:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A3283AAFBA
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Sep 2025 14:56:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBD6E1899CF0
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Sep 2025 14:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775732D6E76;
-	Mon, 22 Sep 2025 14:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313BB2D29AA;
+	Mon, 22 Sep 2025 14:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="MkzjBf4f"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="USSraptt";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="oxMbV+e3"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D312D77EF;
-	Mon, 22 Sep 2025 14:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758552946; cv=pass; b=MOHvIdFxHIbF1d/5PnA/IKQ0wBW5VX1zi8aR3KwPjUV1xXXIGMcxpNI4uunBpLtA2dtnnXX4c4yYUQZMEPAn3e2ssGu5NNkOyHCydQic0BG2OZ4jM1j4D7ZLVB6nRCIQ8uYht6cwoCXXMn+9qdlXnFX4kmLgNJRfTOoz0wDFJ1g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758552946; c=relaxed/simple;
-	bh=cb7wy+ZwN39ONi58h69i1DPSVfww4xXrfbM+TXkw/WI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gzfLU6hNjnTBzjyIUG9E6ITfz+BLdzvyopsjLJCi6e86ggj1MU/plXZEjijfNhdIKD3tRHUrEHHUrD+ne5/DRaiJ7h6wqKeTYyJSqMKSBL0cqX9E1pgjX/jsWgFntJuapWEfn9cclSxL1vIgqsURKrrqIVuusA7LkSvmKSoiLsw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=MkzjBf4f; arc=pass smtp.client-ip=136.143.188.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1758552923; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=C55XzlbDLCmFbDiqjupdn3RbRvL/2iczTfU27UwBI4plR6YtkuDjy/pabhffB6p8nXzsPaNB4wlXlvfTY3j74iiwho6OqUvX//euxnMw1kEia6d860xS+CheNziVk7cbaXlqm85TQdoBhr085pEXZ4f7EtI25kun7g5sAANIUO0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758552923; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PLzv6fg3fqqkM8iKZ+L1jhNCwLYKzVSOP0OdN57SCX8=; 
-	b=RJeWA3DqZvG8gjVnDJJ290dMwFXazbC23ufhwfITvd6mlu4ppzwoZmIzFbV6quvzIxylKPtv73bEFAgoo2LTntxzQd2vguSKnRoqjCUeqNswjG6QvA3f4xaxZA1gwKEBwUVRiRT4dcx1GHDgX1S3VxZMapoUF9Dni6xBTIqCxbU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758552923;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=PLzv6fg3fqqkM8iKZ+L1jhNCwLYKzVSOP0OdN57SCX8=;
-	b=MkzjBf4fxvx6JK7eEAmxLrzmYFsyDwsopO+l8NiJwOrpaQYQkr8P0K8Wl6cylHAD
-	p06iSvqcL0U0Mm/6G3xVU/f6ezlT7B3A5z1C7dcbVYOT5sgB1Wh6v0AquwAlXUrzSJy
-	J/+8woSfozohZgZSFj93cspma7J6hH/mkftdPxhs=
-Received: by mx.zohomail.com with SMTPS id 1758552920497610.5552985610591;
-	Mon, 22 Sep 2025 07:55:20 -0700 (PDT)
-From: Junhui Liu <junhui.liu@pigmoral.tech>
-Date: Mon, 22 Sep 2025 22:51:51 +0800
-Subject: [PATCH 5/5] riscv: dts: anlogic: add clocks and CRU for DR1V90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8922D24BA;
+	Mon, 22 Sep 2025 14:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758552788; cv=none; b=q2K6PlRlN99jkQCR4XnKiEh+lu1bQOpy+F4nK+Dp7gu/CI1kGyFE9YNsGA7r5TdSG92TmPSnB1MnOeDHUk7EkCxdLagtFGttbkMAzI9a8WFMCirOpubtwUgTC8YgQEY2Q9A6e2V45wPzdY18yq56PhZQO8oEVLnhUfbbmeF0c5I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758552788; c=relaxed/simple;
+	bh=GMCPkEYEEsTJqfE/6r6Ghq6SNiQAO0BjDhL0faMM54Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JP+l9y1oQ6Hy+SkRZSVvF6GkIhchvN3tL42RgxiSrODWWqnUx4UycnL5L/mxDol3tYZduMMFhw6n95R3QmIk6ElmrAugGFxA2ti8qjUkGYROfT7CAQL5rLGhDmVuYna9jCW/r8F5+vYJgUebNkGOvJi9FnF6aFqpxPMslm4rRVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=USSraptt; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=oxMbV+e3; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4cVmLm2gGzz9sxm;
+	Mon, 22 Sep 2025 16:53:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1758552784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ia3X6LOqGAChyLZnv60EY8Niqy3mRn+utTuNAth8QQo=;
+	b=USSraptt5e3eqBAphtPEd4M/7yEVRQtJaikPRDFvyR084GcW63O9xJzdM903Rm/oDcQT24
+	/KpJ/kuJw3weKyoiXPHqnwJLkhvIEdu16U/E3T1MaSgOZ2rFrAdZtIW1b7BPE4DiG4aKP3
+	lcMBqgPVbqkOUujlLhuwY5e8VMY3aPU7KMrVaddouA0bAeuSHhnYaCA4NHBqdgboubQ/Th
+	FGIKEKHfoFD+fAvAAAV/7av0dMz6ZkO5b9zKnwt54gL/37g1s56bZyghgqxv4FwcTkPyDP
+	655nt34aNkOzuTxxsXhNzLMVg9hduaif7SbZhOv0TiEk3tD70eQQNP4uofvh2w==
+Message-ID: <a7bc3998-72d8-4d13-b0c1-05c5c44795b4@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1758552782;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ia3X6LOqGAChyLZnv60EY8Niqy3mRn+utTuNAth8QQo=;
+	b=oxMbV+e3sDebK83lCT2bvdqP0N1KrLcaIq6WTcZJtiGTyHnuNQlTHXZKz4xGlMM7GbVRoV
+	NDwbqPzR4Yj3tMWyIbLBFnar8PohdAdpJV+AC9f0Dy0A9qEivgXirgQjXOXSkl+PwFxX+s
+	csZw91CSOrBsMjeeVB6bp4lrDL7S16vfVFRqq7u4u9xZtgSl0Gr6G8jUjM/9tgM0FbhIZG
+	LdTET0ZjwzI1D6swb5vP7V4ENKzGBnLoH0upy0MCzfPAOAxgYjQz+JUKywxsheVkpe0tlQ
+	AdwzZR0hpUm8sHtNpFqTQLTCdNPEPqf1yLEWorFiDP/tGlXnfwXnUP0/1Bb76Q==
+Date: Mon, 22 Sep 2025 16:53:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH] clk: renesas: cpg-mssr: Add missing 1ms delay into reset
+ toggle callback
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, linux-renesas-soc@vger.kernel.org
+References: <20250918030552.331389-1-marek.vasut+renesas@mailbox.org>
+ <CAMuHMdWgaU9MvR+Aa4VGHJz+U_ksyP2w6+TmuEYPrGFEOtNg5g@mail.gmail.com>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <CAMuHMdWgaU9MvR+Aa4VGHJz+U_ksyP2w6+TmuEYPrGFEOtNg5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250922-dr1v90-cru-v1-5-e393d758de4e@pigmoral.tech>
-References: <20250922-dr1v90-cru-v1-0-e393d758de4e@pigmoral.tech>
-In-Reply-To: <20250922-dr1v90-cru-v1-0-e393d758de4e@pigmoral.tech>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Junhui Liu <junhui.liu@pigmoral.tech>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
- "fushan.zeng" <fushan.zeng@anlogic.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758552834; l=2783;
- i=junhui.liu@pigmoral.tech; s=20250910; h=from:subject:message-id;
- bh=cb7wy+ZwN39ONi58h69i1DPSVfww4xXrfbM+TXkw/WI=;
- b=buSBznMbOgHdkJQ7FZtYm3RCpZxmyXDsUY+oZXW+9KxaSJHF+RaKU0KAdU860IixMtuCCq3mH
- GvDkjS5Jr3VDxCDn3E9hmEHCWpG5kWwp9vZ8l7PKnL7HY3761+D2PZB
-X-Developer-Key: i=junhui.liu@pigmoral.tech; a=ed25519;
- pk=cgATWSU1KfGWmdwNmkPyHGnWgofhqqhE8Vts58wyxe4=
-X-ZohoMailClient: External
+X-MBO-RS-META: 1mdhnc95ckfgh3har8i1mwtnt3m7if7d
+X-MBO-RS-ID: 0de83875d2785eba642
 
-Add clocks and introduce the CRU (Clock and Reset) unit node
-for Anlogic DR1V90 SoC, providing both clock and reset support.
+On 9/22/25 1:37 PM, Geert Uytterhoeven wrote:
 
-The DR1V90 SoC uses three external clocks:
-- A 33 MHz crystal oscillator as the main system clock.
-- Two optional external clocks (via IO) for the CAN and WDT modules.
+Hello Geert,
 
-Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
----
- arch/riscv/boot/dts/anlogic/dr1v90.dtsi | 41 +++++++++++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 2 deletions(-)
+>> --- a/drivers/clk/renesas/renesas-cpg-mssr.c
+>> +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+>> @@ -689,8 +689,15 @@ static int cpg_mssr_reset(struct reset_controller_dev *rcdev,
+>>          /* Reset module */
+>>          writel(bitmask, priv->pub.base0 + priv->reset_regs[reg]);
+>>
+>> -       /* Wait for at least one cycle of the RCLK clock (@ ca. 32 kHz) */
+>> -       udelay(35);
+>> +       /*
+>> +        * On R-Car Gen4, delay after SRCR has been written is 1ms.
+>> +        * On older SoCs, delay after SRCR has been written is 35us
+>> +        * (one cycle of the RCLK clock @ cca. 32 kHz).
+> 
+> s/cca/ca/ (I can fix that myself).
 
-diff --git a/arch/riscv/boot/dts/anlogic/dr1v90.dtsi b/arch/riscv/boot/dts/anlogic/dr1v90.dtsi
-index f9f8754ceb5247d3ca25e6a65b3f915916ba6173..6458093dcf27afd640265aa07be9b93d6cb72f8a 100644
---- a/arch/riscv/boot/dts/anlogic/dr1v90.dtsi
-+++ b/arch/riscv/boot/dts/anlogic/dr1v90.dtsi
-@@ -3,6 +3,9 @@
-  * Copyright (C) 2025 Junhui Liu <junhui.liu@pigmoral.tech>
-  */
- 
-+#include <dt-bindings/clock/anlogic,dr1v90-cru.h>
-+#include <dt-bindings/reset/anlogic,dr1v90-cru.h>
-+
- /dts-v1/;
- / {
- 	#address-cells = <2>;
-@@ -39,6 +42,27 @@ cpu0_intc: interrupt-controller {
- 		};
- 	};
- 
-+	clocks {
-+		can_ext: clock-ext-can {
-+			compatible = "fixed-clock";
-+			clock-output-names = "can_ext";
-+			#clock-cells = <0>;
-+		};
-+
-+		osc_33m: clock-33m {
-+			compatible = "fixed-clock";
-+			clock-frequency = <33333333>;
-+			clock-output-names = "osc_33m";
-+			#clock-cells = <0>;
-+		};
-+
-+		wdt_ext: clock-ext-wdt {
-+			compatible = "fixed-clock";
-+			clock-output-names = "wdt_ext";
-+			#clock-cells = <0>;
-+		};
-+	};
-+
- 	soc {
- 		compatible = "simple-bus";
- 		interrupt-parent = <&plic>;
-@@ -65,21 +89,34 @@ plic: interrupt-controller@6c000000 {
- 		uart0: serial@f8400000 {
- 			compatible = "anlogic,dr1v90-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0xf8400000 0x0 0x1000>;
--			clock-frequency = <50000000>;
-+			clocks = <&cru CLK_IO_400M_DIV8>, <&cru CLK_CPU_1X>;
-+			clock-names = "baudclk", "apb_pclk";
- 			interrupts = <71>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-+			resets = <&cru RESET_UART0>;
- 			status = "disabled";
- 		};
- 
- 		uart1: serial@f8401000 {
- 			compatible = "anlogic,dr1v90-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0xf8401000 0x0 0x1000>;
--			clock-frequency = <50000000>;
-+			clocks = <&cru CLK_IO_400M_DIV8>, <&cru CLK_CPU_1X>;
-+			clock-names = "baudclk", "apb_pclk";
- 			interrupts = <72>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-+			resets = <&cru RESET_UART1>;
- 			status = "disabled";
- 		};
-+
-+		cru: clock-controller@f8801000 {
-+			compatible = "anlogic,dr1v90-cru";
-+			reg = <0x0 0xf8801000 0 0x400>;
-+			clocks = <&osc_33m>, <&can_ext>, <&wdt_ext>;
-+			clock-names = "osc_33m", "can_ext", "wdt_ext";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
- 	};
- };
+cca - circa , it seems all of c., ca., ca, cca are valid.
 
--- 
-2.51.0
-
+>> +        */
+>> +       if (priv->reg_layout == CLK_REG_LAYOUT_RCAR_GEN4)
+>> +               usleep_range(1000, 2000);
+>> +       else
+>> +               usleep_range(35, 1000);
+>>
+>>          /* Release module from reset state */
+>>          writel(bitmask, priv->pub.base0 + priv->reset_clear_regs[reg]);
+> 
+> LGTM, but wait for more feedback?
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thank you. I wait.
 
