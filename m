@@ -1,149 +1,201 @@
-Return-Path: <linux-clk+bounces-28331-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28333-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A23B95FEC
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Sep 2025 15:22:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DE48B965FA
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Sep 2025 16:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B135B19C3860
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Sep 2025 13:22:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 898893B5E89
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Sep 2025 14:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2EE322A3B;
-	Tue, 23 Sep 2025 13:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF2E265CB3;
+	Tue, 23 Sep 2025 14:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b="EBOqwOt8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JzO7OW2h"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [93.188.205.243])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4876A30F55D;
-	Tue, 23 Sep 2025 13:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.188.205.243
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CE2211A05
+	for <linux-clk@vger.kernel.org>; Tue, 23 Sep 2025 14:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758633745; cv=none; b=ogrzUMDqzvslOBtuPXb2IMUqGhAWmJj7U6NLaWPI23/Lv+L4IxDoWymGUIbQW4+JKWEl/dg3oPHUuJ8SGe8m4bbomc+ifn6e1EdCiv8DTGSY8idKwpxR2Wc26wyyuotwU+DRsPp1ku94lbnyzc7LtKVN+fn6SIEoRLkvrcWwLd4=
+	t=1758638398; cv=none; b=g+N60jv0mUuI6NIUCg9v83WQMOSAUQbFF/qfOds1GdGYeZnUDbY1z+Tk1E/v/iC0KuDeNjSPh2swtZ3VibEKZVVJym7pnwxX2aWlonVq0sgSMlYaRSWjC7Vg3vuzx4byKsGe9C13dJ3HuH4VcvOSebx/MkkJm8kkcJCoHCLBcvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758633745; c=relaxed/simple;
-	bh=LRQzmBa8kkt8wlTndgDV7ugHOqHHHTZMSQVXCNhqLHk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QXGYnOGYhGKbb1jZu0MI28eWy0FA1PbPdtBnkcFts1jYRnV7opBRkEm+sT0Y1ICeAvmnwZ1wF6XRyTa5aKlSl/fY2v3Z2nagdverJxe46dTGluWk3AgJieVtWmyEOYp1HUag1aGHnW2SWzdyGo2tgrtgekaTF5bocKfy/d03j1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b=EBOqwOt8; arc=none smtp.client-ip=93.188.205.243
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=astralinux.ru;
-	s=mail; t=1758633222;
-	bh=LRQzmBa8kkt8wlTndgDV7ugHOqHHHTZMSQVXCNhqLHk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EBOqwOt8paXaBGErZhHhM84s9xKpv4sLSQ1tgt+bMJHQilcDY9munQeTy2UuuEpuR
-	 b8h5eqtg9dCT5NpzkNEA0h0auuHP/H2zxvnnRnkLflqs3DXWu7wzmec6f16uFad7/D
-	 4PKZXM1gokJJ4Qq1Y80gzypLf9jjreJMsImeTZxbZh/BRX0z+nq6IPOoKmOpS81zTu
-	 vrz/ukwrj+8+kc/2PD65+jBs38IIcRnQiaHJGdhQ0pLKEu23YzQJoWBt5tM3NqVUfc
-	 +8zNiAQJtcpANAhpa+WSUxb/uBIj7mZdvZQXhrnvi+5NBCiFqU61MYDEmZVprWOP3W
-	 V5fje/Ghtca5A==
-Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 0A2201FADA;
-	Tue, 23 Sep 2025 16:13:42 +0300 (MSK)
-Received: from new-mail.astralinux.ru (unknown [10.177.185.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
-	Tue, 23 Sep 2025 16:13:40 +0300 (MSK)
-Received: from rbta-msk-lt-169874.astralinux.site (rbta-msk-lt-169874.astralinux.ru [10.198.22.153])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4cWL5Z2B5Xz2xBx;
-	Tue, 23 Sep 2025 16:13:38 +0300 (MSK)
-From: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
-To: Michael Turquette <mturquette@baylibre.com>
-Cc: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Brian Masney <bmasney@redhat.com>,
-	Eric Anholt <eric@anholt.net>,
-	linux-clk@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] clk: bcm: fix potential int overflow in bcm2835_measure_tcnt_mux
-Date: Tue, 23 Sep 2025 16:12:20 +0300
-Message-Id: <20250923131219.163463-1-mdmitrichenko@astralinux.ru>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1758638398; c=relaxed/simple;
+	bh=j9EbXoSuWTRW4S13uHojnmdjX60lsDhKsm/Ff+KWPLU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=c50x9jh1D38uL39CTM72gS5KWexwGno7CtarNfUfSYuWGo6wAm3ler4z7xg248S1jPJY51a072lJDbZI8o1qLQTkTgXWmSQBuw28I3HG+vfbSItN4hCqrGUSNZXVhnOqnLzKmhZm0Enm/kvvZVFlH2M/pMK+7UObAn03Vz9KfjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JzO7OW2h; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758638394;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DxQDp0IDyzApp/052cL0s/7veaxFSTNbvA8rR+FrLW4=;
+	b=JzO7OW2h2bHMX1F2fVPCe/8YWEvCsC+pAj19zUhOeVALYuiPF/rQRTuJ/DMsSc8QzmLcxi
+	kW+AeFEtBZj4ha/U9zEdJZ060So8wIshDbRD4vQ5Y2YFXXBttUnVaDcuko5BHXrFJKgWSP
+	tz/Zlq+Ifvs+I5t7+DQUIcZL/2SFG3M=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-230-geF-0pKwNe6W5aPxyl_Jzw-1; Tue, 23 Sep 2025 10:39:50 -0400
+X-MC-Unique: geF-0pKwNe6W5aPxyl_Jzw-1
+X-Mimecast-MFC-AGG-ID: geF-0pKwNe6W5aPxyl_Jzw_1758638389
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-84b9c23b8aeso447670385a.1
+        for <linux-clk@vger.kernel.org>; Tue, 23 Sep 2025 07:39:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758638389; x=1759243189;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DxQDp0IDyzApp/052cL0s/7veaxFSTNbvA8rR+FrLW4=;
+        b=OWNnJuXNNTbDUbbimqwkN1ZIVTwxiKLaQqd5P9JDoG5hZYwcGTyj99mJW8QQnHyo24
+         fuww4bHfsoLhMJGTO6fIYe1mlDvga94FRH5KrlGkQpUzaNjQ8g396Xq60Z2T4T8/BvCm
+         wCvn0HTKNztXBqN0Dnk/aNuqQkEg6UZlUucrJZQ6ac2i0R/fk/6G0dIBtpto9B9DdGn6
+         MTkUOMCABVhzLbj8HstcgTBqNAojcGfA+w6MyfB/b7UiN2tDnGWhe+sDwUYf7JpyR8R7
+         gBkec6fv2yymyeW7VPSENslZWP7P8mYtrF1RYEJDjJHAM0HTQVTCmz+N8oGPZJLSu+9D
+         ccIA==
+X-Gm-Message-State: AOJu0Yz011IzvHE067ZwgjVYWwnr3pATanNqSyKFUuotobKU9hzhgRQN
+	SJgIqLfoTaV7ptK9DYsXGpow+GzwihzxTGAJoKC+jktQAP8US8tgOa9teV39lEWcedaF9BEk+yD
+	g8DxTUMmlACFd/2STUDEHZppNLFo4mQdPzYd1Svfy4G983V7sm2MpNRRoYJXyJg==
+X-Gm-Gg: ASbGncuzVO/qHt+DpcWME7Cg1faGPs/a3BZvMlSiHLzZ4UuXpsEjNmPflrtf/lxWFF6
+	FFU+yx+A60HDZOJRgHobPjOaemQNtOU2Rrjbe43cimrjlCjYssB4QU+Wf78mS6GNWtKq3Ky43P0
+	HY5z3PLaW+r7GWicagaZUHAN/nxwY5EjbaZXCdFe1Rb/FEabH/KEb+y95PvBti4XOxaaWHTDPvI
+	kf2gQFaqT1Sh9apj9l63gbRPVuIRKFfTSqYK0ljAgpFgiEVMSzsBrsdcytR8TYf9mvYUGtE7kV3
+	OV2hIJOOysa645pOayIlwWNrFM7M+80MnPBVWEHJxaUCCMbvvoA8r6W1e2R6hFHepxI3vIdfCmb
+	VR9bKS7V7GbT1HDPd+zvCYEZJ6NGuQ9q1lcjY628=
+X-Received: by 2002:a05:620a:29ce:b0:850:4384:d1b1 with SMTP id af79cd13be357-851693f2eb4mr325778085a.4.1758638389237;
+        Tue, 23 Sep 2025 07:39:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGbl6Ccgcfq4My26UrD2QnlIWNInrCEn8gh2opFWhE6oWFWO0OrXhCproHe9Ov0haqvkJ0S1Q==
+X-Received: by 2002:a05:620a:29ce:b0:850:4384:d1b1 with SMTP id af79cd13be357-851693f2eb4mr325773985a.4.1758638388561;
+        Tue, 23 Sep 2025 07:39:48 -0700 (PDT)
+Received: from [10.175.117.224] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-84f2f6f3c25sm230272985a.49.2025.09.23.07.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Sep 2025 07:39:47 -0700 (PDT)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH RFC v4 00/12] clk: add support for v1 / v2 clock rate
+ negotiation and kunit tests
+Date: Tue, 23 Sep 2025 10:39:19 -0400
+Message-Id: <20250923-clk-tests-docs-v4-0-9205cb3d3cba@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: mdmitrichenko@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 67 0.3.67 f6b3a124585516de4e61e2bf9df040d8947a2fd5, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;astralinux.ru:7.1.1;new-mail.astralinux.ru:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 196520 [Sep 23 2025]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.11
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2025/09/23 12:50:00 #27847861
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+X-B4-Tracking: v=1; b=H4sIABex0mgC/12NwQrCMBBEf6Xs2ZWYNJp4EgQ/wKv0UJLVBLWRb
+ ChK6b8b6s3jm2HeTMCUIzHsmwkyjZFjGiq0qwZc6IcbYfSVQQqphRFbdI87FuLC6JNjVE5Zs9O
+ WrDVQR69M1/hehBc4n47Q1TBELil/lpNRLdXPt5H/vlGhQKHbnrw23nl1yORDX9YuPaGb5/kLu
+ AnkWLIAAAA=
+X-Change-ID: 20250806-clk-tests-docs-3c398759e998
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Russell King <linux@armlinux.org.uk>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Brian Masney <bmasney@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4232; i=bmasney@redhat.com;
+ s=20250903; h=from:subject:message-id;
+ bh=j9EbXoSuWTRW4S13uHojnmdjX60lsDhKsm/Ff+KWPLU=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIubdSeIBrsmMct/3jx1pPsej5Hpnpwi93N4ea5a3B0z
+ sWD71vEO0pZGMS4GGTFFFmW5BoVRKSusr13R5MFZg4rE8gQBi5OAZhIUCzD/9TcIBc2g1P3n/1u
+ PxMbmVDPtfTKt62ZPPe3tIUIHnDezc7w372MzWKK3Yq1NicLq3VqDifoLV1w3IXzF8+Tp15vL/q
+ pcAIA
+X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
-If the value in CM_TCNTCNT is close to 2^24 (24 is the width of
-CM_TCNTCNT), then multiplication (count * 1000) will lead to integer
-overflow.
+The Common Clock Framework is expected to keep a clock’s rate stable
+after setting a new rate with:
 
-Make bcm2835_measure_tcnt_mux return a u64 value instead of an unsigned
-long and cast count to u64 before multiplying it by 1000 to avoid
-overflow. Also correct the format string at bcm2835_clock_on for showing
-debug data, which includes the bcm2835_measure_tcnt_mux call result.
+    clk_set_rate(clk, NEW_RATE);
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Clock consumers do not know about the clock hierarchy, sibling clocks,
+or the type of clocks involved. However, several longstanding issues
+affect how rate changes propagate through the clock tree when
+CLK_SET_RATE_PARENT is involved, and the parent's clock rate is changed:
 
-Fixes: 3f9195811d8d ("clk: bcm2835: Add leaf clock measurement support, disabled by default")
-Signed-off-by: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
+- A clock in some cases can unknowingly change a sibling clock's rate.
+  More details about this particular case are documented at:
+  https://lore.kernel.org/linux-clk/20250528-clk-wip-v2-v2-2-0d2c2f220442@redhat.com/
+
+- No negotiation is done with the sibling clocks, so an inappropriate
+  or less than ideal parent rate can be selected.
+
+A selection of some real world examples of where this shows up is at
+[1]. DRM needs to run at precise clock rates, and this issue shows up
+there, however will also show up in other subsystems that require
+precise clock rates, such as sound.
+
+An unknown subset of existing boards are unknowingly dependent on the
+existing behavior, so it's risky to change the way the rate negotiation
+logic is done in the clk core.
+
+This series adds support for v1 and v2 rate negotiation logic to the clk
+core. When a child determines that a parent rate change needs to occur
+when the v2 logic is used, the parent negotiates with all nodes in that
+part of the clk subtree and picks the first rate that's acceptable to
+all nodes.
+
+Kunit tests are introduced to illustrate the problem, and are updated
+later in the series to illustrate that the v2 negotiation logic works
+as expected, while keeping compatibility with v1.
+
+I marked this as a RFC since Stephen asked me in a video call to not
+add a new member to struct clk_core, however I don't see how to do this
+any other way.
+
+- The clk core doesn’t, and shouldn’t, know about the internal state the
+  various clk providers.
+- Child clks shouldn’t have to know the internal state of the parent clks.
+- Currently this information is not exposed in any way to the clk core.
+
+Changes since v3:
+https://lore.kernel.org/r/20250812-clk-tests-docs-v3-0-054aed58dcd3@redhat.com
+- Update clk_core struct members (Maxime)
+- Add v2 rate negotiation logic and additional kunit tests
+- Drop clk_dummy_rate_mhz() in kunit tests; use HZ_PER_MHZ
+
+[1] https://lore.kernel.org/lkml/20230825-pll-mipi_keep_rate-v1-0-35bc43570730@oltmanns.dev/
+    https://lore.kernel.org/linux-kernel/20230807-pll-mipi_set_rate_parent-v6-0-f173239a4b59@oltmanns.dev/
+    https://lore.kernel.org/all/20241114065759.3341908-1-victor.liu@nxp.com/
+    https://lore.kernel.org/linux-clk/20241121-ge-ian-debug-imx8-clk-tree-v1-0-0f1b722588fe@bootlin.com/
+
+Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/bcm/clk-bcm2835.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Brian Masney (12):
+      clk: add kernel docs for struct clk_core
+      clk: test: convert constants to use HZ_PER_MHZ
+      clk: test: introduce clk_dummy_div for a mock divider
+      clk: test: introduce test suite for sibling rate changes on a divider
+      clk: test: introduce clk_dummy_gate for a mock gate
+      clk: test: introduce test suite for sibling rate changes on a gate
+      clk: test: introduce helper to create a mock mux
+      clk: test: introduce test variation for sibling rate changes on a mux
+      clk: test: introduce test variation for sibling rate changes on a gate/mux
+      clk: add support for v2 rate negotiation
+      clk: test: introduce negotiate_rates() op for clk_dummy and clk_dummy_div
+      clk: test: update divider kunit tests for v1 and v2 rate negotiation
 
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index 02215ea79403..9ffef2b0e820 100644
---- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -345,7 +345,7 @@ static inline u32 cprman_read(struct bcm2835_cprman *cprman, u32 reg)
- /* Does a cycle of measuring a clock through the TCNT clock, which may
-  * source from many other clocks in the system.
-  */
--static unsigned long bcm2835_measure_tcnt_mux(struct bcm2835_cprman *cprman,
-+static u64 bcm2835_measure_tcnt_mux(struct bcm2835_cprman *cprman,
- 					      u32 tcnt_mux)
- {
- 	u32 osccount = 19200; /* 1ms */
-@@ -394,7 +394,7 @@ static unsigned long bcm2835_measure_tcnt_mux(struct bcm2835_cprman *cprman,
- out:
- 	spin_unlock(&cprman->regs_lock);
- 
--	return count * 1000;
-+	return (u64)count * 1000;
- }
- 
- static void bcm2835_debugfs_regset(struct bcm2835_cprman *cprman, u32 base,
-@@ -1093,7 +1093,7 @@ static int bcm2835_clock_on(struct clk_hw *hw)
- 	 */
- 	if (data->tcnt_mux && false) {
- 		dev_info(cprman->dev,
--			 "clk %s: rate %ld, measure %ld\n",
-+			 "clk %s: rate %ld, measure %llu\n",
- 			 data->name,
- 			 clk_hw_get_rate(hw),
- 			 bcm2835_measure_tcnt_mux(cprman, data->tcnt_mux));
+ Documentation/admin-guide/kernel-parameters.txt |  15 +
+ Documentation/driver-api/clk.rst                |   3 +
+ drivers/clk/clk.c                               | 201 ++++++-
+ drivers/clk/clk_test.c                          | 694 ++++++++++++++++++++----
+ include/linux/clk-provider.h                    |   7 +
+ include/linux/clk.h                             |  20 +
+ 6 files changed, 835 insertions(+), 105 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250806-clk-tests-docs-3c398759e998
+
+Best regards,
 -- 
-2.39.2
+Brian Masney <bmasney@redhat.com>
 
 
