@@ -1,81 +1,82 @@
-Return-Path: <linux-clk+bounces-28384-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28387-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9CE5B99365
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Sep 2025 11:44:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D37B9937A
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Sep 2025 11:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70753166954
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Sep 2025 09:44:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03C5C3A2A72
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Sep 2025 09:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867C02D97BF;
-	Wed, 24 Sep 2025 09:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B102DAFBA;
+	Wed, 24 Sep 2025 09:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krFXQDtg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYvH2jul"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0662D77F1
-	for <linux-clk@vger.kernel.org>; Wed, 24 Sep 2025 09:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D632D979F
+	for <linux-clk@vger.kernel.org>; Wed, 24 Sep 2025 09:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758707094; cv=none; b=alAQbpKaf6zcv1+phDbe2g6eVbF3t/JmG4Ruyxr8BU5R7w24oTCLRa0mEjtqmRYmbtHaaLXAwNK5JD1QtSQIsdztyPHaQ83BgRsGSt0ikW0Jvx65f2Tytcr+H57Ldt49NyvJUoy0rL+xAqlRrDUTXAFfi+TNyQMAlRtTjgOuZ+M=
+	t=1758707097; cv=none; b=r2Q2DFuut7yTFelwBx8/+k/MrTDNwqKhi8wagsfQ25AXksKgH+8i2XbrfHpwFrObQ0351JN8NTv5WgjfpCQx87DZ6yFnejrTDdei39VMPyxEx72gO2Pn8Dt96xVCWf1pk3As4sXGKgwPmKldas0M4PYqtkJiP3jl5BwA0r25DaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758707094; c=relaxed/simple;
-	bh=uNHbTldTgM5pqxwOKdBk8x8AHCvIBLnCk7TiJXDtqYQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mr2EcxX7OncqgfBt/vzTm9GbaRZ/EvshFXpghBbo5rOLVR+eGRKupf9GcMyju0xfcOzv0Rx7WMqKT0xXigXndJ7+7TQR5NMFadZ3RpjT6NYuno2p1qDVBkRANAaS+nX8Lu4PfdzKDpmcgSxdAnJz9jB8Q0GmEVcv01gwD5QJ8HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krFXQDtg; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1758707097; c=relaxed/simple;
+	bh=2cljBbctUpov7EPp9dHLO/NTrzVDPxTc08Ag9XJ0xdk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WqReR5I5FlT3qQG20Sis2/USocjhUupmi/z/w8Cb+WIsFIiPB0z+Wr8WFH2I1VovnuQCYc+3iKLy73jOBpqvTGQ4sIBAUFQ80r5lC4vQMFugwRMJ8AtcsvpLbLkAoQOgUsvmK2QLIJFSWGum/uyaKbVFIUbWcBmhmsjVtgXxo14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYvH2jul; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-46dfd711172so25239395e9.1
-        for <linux-clk@vger.kernel.org>; Wed, 24 Sep 2025 02:44:48 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3ee64bc6b85so4939778f8f.3
+        for <linux-clk@vger.kernel.org>; Wed, 24 Sep 2025 02:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758707087; x=1759311887; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aU7V00+zuQKk7Voi/XulM/d8ejeausZ1gHzc4r7h4R8=;
-        b=krFXQDtgAZG5jnbZZz3P/FP+fE33B354BvXGKiYozhv31VZGHxUyoSZbnH5ucQDpmz
-         6b1uDINDLm+pTs4PezRYeLXSI21ZXw3qkVHxbIfJ8wCe18ZjC5bjxzfP7AJEHF33leh8
-         TXafhIKZPYIeJN+hM0ksXSQIM2PIIyAk1gmFjezNwC8PkZ+UkUFxqpuGAcDAsYUvwBiW
-         cIFirnU9TjrIrGB+i+KQGGgEJtVNmQWxKNSeUIX3lSYxv50mmJTe2ILDVHT6cX//R3SK
-         ignh9t33vKOB1uuXr2QRt8W8DYrq70Ukne3WMXyU+/SK9PqIwpNOOEKirvB/840Er+8e
-         hk1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758707087; x=1759311887;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1758707089; x=1759311889; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aU7V00+zuQKk7Voi/XulM/d8ejeausZ1gHzc4r7h4R8=;
-        b=u+fe1hJuzff1hVbfktv1YMIF5mwoc5VChz8HvGzQL85kt4CFP3YjMFjVmiVj5FZYWi
-         cJmLObn++AY3ZzgTE2QvJKyw3hvlfDYWHkIfq1GODnojkZQUPWuaYmmNMyjDFoDugYr1
-         4PeZz0AMU8wpo9eiLWlLzMUH7w79jgjcKcXas49cpn3zQuYot1Afvwrlh1dK2TjWawbf
-         GCZA1k8yB3zdRAzYum6+apwvC5xfVA8w9yuRL/yC4SPTpY/Cq7nC191t+LGZOZrBr8gA
-         fJ2JWQQj8sNlmN+NCJA1wqkhBYAveRq20DzakV2cvxsDr7GdyveiVtNXccVN8xeVO2bQ
-         NoPg==
-X-Gm-Message-State: AOJu0YxNAUPybNCe5FY1KFIoQo0wwWktejUMNBAFImSCrKUmXa2SLZQh
-	RFoYVVIH7FcXalIKR5pgHDoNOGFr3YxllSgYIfmrYRZxN8hZ4/XFDtgWdY8mJA==
-X-Gm-Gg: ASbGnct8OAQl8MV0S6E72Wm1OiaWJZpWjC7U01xWtlO/XczOD3ILk42TlFhXyyiqtMZ
-	3R2cdk2UkZ3xQHa3Bo9D+AjDpT8/Ini2NT8nebi5DeuJB8kPby0OB/NY5E5DVl00zRPqWb9ir9X
-	xXhviBgiMngMXFgydsnoj5QaMIk2iEzgxVNwvhNUfTrKr5dKabJPC7+e/wPvOr40cL8bSsAx0Wu
-	MCngIsQANEsRY6E5TywJRSpSQhw4QhdyMADcZFbLR1jWwCIbcUz3NDOIsYxgPNNTUOW7O8UZSTQ
-	8AeoO8b3a5/P+48ulbvm6ddQu3xCRj+w7lLvNCHOngMYn7e22UfwwSa3JEFteSOXWbLKr6BtNcW
-	y0UgAMbWuswhq7CpVDQwhJvOQxCeacOT5W8847zvnbU6slcSSKajRwpZSbpH4U0+CD684dLpn5Q
-	1VD0b/dFViE6MXhw==
-X-Google-Smtp-Source: AGHT+IFpHasan3pFJOdP5ZGB5ynPDa66E5OeJLF7PLwNIJrHXHfWU8ia57w+wOsWZehdESEd0RRK+Q==
-X-Received: by 2002:a05:6000:208a:b0:3ea:6680:8fcd with SMTP id ffacd0b85a97d-405c49a250fmr4780811f8f.13.1758707087081;
-        Wed, 24 Sep 2025 02:44:47 -0700 (PDT)
+        bh=8htGACZZYE1dIEbtDAUA+3P97IrmED7ZD9WcIPqTfx4=;
+        b=UYvH2julEtiVLHK5cq3xe1ZDrFicw+myAajPVWZSgqRPu7nbZcPbxrASYkrKMg/2ao
+         +tyXlZcSqUCL0jeVk2+PzgmwVq7ty9JnLVqJGAsFGFpMmTPZ9kVsjaPCtF4W/6UseHI8
+         lvnpXYibMv5KK0NYroHDZLnPE9FSu990CuLK0veA3huexyAGtkBW3M5SFuY9Y6c9KWwD
+         pi6BXTEqUtCUSMQ8UhTtPQMMSmFWMyCdQEolTAvkzTsiqzsw8ztPj01qIzQtLJfq7wYe
+         7zoM446lJV6Xmgyg3XqoOObCYvIebemVkfH2b8v0z29yEM7B5KKSBNEudP1l4p1YiCW6
+         qqUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758707089; x=1759311889;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8htGACZZYE1dIEbtDAUA+3P97IrmED7ZD9WcIPqTfx4=;
+        b=fVnxSarjzZlg/8CCjar5FBL7B/e/nuMZhAjsJciaZYc4BVLHOhotP3EN5mF2V66mLg
+         9JlaRXU+pNo3Hg0EClhR3OXizac3qTSJihki93wZyUcU15R1c/gT2nczzuJK1QBCVCOC
+         FZQ6Xq7yDyK3/CpZNzbMTOtRC6ZjNxVGGNKjxggxVbI4el07hZAiKhu8OSr+/gc7A1UP
+         hDos3zV6mXu1I7gcxSqMdosAXgzYcohIOpGtQKu6eOE+5wEqL8+fHGlwVA6zw5V/EEEq
+         rUWv7os7n4m7yJcbvNkLwNm54XUVnPj3EQEebVEZe1mDfmzh2k2qqhWHt2PObbGwRYzg
+         q9XA==
+X-Gm-Message-State: AOJu0YwJ0RK37EyNbq4J6Fi0Ilh/FHQ5YiKwhq3OQVXB5agOygoTMZDx
+	D+Z5lBR1kFG3uPqRs3Izbhkt86vwSUC1skcjrPv7DHMub10SsA8xbQ0Z7HmmWw==
+X-Gm-Gg: ASbGnctyABjaN1ILPO2OfMV4MRYFzsFJeZ5APij7jW4YBJXWd4nL4gmh2hzUpfGb0F6
+	ri0Q4WStl2RG9EdePHPWhbGx4Vo4SuEiY2KTKoCns+9PmzFpB+LMeyn0+38rQGQWLrrfslmcDku
+	aBApTfm6onw0hSLSCbUmHkvcZCrvX/yB2r+L2ZBe8kNwWXgs3Eg88MHzV84DIHeE0pv7F3O+QNa
+	tAac678Z0pdK4he12CZIxAtnGKtiBYACRFouAYCiWT3VGoMFlUO8LfaP1cfPsI2N9fLm5Gx3j+q
+	q7wqaTxGG3VwXiOhXgxsyIUSKPMcuO58TPBV8odg023kPieIz65ZNkU6htk0Bo6E3fzmm6S3ZpK
+	hYebX+jOhrmrwvhhODPnGfLfDAZ0QhwU030et/eCE9jRXLc8T+xXAKV6q44WN1TvKBc/ndg6IQj
+	l23nNCwv2o6z+bNQ==
+X-Google-Smtp-Source: AGHT+IFDGC5gILr6xmz9HYWmbPGf7fv1JpRWluY5ULikXOKvBqLdmUKtTk3mYXekw57q/HwxxJNkVQ==
+X-Received: by 2002:a05:6000:186c:b0:3f0:9bf0:a369 with SMTP id ffacd0b85a97d-405c6d1024dmr5131775f8f.14.1758707088783;
+        Wed, 24 Sep 2025 02:44:48 -0700 (PDT)
 Received: from localhost (2a02-8440-7503-805b-0076-f865-8f03-23d3.rev.sfr.net. [2a02:8440:7503:805b:76:f865:8f03:23d3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e2a9ac55esm28446145e9.6.2025.09.24.02.44.46
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee141e9cf7sm27213765f8f.12.2025.09.24.02.44.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 02:44:46 -0700 (PDT)
+        Wed, 24 Sep 2025 02:44:48 -0700 (PDT)
 From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <legoffic.clement@gmail.com>
-Subject: [PATCH v8 0/3] Register the STM32MP25 RCC driver as an access
- controller.
-Date: Wed, 24 Sep 2025 11:44:41 +0200
-Message-Id: <20250924-b4-rcc-upstream-v8-0-b32d46f71a38@gmail.com>
+Date: Wed, 24 Sep 2025 11:44:42 +0200
+Subject: [PATCH v8 1/3] dt-bindings: stm32: stm32mp25: add
+ `#access-controller-cells` property
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -84,12 +85,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIm902gC/2WP0Y6CMBBFf4XM83bTFiiFJ//D+DC0M9oERFtk1
- xj+3SoPa7KP9yZz5twHJIqBEnTFAyItIYXpnIP9KsCd8HwkEXzOoKWuZauM6CsRnRO3S5oj4Sg
- sWsIS2aD0kK8ukTj8von7w5YjXW8ZPG8l9JhIuGkcw9wVsiHdoFembFtk501b9pSfKdVLz0imJ
- GlUzfAp1BWfOhwi/eAw/Dl5Jltbi1qx7ZYGXh6nkOYp3t9Dc/US2SBa/9u0NEIK7dlVJJXlSu6
- OI4bhO0vDYV3XJzN1wsI2AQAA
-X-Change-ID: 20250916-b4-rcc-upstream-8a8ea3af6a0d
+Message-Id: <20250924-b4-rcc-upstream-v8-1-b32d46f71a38@gmail.com>
+References: <20250924-b4-rcc-upstream-v8-0-b32d46f71a38@gmail.com>
+In-Reply-To: <20250924-b4-rcc-upstream-v8-0-b32d46f71a38@gmail.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -104,47 +102,52 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
 X-Mailer: b4 0.15-dev-0dae4
 
-The STM32MP25 RCC peripheral as an access controller is allowed to know
-whether the clocks are secured or not.
-The STM32MP25 RCC peripheral knows about the clock secure configuration
-of all non RIF-aware peripheral.
-In parallel all the RIF-aware peripheral configuration information
-are known by the RIFSC peripheral which is already an access
-controller.
+From: Clément Le Goffic <clement.legoffic@foss.st.com>
 
-Changes in v8:
-- Use uppercase for peripheral name in commit message
-- Add the '#access-controller-cells' property to the RCC in
-  stm32mp231.dtsi
-- Link to v7: https://lore.kernel.org/r/20250922-b4-rcc-upstream-v7-0-2dfc4e018f40@gmail.com
+RCC is able to check the availability of a clock.
+Allow to query the RCC with a firewall ID.
 
-The v7 is a subset of the v6 and other prior versions, split to simplify
-the review and merging process.
-
-Changes in v7:
-- None
-- Link to v6: https://lore.kernel.org/all/20250909-b4-ddrperfm-upstream-v6-2-ce082cc801b5@gmail.com/
-
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Clément Le Goffic <legoffic.clement@gmail.com>
 ---
-Clément Le Goffic (3):
-      dt-bindings: stm32: stm32mp25: add `#access-controller-cells` property
-      clk: stm32mp25: add firewall grant_access ops
-      arm64: dts: st: set RCC as an access-controller
+ Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- .../bindings/clock/st,stm32mp25-rcc.yaml           |  7 ++++
- arch/arm64/boot/dts/st/stm32mp231.dtsi             |  1 +
- arch/arm64/boot/dts/st/stm32mp251.dtsi             |  1 +
- drivers/clk/stm32/clk-stm32mp25.c                  | 40 +++++++++++++++++++++-
- 4 files changed, 48 insertions(+), 1 deletion(-)
----
-base-commit: 07e27ad16399afcd693be20211b0dfae63e0615f
-change-id: 20250916-b4-rcc-upstream-8a8ea3af6a0d
-prerequisite-change-id: 20250916-b4-firewall-upstream-dfe8588a21f8:v7
-prerequisite-patch-id: 1ead960f405c7a2dcc9111acd0bb4c95ed33954f
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
+index 88e52f10d1ec..4d471e3d89bc 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml
+@@ -31,6 +31,11 @@ properties:
+   '#reset-cells':
+     const: 1
+ 
++  '#access-controller-cells':
++    const: 1
++    description:
++      Contains the firewall ID associated to the peripheral.
++
+   clocks:
+     items:
+       - description: CK_SCMI_HSE High Speed External oscillator (8 to 48 MHz)
+@@ -123,6 +128,7 @@ required:
+   - reg
+   - '#clock-cells'
+   - '#reset-cells'
++  - '#access-controller-cells'
+   - clocks
+ 
+ additionalProperties: false
+@@ -136,6 +142,7 @@ examples:
+         reg = <0x44200000 0x10000>;
+         #clock-cells = <1>;
+         #reset-cells = <1>;
++        #access-controller-cells = <1>;
+         clocks =  <&scmi_clk CK_SCMI_HSE>,
+                   <&scmi_clk CK_SCMI_HSI>,
+                   <&scmi_clk CK_SCMI_MSI>,
 
-Best regards,
---  
-Clément Le Goffic <legoffic.clement@gmail.com>
+-- 
+2.43.0
 
 
