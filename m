@@ -1,157 +1,142 @@
-Return-Path: <linux-clk+bounces-28819-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28822-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53771BC5FE0
-	for <lists+linux-clk@lfdr.de>; Wed, 08 Oct 2025 18:18:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D7ABC6A7C
+	for <lists+linux-clk@lfdr.de>; Wed, 08 Oct 2025 23:14:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3585142692D
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Oct 2025 16:07:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 725633B01D7
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Oct 2025 21:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC37F2BD034;
-	Wed,  8 Oct 2025 16:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614A22C0279;
+	Wed,  8 Oct 2025 21:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="KzNFGIie"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ceK10NHV"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3022629E109;
-	Wed,  8 Oct 2025 16:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759939633; cv=pass; b=VGZXvQuCF/p8M7gUoKrZtasjdJmb3NgFpJwOf+5Fi1yCBaZu2aCljcgVne/oS687MwsgeoR4dzQuPkdaAeB7MFSi+u5TTnesCrT5iuGRN2FIXAtIrx6scBLbQmGfiycPAeeNurqBWbxPFKA2ZejnpGUOhaVmaTKKAoeL5TNxPys=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759939633; c=relaxed/simple;
-	bh=8Kg+ZqfUphNmvU4IK0EE6Ciy+Dgs1wiV/H7VPqsSXU0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LDbWOCrSviHL59idqVo/1P2n/Zik2ct0wcKUMmYfJQWWZANFOBqDwMvFkG/aYaSU8kMRTxptIOtlgOIR2Nl08uK/RZNaQ0ZWIGEcgBs+LH0jvHUM6vFmdaTVX7OvbURTTJzMobbE7SzallaKuFDy0hzB+dCMx9Ev/gwKVRJVKuQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=KzNFGIie; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1759939565; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=lctHQh5LNPjM6hMcCkjrr9YeG4BxrIkZdmUcoZH1HbkJ0kIc5DU06gtscxfdFLNYltMckLT418OnzEb27mlFOt//PBMihQMpS77y2ARiKzapwv4tEuiPIxa15JdCUOKpuvLWaMD37h+4kCG8CHdGdL4x7Iq/uaV5/dvIaWyhhII=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1759939565; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=kJsRAjav3ZDmi2sZG+xEBRsiXb29hae9R43qCC2s6lg=; 
-	b=QPBTOsR8DJfkJIo6ZAN4no1FEtH0PjWxfIi9UnEXqIYTLeDv4o7zSyg37QEREHYmOivwnsKlfTv35SHGN16BOJ/9Y14N09nWhSsGtXmp8wMtQ3tfhyKjfx8wxAP7qyOCzLDseThOYSXBeBlM2nScR9HH8okCQ/biPPVlupk4frA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759939565;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=kJsRAjav3ZDmi2sZG+xEBRsiXb29hae9R43qCC2s6lg=;
-	b=KzNFGIie44JP/rsyaLC5S5HXBHSNvKJ/ON+RZxYmV0KYKMH1gqGQG1/6c4nKHhtY
-	DfOE0ZKGukffQiU8tEqTCmRR34Fi4LbpVh0f+tmxv7p1d1fLw4Vfg6T675XznMrUd4W
-	oEyN9AldhDUQcKFjlH1QBEyMqSESZVFDU5Jq7rG8=
-Received: by mx.zohomail.com with SMTPS id 1759939563610836.7617931382553;
-	Wed, 8 Oct 2025 09:06:03 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Wed, 08 Oct 2025 18:05:39 +0200
-Subject: [PATCH v2 5/5] clk: mediatek: Add mfg_eb as parent to mt8196
- mfgpll clocks
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC45224AF3;
+	Wed,  8 Oct 2025 21:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759958058; cv=none; b=FaipCfqKwEhgda6VuV7nlMZHt2+39MHxw4cpn8KpiUQrJedpye4YMnpQ42iNlnH5K92JpPvbP7Zo6iDAV6ClCIggCY+h9fC3AFgqMlSPGomnKXfl88pHE5xrd7zLqVFPFhRfpKrA0k8OaHArfH74QuJniKpsl3h5Lm6rCUyG+WI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759958058; c=relaxed/simple;
+	bh=39B89TgYoeDAnrK783gKdzfBrJbIvzbmWAJjVVApfII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QQezoTECt52RwIXm9X6HxYSTj7qxIRwoO30aU9izpSy+l6Wh4c4MAnM/F2PZB4hR4owQh2xZqM7W0saTzTnZejSOxr2Wdfnr18Wm3SXrP4fyeduB3jq5ynTMrg1fpKgXc0mJwOhL105jSRP5WUnRoK7JPiVBaGBDbUqsnrX0GCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ceK10NHV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB888C4CEE7;
+	Wed,  8 Oct 2025 21:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759958057;
+	bh=39B89TgYoeDAnrK783gKdzfBrJbIvzbmWAJjVVApfII=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ceK10NHVXa+RL9euVgbkDmln/76dAQkUWMLVrZzSVR4yRoFxml0LPd0b4mCCn9Hrd
+	 zKC3bbZ+F7rkcwHxFziParI4mT+KR8gYkz+91Vfy3RzZk2h9WwPRn7TKzdSVWFiQrx
+	 vUng9HGSM1pRjHokzqiQ2ki+cwAJqhZaiB0tah6Chn2TS/gW5kQmXrpzlh40qcUM6W
+	 spzrctqKlw6BwBC/wdicJnBYJ6L15f+byMfYDNH2UJ3stAPBTO8lbIXZI1Qg67CZ3R
+	 76O4vGN0us3u1ExdoELSZRmBEADrzXST0kVQxc0ElzgIOUCCQdlNe+2ZSbZOWNCdtJ
+	 420Lt+6+Ba2uw==
+Date: Wed, 8 Oct 2025 22:14:09 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Prashant Gaikwad <pgaikwad@nvidia.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonas =?iso-8859-1?Q?Schw=F6bel?= <jonasschwoebel@yahoo.de>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Charan Pedumuru <charan.pedumuru@gmail.com>,
+	Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+	Aaron Kling <webgeek1234@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v4 11/24] dt-bindings: display: tegra: document Tegra132
+ MIPI calibration device
+Message-ID: <20251008-craving-composite-81aa70b6e882@spud>
+References: <20251008073046.23231-1-clamor95@gmail.com>
+ <20251008073046.23231-12-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251008-mtk-pll-rpm-v2-5-170ed0698560@collabora.com>
-References: <20251008-mtk-pll-rpm-v2-0-170ed0698560@collabora.com>
-In-Reply-To: <20251008-mtk-pll-rpm-v2-0-170ed0698560@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Yassine Oudjana <y.oudjana@protonmail.com>, 
- Laura Nao <laura.nao@collabora.com>, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
- Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>
-Cc: kernel@collabora.com, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, Stephen Boyd <sboyd@codeaurora.org>, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jP+KgV2/KzUlrI8N"
+Content-Disposition: inline
+In-Reply-To: <20251008073046.23231-12-clamor95@gmail.com>
 
-All the MFGPLL require MFG_EB to be on for any operation on them, and
-they only tick when MFG_EB is on as well, therefore making this a
-parent-child relationship.
 
-This dependency wasn't clear during the initial upstreaming of these
-clock controllers, as it only made itself known when I could observe
-the effects of the clock by bringing up a different piece of hardware.
+--jP+KgV2/KzUlrI8N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Add a new PLL_PARENT_EN flag to mediatek's clk-pll.h, and check for it
-when initialising the pll to then translate it into the actual
-CLK_OPS_PARENT_ENABLE flag.
+On Wed, Oct 08, 2025 at 10:30:33AM +0300, Svyatoslav Ryhel wrote:
+> Document MIPI calibration device found in Tegra132.
 
-Then add the mfg_eb parent to the mfgpll clocks, and set the new
-PLL_PARENT_EN flag.
+Could you explain why a fallback is not suitable? The patchset is really
+too big for me to trivially check that the change is correct.
+With an explanation,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Fixes: 03dc02f8c7dc ("clk: mediatek: Add MT8196 mfg clock support")
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- drivers/clk/mediatek/clk-mt8196-mfg.c | 3 ++-
- drivers/clk/mediatek/clk-pll.c        | 3 +++
- drivers/clk/mediatek/clk-pll.h        | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
+>=20
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  .../devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml  | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra=
+114-mipi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegr=
+a114-mipi.yaml
+> index 193ddb105283..9a500f52f01d 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mip=
+i.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mip=
+i.yaml
+> @@ -18,6 +18,7 @@ properties:
+>      enum:
+>        - nvidia,tegra114-mipi
+>        - nvidia,tegra124-mipi
+> +      - nvidia,tegra132-mipi
+>        - nvidia,tegra210-mipi
+>        - nvidia,tegra186-mipi
+> =20
+> --=20
+> 2.48.1
+>=20
 
-diff --git a/drivers/clk/mediatek/clk-mt8196-mfg.c b/drivers/clk/mediatek/clk-mt8196-mfg.c
-index 8e09c0f7b7548f8e286671cea2dac64530b8ce47..de6f426f148184e1bb95b5cfca590b1763fc0573 100644
---- a/drivers/clk/mediatek/clk-mt8196-mfg.c
-+++ b/drivers/clk/mediatek/clk-mt8196-mfg.c
-@@ -45,7 +45,7 @@
- 		.en_reg = _en_reg,				\
- 		.en_mask = _en_mask,				\
- 		.pll_en_bit = _pll_en_bit,			\
--		.flags = _flags,				\
-+		.flags = (_flags) | PLL_PARENT_EN,		\
- 		.rst_bar_mask = _rst_bar_mask,			\
- 		.fmax = MT8196_PLL_FMAX,			\
- 		.fmin = MT8196_PLL_FMIN,			\
-@@ -58,6 +58,7 @@
- 		.pcw_shift = _pcw_shift,			\
- 		.pcwbits = _pcwbits,				\
- 		.pcwibits = MT8196_INTEGER_BITS,		\
-+		.parent_name = "mfg_eb",			\
- 	}
- 
- static const struct mtk_pll_data mfg_ao_plls[] = {
-diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-index c4f9c06e5133dbc5902f261353c197fbde95e54d..0f3759fcd9d0228c23f4916d041d17b731a6c838 100644
---- a/drivers/clk/mediatek/clk-pll.c
-+++ b/drivers/clk/mediatek/clk-pll.c
-@@ -359,6 +359,9 @@ struct clk_hw *mtk_clk_register_pll_ops(struct mtk_clk_pll *pll,
- 
- 	init.name = data->name;
- 	init.flags = (data->flags & PLL_AO) ? CLK_IS_CRITICAL : 0;
-+	if (data->flags & PLL_PARENT_EN)
-+		init.flags |= CLK_OPS_PARENT_ENABLE;
-+
- 	init.ops = pll_ops;
- 	if (data->parent_name)
- 		init.parent_names = &data->parent_name;
-diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-index 0f2a1d19eea78b7390b221af47016eb9897f3596..492cad8ff80ba31a78a96085285cb938e9b978e9 100644
---- a/drivers/clk/mediatek/clk-pll.h
-+++ b/drivers/clk/mediatek/clk-pll.h
-@@ -21,6 +21,7 @@ struct mtk_pll_div_table {
- 
- #define HAVE_RST_BAR	BIT(0)
- #define PLL_AO		BIT(1)
-+#define PLL_PARENT_EN	BIT(2)
- #define POSTDIV_MASK	GENMASK(2, 0)
- 
- struct mtk_pll_data {
+--jP+KgV2/KzUlrI8N
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-2.51.0
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaObUIQAKCRB4tDGHoIJi
+0spgAQCOTfXrsyfS3CIGSc9JYyiUFNhWFHlpRP7VzN3DQa0r0gD+PG6VUqC7h62Y
+pRPxQQG4kkheap2w4cYcE/VcpEiIOwk=
+=EFMD
+-----END PGP SIGNATURE-----
+
+--jP+KgV2/KzUlrI8N--
 
