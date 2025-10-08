@@ -1,115 +1,160 @@
-Return-Path: <linux-clk+bounces-28815-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28820-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B42ACBC5578
-	for <lists+linux-clk@lfdr.de>; Wed, 08 Oct 2025 16:02:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C13ACBC5FFE
+	for <lists+linux-clk@lfdr.de>; Wed, 08 Oct 2025 18:20:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6F8694EBF8C
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Oct 2025 14:02:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8FF40739A
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Oct 2025 16:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3BD28B3EB;
-	Wed,  8 Oct 2025 14:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D24B2BCF7F;
+	Wed,  8 Oct 2025 16:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="QUlT0w9n"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Gl+StA1H"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D232853F3;
-	Wed,  8 Oct 2025 14:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759932161; cv=none; b=Z4VfOw+r68LeHYn95hph52HeJ178HoPFwYaC1xsMDeHx7hXZ3lHtzLDYqPfgIx5oh2rp8SMamxKCYZ0ti/H3Q6k+SF6dL11Y16jCAW/a1IT3/Abxu79qWGzQYpYrditAaUkh/NMxPEnmZMy45pokxkNv4wnSBuxYz5fBz+NUuh4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759932161; c=relaxed/simple;
-	bh=7FneiLEF1k6K414Cx/x7uqrXKf2wqtsYD1RT9uHtFrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HhvCEknHKydKH7ds69l4J9mdbhX5zHXR2tU+5ex6cmRj7pNyW72+bzLDU674JpMAaKJL9syBjsslL/XhEmUvfjnsA+G0hcaamuo0NgoQ4oyx0mqC7KuWZGbHrdV40dvLIiJtWerjtAhXP7Vdin9GJuo8fZof1l7CTaBetVuyhi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=QUlT0w9n; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
-	Subject:Cc:To:From:Reply-To:Content-Type:In-Reply-To:References;
-	bh=NOYL0uD62hKk28WG4gpRQ/Og2WNGiOzJLp810Y1iXv0=; b=QUlT0w9nR/T9hYkLxnW0QicOxh
-	gjEb+c/9oV8pUlTT0b6Wyf+ooTwWWZZZg32QDTbMDXNhjW88OJoZxCcaJkP2fEqNw9t5TjXNCKGnQ
-	TFBoeebPG9qGqDLWIPvpyyrt/FHAW91+Dzs3iTD1O7kIypK4p8Bvz6itB5iMpeQuZwecR8TKM9P/E
-	9gh/trrYJpJNEkKXP+e8JhDYHPa7CM0sMJyTUs/OfRvcDLSnJbG0KFSjKb4XG7SKIapNbwzSz+ICA
-	xurFyZPzPSOesXSOpCNzcVDFJj97I8GMljL0qDUeA+nA20GFimqQYSjiQq59z34ukRzmoj22WnVZj
-	JpGdSUUQ==;
-Received: from i53875a0d.versanet.de ([83.135.90.13] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1v6UGt-0002uq-S4; Wed, 08 Oct 2025 15:31:59 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: heiko@sntech.de
-Cc: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	zhangqing@rock-chips.com,
-	sebastian.reichel@collabora.com,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	quentin.schulz@cherry.de,
-	stable@vger.kernel.org
-Subject: [PATCH] clk: rockchip: rk3588: Don't change PLL rates when setting dclk_vop2_src
-Date: Wed,  8 Oct 2025 15:31:35 +0200
-Message-ID: <20251008133135.3745785-1-heiko@sntech.de>
-X-Mailer: git-send-email 2.47.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51122BD02A;
+	Wed,  8 Oct 2025 16:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759939656; cv=pass; b=MaGfpnhuGtV7yVCS3RXAtOyFoZaieTCQ+bavZ1oDSNxZ+GO+k4yJRswLAXBI5hwxxmexqI/k3j7N5MR1Jnbk8wZoQHGGyYUrFySHfqxlFUf5aby6brIzO16dPa6ix6UnK6wM43R4FrtLd1o4hVZUV0aO1IMfKSNVx5YhSjpctoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759939656; c=relaxed/simple;
+	bh=/96yJw7IOpqI6hPVch1F2jY7Dzoyi6NmuPvpTMa3hV4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rdB4fQ1msiL1cXT5aWLF3nI4WAywBT8NDiz7BzsB1A8jh43SSOJoOC+DCgwfWa+G/fhR1fT2FmFDVIaufv9CKWKT2o/uZw1/8YdZtWsA1HvJyAUhOjDrZdzXi/0cN2Or/gS4c05P/flpSUphLLVUKJMZs7TyY+HU/K8ohJcGDCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Gl+StA1H; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1759939547; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=WvgFhNQjFuF2w7vmkBR33tizRowq9p5DChLX8HhxldVQyoKsQkuYzE3pdwHFYTQdGsdchmtK17UD1kygsfd0bCK6whtHz6k2tVnzqk+Uk2lX9xKlJntcMRg/KaX9F9PbaMY/iWjBaA94yyA2V2Q8SnEqvTjB6/cnx2sJwfHp74w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1759939547; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=C6Dgx4PSW53d7cGyuFXrxBnWUw2p9vWZj5GWMum1gdM=; 
+	b=aPXjLwxLRuF1Ai31FkBFBgrdapHSU9DNfeEavQ8deQnSSeG/kwoh/7N8meg0EjxmWFhxK6iFX5CPGLt0s3RZl64ZmzqIIevNEAbnhnLfTas/jBgcJOmT9OkljH7FzhvybEyERehKKqkZv0ZKLaVFNk1vnM9ONpox3xwPfpLzs6w=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759939547;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=C6Dgx4PSW53d7cGyuFXrxBnWUw2p9vWZj5GWMum1gdM=;
+	b=Gl+StA1H5jP7fNz2zNLRrP4kTVV8+at5FSUtga0KJk4xGBU449nWNrfKz8Ud7hjh
+	dFA0fzNiGmI0rVkKpmJfEG8UYQyQ3IBYy1tjxbheiFQh6y8OcEqo/QAigf4HqSren6b
+	N2F3xp81jLH0zoFJfdRf5UawBAgEw2bMcp1BtCXM=
+Received: by mx.zohomail.com with SMTPS id 1759939544761761.1705555269986;
+	Wed, 8 Oct 2025 09:05:44 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v2 0/5] MediaTek PLL Refactors and Fixes
+Date: Wed, 08 Oct 2025 18:05:34 +0200
+Message-Id: <20251008-mtk-pll-rpm-v2-0-170ed0698560@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM+L5mgC/22OQQ6CMBBFr0Jm7Zi2AWlZeQ/DosAgjUCxrQRDu
+ LsFti7fJO/9WcGTM+ShSFZwNBtv7BhBXBKoOz0+CU0TGQQTGVNC4RBeOPU9umnAqhWSK9E0jN8
+ gGpOj1ixH7VGe7Oj9idFwHqHSnrC2w2BCkYy0BNzDnDEJu9AZH6z7Ht/M/DD+Ds8cGaYqS3me5
+ zKXzb22fa8r6/Q11qHctu0HXBHsAtsAAAA=
+X-Change-ID: 20250929-mtk-pll-rpm-bf28192dd016
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ Yassine Oudjana <y.oudjana@protonmail.com>, 
+ Laura Nao <laura.nao@collabora.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
+ Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>
+Cc: kernel@collabora.com, linux-clk@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, Stephen Boyd <sboyd@codeaurora.org>, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-dclk_vop2_src currently has CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT
-flags set, which is vastly different than dclk_vop0_src or dclk_vop1_src,
-which have none of those.
+This series refactors all users of mtk-pll, just so we can enable
+runtime power management for the clock controllers that want it. It's
+also generally more useful to have the struct device in the pll code,
+rather than the device node.
 
-With these flags in dclk_vop2_src, actually setting the clock then results
-in a lot of other peripherals breaking, because setting the rate results
-in the PLL source getting changed:
+Also fix up MT8196 mfgpll to declare its parent-child relationship with
+mfg_eb, and fix the common clock framework core to take
+CLK_OPS_PARENT_ENABLE into account for the recalc_rate op as well.
 
-[   14.898718] clk_core_set_rate_nolock: setting rate for dclk_vop2 to 152840000
-[   15.155017] clk_change_rate: setting rate for pll_gpll to 1680000000
-[ clk adjusting every gpll user ]
+The reason why this is all in the same series is that it grew out of me
+first modelling this as an RPM clock for mfgpll, which Angelo disagreed
+with, so I did some investigation and it seems MFG_EB indeed is a parent
+clock. However, the earlier refactoring to pass the device pointer down
+is still useful.
 
-This includes possibly the other vops, i2s, spdif and even the uarts.
-Among other possible things, this breaks the uart console on a board
-I use. Sometimes it recovers later on, but there will be a big block
-of garbled output for a while at least.
-
-Shared PLLs should not be changed by individual users, so drop these
-flags from dclk_vop2_src and make the flags the same as on dclk_vop0
-and dclk_vop1.
-
-Fixes: f1c506d152ff ("clk: rockchip: add clock controller for the RK3588")
-Cc: stable@vger.kernel.org
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/clk/rockchip/clk-rk3588.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Drop bindings patch
+- Drop mfgpll RPM patch
+- Add patch to also transition pllfh to passing device
+- Add fixes patch to make CLK_OPS_PARENT_ENABLE also apply to the
+  recalc_rate operation
+- Remodel mfgpll's mfg_eb dependency as parent-child with
+  CLK_OPS_PARENT_ENABLE
+- Link to v1: https://lore.kernel.org/r/20250929-mtk-pll-rpm-v1-0-49541777878d@collabora.com
 
-diff --git a/drivers/clk/rockchip/clk-rk3588.c b/drivers/clk/rockchip/clk-rk3588.c
-index 1694223f4f84..cf83242d1726 100644
---- a/drivers/clk/rockchip/clk-rk3588.c
-+++ b/drivers/clk/rockchip/clk-rk3588.c
-@@ -2094,7 +2094,7 @@ static struct rockchip_clk_branch rk3588_early_clk_branches[] __initdata = {
- 	COMPOSITE(DCLK_VOP1_SRC, "dclk_vop1_src", gpll_cpll_v0pll_aupll_p, 0,
- 			RK3588_CLKSEL_CON(111), 14, 2, MFLAGS, 9, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(52), 11, GFLAGS),
--	COMPOSITE(DCLK_VOP2_SRC, "dclk_vop2_src", gpll_cpll_v0pll_aupll_p, CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT,
-+	COMPOSITE(DCLK_VOP2_SRC, "dclk_vop2_src", gpll_cpll_v0pll_aupll_p, 0,
- 			RK3588_CLKSEL_CON(112), 5, 2, MFLAGS, 0, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(52), 12, GFLAGS),
- 	COMPOSITE_NODIV(DCLK_VOP0, "dclk_vop0", dclk_vop0_p,
+---
+Nicolas Frattaroli (5):
+      clk: Respect CLK_OPS_PARENT_ENABLE during recalc
+      clk: mediatek: Refactor pll registration to pass device
+      clk: mediatek: Pass device to clk_hw_register for PLLs
+      clk: mediatek: Refactor pllfh registration to pass device
+      clk: mediatek: Add mfg_eb as parent to mt8196 mfgpll clocks
+
+ drivers/clk/clk.c                            | 13 +++++++++++++
+ drivers/clk/mediatek/clk-mt2701.c            |  2 +-
+ drivers/clk/mediatek/clk-mt2712-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt6735-apmixedsys.c |  4 ++--
+ drivers/clk/mediatek/clk-mt6765.c            |  2 +-
+ drivers/clk/mediatek/clk-mt6779.c            |  2 +-
+ drivers/clk/mediatek/clk-mt6795-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt6797.c            |  2 +-
+ drivers/clk/mediatek/clk-mt7622-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt7629.c            |  2 +-
+ drivers/clk/mediatek/clk-mt7981-apmixed.c    |  2 +-
+ drivers/clk/mediatek/clk-mt7986-apmixed.c    |  2 +-
+ drivers/clk/mediatek/clk-mt7988-apmixed.c    |  2 +-
+ drivers/clk/mediatek/clk-mt8135-apmixedsys.c |  3 ++-
+ drivers/clk/mediatek/clk-mt8167-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8173-apmixedsys.c | 14 +++++++-------
+ drivers/clk/mediatek/clk-mt8183-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8188-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8192-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8195-apusys_pll.c |  3 ++-
+ drivers/clk/mediatek/clk-mt8196-apmixedsys.c |  3 ++-
+ drivers/clk/mediatek/clk-mt8196-mcu.c        |  2 +-
+ drivers/clk/mediatek/clk-mt8196-mfg.c        |  5 +++--
+ drivers/clk/mediatek/clk-mt8196-vlpckgen.c   |  2 +-
+ drivers/clk/mediatek/clk-mt8365-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-mt8516-apmixedsys.c |  2 +-
+ drivers/clk/mediatek/clk-pll.c               | 19 +++++++++++++------
+ drivers/clk/mediatek/clk-pll.h               | 11 +++++++----
+ drivers/clk/mediatek/clk-pllfh.c             | 13 ++++++++-----
+ drivers/clk/mediatek/clk-pllfh.h             |  2 +-
+ 32 files changed, 81 insertions(+), 51 deletions(-)
+---
+base-commit: adff43957b0d8b9f6ad0e1b1f6daa7136f9ffbef
+change-id: 20250929-mtk-pll-rpm-bf28192dd016
+
+Best regards,
 -- 
-2.47.2
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 
