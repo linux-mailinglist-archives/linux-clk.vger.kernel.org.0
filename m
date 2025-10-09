@@ -1,220 +1,203 @@
-Return-Path: <linux-clk+bounces-28853-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-28856-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03A4BC823C
-	for <lists+linux-clk@lfdr.de>; Thu, 09 Oct 2025 10:53:31 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D14BC8491
+	for <lists+linux-clk@lfdr.de>; Thu, 09 Oct 2025 11:23:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2887919E5B9D
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Oct 2025 08:53:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A5AD54F8872
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Oct 2025 09:22:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5272D322F;
-	Thu,  9 Oct 2025 08:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iopsys.eu header.i=@iopsys.eu header.b="Ik2aKtzx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7067B2D63E2;
+	Thu,  9 Oct 2025 09:22:52 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022139.outbound.protection.outlook.com [52.101.66.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC42D2D321D;
-	Thu,  9 Oct 2025 08:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759999996; cv=fail; b=BuqLVKS+z/eTD2XoGBsXAT7QVqKgOR2TvViIsGSKTuqxp0NofMO3qKPcUJLc/DM0qPlvQkmYetEpNeF2v4XG2UlqVNLs8GPyx45jpm4GnwMQu+kxS4hX5I2qEDWJWKR3g6c7ayo+oEhRm85EDKjEYuCjeKWbN/6eJ9X6wh6fH5Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759999996; c=relaxed/simple;
-	bh=w+rInlVkAh1PK8OB/QOdce0NeilOIS6wyg+QyDefKPM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=c+hzQunvJHr5cuufQFGOQKjEz/cvT7r07thVrKzc5T+2pZAG+0ILy9qAtvJUJA/zDAJ0O6vhTNH3GMS/CMZzKyQYkjUkeo0u9U5oO1mUuYAv+C7BfvcZTbEcUWy2FY8fPVXXkKTIZIoAGLeyFw/A3qoNjMDWky4gEnx0NlnybJM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iopsys.eu; spf=pass smtp.mailfrom=genexis.eu; dkim=pass (2048-bit key) header.d=iopsys.eu header.i=@iopsys.eu header.b=Ik2aKtzx; arc=fail smtp.client-ip=52.101.66.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iopsys.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=genexis.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lFQqa+6SizkKxQI8ClpPpun0M0lSQ3syH+PGTCggNPZQ/sFc50ux17Y8ytYVJp86yWtEepaLeuMMeaCuTyBR7yN5Jjtl1GLeRNCA/MgnYFPU34mtsQcgGhoyGWXi4mM8GUknLGSbQUc0HGJJOPzaZpfOjUmbeJ3q9lN9lQcTwVA/siiffmDFZuErO2N1rVETk492V83epk/jkTpXIcDR4ZyTRNuqyNIRBaXqBhg1k6MYDRQ4INV6EPUb3EJV8yB6+OsQh44xC2oiDJwqZeLHeedLqdjd4yuPg9Ku0hTO1WDYzWoRXmmiYaS9yqAS1mBYM4FUOF2EckZMVPX95b/UFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WZHNPLQiw413uvBxrkZppSRbwcvTmQ12So+1FLPSMhc=;
- b=XdQrDgfLJ1RcFB7z8TOhhmlY7UXWd+VVFrLKyPyOGt4MUt+URS0E0dGg64ESldYOXHTUYKF+6C1XCBvoLQeVOyq29fXEOSbkwX+RoyILiOEVsvydHhIVI9Rzk5w6MBgXIvEg11V0jGN7DNDMCjXfRxB0wTe0xY8osohGuk8K/R2TEZxYLq133yRB5os3v3AEAx0KZf9p7FP5TZZCoGgFFGWuJP7G3vukTDjLzVE7jYQH0nnvjs0yzZTL5QbpFuzJVtaCbL654hySCTLWEr+RqYgcX0BCgzpyIoYLfLSfGWE8btVymcYHKFIW3l0/ry5c2UH9njVlqbWTzdTdCwEVrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=genexis.eu; dmarc=pass action=none header.from=iopsys.eu;
- dkim=pass header.d=iopsys.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iopsys.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WZHNPLQiw413uvBxrkZppSRbwcvTmQ12So+1FLPSMhc=;
- b=Ik2aKtzxAhr9upBW4gWMdQryMauFZnKsW10mo2yo00F7StN+AU+s3Cb6SAvcOj7bN6OXmzGOE/0U8McQhxeg+FcD8IFaKgzMLNkooc3IsdU34+X3P72appOe0nEPzS1AlGyQ5rwQjZLg0vqM3UCXQbw67vlsvRjdAq5B/O1TxZLVXeobE8bICIDUyv0/vEVRieM3stddioaUQKBjjKEXpT3ghzVHEs3B4vTxjR6oKa6Y48Lr4C8iKI9/iCn8EfXabPrfya4zFpPR9AUa+k+lZ83DMrk2X7m5QwsvxzlkZzOWuzx08GHxsYqILpf2MhVlgQk2F1o9GseXQoSOUSJONQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=iopsys.eu;
-Received: from GV2PR08MB8121.eurprd08.prod.outlook.com (2603:10a6:150:7d::22)
- by DB9PR08MB8434.eurprd08.prod.outlook.com (2603:10a6:10:3d6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.9; Thu, 9 Oct
- 2025 08:53:11 +0000
-Received: from GV2PR08MB8121.eurprd08.prod.outlook.com
- ([fe80::4cd3:da80:2532:daa0]) by GV2PR08MB8121.eurprd08.prod.outlook.com
- ([fe80::4cd3:da80:2532:daa0%3]) with mapi id 15.20.9203.009; Thu, 9 Oct 2025
- 08:53:11 +0000
-Message-ID: <ca777e63-96a3-4dbc-8540-2fc8ed61eec2@iopsys.eu>
-Date: Thu, 9 Oct 2025 11:53:09 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] clk: en7523: reset-controller support for EN7523
- SoC
-To: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Felix Fietkau <nbd@nbd.name>,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
-References: <20250924094112.1918444-1-mikhail.kshevetskiy@iopsys.eu>
- <20250924104850.1930254-1-mikhail.kshevetskiy@iopsys.eu>
-From: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-Content-Language: en-US, ru-RU
-In-Reply-To: <20250924104850.1930254-1-mikhail.kshevetskiy@iopsys.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0234.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e9::18) To GV2PR08MB8121.eurprd08.prod.outlook.com
- (2603:10a6:150:7d::22)
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.205.26])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B28C2C0291;
+	Thu,  9 Oct 2025 09:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.205.26
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760001772; cv=none; b=WMQW1DMWPxXgUyqY+42LC/W5un+78DZQm/asKyiRuwgV3K28rgnO1y9/WgXye+AbBsv9A6EpOKmcWu6+6cT57f/HuRnJIP55mChe17RBZohu7bQtxA82feHgcyqL4Jq6d+cf0YfP5VU/+J6tRSU45dD+vIPJ+jgr27o0L4kmC6w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760001772; c=relaxed/simple;
+	bh=HTDQ9mZicj2h3erxY8eJ1g4RB7lsX3iZ2xYF9pzKNrM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=spC7RuUms0OG1mFUSF08M3RoYrDWnrdvDDZNw/GvLK0A8AYX8nql/kkcyhd5Cq023r1vtB41qkmAY5/7ue3vrsKNXFw2gmccHs1nR9XjlqEuQXcjbkzaaoq89FPVQa9+zjEC0B02Q4akISDJ+IvoPtp/dtOPlcGkG1Af3Jq9HKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=52.229.205.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0005152DT.eswin.cn (unknown [10.12.96.41])
+	by app2 (Coremail) with SMTP id TQJkCgD3iJJgfudouI4CAQ--.60404S2;
+	Thu, 09 Oct 2025 17:20:34 +0800 (CST)
+From: dongxuyang@eswincomputing.com
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: ningyu@eswincomputing.com,
+	linmin@eswincomputing.com,
+	huangyifeng@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	Xuyang Dong <dongxuyang@eswincomputing.com>
+Subject: [PATCH v6 0/2] Add driver support for ESWIN eic700 SoC clock controller
+Date: Thu,  9 Oct 2025 17:20:29 +0800
+Message-Id: <20251009092029.140-1-dongxuyang@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PR08MB8121:EE_|DB9PR08MB8434:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb0f4850-d3f5-42a0-91d3-08de07114672
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|7416014|366016|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NDdoYTl3TVh2a0NETVVIZDY5MmExenNMMGJ3Nlc5aHBkTk9NQkN4SUxwdytQ?=
- =?utf-8?B?RkYydml6ZFNaUzNJNEJjR3ZSK3FEWlErMzFaYVRVZG9YVGZrb3oraTJ5N0E2?=
- =?utf-8?B?OG5RNGdSUjRnM3l3cWtMRmc4RG16NlpncmpCZUxONzcyVVlOVW02S2UxZXpX?=
- =?utf-8?B?VnpuSlg2YmhOWkx6aTRRWWNTbHd1QSttM1FiNjZ6NjZaSjhJbFM1djRaL2I5?=
- =?utf-8?B?WFl2Uk1vZzV1NTFkdCt5NW1BWmhQMlFtVEFHL0EyUmQrNHMyZDF2UWxIMGxW?=
- =?utf-8?B?Mzd3RGNlN3c4MWtFY3N0bXVpVGZadlJoby84TE1nVlZDZzk4ZE1uZFF2MzB1?=
- =?utf-8?B?djVXVHlwWXMvbm9WUjB3TDhSNHR4THlUVllDVGdubGRFQXNPQVhmWFZSZTdC?=
- =?utf-8?B?czFKeVFQTGcxOXVNc2FCSFNTcmVlN2dDeGFJbGNjWXhnelVEeWJVdlk2aUdV?=
- =?utf-8?B?NDRETmV0bVVpVXdzY29Qazh3Q3JPTytyWHdEYU4vNUlnNTNHRFZCY1lzSVdB?=
- =?utf-8?B?MCtPTVhFa2xOLzgxQldXa3ltaXFrRmtpMERodU1kQ0ljMzJpdVJzUGIxdnRa?=
- =?utf-8?B?bFJVZzhGL2RNTWxGQUw0RnEzYlJGaXRoaUpaNVN3WGlFV3hGMG1mZys1elpI?=
- =?utf-8?B?Q2xYQUVRQ0hFTkNwYmVrdk5lenBIRFhKQ3ozZldzTlhhbERKekxGdXhEUDNQ?=
- =?utf-8?B?V0FXQW5vWVU5ZFNUZGdaMVpBbTNBY2JGSjFkMHVxQzZtQjB0cjRlTXNpK1ZX?=
- =?utf-8?B?WXBMY3ljaHRwL0wrVE9qdytkekRPd1l3eUsxRG1kaForU0ZrZEMvY05LQ2do?=
- =?utf-8?B?eXFqVmgzWG5yUGgwN3Brc0J0LzF3b0lBclZWQXB5NVpCS0xCSEtUMFNha2dG?=
- =?utf-8?B?aVBnTUNQdDlQM3I1STIzeHEwdUpYMURMaFJxdFdkRlIwYjEvdmsxQVVnMktG?=
- =?utf-8?B?QXpvVTV2NS95U1VLNSszSWV6Z0lLUm9VYmlwdXlQS3JaRGN5VCtQbUFjdld0?=
- =?utf-8?B?NFpoVlJrRlJ5T24rbTZDcmxqT0IxRGNsVmlxQjB6MmVNK2RiZUZZemF6L213?=
- =?utf-8?B?UHY2SW03UVFLWFR0UDk2SVdnbklHU0RLUnRaU28yamE4T3UyYXVaRzNXSjVM?=
- =?utf-8?B?aDZNQTRUZ2E2dUI3anVQVy9qTS9aR0ZocHI2T3B4R293QUYrcnlpS1grN1di?=
- =?utf-8?B?MGZGcEpzdjNiOEdPMTUrcVNueEVNajA0amNhTjcwN1h5TVpDN3ZhVGNHU2xS?=
- =?utf-8?B?MElRN3FlRC9FWmNpcDUxOEthRXBSS3p5MVIzcEgrcENQRjN2bCswcHRNc2h2?=
- =?utf-8?B?NXdQUnk5SDdOa3dxc0hDOXRLRGw2MnUyN05lTGRxUDlaMkwwdkRUTElVTlhV?=
- =?utf-8?B?LzRuSHE5dFV0VDArWDllYUJCbEFCRXlPV05WRDkxU1c0V2FQU1Z4RHVVY0Ir?=
- =?utf-8?B?eFhzbU5mM2dGQWN0YWlRN3d3VUJyeWxtbU16K0VvT05nZm56QU8rM1djY1lG?=
- =?utf-8?B?cEtxZFlHYldKYXFPSTJzS1RZVE5mdkx4ekFvWHppa25PTGFqcDFRM0dmcWd0?=
- =?utf-8?B?aCtycTIvbStsclhxMGZ6djg5bG5oeDV6QW51VGt3L094OEJBN21ReUFMUFNY?=
- =?utf-8?B?QzFPaDB2cVpTdVNTYitGbWcxSEZwQm8xVmFTWHE4S1N5aGh5alQ3VjB4ZWZa?=
- =?utf-8?B?RTdHMEVudzZFSjNSQzJLUHZzU0s5S09jWU5KckZ4VWsvQ3FvVUZVRVMxOFQ0?=
- =?utf-8?B?TW5BMVozRUxkbjFROVR0RTN1SzNJTThWQWxqNmg1ZWxSZW01dU5pYnlwbXB0?=
- =?utf-8?B?NTVWWm9QU3dkTjRJL2ZRMHA5K0FuWHQ1ZmZMYU1ZTHZjckJIUTFvRHpNYUk5?=
- =?utf-8?B?NUV3WHpuOXpVNk44d2RRbWpLU0JEcURpRmp0alp1OFZOVXY5bU9xMTVWa1lV?=
- =?utf-8?B?c0M1UzVCQlB0Kzc4OWNjeXFIWXEydzI4ZzZicVFWVWlYUDErK3dyY2hKR2No?=
- =?utf-8?Q?Q3Y0zVpIlp/NFW7xKvD8C1WnQ0Tm5w=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR08MB8121.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aVJoSExOUTc4bUtoVTJPZnJGSHFtQWZXVnRCUmFmbmxhYzg4SmhLWmFrUGtR?=
- =?utf-8?B?UGk5dGc1MDRjMzloMFI1UVNhT1NyY25NbWVIbVdGT1dsRXhCOVEyblRsS3dZ?=
- =?utf-8?B?YVI0REZJR3BvMlpUZDVWZEJCakFCelhWd3FpaUQ1UEdUS2o3R0tpcTdXV3Fz?=
- =?utf-8?B?RE9Nd0tuamFRRXgwelFEQ0pSZUxzK2RhaFprRDBSbzcwMzdZelFpTGQvMnJO?=
- =?utf-8?B?UUt6VU5EM3lGZEhqdjNvTXJzRTFtWDRMb1FXalRDMmk1SG5KMm4zUDlJbDVt?=
- =?utf-8?B?VGtqd0dSeWdBV01rY1ZCVjQ4cFVuRW4wTWhSQWxjYWtZc1VZVHgrcDJjUi8v?=
- =?utf-8?B?bVU3WmdBUk1McDlDMGova1lEdlFQdnhIcVJmeVBUaGRPRFFhdDJmVC9FeVVX?=
- =?utf-8?B?SE5YdjRaZXZwTHlkTTVKV0VqUjcybmlFYXJBQVRyRG5ZbUswR1NiVHRNYkpQ?=
- =?utf-8?B?SVlUbVdHci81K2prMU5tdEtBRjFiU2tIZ2lRM25vQktWdFIrVlFmT2N6RHdz?=
- =?utf-8?B?czl4N3RtUFh6SXd6SDBjeU9ZZFF5bk9iRmtzc2owWktWc2plQ3lsNjJPN1py?=
- =?utf-8?B?aXF4RHorbWk5MVRoV2JtYWVNUmxKRitiZStjbW1ObDJESlM4Z0I0TXBPVUFh?=
- =?utf-8?B?WVZ0V0xDelc3OWNPNm8zaHhJUGpqUlYzWVNnYTF0L2Foc0prbE1aUStrRWdS?=
- =?utf-8?B?dWhHdXd5VVJJS0FNWGJJYURPellJTVQ4RkVVRVh0YXNodmJSZlhQSm12WlJX?=
- =?utf-8?B?bTZXVXg5alVieU0rK2FZRnJpQXIvcUorc2RMMGpYNElXZEdvTU9mUTJ0dE9Q?=
- =?utf-8?B?cHE0UGFuQjVCR1psZ3hmZW1YWDhrUlcyYmF0OERiUExaNmFqQzZYWmlOQm9k?=
- =?utf-8?B?ZW1qczZEdzJ5S0kwcjVraWVPVGdCdHlIT2ZTZjZEUXZnOGM1ak5SY3loWTRM?=
- =?utf-8?B?b1hTR1RNZUxpbjhlMjk1TjRQOW1SN29PTUNyYjRsa0pDcEMvekExUUVobUE0?=
- =?utf-8?B?RWE0SmxUUEQvT3o2SDRnbklOYkg2aHdPbFNJaTNIQStOcVhXMm1CVUxKcFBW?=
- =?utf-8?B?SnptR08xSEhmOWdQR3RlZTU4SjhOOFA4LzE4Zm91TlpCa05ZbzVpeFVSV21P?=
- =?utf-8?B?VU1HdEpsa1VkcEowMkxYdFZMWDFxYWRDWE9oUjY2NUtISUhpOGRqNEJmWHNE?=
- =?utf-8?B?RHhrbmhMZXIrMG52WWp3WlVCUDhZTEVoZnlpM1BzNXhLTDREUUJWakFjTXpm?=
- =?utf-8?B?bGw2dElxd3RpZkxQTCtBNE12TU5oWFlXb3dCNmRNdk9vd1BERTUzRmpKVUFi?=
- =?utf-8?B?S0FhNGQrUHpnYi9QWlhGMk5PUEszbWkyWVZvMW1ub1FidTMybDFPbEg2V2sw?=
- =?utf-8?B?VjlIMHN1VjNxV2JBdzh0RzVON2Y0ZEZvNGJJd2dyQzJRMHk2WEVDTWlsZ0dG?=
- =?utf-8?B?OHUxMU5jTE5lQklPWElTYTVmdTFRZTUwUnUvbEZES0x4aGNhN0tyYlRyRHpi?=
- =?utf-8?B?dTNxT0VWVHhsOFBLamZUcDVqZm9LTUw1VUdCOWtBMExnT09ySnMyb2l1ZElZ?=
- =?utf-8?B?bVhyQlFTODlaWStGK1IzRC9vZVFreXhJaEI0ZVBxRXRyaGpSQVlVb053Z3Aw?=
- =?utf-8?B?QXVNUkxmNk9mSnk2ZkNERFNCYXYwUTVKcjI4L3F3ZEpFNy8rYng3QTN2NlV0?=
- =?utf-8?B?RUFkUUtobXV3b3pKQ0lNVXBBVWZnQ2VjZlpVYUJkRjBna0RWbUp6d0xUdWRN?=
- =?utf-8?B?eUZyeEY4bGc2WEFVeTI3UnhNQWQ1Y1kxVGsyQlFZM2MyeU5EUkYrekJVdmJQ?=
- =?utf-8?B?aWFid3lMU2VjdVNPY1V4TlAzY0NnTmJNdDdsbC9yYWN1aTNaOGVTS3d5VlQ0?=
- =?utf-8?B?YUg1bzJiYVB5OUUxeGxWeFFsUnJmYUYwUzVvZUVtV3pBMnRUMUxrNmZwUjJ3?=
- =?utf-8?B?bWVabVFVVDhvdFhRbFZiZlZWdWJZSWtsamtDZXhqMXNjOFBpaWhZSkw5T1dH?=
- =?utf-8?B?YkVxR2duSStsa2hVL1lveVVOa0lOQ3VFZkZ2Y2c2aGZQQlFSYU1sSXdrQVJ5?=
- =?utf-8?B?SW9EeHVXWnBIK0U3M0JpdU1sZkZVcFZBWENNN0F3Ni9NczBEd3RTWThTUUhV?=
- =?utf-8?B?SEtwWmowaVpqT3RRQUx4QmdiblVaUEU0NW4vUzVUbGpxdGF2dzhYdUt4MmNZ?=
- =?utf-8?Q?t8b8U0bjkOCPWlwOouV9Sac=3D?=
-X-OriginatorOrg: iopsys.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb0f4850-d3f5-42a0-91d3-08de07114672
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR08MB8121.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2025 08:53:11.2820
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8d891be1-7bce-4216-9a99-bee9de02ba58
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yl88ZDRoGcDzOOzKSCovvRFhMl4NDqHgpGA335I0Q/VAKEmzYGqZn6TDmmKPQ6N8vyMbBi8F4+F7Repy/DnlpjPn606V9o21jlHj8Jd7G/Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB8434
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:TQJkCgD3iJJgfudouI4CAQ--.60404S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFy8ZrW5JFyDCr17AF1xAFb_yoW7ZF4rpF
+	s7Gr98AFn0gryxXan7ta4IgF93ZanrJFWUCryxXw1UZa45Ca4vyr4FqFy5AFZrAr4fAw1D
+	JrnrWa10kF4UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
+	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmjgxUUUUU=
+X-CM-SenderInfo: pgrqw5xx1d0w46hv4xpqfrz1xxwl0woofrz/
 
-Is there any chances get it merged to linux-6.18?
+From: Xuyang Dong <dongxuyang@eswincomputing.com>
 
-Regards,
-Mikhail Kshevetskiy
+Updates:
 
-On 24.09.2025 13:48, Mikhail Kshevetskiy wrote:
-> These patches:
->  * adds reset-controller support for EN7523 SoC
->  * updates dt-bindings
->  * updates en7523 dtsi
->
-> Reset-controller support will allow us more easily reusing of en7581 drivers
-> for en7523.
->
-> Changes v2:
->  * keep '#reset-cells' property optional
->  * put dtsi changes to a separate commit
->  * add missed dtsi include
->
-> Changes v3:
->  * keep en7581 prefix for common en7523/en7581 variables and functions
->
-> Mikhail Kshevetskiy (3):
->   dt-bindings: clock: airoha: Add reset support to EN7523 clock binding
->   clk: en7523: Add reset-controller support for EN7523 SoC
->   ARM: dts: airoha: update EN7523 dtsi to support resets
->
->  .../bindings/clock/airoha,en7523-scu.yaml     |  3 +-
->  arch/arm/boot/dts/airoha/en7523.dtsi          |  2 +
->  drivers/clk/clk-en7523.c                      | 64 +++++++++++++++++--
->  .../dt-bindings/reset/airoha,en7523-reset.h   | 61 ++++++++++++++++++
->  4 files changed, 123 insertions(+), 7 deletions(-)
->  create mode 100644 include/dt-bindings/reset/airoha,en7523-reset.h
->
+  Changes in v6:
+  - Removed config option patch dependency from cover letter, because the patch
+    was applied.
+  - Updated YAML file
+    - Added an oscillator as the clock input, named xtal24m.
+    - Added clocks property.
+  - Updated driver file
+    - Replaced fixed_rate_clk_xtal_24m with xtal24m.
+    - Dropped fixed_rate_clk_xtal_24m from driver. Because clock xtal24m was
+      registered by fixed-clock as oscillator.
+
+  - Link to v5: https://lore.kernel.org/all/20250923084637.1223-1-dongxuyang@eswincomputing.com/
+
+  Changes in v5:
+  - Removed vendor prefix patch dependency from cover letter, because the patch
+    was applied.
+  - Updated YAML file
+    - Placed the required after all properties.
+    - Removed patternProperties. Also removed compatible of eswin,pll-clock,
+      eswin,mux-clock, eswin,divider-clock and eswin,gate-clock as we have moved
+      clock tree from DTS to Linux driver.
+    - Removed the clock tree from DTS. Used clock-controller to manage all
+      clock. Removed all child nodes in clock-controller.
+    - Removed '#address-cells' and '#size-cells' properties, because the clock
+      controller did not need to define these properties.
+    - Removed eic7700-clocks.dtsi.
+    - Added dt-bindings header for clock IDs. Because used the IDs to register
+      clocks.
+  - Updated driver file
+    - Modified the commit for clock driver. Dropped indentation in commit.
+    - Removed CLK_OF_DECLARE(). Used *clk_hw_register* to register clocks. Used
+      devm_of_clk_add_hw_provider.
+    - Dropped singletons.
+    - Checked the value right after obtaining it.
+    - Removed the definitions of macro frequency in clk.h like CLK_FREQ_24M.
+    - Modified description of help in Kconfig.
+    - Added COMPILE_TEST. Added COMMON_CLK_ESWIN for clk.o. And added
+      "select COMMON_CLK_ESWIN" for clk-eic7700.c. Without COMMON_CLK_EIC7700,
+      clk.c could not be compiled.
+    - Used .determined_rate.
+    - Added macro definitions of EIC7700_DIV, EIC7700_FIXED, EIC7700_FACTOR,
+      EIC7700_MUX and EIC7700_PLL to manage clock tree.
+    - Added clk-eic7700.h to place eic7700 SoC clock registers.
+    - Removed refdiv_val and postdiv1_val from clk_pll_recalc_rate(). Because
+      these values were unused.
+
+  - Link to v4: https://lore.kernel.org/all/20250815093539.975-1-dongxuyang@eswincomputing.com/
+
+  Changes in v4:
+  - Updated YAML file
+    - Changed name from cpu-default-frequency to cpu-default-freq-hz.
+    - Dropped $ref of cpu-default-frequency.
+    - Added cpu-default-frequency for required.
+    - Removed cpu-default-frequency in updated file, because there was no
+      need to add cpu-default-frequency.
+    - Moved DIVIDER to DIV.
+    - Arranged the IDs in order.
+    - Dropped EIC7700_NR_CLKS.
+    - Removed dt-bindings eswin,eic7700-clock.h. Because IDs was not used,
+      and used clock device nodes.
+    - According to the updated driver codes, the YAML has been updated.
+  - Updated driver file
+    - Remove undocumented parameters "cpu_no_boost_1_6ghz" and
+      "cpu-default-frequency".
+    - Modified the comment and used the correct Linux coding style.
+    - Removed codes of voltage, because it was not the clock driver.
+    - Updated the formula of clock frequency calculation. Removed the logic
+      that only used register selection.
+    - Used CLK_OF_DECLARE() to register clocks. Registered pll-clock,
+      mux-clock, divider-clock, and gate-clock in clk-eic7700.c.
+      The specific implementation of clock registration was in clk.c.
+    - Added eic7700-clocks.dtsi.
+    - Moved device information to DTS. Put all clocks' node in the
+      eic7700-clocks.dtsi.
+
+  - Link to v3: https://lore.kernel.org/all/20250624103212.287-1-dongxuyang@eswincomputing.com/
+
+  Changes in v3:
+  - Update example, drop child node and add '#clock-cells' to the parent
+    node.
+  - Change parent node from sys-crg to clock-controller for this yaml.
+  - Drop "syscon", "simple-mfd" to clear warnings/errors by using "make
+    dt_binding_check". And these are not necessary.
+  - Add "cpu-default-frequency" definition in yaml for "undocumented ABI".
+  - Drop Reviewed-by, this is misunderstanding. We have not received such
+    an email.
+  - Link to v2: https://lore.kernel.org/all/20250523090747.1830-1-dongxuyang@eswincomputing.com/
+
+  Changes in v2:
+  - Update example, drop child node.
+  - Clear warnings/errors for using "make dt_binding_check".
+  - Change to the correct format.
+  - Drop some non-stanard code.
+  - Use dev_err_probe() in probe functions.
+  - Link to v1: https://lore.kernel.org/all/20250514002233.187-1-dongxuyang@eswincomputing.com/
+
+Xuyang Dong (2):
+  dt-bindings: clock: eswin: Documentation for eic7700 SoC
+  clock: eswin: Add eic7700 clock driver
+
+ .../bindings/clock/eswin,eic7700-clock.yaml   |   46 +
+ drivers/clk/Kconfig                           |    1 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/eswin/Kconfig                     |   15 +
+ drivers/clk/eswin/Makefile                    |    8 +
+ drivers/clk/eswin/clk-eic7700.c               | 1034 +++++++++++++++++
+ drivers/clk/eswin/clk-eic7700.h               |  122 ++
+ drivers/clk/eswin/clk.c                       |  448 +++++++
+ drivers/clk/eswin/clk.h                       |  242 ++++
+ .../dt-bindings/clock/eswin,eic7700-clock.h   |  280 +++++
+ 10 files changed, 2197 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/eswin,eic7700-clock.yaml
+ create mode 100644 drivers/clk/eswin/Kconfig
+ create mode 100644 drivers/clk/eswin/Makefile
+ create mode 100644 drivers/clk/eswin/clk-eic7700.c
+ create mode 100644 drivers/clk/eswin/clk-eic7700.h
+ create mode 100644 drivers/clk/eswin/clk.c
+ create mode 100644 drivers/clk/eswin/clk.h
+ create mode 100644 include/dt-bindings/clock/eswin,eic7700-clock.h
+
+--
+2.43.0
+
 
