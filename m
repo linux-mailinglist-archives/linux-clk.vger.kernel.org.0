@@ -1,130 +1,109 @@
-Return-Path: <linux-clk+bounces-29161-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29163-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D262BDEC5F
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Oct 2025 15:33:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17F3EBDF187
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Oct 2025 16:35:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEDB619A1E21
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Oct 2025 13:33:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C3703A2B21
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Oct 2025 14:33:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4229722424E;
-	Wed, 15 Oct 2025 13:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490C927B4EE;
+	Wed, 15 Oct 2025 14:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rz/cv0jG"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="wN7lqxX9"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16116223DEF;
-	Wed, 15 Oct 2025 13:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4DE17B50F;
+	Wed, 15 Oct 2025 14:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760535199; cv=none; b=lnjIGLimXlmhJWB1RE4RdrpdNkYB1S9MKvDdwbICNCEmH+gZRSr6ovVyrCf7VN49Khc8H7a8Wb/KbwFFtKxgdPIFbPZeWTzETI8Fqe/3bOBbwHkwP+0gSPHCk3NMIC2g0Z9tCBWibZ03QBmrZcb/Q7TA/rzjS7ahr1igXYsvCT8=
+	t=1760538802; cv=none; b=sZAQHzSwHVe3uiqq8kem+zkq6gR3SuT/lbe/QYGgYp8P13rmyJZcRpP4rh1r+3FsrmzSgTUS5zEVVXB0iOHGWG/58JoAaaeu3zrXZtOt3rYJulIVOWwK3Wz6xeJf/aSqlojalHt3gz+71KPJrWb3KYpQHV4cI2HFa5HFSs7FSN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760535199; c=relaxed/simple;
-	bh=3fz9KGNaQakjQB6EQzIxoVQtqjKXznasDpV8NOPgPuQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHKtg9wj13BPTC/+2FWO7rU32Oh4xcOHb2/ad8VqJ1TRGxYZKOzYxFmE0mBgCFCNIQuUw1cJE/j6cb/h+sutze/YLjyrCZTLbsfDD+nVByyG/b5I6hiWDJU7K1uqiw8wDb5Pvefb34FEPw3oVZKWlIdTYl5xYr8ATw6KVFJRhvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rz/cv0jG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559D5C4CEF8;
-	Wed, 15 Oct 2025 13:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760535197;
-	bh=3fz9KGNaQakjQB6EQzIxoVQtqjKXznasDpV8NOPgPuQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rz/cv0jGa6pcHdPzjjI1OM8wpBajf6uLdiwhQUjIwwa/08P9M/cr0zt05mHYbGzUK
-	 pap+MlEKcpQWolJ4vJYl77nEIi6aTDGVnrh2/dHbbz3AB2m0+CbqmYAeY+/43BXpAZ
-	 nU1X0VzsbhDXvWvb/CKzy8DN1iM2qdMPqTvgWUXtZpeACYkz/ARmZBjUtMmi47peiv
-	 HIbrkj584SyBB/tJYeQz/7Z2SJNMV281XhoF3xnBSGApzpfCfHsZEX+wQ2luvZxRhO
-	 0qSJOTwfU95lhsoyRTxgYH8XXrdMTpt8r/jKCwtEGVd66+lDNjniYl0p3IppvQ0rca
-	 pdMbGAjZ42upQ==
-Date: Wed, 15 Oct 2025 08:33:15 -0500
-From: Rob Herring <robh@kernel.org>
-To: Marek Vasut <marek.vasut@mailbox.org>
-Cc: dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Liu Ying <victor.liu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
-	Peng Fan <peng.fan@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH 38/39] dt-bindings: clock: support i.MX95 Display Stream
- CSR module
-Message-ID: <20251015133315.GA3263713-robh@kernel.org>
-References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <20251011170213.128907-39-marek.vasut@mailbox.org>
+	s=arc-20240116; t=1760538802; c=relaxed/simple;
+	bh=tDM0kU0b+a0XNq9PsdHCsruV9hc1JDceI75DKsbQfjE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kMNvx3I4kYKzjafMDbGDKSfusi1MlYwgSwEndHukru2jugZVEAlHiuxmK03zJhzd80sGF3SgR2DKqBNAS0uKl/W8vmsaD3ziC+LdseWqkhXqr4z2nMFgO32Ex8L4pXs6A5jJfWEBRzOp8UkhhaJDh64tRJoAhZ08NyyVFYmZu50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=wN7lqxX9; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4cmtqJ5ghsz9v66;
+	Wed, 15 Oct 2025 16:33:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1760538796;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p+0AAq5p9n3CYb0eN2KQBzPDtI3LpH6hBvgSrfcGzKs=;
+	b=wN7lqxX9ujyaZAtI3oFJQBPbEbCEMBGULGgOFLBCY8XqGfDEy4VEj5OTv3D4U7tGelWb9+
+	StMm8aoZZcvrm9F7FXK+h/dd87S4E6C0WFcCWzepB33sy+b1zj6nhGPnXO82dXsPTsYosY
+	Ud7bD3DHde2xmx+/bZrhYtSKMC8zU9dnKaiJDxWRPUPpBILy98OUUUa5ep2h2dF9VVcwkk
+	wAX+kTD0D090Sy7/0bIEJZArrFjR9fB9m6/3c5fgSzAghzEkE9EzMcKYN34SBzaZnjFI6N
+	WUAq+FAHm7mc4pGvhu15vOKy85e1gZt88Aer8pMJnVjgGGNfjhXIup6L4LHINw==
+Message-ID: <ae9d1289-c0f9-47b9-b6be-e39d170425a2@mailbox.org>
+Date: Wed, 15 Oct 2025 12:19:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251011170213.128907-39-marek.vasut@mailbox.org>
+Subject: Re: [PATCH 03/39] dt-bindings: display: imx: Document i.MX95 Display
+ Controller processing units
+To: Liu Ying <victor.liu@nxp.com>, Frank Li <Frank.li@nxp.com>
+Cc: dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org
+References: <20251011170213.128907-1-marek.vasut@mailbox.org>
+ <20251011170213.128907-4-marek.vasut@mailbox.org>
+ <aO0tmUWA5H0J80Ov@lizhi-Precision-Tower-5810>
+ <260b4db1-c02a-48a0-baf8-5e217c729824@mailbox.org>
+ <e3ab9421-61a5-4ab6-8c72-6b0ab340f3a8@nxp.com>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <e3ab9421-61a5-4ab6-8c72-6b0ab340f3a8@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-META: 3bfifor4uba8rjg7sfrfhsxrmksew5w3
+X-MBO-RS-ID: f82c0904535502d82ca
 
-On Sat, Oct 11, 2025 at 06:51:53PM +0200, Marek Vasut wrote:
-> i.MX95 DISPLAY STREAM_CSR includes registers to control DSI PHY settings.
-> Add dt-schema for it.
+On 10/15/25 10:59 AM, Liu Ying wrote:
+
+Hello Liu,
+
+>>>> @@ -90,13 +102,15 @@ patternProperties:
+>>>>          compatible:
+>>>>            const: fsl,imx8qxp-dc-signature
+>>>>
+>>>> -  "^tcon@[0-9a-f]+$":
+>>>> +  "^tcon(@[0-9a-f]+)?$":
+>>>
+>>> why here allow no address unit tcon?
+>> This might be something Liu can clarify too.
+>>
+>> TCON on iMX95 DPU does not seem to exist at all, or at least has no control registers. Hence no address.
 > 
-> Signed-off-by: Marek Vasut <marek.vasut@mailbox.org>
-> ---
-> Cc: Abel Vesa <abelvesa@kernel.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Liu Ying <victor.liu@nxp.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: devicetree@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: imx@lists.linux.dev
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> ---
->  .../imx/nxp,imx95-display-stream-csr.yaml     | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/imx/nxp,imx95-display-stream-csr.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/imx/nxp,imx95-display-stream-csr.yaml b/Documentation/devicetree/bindings/display/imx/nxp,imx95-display-stream-csr.yaml
-> new file mode 100644
-> index 0000000000000..61153120c9378
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/imx/nxp,imx95-display-stream-csr.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/imx/nxp,imx95-display-stream-csr.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX95 Display Stream Block Control
-> +
-> +maintainers:
-> +  - Marek Vasut <marek.vasut@mailbox.org>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - nxp,imx95-display-stream-csr
-> +          - nxp,imx95-master-stream-csr
-> +          - nxp,imx95-mipi-tx-phy-csr
+> i.MX95 DC hasn't got TCON so it should not be documented for i.MX95 DC.
 
-'-csr' seems redundant.
+What DT node do I attach the pixel-mapper/pixel-interleaver to then ?
 
-> +      - const: syscon
+-- 
+Best regards,
+Marek Vasut
 
