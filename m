@@ -1,199 +1,193 @@
-Return-Path: <linux-clk+bounces-29183-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29185-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E91BE151F
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Oct 2025 04:58:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB76BE15B6
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Oct 2025 05:28:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 62BD434A22D
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Oct 2025 02:58:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4B50B4E60A1
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Oct 2025 03:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03391F1513;
-	Thu, 16 Oct 2025 02:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC617213254;
+	Thu, 16 Oct 2025 03:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kySNXkTM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZIyykUIR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010015.outbound.protection.outlook.com [52.101.69.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F3B1C6FF6;
-	Thu, 16 Oct 2025 02:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760583475; cv=fail; b=NWP4cZoKevwiRMUG+fyG7V02zlvELUyElrQXeIbyG3fb9RvA96NIx+zF7KFL41S63DwAmK8dosRK0zygoLn9a0J5UTIu8ew0muO5YsZxLa2xQLSq59745XPtmEIDxtialJN9W+aUwLjDlXR4YmrdBTkYE2t/ltxN/fzql/7JyfI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760583475; c=relaxed/simple;
-	bh=ZGUAj8pf177vxYlSqd9LJjOafHaLbc+Ssyc5X5pvr4w=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=E/F55Qiux39dHWGnilqfsQrPnlihaYyJP5R8zUnC2sI1VixJStZPIwRkmbcodgcTcbQhXZkaQw+usDCnWPPG0CZhaPdFeE9W1zN28EBETTIU4Rjd1W34xvDD9ynvuejMjmk+QB5wA9tcYl6pF7lZt2VxjbehxvlOvTvSD7ucW3A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kySNXkTM; arc=fail smtp.client-ip=52.101.69.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kqpaKGSn6q1nZvP7b+ic93YNCvczudZJXqp25xi7FUao+qJ+i+o6fJins3mFaIFJAQh9BX+WihIKQXKjvXtZ0TRDizf2oY5OCD6XtICJgX/D4W9jjKUgoYRltDfPdubr/Ij+lBL3aBQR63jtmWlIzygb5D2+Cd3/6cw0OMKEkr5EKpfoSMgjnSYT23r2U1d0MlJIR4o1FHtQP7AFERDQmHZlP6fa1U0jaJTlJW1B+dgKvXZ/W9iCBT6s6GWmp+OPCCBBBxHNNlVEqZBsnf6ni89oEXtiC77VsUSZ9xAD6KNiA64IoOYL3bs2G26oYOzr0uJqjKLpqlPxQKC9o3oksg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nZ7Fx91T/DYZB+QDB1Cs0WWcPCDsO3UUg1PUVJi4IDo=;
- b=SuD4XxuDlOVHCuSSfpmYxG34lgQ/pHE8WSXpzp7jPEK/7V2nTQQdL4hwiPu0sbREsdEoRpLXLBvZYrDQfAC2xZw6HyqBAZQAXpLbL6MT6JoQm7pk8W8O9v6J/33GlWH9QcxdgPuWwGIbl0Rwp45ceSq7SfvWn697iZKrDq8JFgXgsx8GIcpnlO84pK4A18taVNgM3eGqJ0ScQH8yPphi55qdlz/6eAU/1ErIGSmmuO1Y7gsT7tjFhOTJq7dl+nA4IbDq5wMcqwHx8ft4RerSV+URoIfJTcAnIBJxskftS3/a7bJbRyvQNboz4jp9k4ZPOB1OcH+SUE7AUSWhdsQY9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nZ7Fx91T/DYZB+QDB1Cs0WWcPCDsO3UUg1PUVJi4IDo=;
- b=kySNXkTMLJyJOh30JHgGiuj0E/5a8Sz+mnLfuTrqEHAWJJ3CXvlGkYzrKjHnP/Fv+gFv2s5WYGgke3bMk1rb2VMtIE4NSBNHCUzEAIcOwSpOpMlES430ncUGFZYre/jMF0vW3GjivtPXYsRtXK4nZycQy1NIqNYI6EQNBczdENbi0Oi2yhWaHXYuF92gE96Q70H2jHcWdG8Hts4Wv09HyVML6i2DkejpP9j1nlv4C7CjWosVvOZ33KumS4bse+4eTKwKM7H7vKp5cuyIb16pUOWl6hnhrwyOmwRvE20JckwDYnIvaPG8VOyRXgWqVbsh+UIxNhZgwe09CyfYd5JDwg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by PA4PR04MB7549.eurprd04.prod.outlook.com (2603:10a6:102:e0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.11; Thu, 16 Oct
- 2025 02:57:50 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::4609:64af:8a4b:fd64]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::4609:64af:8a4b:fd64%6]) with mapi id 15.20.9228.012; Thu, 16 Oct 2025
- 02:57:50 +0000
-Message-ID: <b6170f87-f2ff-4c54-a8f8-adf9a1941785@nxp.com>
-Date: Thu, 16 Oct 2025 10:58:10 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/39] dt-bindings: display: imx: Document i.MX95 Display
- Controller processing units
-From: Liu Ying <victor.liu@nxp.com>
-To: Marek Vasut <marek.vasut@mailbox.org>, Frank Li <Frank.li@nxp.com>
-Cc: dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org
-References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <20251011170213.128907-4-marek.vasut@mailbox.org>
- <aO0tmUWA5H0J80Ov@lizhi-Precision-Tower-5810>
- <260b4db1-c02a-48a0-baf8-5e217c729824@mailbox.org>
- <e3ab9421-61a5-4ab6-8c72-6b0ab340f3a8@nxp.com>
- <ae9d1289-c0f9-47b9-b6be-e39d170425a2@mailbox.org>
- <a9a9867c-2653-45f0-89a2-39132335aac9@nxp.com>
-Content-Language: en-US
-In-Reply-To: <a9a9867c-2653-45f0-89a2-39132335aac9@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5P287CA0165.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:1ba::7) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA40418D656;
+	Thu, 16 Oct 2025 03:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760585298; cv=none; b=WMa28mTuQ33tzYuSNhF5b4ecorseI3J0C/HcIzgQd36fiHi8IqSEE43hhD8vrj/qGtYMh27UiSBm9GKh+koKYzaQOJBYUWRMAlDFITECyG8v4YVgCAukhotBoOL1SBhp4Cf7X1bvrxz/q1jZm4nsF0/39eeBUe4RP9pEOfUfA+g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760585298; c=relaxed/simple;
+	bh=YuhMJ7IURSN/c0WscS4LqfJVABe59UgRlw5ETqTHE4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nky7Q43zkRgfwI6jQdIbVhG8r1kkrJhpvffP5ymt4beCP6c/12wpTv56Dv3mermQHWrop52J8mvVUdJSPMCgw0DY+9m5fO9peHhOkLGFl2PyGyzro/UzzDME5rQDgdJqK3FST1nHeQtY73yxOX4yiNSNgP/fuadw8l/Knd6Ne2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZIyykUIR; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760585297; x=1792121297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YuhMJ7IURSN/c0WscS4LqfJVABe59UgRlw5ETqTHE4w=;
+  b=ZIyykUIRPKZ6rnzMzHG+69oZCYeoRgsLdv/Ux4LsetyP2K5/BcfMakGu
+   a4jRiCnrPWYfuYNr0NiiG1GFmJ9nXXPnDfQY7g9oazyBQHnR7XPYeMyJJ
+   mEsxH5P6uN8ts6wGHh4zGcU1vKt7ha3BFsaZ2YIISsc5j3VIRukqtVVuD
+   IKB6+jNRSUgwrVThEnfGSnJnuVZ54knAlOXXSTJ0H0FnX+/l6TroxLWDs
+   74cJsPiNGGaS58vizNe/q5QYnto10YhMvS8qLbHDOpLho9Isx8zgglPWD
+   V9psKlcvbIcjTn7J7YAM8wCksHF+cEYi/bGvExjZu9KH/EUB7TWFVoV5B
+   Q==;
+X-CSE-ConnectionGUID: w3oV1vUdSLeOoDXXm+jqhQ==
+X-CSE-MsgGUID: /vDtIPPFQpaQnuF4Z7vy/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="80211155"
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="80211155"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 20:28:16 -0700
+X-CSE-ConnectionGUID: h4zjBHpbS4WOJ1jCF0CC1w==
+X-CSE-MsgGUID: a2/yikpcSgKQK1Ay7/R7Ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="187431115"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2025 20:28:12 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v9Eew-0004Q9-0R;
+	Thu, 16 Oct 2025 03:28:10 +0000
+Date: Thu, 16 Oct 2025 11:25:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Elaine Zhang <zhangqing@rock-chips.com>, mturquette@baylibre.com,
+	sboyd@kernel.org, sugar.zhang@rock-chips.com, heiko@sntech.de,
+	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	huangtao@rock-chips.com
+Subject: Re: [PATCH v1 3/5] clk: rockchip: Add clock controller for the
+ RV1126B
+Message-ID: <202510161113.KpOm5Unm-lkp@intel.com>
+References: <20251015091325.71333-4-zhangqing@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PA4PR04MB7549:EE_
-X-MS-Office365-Filtering-Correlation-Id: 32c0ca8c-3eb0-4059-07da-08de0c5fcae6
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|7416014|19092799006|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?OERKRjZ4RUhTdjBhdjlubFAwKzE1RGs0WHE2N3VPcEZ4Si9xcmgvNDZmcENG?=
- =?utf-8?B?NW00RDBUZHFZcUVadkhOSHdZcVdaZEJ2UlFmYy9mbnJzWUVCanVJWUMwMXBv?=
- =?utf-8?B?UGthMnNGUU03YThJbkpXV1hiWE9FUmNjT2N4UGlMZXBrb1E1dEZrL2RXTjFh?=
- =?utf-8?B?bFFzNml4dVpsRExZaEwrS2N3bGVNSHN6cDhvSW1iSjdCc2lkK1l0dTJnQ2lk?=
- =?utf-8?B?KzVBckpwbDBET1htQmw2SlVMMGJ6VjY2U0M2SkxOUkFCZW5sMTFiQmdMOUsw?=
- =?utf-8?B?YURJeHNLMWxwNFhWYVhVc3Q1TzArWHpscFZ0c0Z3ZTE0TG1Nb1NuMXhhc3J6?=
- =?utf-8?B?YUduakFNR055OXluSEVyTHIwZEN6OUdLVFhVcUFpYWR6L3F0WVRQR0E4RVVa?=
- =?utf-8?B?NGx1bVREd2xrWGE3RTZyNEI3eGJDR0ZFTGtFTnBnd3JuZGJ1UHJ2bWdsM0dR?=
- =?utf-8?B?RjdmQy95ZVY1N3Z2eXdmcWpvVkFiay9BZlM1SmUvRXBEd3U2RmNpY2c3M01V?=
- =?utf-8?B?dE9qd2JPV0phc0VrLytNOGx1bW5uZ2J5eXQzaUpCSHlZaURZQlJHV3RTM0tC?=
- =?utf-8?B?Vnd2NmNxMzI2RDQ2SVFoRzFlcXlPVGxPQTU5MEVDc1lTUjNRTi8xUG9zOUdH?=
- =?utf-8?B?YmJpYnNNeVJURE91b3dsZlVLck5mQzlqSHRVUWlqV2l3QkhJMzV0N2M1dnhD?=
- =?utf-8?B?bFVmZnZCNy9zWGZvdHEyVEVVbjFBcXZQcTNmSTVVaHZMTUUxR2pSTnhrTVpW?=
- =?utf-8?B?RHhxcWNkcStCZzVOenptUzYzQmNjVzhFZkN6MGo4OEp2dkF6YUxyb0pwY3Bs?=
- =?utf-8?B?di9UMWNhQWxQWjJvanRST2VxWmlVSjJBaXl4TTV1OGZqdnNmaVo4UVlPVStI?=
- =?utf-8?B?TUR4aU1USUtrS2RXU2hSMjNrMmhlV1dPQkl4eWVwb05YK2tHelZkRlVIODl4?=
- =?utf-8?B?SURqb2pOOHd3R2NhS1o5QmRQWFdSTEhFZ2hlTXlabDNRalNvQm12VFFIbWJ1?=
- =?utf-8?B?Kzh2aXpNOUJOd04vNmhTWko1clMxWmtQbHhiamphOTZ2OStibk1tZHo2ZU9o?=
- =?utf-8?B?OTVQYkIwYUhiSEVFTTF3TXNjRWxTY2FzaGFNMkphVVphT084TE1VL0k2NHJm?=
- =?utf-8?B?bnFheStjWGI1TjFFMnRraHBrRmtmRllDakZ1N1k4R2plUUYvS3lYY1FNMXdj?=
- =?utf-8?B?dUlNTk93VlR0NzlJYVNncFJIdEFwbkxuNnRyamRUTWMxQVF0Skx1U1ZoZlFZ?=
- =?utf-8?B?ZWY2RGtSZk5UM3N3N05ZRGJXZVJLZTh5VFE0c0FYY3ZoWGV5YmtLQm5MWWJu?=
- =?utf-8?B?YkVoZ3FqdnhIN0JLV3M1NnlFdmVZWEpJTEFyemFOZU8va21ZaGUyQVdZOW1K?=
- =?utf-8?B?Y0o4YThQbGJFWTdVY0xtVGVNMXJIRnBCdlRySVlDblp6bmRQRVN6eXJvYUFU?=
- =?utf-8?B?SHVtdFhwODh6VE5jWVFNMTJ5L212U0wvNW1GOHJSK1doZTZ4WThSWGZJeXdV?=
- =?utf-8?B?VzZXeTdmNmhEMDhDSGdOS3g1b1BKZ1JyTVZNcElkZ3p0eStFVlcwYTJCUjF4?=
- =?utf-8?B?RG9xNExQMGNLcFdKcDJyRWtBV1pLVm5vdGJrT1hiRmw5UFJZbjhKSW1rT1hI?=
- =?utf-8?B?ejBqSDhpblZBMmRWcldILzNQZXRNM3FZSUowbW5wNGtyemYxSnRiRzMvRTdM?=
- =?utf-8?B?WGc1WUEyQlFuUEpZNUVuYUptRTM2MENwS3dsQXlXZ09CUTQwNVllRzBEbnZN?=
- =?utf-8?B?Tm5lV25zMVJ1R2FBdUVjck01Umh0VkZMdEdNYnZCSXluK0VsSnVmaUQrZGEz?=
- =?utf-8?B?S2tXdk15ZE5heit1ZzdNSXdOeE5aVnFJRVFaV0Z5ZzlSRFlRTHBjd3FOVkd2?=
- =?utf-8?B?c1MyS1dhWCswUWFndGxNajJwMzQ0Y3h1R3VTdXpTbEpDMzl1Znhqemdsc0tF?=
- =?utf-8?Q?Qi43p8KCaPCTBXPfIFLo5npVxrNUP54W?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(19092799006)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?Z0x6ZUQwNG9ySUMvbGJobEc4NW95czlCZitiZ0FwSWR3RFdEV1VxamY4UXpG?=
- =?utf-8?B?MW9jOTd6Sng1MFlrYVdzckxFKzdoM2ZpZUgzendHcVJPSWV5UFpzZDAzdlhC?=
- =?utf-8?B?NzQxQU9qRlBLWEVNd003YWJETkVjQXZMOUpXT2dyU2trWXZRVUpzdG1jdWxW?=
- =?utf-8?B?bmRvejNwRGxVOGFXNXlBWXFOTWxDRCtQdVdTdm1IN3FHWkV2d3FKZjE5YXNT?=
- =?utf-8?B?dm5VbDY4TXBWbTJFdG1iN0UxaFRCQWp4ZDlqYjNmRkxFTFVZaDdrZnRtSktR?=
- =?utf-8?B?V21UMGk0SGhqRFdETC9pY1gxVWVET2cyemE4UW5na3BiQjRBbG5Za0dCQkUx?=
- =?utf-8?B?V0ZlSkJVUTNVRUhiTjN3dWZNZFpMS212cDhDVWRRdkdwZGRtYytwRUFjZ3lp?=
- =?utf-8?B?OTJ5cU9FTjFxT2N6cWh1Qko2TXJ1bkh0NzFvTkxkTXJtczhpdjFJNThMRisr?=
- =?utf-8?B?K0grZ25XbHJKL0hqWE02QTdXZUhTV0JHUFVuMndwL3RSZWxjODM5cUtoOUtj?=
- =?utf-8?B?RXRKd2NIOFAxZVBpZTFBNU5pMmVlTVAweGJSYVdEcW9YVDlJVnVsZ0txeUJh?=
- =?utf-8?B?YWs5RTlmSzVrSS9CUk11SEtFU3M1NVBYMVFsdyt4YUZSNVROZ3pwK0RvSmRy?=
- =?utf-8?B?MWtvMnczUGo4bFMzOFNQcTk2RGRZNmUrSWFWZjJ3cFZBN0Z6YUVCV25vY3ZM?=
- =?utf-8?B?WmlFYXBKcFVISHhjU1grRk0zOVdQU05VOC9IZkF1bjFMQ2tXS3Q3djJrOGRC?=
- =?utf-8?B?dkFVVTd3Rkg0cDFEZUkzRXVUYkxYeVRjQzBENHBWejIyRXF3Z21CTWNnbk93?=
- =?utf-8?B?YXlXckpKVTlvVzlPZmt4cWluUGExbm8yMTR3Y2NKYi9rTlRBOU11Zll1a1RS?=
- =?utf-8?B?eWoyYlVucFRJR0hXM2NLZlhyR1FWS1hydnAzZVh3MnlFWEhWeUtNaW0yaXVW?=
- =?utf-8?B?OUM2c29LaXNFMzgrbWhJOEhjVGtYcVlUZkxRSXkyTEhwUUZpMWYrY1ZUSytV?=
- =?utf-8?B?MXgvVzdqVWcremw1TnJYTnVQMzM5YkQ1TWZOWURyVWdreUNwMUFNQ2lQUEVw?=
- =?utf-8?B?dzFialJPTzJIREVzQXJCRDRnbERjclk0SVRGOERLeU5sd3lPZzRTMzJJSGJL?=
- =?utf-8?B?eGhNbHEyRU13OXU2ZTBsK284N0dRWmt3OURUelVGbExPY1NvZGQwbHRiWmtN?=
- =?utf-8?B?Uk51QkVjc25Kcm1PRGFlRmNONU5xeGlVMEU1emwvNC9RVkdpU3BlZlZHNCts?=
- =?utf-8?B?VzhWY1k0RUZROE5pdkFtWU9IdHV1V0NoRTJLbDJ6elNtTmpNVUlJdlNNcGZo?=
- =?utf-8?B?WmdNdEZDWFM1eGNqN0NYd25CUXdac1ZzRzJMcTNnalQ1RDlvRExQTjJZbjZI?=
- =?utf-8?B?VDFvcTFOaWRlWnFNbHp0dXlwMmpxTytMMkN4UDFWVWNnMWtESlR4UTlmQ2tM?=
- =?utf-8?B?OVU1eXZiT0pBQVlWeEZOTUs5YXAxbEVxMGFPMlU2ejFwT3ZUNDlLKzl6NzJJ?=
- =?utf-8?B?MXFUNmdoSGN4Q2w2RVJEYjA4N1UzNnhybUFGUFdMalg3ZGdQdGlOSVJBRXRO?=
- =?utf-8?B?angwNlduaG11cXptTXk1OHN4dzk0T1hya3d5T0Z0K0tLRUM3MklyNlpzYWFi?=
- =?utf-8?B?NW91UUNyYktNQW5uaHBQM3hkOFJScm1lb2xrbUZBSXJhOXQ0U2tJYkUvVng3?=
- =?utf-8?B?UUxLVHZpWnZGMHNZN1o5dEQzL01CR29MbUlVTHJlT0I0TTgwMkcxaERvdnRm?=
- =?utf-8?B?aXJZSEFaNkVqeFMvZC9VWk5jRzhrd0FMM0JrMEtRMldxVFR4Y3Y1SG5qd0Er?=
- =?utf-8?B?NnRwekdZWG1mSGF4TjNvZ1c0THJ2SVZjWGFpL0lRUEk0WFp5b25QUEpYd2RR?=
- =?utf-8?B?Z25Hc0FMa09zbW9ZeGtNSURFeGlub1R0bGUxTjJvNDVyckRkWWVrelltMXNP?=
- =?utf-8?B?azMvdTJ3eUNBc3VTc2M3RGdTV3FWMkVMNDBKVUVFL01sNWVNblRRRFAza0Nr?=
- =?utf-8?B?MWhDbllyV3IwOWdiM3F5aStOSktOZXhSeVprSEVHdko5WWh6Nm0rWSticFQz?=
- =?utf-8?B?djUwekdjYmRKeFhmajhHUDZqL1dnVkN5cVZCa3NUVmkrZVhlb0hKanRNTmFT?=
- =?utf-8?Q?oU6u4jvtku5AasGmhAZmtnrCO?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32c0ca8c-3eb0-4059-07da-08de0c5fcae6
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2025 02:57:50.1098
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SU43JoBF/qf16tpbKGRPR+pKmym71GByepSKHA4CnrMwsHCKHWGz2xPubbAmpKjYe34OwcSrspBUWnxEMby7rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7549
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015091325.71333-4-zhangqing@rock-chips.com>
 
-On 10/16/2025, Liu Ying wrote:
-> BTW, i.MX8qxp/qm DCs haven't got any Dither unit.
+Hi Elaine,
 
-Hmm, sorry, I have to correct this - i.MX8qxp/qm DCs do have got Dither units,
-and it's documented.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rockchip/for-next]
+[also build test WARNING on clk/clk-next pza/reset/next linus/master v6.18-rc1 next-20251015]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Elaine-Zhang/clk-rockchip-Implement-rockchip_clk_register_armclk_v2/20251015-175108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20251015091325.71333-4-zhangqing%40rock-chips.com
+patch subject: [PATCH v1 3/5] clk: rockchip: Add clock controller for the RV1126B
+config: arm64-randconfig-003-20251016 (https://download.01.org/0day-ci/archive/20251016/202510161113.KpOm5Unm-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161113.KpOm5Unm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510161113.KpOm5Unm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/clk/rockchip/clk-rv1126b.c:17:
+>> drivers/clk/rockchip/clk-rv1126b.c:146:7: warning: 'mux_ddrphy_p' defined but not used [-Wunused-const-variable=]
+     146 | PNAME(mux_ddrphy_p)   = { "dpll", "aclk_sysmem" };
+         |       ^~~~~~~~~~~~
+   drivers/clk/rockchip/clk.h:740:43: note: in definition of macro 'PNAME'
+     740 | #define PNAME(x) static const char *const x[] __initconst
+         |                                           ^
+
+
+vim +/mux_ddrphy_p +146 drivers/clk/rockchip/clk-rv1126b.c
+
+    86	
+    87	PNAME(mux_pll_p)			= { "xin24m" };
+    88	PNAME(mux_gpll_cpll_p)			= { "gpll", "cpll" };
+    89	PNAME(mux_gpll_aupll_p)			= { "gpll", "aupll" };
+    90	PNAME(mux_gpll_aupll_cpll_p)		= { "gpll", "aupll", "cpll" };
+    91	PNAME(mux_gpll_cpll_24m_p)		= { "gpll", "cpll", "xin24m" };
+    92	PNAME(mux_cpll_24m_p)			= { "cpll", "xin24m" };
+    93	PNAME(mux_24m_gpll_aupll_cpll_p)	= { "xin24m", "gpll", "aupll", "cpll" };
+    94	PNAME(mux_24m_gpll_cpll_p)		= { "xin24m", "gpll", "cpll" };
+    95	PNAME(mux_24m_gpll_aupll_p)		= { "xin24m", "gpll", "aupll" };
+    96	PNAME(mux_sclk_uart_src_p)		= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2",
+    97						    "clk_uart_frac0", "clk_uart_frac1" };
+    98	PNAME(mclk_sai0_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2",
+    99						    "clk_audio_frac0", "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai0_from_io" };
+   100	PNAME(mclk_sai1_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
+   101						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai1_from_io" };
+   102	PNAME(mclk_sai2_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
+   103						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai2_from_io" };
+   104	PNAME(mux_sai_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
+   105						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai0_from_io",
+   106						    "mclk_sai1_from_io", "mclk_sai2_from_io"};
+   107	PNAME(mux_100m_24m_p)			= { "clk_cpll_div10", "xin24m" };
+   108	PNAME(mux_200m_24m_p)			= { "clk_gpll_div6", "xin24m" };
+   109	PNAME(mux_500m_400m_200m_p)		= { "clk_cpll_div2", "clk_gpll_div3", "clk_gpll_div6" };
+   110	PNAME(mux_300m_200m_p)			= { "clk_gpll_div4", "clk_gpll_div6" };
+   111	PNAME(mux_500m_400m_300m_p)		= { "clk_cpll_div2", "clk_gpll_div3", "clk_gpll_div4" };
+   112	PNAME(mux_333m_200m_p)			= { "clk_cpll_div3", "clk_gpll_div6" };
+   113	PNAME(mux_600m_400m_200m_p)		= { "clk_gpll_div2", "clk_gpll_div3", "clk_gpll_div6" };
+   114	PNAME(mux_400m_300m_200m_p)		= { "clk_gpll_div3", "clk_gpll_div4", "clk_gpll_div6" };
+   115	PNAME(mux_200m_100m_p)			= { "clk_gpll_div6", "clk_cpll_div10" };
+   116	PNAME(mux_200m_100m_50m_24m_p)		= { "clk_gpll_div6", "clk_cpll_div10", "clk_cpll_div20", "xin24m" };
+   117	PNAME(mux_600m_24m_p)			= { "clk_gpll_div2", "xin24m" };
+   118	PNAME(mux_armclk_p)			= { "clk_core_pll", "clk_core_pvtpll" };
+   119	PNAME(aclk_npu_root_p)			= { "clk_npu_pll", "clk_npu_pvtpll" };
+   120	PNAME(clk_saradc0_p)			= { "clk_saradc0_src", "clk_saradc0_rcosc_io" };
+   121	PNAME(clk_core_vepu_p)			= { "clk_vepu_pll", "clk_vepu_pvtpll" };
+   122	PNAME(clk_core_fec_p)			= { "clk_core_fec_src", "clk_vcp_pvtpll" };
+   123	PNAME(clk_core_aisp_p)			= { "clk_aisp_pll", "clk_vcp_pvtpll" };
+   124	PNAME(clk_core_isp_root_p)		= { "clk_isp_pll", "clk_isp_pvtpll" };
+   125	PNAME(clk_gmac_ptp_ref_p)		= { "clk_gmac_ptp_ref_src", "clk_gmac_ptp_from_io" };
+   126	PNAME(clk_saradc1_p)			= { "clk_saradc1_src", "clk_saradc1_rcosc_io" };
+   127	PNAME(clk_saradc2_p)			= { "clk_saradc2_src", "clk_saradc2_rcosc_io" };
+   128	PNAME(clk_rcosc_src_p)			= { "xin24m", "clk_rcosc", "clk_rcosc_div2", "clk_rcosc_div3", "clk_rcosc_div4" };
+   129	PNAME(busclk_pmu_mux_p)			= { "clk_cpll_div10", "clk_rcosc_src" };
+   130	PNAME(clk_xin_rc_div_p)			= { "xin24m", "clk_rcosc_src" };
+   131	PNAME(clk_32k_p)			= { "clk_xin_rc_div", "clk_32k_rtc", "clk_32k_io" };
+   132	PNAME(mux_24m_32k_p)			= { "xin24m", "clk_32k" };
+   133	PNAME(mux_24m_rcosc_buspmu_p)		= { "xin24m", "clk_rcosc_src", "busclk_pmu_src" };
+   134	PNAME(mux_24m_rcosc_buspmu_32k_p)	= { "xin24m", "clk_rcosc_src", "busclk_pmu_src", "clk_32k" };
+   135	PNAME(sclk_uart0_p)			= { "sclk_uart0_src", "xin24m", "clk_rcosc_src" };
+   136	PNAME(clk_osc_rcosc_ctrl_p)		= { "clk_rcosc_src", "clk_testout_out" };
+   137	PNAME(lrck_src_asrc_p)			= { "mclk_asrc0", "mclk_asrc1", "mclk_asrc2", "mclk_asrc3",
+   138						    "fs_inter_from_sai0", "fs_inter_from_sai1", "fs_inter_from_sai2", "clkout_pdm"};
+   139	PNAME(clk_ref_pipephy_p)		= { "clk_ref_pipephy_cpll_src", "xin24m" };
+   140	PNAME(clk_timer0_parents_p)		= { "clk_timer_root", "mclk_sai0_from_io", "sclk_sai0_from_io" };
+   141	PNAME(clk_timer1_parents_p)		= { "clk_timer_root", "mclk_sai1_from_io", "sclk_sai1_from_io" };
+   142	PNAME(clk_timer2_parents_p)		= { "clk_timer_root", "mclk_sai2_from_io", "sclk_sai2_from_io" };
+   143	PNAME(clk_timer3_parents_p)		= { "clk_timer_root", "mclk_asrc0", "mclk_asrc1" };
+   144	PNAME(clk_timer4_parents_p)		= { "clk_timer_root", "mclk_asrc2", "mclk_asrc3" };
+   145	PNAME(clk_macphy_p)			= { "xin24m", "clk_cpll_div20" };
+ > 146	PNAME(mux_ddrphy_p)			= { "dpll", "aclk_sysmem" };
+   147	PNAME(clk_cpll_div10_p)			= { "gpll", "clk_aisp_pll_src" };
+   148	
 
 -- 
-Regards,
-Liu Ying
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
