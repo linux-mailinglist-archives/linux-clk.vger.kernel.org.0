@@ -1,201 +1,116 @@
-Return-Path: <linux-clk+bounces-29285-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29298-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B14C2BEAC9C
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 18:37:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C68CBEB17E
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 19:39:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3645E35F37D
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 16:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 264D95E5FBD
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 17:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2E22BEFFF;
-	Fri, 17 Oct 2025 16:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92485307AE1;
+	Fri, 17 Oct 2025 17:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBrR57zW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NT0kk5AT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4416B2BEC52
-	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 16:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5134F221726;
+	Fri, 17 Oct 2025 17:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760719035; cv=none; b=caqecDaa3Y98jQ5pnA1DBJbOBi1955F2PUaFmsmq7N4dyrKeXloyMYILbspUedn2jLxUgAFBeBDOgy7Dv2U3PiQlKD3I/WV4LLKxaQsbIw2o45Oh+ywKk+kzdhKVUwjN68/MsA5uILKBO1YGEsILT89JExI7ie3uhgje7ZUbgns=
+	t=1760722779; cv=none; b=PQGu7n8ZdD4ihx0s5glaaCJFel3VMqjLGzW53ri17yteryRvIFu95dNnO0ieQEkXlaDjMGY5tkGsRJ+g5gDaZNksy+YZLuwAXD4nGRjMs+07UlFzLneaIrrFWxNfWSxUX/4SZEBkduM3nvylKIbD+RAgydXTjJ4lpKjRh6CjKAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760719035; c=relaxed/simple;
-	bh=K5dh/21yz367t5636zz5BS+SRG5wCokC8YohqZIkQhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y53yz5ejN7gPoZ2w0JOCiBLwpJXZwktPj4bG83qDAPpkXCUM6EWrKRru49ZvtMn2IZ0GRcOqyuH+xowLJ7Bwd6ayFTr92JS+MRwdw+mUwDAZ3MrWccpPQOL3cYbYO1Z38gOu3fADkKdB3UxMmpmzoyXFX0BHhLTnF2CuNvt3mQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBrR57zW; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-78ea15d3489so25435876d6.3
-        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 09:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760719032; x=1761323832; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZqTIsgME323ZkO31yyQWUQxJPAMGciP0ot1SYinmXM=;
-        b=gBrR57zWpXm2w/7blqiasX6rmV7vMOXlvxZj17ty4WRF2XnRnvCdJtbZv+TCRnKfEx
-         dJRlYjhECXVkQ9Q1HIXqpT24ZGQzQyQsiU9ADp3KCRFJ3G7mv1AiaubTgOpTRR3QJiZ3
-         nL5TZx6sR9W1Vxti398bZwYcjYqIqFXg7IwscFtEsLL6pqzhaQpJbypNsFnFKem58Lnt
-         vDxezsCzssRFdXkEHo2TWlwIp5pluD9Qrl4KdwvuiuR/eE1k/nRL5SkfuLiqgxJrKVTe
-         CXGLcSwa1vOVG6qTZzmTOJQt6xSCdBQTV/aXP+AmQChG2FjRoFtd4Y80fXd9rDh0uUM7
-         a6Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760719032; x=1761323832;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lZqTIsgME323ZkO31yyQWUQxJPAMGciP0ot1SYinmXM=;
-        b=lXRvVsVnGHM5mYmkQy49gqKLKzYyEKhNwoXQHR6ooX8kUxXKsSHabsy0wVOnaJS1/R
-         yo+5PPNWTNyryeKEhOEQMy4RbqHfEgxgNokZ8OVrYIuIAm6VtIma6yVWO0ynUSywi+y9
-         /RVsMcvnLbGJVeV2w3tXlpEv/+i5UponQxXiTIJhSe6XVsZ8ZYtwAHFX0awhNSNmpa69
-         hhi/61LxV1VINYdCP5u82l4uvsZm1/knTTVijovqKMmFHl1+KyZjnvZm2KnyypsI17x8
-         2WR39hi9RoLSUCiRG+ir5k0KUHIfibc9IdmyWXdUMx6ANy1ZjsW9OInODKESAgf4Z/DL
-         9Xfw==
-X-Forwarded-Encrypted: i=1; AJvYcCWzlOQgWomnnNd4HDhFMefcM9npE52ZgY5ULCaA6FVKih4XHVUYx+Kfo6k2P3Vrner/8VV5e2CzOZ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB2ZJLjJ+Vc1eodd0wuRzp3kmF4Z5omf1CcJWV26Wvli14w2O7
-	B31h5S2pL4v54ZzEqLfe6lY1UfOXuMZlWY/NH3QRIVuyEzRGPFWCCQbh
-X-Gm-Gg: ASbGnctSJ2z6i2gY6PMeubylKCFGzV0xcby0uIMhr5c1DxMLh3PFXXL/ANanjVLrIcB
-	gjQy//gP8gP4lzkAoSJU8QosLQV8o0JGdQoVsAxBiRJpiiy8oCRl3JeFXcKSGnMv59fLZNna46C
-	FF9zm1a7uUODHkfR3HzuGF8hzHtn/4HSMhhwoEFhWL/txYj+ygjuQ/CWOWOihRHtMxTt85Gp6Fz
-	roSdAed/FncbAeAoDlmggpCljrVU+w8J+HNJpDF9wMwYAobjLZkUGNbmJotgZw7xxU+FfZ2Ory1
-	asoOPFEwYfXYwt4Cih0+TZoZ5iRfcciIL0GfISrxsoyLBxswrbcwcT1mQCWX+kx09dR6sLwlw/P
-	Dd+5lWlk39HXfqmVMYVLg+M0KE/3bLLaWtrLFp7Nm/PheozuZQAFcDFzSfgxsdj2gr/EUp4DIzM
-	2YAEV1j0U=
-X-Google-Smtp-Source: AGHT+IEBLNSjsT2f6SbTw5aTPGakjHLdlQrL5hue+DxfPG8mzc3zrpMssrggDkT+31HrLygOdkrpIg==
-X-Received: by 2002:ad4:594b:0:b0:87c:2920:5730 with SMTP id 6a1803df08f44-87c29205b08mr24398926d6.40.1760719031704;
-        Fri, 17 Oct 2025 09:37:11 -0700 (PDT)
-Received: from localhost ([12.22.141.131])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87d02d91324sm1575686d6.65.2025.10.17.09.37.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 09:37:11 -0700 (PDT)
-Date: Fri, 17 Oct 2025 12:37:09 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org, qat-linux@intel.com,
-	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] bitfield: Drop underscores from macro parameters
-Message-ID: <aPJwtZSMgZLDzxH8@yury>
-References: <cover.1760696560.git.geert+renesas@glider.be>
- <792d176149bc4ffde2a7b78062388dc2466c23ca.1760696560.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1760722779; c=relaxed/simple;
+	bh=RLpFlKj0oX6F2FHmvB6odL7qjqFC0HmExWxoVhIdU1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UvyS4bxtzcEfUO//Ezexi0Lj5QwG1MlYxsOIhUXmMBcMTbUGQMRLLucauGlguhJmARoqgaaw9cvBQuaGzY6+1CJ7LGjpuSGtvzaKhpsDJxtbctyDTNik1DvncTA4wlJzPPMQ55YholeG9ClBGfmsU5+bk4hjvR8zmgtANWNmdog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NT0kk5AT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD47C4CEE7;
+	Fri, 17 Oct 2025 17:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760722779;
+	bh=RLpFlKj0oX6F2FHmvB6odL7qjqFC0HmExWxoVhIdU1A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NT0kk5AT8tFG1ex9SS8EUtqaH3MN+k/hRFCGSaqU55hscTm9YrecMaHll0u79zNw6
+	 sIBNy7OA9YnQH8zcWJvaMly7J6UxVErlApIMtWqqtxuCay5hHv3uxPVR74IQZH7Eo7
+	 POgxmUZCozpR5oUMwioI8150ALcQrPO9kadHLQDIRlSHNVEt+zPMCklNd1E0+Dvk0M
+	 FLUc8epgBZ5fXzgVrxCcc2oNTqFhlAuQ56P5auW6pS+BXbjn0jHuPDkH8FdSsJSL4W
+	 uFicrrFA5Ph3zrKxR/crhBXdSf97NMqd7lwWACFyVrsYLycFeAVJesTkco7Sb8QbzJ
+	 h9rvU97EVVwQg==
+Date: Fri, 17 Oct 2025 10:39:36 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre
+ Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>, Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Miller
+ <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+ <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, Jonathan Cameron
+ <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang
+ <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, Yury Norov
+ <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Johannes
+ Berg <johannes@sipsolutions.net>, Alex Elder <elder@ieee.org>, David Laight
+ <david.laight.linux@gmail.com>, Vincent Mailhol
+ <mailhol.vincent@wanadoo.fr>, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, qat-linux@intel.com,
+ linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+ linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH treewide v3 2/4] bitfield: Add non-constant
+ field_{prep,get}() helpers
+Message-ID: <20251017103936.49fbafdd@kernel.org>
+In-Reply-To: <CAMuHMdVS5KmVkv_pmc+R-EXik-Z1_7nuiHM=vm1Cu8v91wmLBQ@mail.gmail.com>
+References: <cover.1739540679.git.geert+renesas@glider.be>
+	<2d30e5ffe70ce35f952b7d497d2959391fbf0580.1739540679.git.geert+renesas@glider.be>
+	<20251017081912.2ad26705@kernel.org>
+	<CAMuHMdVS5KmVkv_pmc+R-EXik-Z1_7nuiHM=vm1Cu8v91wmLBQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <792d176149bc4ffde2a7b78062388dc2466c23ca.1760696560.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 17, 2025 at 12:54:09PM +0200, Geert Uytterhoeven wrote:
-> There is no need to prefix macro parameters with underscores.
-> Remove the underscores.
+On Fri, 17 Oct 2025 18:00:41 +0200 Geert Uytterhoeven wrote:
+> > +/**
+> > + * u32_encode_bits() - prepare a u32 bitfield element (non-const)
+> > + * @v: value to put in the field
+> > + * @field: shifted mask defining the field's length and position
+> > + *
+> > + * Equivalent of FIELD_PREP() for u32, field does not have to be constant.
+> > + *
+> > + * Note that the helper is available for other field widths (generated below).
+> > + */
+> > +static __always_inline __u32 u32_encode_bits(u32 v, u32 field)
+> > +{
+> > +       if (__builtin_constant_p(v) && (v & ~field_mask(field)))
+> > +               __field_overflow();
+> > +       return ((v & field_mask(field)) * field_multiplier(field));  
 > 
-> Suggested-by: David Laight <david.laight.linux@gmail.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v4:
->   - Update recently introduced FIELD_MODIFY() macro,
+> Unfortunately gcc emits actual divisions or __*div*() calls, and
+> multiplications in the non-constant case.
 > 
-> v3:
->   - New.
-> ---
->  include/linux/bitfield.h | 106 +++++++++++++++++++--------------------
->  1 file changed, 53 insertions(+), 53 deletions(-)
-> 
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index 5355f8f806a97974..7ff817bdae19b468 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -60,68 +60,68 @@
->  
->  #define __bf_cast_unsigned(type, x)	((__unsigned_scalar_typeof(type))(x))
->  
-> -#define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)			\
-> +#define __BF_FIELD_CHECK(mask, reg, val, pfx)				\
->  	({								\
-> -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-> -				 _pfx "mask is not constant");		\
-> -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
-> -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
-> -				 ~((_mask) >> __bf_shf(_mask)) &	\
-> -					(0 + (_val)) : 0,		\
-> -				 _pfx "value too large for the field"); \
-> -		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
-> -				 __bf_cast_unsigned(_reg, ~0ull),	\
-> -				 _pfx "type of reg too small for mask"); \
-> -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
-> -					      (1ULL << __bf_shf(_mask))); \
-> +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
-> +				 pfx "mask is not constant");		\
-> +		BUILD_BUG_ON_MSG((mask) == 0, pfx "mask is zero");	\
-> +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
-> +				 ~((mask) >> __bf_shf(mask)) &	\
-> +					(0 + (val)) : 0,		\
-> +				 pfx "value too large for the field"); \
-> +		BUILD_BUG_ON_MSG(__bf_cast_unsigned(mask, mask) >	\
-> +				 __bf_cast_unsigned(reg, ~0ull),	\
-> +				 pfx "type of reg too small for mask"); \
-> +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
-> +					      (1ULL << __bf_shf(mask))); \
->  	})
+> So I don't think this is suitable as-is.
 
-Hi Geert,
+Sorry I missed or forgot that you replied :(
 
-Thanks for the series!
+The inline helpers exist already have have a lot of uses. If __ffs is
+more optimal then why not make existing helpers use it as well? 
+It'd be far more beneficial:
 
-I agree that underscored parameters are excessive. But fixing them has
-a side effect of wiping the history, which is a bad thing.
+$ git grep u32_encode_bits | wc -l
+391
 
-I would prefer to save a history over following a rule that seemingly
-is not written down. Let's keep this untouched for now, and if there
-will be a need to move the code, we can drop underscores as well.
-
-Meanwhile you (and David) can propose a corresponding rule in
-coding-style.rst and a checkpatch warning. That way we at least will
-stop merging a new code of that style.
-
-Thanks,
-Yury
+Sorry if I'm being slow..
 
