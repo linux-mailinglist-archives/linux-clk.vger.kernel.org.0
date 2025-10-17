@@ -1,138 +1,169 @@
-Return-Path: <linux-clk+bounces-29249-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29251-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 009AEBE82BD
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 12:55:50 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45242BE83B7
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 13:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 925AF1AA47CF
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 10:56:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B9914E6C89
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 11:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08B232A3E5;
-	Fri, 17 Oct 2025 10:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E2632F75B;
+	Fri, 17 Oct 2025 11:03:11 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1C4320CB6;
-	Fri, 17 Oct 2025 10:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5B432D0E8
+	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 11:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760698514; cv=none; b=bD1rHmmMGI3u2zqsOyACuZoQtwUOcFi9uafdIiy/BeUeh8sQq4bO+qKvs/e5VhATV1LIa96gWsn7zQYp0AWOK/LB1RzOXGZ2z9YlFUcyo7Vftu3FoNoiP6pk6JZE/H70RZCKZPNZNjBHZyQ0MId+Q7thzlW9LFvxJUz8PGUByqo=
+	t=1760698991; cv=none; b=eFa7BuKVg3wvx89Y079V0B+4qqRcicwE12vz8Wdj3KksFniHMBS5i+YLK4HZwFYtOG5GFX98c/YeR7fPl5fGFm7eQP4FvXBw5sgMTLx9zapSrdcSkNFVE86pFvBD+cWo7F4nByHvCMQaIBlj3zdiYqyzavfJDcrTkr60xdH88nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760698514; c=relaxed/simple;
-	bh=YhNStRN+RN3qBLGJrZXY7hU9RUoPioJIdGPZbOpDi+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZU5eDxJStkFypkBS+TjYMHBT5LmiTdzzHEI7ZkNwz48R3EyAwwoCSfpUCf0g3DsxtzGZpzj2u6vkEAVH40dPT9+/5TNX/NjXAdGxU2+9wdzIDExYworkQcnUMya1wxb5OEmcKfPdCd9eeSDFrWMLofxPLNnvwk6kIlBjSthpDBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442C9C4CEFB;
-	Fri, 17 Oct 2025 10:55:05 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	qat-linux@intel.com,
-	linux-gpio@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v4 4/4] soc: renesas: Use bitfield helpers
-Date: Fri, 17 Oct 2025 12:54:12 +0200
-Message-ID: <5182a66c22d80efd3fa7ccedf62554d9f95c0a40.1760696560.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1760696560.git.geert+renesas@glider.be>
-References: <cover.1760696560.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1760698991; c=relaxed/simple;
+	bh=LrniXy6ZCFM530ZMtcnDRQn9pcEmCEynLCDVJ3AMIhs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BRPDc0opRV4Tbc7lpSRTS5bLkT5VyH/tP+0XAoAb4i80J3BME5HeoEWBUmA5GGrANHR/qA074aCKRM+6puQ87Lt4DSJoGvHE/R1TaK/KsGLZEJC3UaXvRITpS1EwQPy89+XsMmuqo5GE/wfDBtKz4OPfUQ/yAcTG+A2c5NPyooU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-88f86727622so274508385a.1
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 04:03:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760698989; x=1761303789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XCpfZFAx3hiLnczCJXcXTR7Dek411X8RRc+fD4xQf5M=;
+        b=hQB//OTsnWsdj+V/nWzueiBz+RxNa+r20COPRJJ5ateOc/I6Y9/EQ7ENk1ZVVdKiym
+         xUMCjMZJRUf64CV4zgvAWsUGFH3FgaB7jFywLKIy44FFMznhuT3Li5XmOR2RRAoZqby4
+         BHh6kJIFdChiizjv421wK+e3BEAYoks+XhJ0YafDUfwgbYxaH28yvPx3J6tTBBzKFANc
+         kA3U+zIY/vxgngogfv65Idq3fx0U3R1WLUxtyiDBtfLaAaacoF9vJ+7OUmeg68ocePHX
+         50Uhe6PyDvK1ltzhnhHG2Gm5akLZ/YYvegzXITZ48xBLZs+qY8+JFbktJrGtiaZSJZFj
+         9Ijw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBnJQwmHlAXPNGaShHdrFLG1gqLp/XzuqK2JOXs0kwZNxaRTd4vmBUnTGUw7JG8dJzyJWeYylmejI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHfB2QU/ruMAW+S7kB447+RG8YNDH7jHcLs0TuEWEvz886DaIh
+	OV6rgsg35FY9bRK9fCLpgP1Al0wdial9ZBsRr4XU+dP6U16bD9oLgjLBsWjLoyZh
+X-Gm-Gg: ASbGncumo99Z4fd1luUhSdZ3ZQx0hU6tMCXVSqIYyLP8mJcLMPR3Y6B8cOLJY7weGpa
+	KR3EuvlJtJAvGTUmH8UrU1/5tYvAiYjR6vDaOvUiGxW9V5FvcLZ2t9hYPmfOYnjBFLuj5Pz2+G3
+	DthN8kaZM9Qym18NNWgrElOEZpLxlO8fcfeKGkwENvbTOplaAs3DRiXFFzJmoWIWfCEyvvalB8M
+	AQPUOBV1oc7DW2WK4LTdirIHMy8l3L/F0UncA/mm1Z5m+Bsz3JZSXSL0Qn2N+8wXMEA0h49NRH2
+	v4/ltO4IdemDRxOHv4rrnAVh7SrsbhxepXqDvA141nXsH3gG6m6p4GOe9d1buijaxLlZQCz1+z1
+	1MZYpkAy07PeWSsxPUCRXmCcYK9Ygb53c6gYlFdfe6GFxEsDL+SGBFaErZd2661RGMdKSwQaz3A
+	2YF30KZEHNlylzKjiPLaSUOXpQN2vZZ3DgkSmGUW3A33/GBe5J4pi4
+X-Google-Smtp-Source: AGHT+IGpcIZ/Saj1uf+BbIQT1qKD0MVLXt4F0oMeb/34I3JJ7k4rkHn4OtyWDfhHQmA0lJqsm/bbzw==
+X-Received: by 2002:ac8:5a42:0:b0:4e8:8ca9:10a with SMTP id d75a77b69052e-4e89d41f4c0mr48301091cf.84.1760698988960;
+        Fri, 17 Oct 2025 04:03:08 -0700 (PDT)
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e891035919sm43400091cf.15.2025.10.17.04.03.08
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 04:03:08 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-88e1a22125bso250025685a.2
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 04:03:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW2VB4vAYK4/HyHiR8vRtGbUtbdhoYgJ0bcRfxN4ve/JJxZsYWEMtQpEO9S+kd9w1JE/irNkmy7mFk=@vger.kernel.org
+X-Received: by 2002:a05:6102:c49:b0:5a1:f09f:524e with SMTP id
+ ada2fe7eead31-5d7dd59bcd6mr1313646137.16.1760698511065; Fri, 17 Oct 2025
+ 03:55:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1739540679.git.geert+renesas@glider.be> <2d30e5ffe70ce35f952b7d497d2959391fbf0580.1739540679.git.geert+renesas@glider.be>
+ <20250214073402.0129e259@kernel.org>
+In-Reply-To: <20250214073402.0129e259@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 17 Oct 2025 12:55:00 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+0HGG22FbO3wNmXtbUm9RhTopYrGghF6UrkFu-iww2A@mail.gmail.com>
+X-Gm-Features: AS18NWCjFk9wo7Q1aPnnkBYJzaq6xcQVQAXawyeid30N8a2RlJlAbXrKkziomTs
+Message-ID: <CAMuHMdU+0HGG22FbO3wNmXtbUm9RhTopYrGghF6UrkFu-iww2A@mail.gmail.com>
+Subject: Re: [PATCH treewide v3 2/4] bitfield: Add non-constant
+ field_{prep,get}() helpers
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	qat-linux@intel.com, linux-gpio@vger.kernel.org, 
+	linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Use the field_get() helper, instead of open-coding the same operation.
+Hi Jakub,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v4:
-  - No changes,
+On Fri, 14 Feb 2025 at 16:34, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Fri, 14 Feb 2025 14:55:51 +0100 Geert Uytterhoeven wrote:
+> > The existing FIELD_{GET,PREP}() macros are limited to compile-time
+> > constants.  However, it is very common to prepare or extract bitfield
+> > elements where the bitfield mask is not a compile-time constant.
+> >
+> > To avoid this limitation, the AT91 clock driver and several other
+> > drivers already have their own non-const field_{prep,get}() macros.
+> > Make them available for general use by consolidating them in
+> > <linux/bitfield.h>, and improve them slightly:
+> >   1. Avoid evaluating macro parameters more than once,
+> >   2. Replace "ffs() - 1" by "__ffs()",
+> >   3. Support 64-bit use on 32-bit architectures.
+> >
+> > This is deliberately not merged into the existing FIELD_{GET,PREP}()
+> > macros, as people expressed the desire to keep stricter variants for
+> > increased safety, or for performance critical paths.
+>
+> I really really think that people should just use the static inline
+> helpers if the field is not constant. And we should do something like
+> below so that people can actually find them.
+>
+> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+> index 63928f173223..e02afcd7aeee 100644
+> --- a/include/linux/bitfield.h
+> +++ b/include/linux/bitfield.h
+> @@ -156,6 +156,80 @@
+>                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+>         })
+>
+> +/**
+> + * u32_encode_bits() - prepare a u32 bitfield element (non-const)
+> + * @v: value to put in the field
+> + * @field: shifted mask defining the field's length and position
+> + *
+> + * Equivalent of FIELD_PREP() for u32, field does not have to be constant.
+> + *
+> + * Note that the helper is available for other field widths (generated below).
+> + */
+> +static __always_inline __u32 u32_encode_bits(u32 v, u32 field)
+> +{
+> +       if (__builtin_constant_p(v) && (v & ~field_mask(field)))
+> +               __field_overflow();
+> +       return ((v & field_mask(field)) * field_multiplier(field));
+> +}
 
-v3:
-  - No changes,
+Unfortunately gcc emits actual divisions or __*div*() calls, and
+multiplications in the non-constant case.
 
-v2:
-  - Drop RFC, as a dependency was applied.
----
- drivers/soc/renesas/renesas-soc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 1eb52356b996bdd7..ee4f17bb4db45db7 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2014-2016 Glider bvba
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-@@ -524,8 +525,7 @@ static int __init renesas_soc_init(void)
- 							   eshi, eslo);
- 		}
- 
--		if (soc->id &&
--		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
-+		if (soc->id && field_get(id->mask, product) != soc->id) {
- 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
- 			ret = -ENODEV;
- 			goto free_soc_dev_attr;
--- 
-2.43.0
+                        Geert
 
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
