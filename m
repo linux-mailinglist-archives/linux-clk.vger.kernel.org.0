@@ -1,111 +1,135 @@
-Return-Path: <linux-clk+bounces-29289-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29292-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B45BEAEC1
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 18:57:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 494FEBEAF2D
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 19:01:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C55245A403B
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 16:51:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74BCE7C482E
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 16:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6306C2E8B80;
-	Fri, 17 Oct 2025 16:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A472E92A2;
+	Fri, 17 Oct 2025 16:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="nvNb7JM/"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="KlzpCtN7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EE02E8B81;
-	Fri, 17 Oct 2025 16:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797492E8DEE;
+	Fri, 17 Oct 2025 16:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760719860; cv=none; b=B1M8s49/GIAcreAzcgZQrVh0VrNwvWpbpE2ZctJO41y/bHZEEj3fU5nZZ1JgelCZ5ci6QILzB0Som/INNk8vGtOoR9Vlhip/EKAKeEnK2/238QFwX2ncCa9hwibqAv0c+nzeZepriz9CB8zeFPPwL5ELSloYaAUYVf6MreJkfWs=
+	t=1760719869; cv=none; b=dkSc5iyZeXLU14SoLFlRmkpY23AvcXOohJCOwGuOnL/15O4Zj9/snLZ/omJQ2U/+p/VtLXEqNH4SsfYV90YXt777E1opca3zzB8DdLZvvEzFVBZM2hs3f6cL4vR1flJJkNhd8Ibl1tgwVmAqQoDsfzUptRil9KcLd0odZt9sCUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760719860; c=relaxed/simple;
-	bh=HPe6EAmdU+8YRmYd0qw6BSYIKCyaqr/9+MvrVMtwHnw=;
+	s=arc-20240116; t=1760719869; c=relaxed/simple;
+	bh=66toKUayRMWner6CrI2BOzMa2JyG/MpMWtEk6oD9pD4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L6AhSbVZxSRdjoYX6Noj87w6W4PuYi2OyjlaBEIGmdodkXp1vi8QwAQbUTLGmeORruaSGM/j+bzZEePiLg8h/BJv7wIjKznKefZL0opBPt4MkOzluTBm54uA8iLYCpXQnd7CcKyF7FVXMz9CD7uE7EQDONX05qzjLX/OA6p1GRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=nvNb7JM/; arc=none smtp.client-ip=80.241.56.151
+	 In-Reply-To:Content-Type; b=d140JUFp9atsaJ5wGuvgxUFs7tI0t69/gOHLJiqa7vWu03akdHa9mB1GR+P8GynLxQ8YZzzSA2Mr/OizfRSaaYB2eku1VHcpENPMOPA/b9olaoNeU2wpiMdTa3vWEA6ufXKiYhW+M7Zhw64Aive2uImuWbU19XcDdhoUAkbjWd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=KlzpCtN7; arc=none smtp.client-ip=80.241.56.152
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cp9nC0Bw8z9t4X;
-	Fri, 17 Oct 2025 18:50:55 +0200 (CEST)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4cp9nF6NMLz9tRR;
+	Fri, 17 Oct 2025 18:50:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760719855;
+	t=1760719857;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=I0PCGcbcebxEbmKkqUra8r/5kC8oKG3WtMDn0TPnQmM=;
-	b=nvNb7JM/ergf992QdOb+HWiqFnAQbgApIg++mtkKrysn/7LHTAktGAsbNUyt9o1peDmwx9
-	JbCJKkknxuVQp9LvVMuoxoNrYgtSoMJ0kwmIoDvS6eMUmOGAhxVO2cPEC/mGjmW7snTufB
-	FK9jiVPosKPpk2TBBDDCI35epqEBQEQyhL14gYwOcm/rKqwTOn6ODv9fcwKBdTvMhKsqZC
-	IoLrIMK6TdX5VKzFx9wo4uc0MHpaqg8XG98Em3cGn53kVXKBTvHne46ETfHr3N3pMSTL6n
-	q3vzrqLJGarAL+HmI9iTRWNjjgS9526TTlwyrLEZ/U/VfREgBHrFnWqYLuLDaw==
-Message-ID: <91a59c49-db23-425a-a728-b81c30802bd8@mailbox.org>
-Date: Fri, 17 Oct 2025 17:08:20 +0200
+	bh=oTfWmnLQ6ukMdEbgfBMNWGOo7KjRgWEeSGa22YoD+80=;
+	b=KlzpCtN7V0epBRmPwHiyo4tjl0KakccxsblOcYYkMP3qUvr3HC6kMRrRo8KK+aW7dqVhJH
+	jmciNwC5gtkHsA3YxnTDDVtGrI2cGpAELXQDfXsXP7kArwVkEz5bncWkMg37XJMeQcMwVe
+	ORLIIw4qn4FucHm440UjqPXe9PWmqhntt/beNEL2j9CfaHU8BVDuum3Ov3LiQxTP/Jdnd5
+	WnryxYoyr8TCOeIlSWrFes9pDNy+cWxde7a0G/YHgbwrehOEuFAUeBXxt1Hd/YzM9pW8nC
+	ShxQ5ahm4wcfyaTLT8wUKMMmga8Uohqtx4G16YbxD2nNrG3I7AW8zV2JZ2Kl0w==
+Message-ID: <c712dae1-00a5-4cc0-baef-2ce014bd470f@mailbox.org>
+Date: Fri, 17 Oct 2025 17:15:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 38/39] dt-bindings: clock: support i.MX95 Display Stream
- CSR module
-To: Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 01/39] dt-bindings: display: imx: Document i.MX95 Display
+ Controller DomainBlend
+To: Liu Ying <victor.liu@nxp.com>, Rob Herring <robh@kernel.org>
 Cc: dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Liu Ying <victor.liu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
- Peng Fan <peng.fan@nxp.com>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org
+ Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Shawn Guo <shawnguo@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ devicetree@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
 References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <20251011170213.128907-39-marek.vasut@mailbox.org>
- <20251015133315.GA3263713-robh@kernel.org>
+ <20251011170213.128907-2-marek.vasut@mailbox.org>
+ <20251015132442.GA3241958-robh@kernel.org>
+ <5c5bb009-3463-4282-946f-3ae93fab11ec@nxp.com>
 Content-Language: en-US
 From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <20251015133315.GA3263713-robh@kernel.org>
+In-Reply-To: <5c5bb009-3463-4282-946f-3ae93fab11ec@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: 9b13f95dc50aafe5c94
-X-MBO-RS-META: wbuyjodo48czus9sqe6m5ubysagbd8jp
+X-MBO-RS-ID: 1e9bf3970d21c759542
+X-MBO-RS-META: xtxht9rdhwbcun9qqmd7dk9na8uqmrzb
 
-On 10/15/25 3:33 PM, Rob Herring wrote:
+On 10/16/25 4:07 AM, Liu Ying wrote:
 
-Hello Rob,
+Hello Liu,
 
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - nxp,imx95-display-stream-csr
->> +          - nxp,imx95-master-stream-csr
->> +          - nxp,imx95-mipi-tx-phy-csr
+>>> +$id: http://devicetree.org/schemas/display/imx/fsl,imx95-dc-domainblend.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Freescale i.MX95 Display Controller Domain Blend Unit
+>>> +
+>>> +description: Combines two input frames to a single output frame.
 > 
-> '-csr' seems redundant.
-It follows the existing naming scheme on iMX95:
+> I'd like to comment on patches in split patch serieses(to be sent if needed).
+> But, since I provide the below interrupt information, anyway I take the chance
+> to comment more:
+> 
+> Add more description about the unit according to i.MX95 DC IP spec:
+> The unit operates in four modes:
+> - Primary mode: The primary input is used for output.
+> - Secondary mode: The secondary input is used for output.
+> - Blend mode: Primary and secondary inputs are blended, according to the
+>                programmed blending functions.
+> - SidebySide mode: Primary and secondary streams are projected side by side,
+>                     i.e., primary video on the left side and secondary on the
+> 		   right.
+> 
+> BTW, I confirm that two Domain Blend Units exist in i.MX95 DC while they don't
+> exist in i.MX8qxp/qm DCs.  And, as you can see, this unit supports multiple
+> modes, this would impact how an OS implements a display driver a lot, especially
+> Blend mode and SidebySide mode.
 
-Documentation/devicetree/bindings/clock/nxp,imx95-blk-ctl.yaml: 
-- nxp,imx95-camera-csr
-Documentation/devicetree/bindings/clock/nxp,imx95-blk-ctl.yaml: 
-- nxp,imx95-display-csr
-Documentation/devicetree/bindings/clock/nxp,imx95-blk-ctl.yaml: 
-- nxp,imx95-lvds-csr
-Documentation/devicetree/bindings/clock/nxp,imx95-blk-ctl.yaml: 
-- nxp,imx95-vpu-csr
-Documentation/devicetree/bindings/clock/nxp,imx95-display-master-csr.yaml: 
-      compatible = "nxp,imx95-display-master-csr", "syscon";
+There is one thing which specifically concerns me about the DB, it seems 
+to be capable of blending two inputs from different security domains, is 
+that correct ?
 
-Shall I adjust that ?
+>>> +maintainers:
+>>> +  - Marek Vasut <marek.vasut@mailbox.org>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: fsl,imx95-dc-domainblend
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>
+>> No clocks or other resources?
+> 
+> As patch 39 shows, there are 3 interrupts - domainblend{0,1}_shdload,
+> domainblend{0,1}_framecomplete and domainblend{0,1}_seqcomplete.
+It seems we currently do not use either clock or interrupts on either 
+domainblend or layerblend IPs, but maybe DB and LB are different and LB 
+really has no clock/interrupts ?
 
