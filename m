@@ -1,117 +1,191 @@
-Return-Path: <linux-clk+bounces-29297-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29278-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97E70BEAE1F
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 18:51:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B57FBEA7E0
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 18:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 44BB835F757
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 16:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 256B1188B816
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 16:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB6E22E8E14;
-	Fri, 17 Oct 2025 16:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="F9oG5Aad"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4E724678A;
+	Fri, 17 Oct 2025 16:06:56 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB6528727D;
-	Fri, 17 Oct 2025 16:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0E324DCE2
+	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 16:06:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760719881; cv=none; b=M1QbI2gOvW5WIoZmAZhG77a7oOcGVwtBJMnkyT58h18RfGbFY3F/nbfFOpPkbNPMmLe1oxp6TqocWh3X8fd/yV8ARP6AYIRSOW5vEkvlYem97E+Mzms83Hag3k7eyTlAhpCYDfvlAY3HZ+7sVLfXRrOROrQyZB+8lGe4umXt65Q=
+	t=1760717216; cv=none; b=nYiYJaCrrKahPTCfHdq67BiLqcsA8c+nImOVZN+6FT8EZaHiJU0mLpv84pk9A+M20Doj3JM5GQd6eLk8iMGFIE+eA9KWc7BjWLYBGNdjtZmQw/0vbldEKQwWVpKZ2Imk6ZHUhLsSQ04nGZ40/nIhKp+R/QPwrShTaaSLMN7TNYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760719881; c=relaxed/simple;
-	bh=hBS7zXpwgc06YApPZakDHwkP5KDcqLK2xOOP5lYVbh4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uzKLVSgQkQwwfVluGjXjDTLkzzV1EUp2LzAJbS3/APN7JlLIS9aSfBagUvIp1DejfnluCd1kUsqe8avSt2s/1PhR1t9v/AdEF197Gj5qFPjkHD3K0C8hIGsU2CaQuc41MCfwVa4sxaTQZWW93Iqj4b8nflfCWHY9zI7nd7fnKKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=F9oG5Aad; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cp9nc4Zdtz9sSq;
-	Fri, 17 Oct 2025 18:51:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760719876;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qnyRJyBxqqT6Z/vke/OGUHeBh7T7CM9FTOlPeQxkIbU=;
-	b=F9oG5AadMHujS4rxilXnq9aHT15NPwRYd0bRa+jQjBORkZi2yiwZRFiq7dMLwqrbEgtGnF
-	uVhQIpmLzP6MgJi2cdKVxACJC+lgTawa2grTfcPCTE74t1YJ3aC07XY1cLofvD7JL8HGlR
-	nEP4xvjIqp+KSA1RKCDRBwm2tvHLT7AkpWoudVKprnU5DQOt4dNGoR/02HOKlT5vGX7whu
-	5bYZetKhuYhZgGKCsGgQZzZLg6GR9J05mwTWHj7BK8Mw9Fi2xnkQ8B7UBiEy31GB+g55OL
-	XxzpVRn74A3h2UUBT39eg38rQ1yrGrICQKFpBHU/PesyL2D7HzyJZo6KXDDN+A==
-Message-ID: <85a35703-fc75-4fde-b9ca-a2ceb1214327@mailbox.org>
-Date: Fri, 17 Oct 2025 17:54:41 +0200
+	s=arc-20240116; t=1760717216; c=relaxed/simple;
+	bh=5UuF/HjwkQMRQp3toEpBUcYrHBj825aq+Tc6Itk11zY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZGqnNjtxn25blg276NbBrTdO9gYAsPqov83o8g21ub25On4+xXkwLPHp5/FItkgr1XDdEfyJnQGxW/GdwmRp0t8uuduVDkq3mlmx2/Ac1kJfsVPJUICt/x/97rI9SuDUqOEWQc7E61GW1NkGZwpoxZv0BSKl8CxcZsK3fa/iOjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-74572fb94b3so1420227a34.2
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 09:06:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760717214; x=1761322014;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D4mf9FdrvOGmLornKgNki0gXD9BcM6SCmzEl3gfV4Zs=;
+        b=OBnoKj8eW7BVbp6yUpexsy9+U8+0sUcxy7vg9qneNoTeicrciulkxTNMEu25+UjcqB
+         7t5vHTjqDt6uzm0yL1FViQLDTtscbKrZS1HNeYjVjpj0ZA6RJsn/y4uP34iGTMxIppya
+         gz8sE2eipgkseJ3hXGXzuUSv/Edza5xGjvY+4pU7EY3BBn0xUVBB204hPEL36bTXhCHE
+         fc/+JPpeOTG9RjgZJ9kiXPXUT65Go1QgS9NXBmlxpNbQwQsNKrw8RWfVftP4PCFXowZf
+         AFL4HQsLbVvEVgqBMftI2W1bHUup+Lrc5az0/6rI57jWhVHaO5ra/6qoDj9ueNtIi/1e
+         7Ytw==
+X-Forwarded-Encrypted: i=1; AJvYcCW0DLn2CzpIWSIm6vF/tF/zc3yO63GWYkdgXKBKyT5CDH6LhGZDX1GwOD/y1D1YyL9acMAxbEBI+AI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxedIJRxG0JIg1Bu/a5QyGpprhTUvl+d2BhC28e80uI6fEvC4aH
+	eOT+qKysAPojvg6x/Fs1MFbuIalJl0v1J0gLFGPrLS9Q6sJbF4O6FnuhU8W0HkYw
+X-Gm-Gg: ASbGncvvy1hP3FSfMtEtuDbTyAhdb1caRTWMyBYVPV6qyWKCozoSOC5gzi7DTtt/MJC
+	thKqlFjitlHrOG/4v2fLdrwpGFJ97SvVvBrXtmK+mqe1ix1Q6cbwQdkQT6EP82axHLCwX9yJhHZ
+	o4DGsJUU8yI7oqz4xESdU6RVCT7DPxn1gDZQ89s4JM+fE63bgQ+jUuXgObfVtiwfkLKgA0+FL0h
+	WXSqBgkM5TLTN2bmw0xNUUVsaKIWgG1llOR+sst+nZx6i0REh2UW197/FCtNixIhkJfoZSC82X0
+	SFkvTrvl3O4EkOj+5gVvpZie4vp+zL0w/wnyX5u8MFs1A9JIa9ljfkGMXs2WdibBPXRsJenvNKg
+	cjsvAgYk8u7L9ee5rAU2VQOY3acgIxzIA2lbIElH7EcCKgWiF/NLDxXmLmf5k/IKvFyuYWrjmm1
+	voTSefKAj5W7u8BmFHf5Ljh4T5w5n/lOOjZJVJjDWROw==
+X-Google-Smtp-Source: AGHT+IFiQ5THHk7rR8FKHvEyF5vFgLcSS0NQ/oTF/RycLX1Hu8RIbDBgLzFhxx/Ep04BSyzDhre7FQ==
+X-Received: by 2002:a05:6808:178a:b0:438:bdb0:89ba with SMTP id 5614622812f47-443a2ec72cbmr1622304b6e.3.1760717213549;
+        Fri, 17 Oct 2025 09:06:53 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-651d3a9adb3sm8442eaf.1.2025.10.17.09.06.53
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 09:06:53 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-443a7490a54so481452b6e.1
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 09:06:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXLggQb9SzNB1ervHU2CB89VOL/3viyzFOANavLnmFxynLR30kd7pZZWEWjh8XgjfXe6UDNzUwTMuc=@vger.kernel.org
+X-Received: by 2002:a05:6102:40c6:10b0:5d7:dec6:389a with SMTP id
+ ada2fe7eead31-5d7dec64177mr1309355137.9.1760716852567; Fri, 17 Oct 2025
+ 09:00:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 00/39] Add i.MX95 DPU/DSI/LVDS support
-To: Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org
-Cc: Abel Vesa <abelvesa@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org
-References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <2a22c45e-5de4-49ee-af3e-002941a7e2d0@nxp.com>
- <bf451620-c917-4d4a-999d-32148fbcf11b@mailbox.org>
- <182271f2-4986-4401-a4c5-ca379a02e69b@nxp.com>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <182271f2-4986-4401-a4c5-ca379a02e69b@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: 21f322bb393c42677d5
-X-MBO-RS-META: xow3qztriop681daecnza1kueomurrys
+References: <cover.1739540679.git.geert+renesas@glider.be> <2d30e5ffe70ce35f952b7d497d2959391fbf0580.1739540679.git.geert+renesas@glider.be>
+ <20251017081912.2ad26705@kernel.org>
+In-Reply-To: <20251017081912.2ad26705@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 17 Oct 2025 18:00:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVS5KmVkv_pmc+R-EXik-Z1_7nuiHM=vm1Cu8v91wmLBQ@mail.gmail.com>
+X-Gm-Features: AS18NWD4CQztq7yi6j63q-9XtnW0otWo2wOw8z0_Fp7R-6z_qrlZWB5IqFYEbBg
+Message-ID: <CAMuHMdVS5KmVkv_pmc+R-EXik-Z1_7nuiHM=vm1Cu8v91wmLBQ@mail.gmail.com>
+Subject: Re: [PATCH treewide v3 2/4] bitfield: Add non-constant
+ field_{prep,get}() helpers
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	qat-linux@intel.com, linux-gpio@vger.kernel.org, 
+	linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/15/25 12:09 PM, Liu Ying wrote:
+Hi Jakub,
 
-Hello Liu,
+On Fri, 17 Oct 2025 at 17:19, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Fri, 14 Feb 2025 14:55:51 +0100 Geert Uytterhoeven wrote:
+> > The existing FIELD_{GET,PREP}() macros are limited to compile-time
+> > constants.  However, it is very common to prepare or extract bitfield
+> > elements where the bitfield mask is not a compile-time constant.
+> >
+> > To avoid this limitation, the AT91 clock driver and several other
+> > drivers already have their own non-const field_{prep,get}() macros.
+> > Make them available for general use by consolidating them in
+> > <linux/bitfield.h>, and improve them slightly:
+> >   1. Avoid evaluating macro parameters more than once,
+> >   2. Replace "ffs() - 1" by "__ffs()",
+> >   3. Support 64-bit use on 32-bit architectures.
+> >
+> > This is deliberately not merged into the existing FIELD_{GET,PREP}()
+> > macros, as people expressed the desire to keep stricter variants for
+> > increased safety, or for performance critical paths.
+>
+> We already have helpers for this, please just don't know they exist :/
+>
+> The "const" version of the helpers are specifically defined to work
+> on masks generated with BIT() and GENMASK(). If the mask is not
+> constant we should expect it to have a well defined width.
+>
+> I strongly prefer that we do this instead and convert the users to
+> the fixed-width version:
+>
+> ---->8----------------
+>
+> Subject: bitfield: open code the fixed-width non-const helpers so that people see them
+>
+> There is a number of useful helpers defined in bitfield.h but
+> they are mostly invisible to the reader because they are all
+> generated by macros. Open code the 32b versions (which are
+> most commonly used) to give developers a chance to discover them.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
->>> This has conflicts with my in-flight patch series for adding i.MX8QXP DC
->>> prefetch engine support(though i.MX95 SoC doesn't embed any display controller
->>> prefetch engine).  You probably want to take a look at it, just a heads up.
->>>
->>> https://lore.kernel.org/all/20250929-imx8-dc-prefetch-v3-0-c01d0608add2@nxp.com/
->>
->> Thank you for sharing that.
->>
->> Would it make sense to send 4 and 5 separately , so the fixes can land faster?
-> 
-> Maybe not, since there is no user(DT node is not enabled) so far.
-> But I'd like to have more review/ack for that patch series(it's kind of
-> hard to get sufficient review...).
+Thanks, but this is more or less the same code which you suggested
+before [1], and to which I just replied[2] after looking at the
+generated assembler output on various architectures.
 
-I could test on the MX95 if we can somehow ... figure this out. Then I 
-can provide RB/TB easily. I don't have MX8qxp device.
+> @@ -188,6 +193,81 @@ static __always_inline u64 field_mask(u64 field)
+>         return field / field_multiplier(field);
+>  }
+>  #define field_max(field)       ((typeof(field))field_mask(field))
+> +
+> +/**
+> + * u32_encode_bits() - prepare a u32 bitfield element (non-const)
+> + * @v: value to put in the field
+> + * @field: shifted mask defining the field's length and position
+> + *
+> + * Equivalent of FIELD_PREP() for u32, field does not have to be constant.
+> + *
+> + * Note that the helper is available for other field widths (generated below).
+> + */
+> +static __always_inline __u32 u32_encode_bits(u32 v, u32 field)
+> +{
+> +       if (__builtin_constant_p(v) && (v & ~field_mask(field)))
+> +               __field_overflow();
+> +       return ((v & field_mask(field)) * field_multiplier(field));
 
->> Also, could you please try and avoid the SCU dependency on patch 7 ,
->> and more in that direction , can the PRG be made a bit more optional, so the
-> 
-> Don't think there is any way to address them.
-> 
->> iMX95 can still be supported by the DC driver ?
-> 
-> SCU dependency and PRG(even more other reasons) make me opt to separate
-> modules for i.MX95/8qxp DCs.
-SCU is only a register accessor, PRG is another block in the DC, I think 
-those can be isolated. It seems the whole DC is a composition of 
-multiple reusable blocks, so we can compose them for both MX8qxp and 
-MX95 the right way and reuse most of the code, right ?
+Unfortunately gcc emits actual divisions or __*div*() calls, and
+multiplications in the non-constant case.
+
+So I don't think this is suitable as-is.
+
+> +}
+
+[1] https://lore.kernel.org/all/20250214073402.0129e259@kernel.org
+[2] https://lore.kernel.org/all/CAMuHMdU+0HGG22FbO3wNmXtbUm9RhTopYrGghF6UrkFu-iww2A@mail.gmail.com
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
