@@ -1,192 +1,1041 @@
-Return-Path: <linux-clk+bounces-29242-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29244-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1747BBE7DA2
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 11:43:35 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE601BE80DE
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 12:26:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3C546E64DB
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 09:37:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 49E444EC9BD
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 10:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF863090E6;
-	Fri, 17 Oct 2025 09:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F57631197A;
+	Fri, 17 Oct 2025 10:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="myaT99tq"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471862D9EED
-	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 09:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D65833469C
+	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 10:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760693707; cv=none; b=VNlvHcMphSJcenZYYXMeFhPki6pERsMq/L/wT4LW3WFiZUWirNok05K2NmKQp71ACf4lVzBkPtz44Q885tnK1TlpqUYT0E/Pdx2s19S6XE2oufraEEmqjvLrlYtvLnaifrTUdm2DKpuX5Va/nxG0gf1Syy4cAOjtPoM0JBaB7Zk=
+	t=1760696766; cv=none; b=iwvZB0ohTU5ykhPmkzbYK3+0otXIvtlcTPS0UzkFzWToBCAZXHQGvkNIdULX5h4lOyF1/CFiK1y2jAlEyj2zZ9kjLEPWRAklUehLY7z9nIyOzGlONffvVch6xRhxcJ7P2fEQl5UvMP36t/B8+M47RsMyF7SHmKsGfGOURNvaroI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760693707; c=relaxed/simple;
-	bh=6vzNI1DK18m3ce5DSYBfwoD5ny5GBGqbd/mU6bAfUFA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KNeUUbzRy1KoyHvb0RSw4wchTcF3a2EQCnJMsmGPzSgZAEDpoqQIeaTrk95AveFk+gtlPIZIM2TzOhJGIdbrWWLTAyxQN0elH6mg0gYsTxWOg/5FYleTEEOK5j3aFWUIRs9k8WD6MLDyt+ypC5akncX+KMaRLVNyB2G0vkV8/Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v9grO-000516-Q7; Fri, 17 Oct 2025 11:34:54 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v9grN-0042MN-32;
-	Fri, 17 Oct 2025 11:34:53 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1v9grN-000000003Jz-3fNi;
-	Fri, 17 Oct 2025 11:34:53 +0200
-Message-ID: <7cef6733507f86dfcc30131f1d941a47771a394a.camel@pengutronix.de>
-Subject: Re: [PATCH 2/2] reset: remove legacy reset lookup code
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, David Lechner
- <david@lechnology.com>,  Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, Bartosz
- Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Fri, 17 Oct 2025 11:34:53 +0200
-In-Reply-To: <20251017-da850-reset-lookup-v1-2-362a309a9f09@linaro.org>
-References: <20251017-da850-reset-lookup-v1-0-362a309a9f09@linaro.org>
-	 <20251017-da850-reset-lookup-v1-2-362a309a9f09@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1760696766; c=relaxed/simple;
+	bh=GcQEkpxjcnoqa7pnlg5TjfHJKLPJF30Pm7Sm70+avMw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L/5GeDwURvW/+cDYJ22INMqsyv81IWa5vXMcO3vqWN2GpLLEsxWYdThIoNZHfJLBHbo011LlNevsfUqcbWIPcdLR+E47r9x1IrxRrFpWnKy4SomxhKFnHiROViujBzY7rTkpEeTK3fjLPWdf8oT/cm4Tjn16tK2ZrEj/R3OWWR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=myaT99tq; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-63d97bcb898so2320610d50.0
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 03:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760696761; x=1761301561; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/OsjTn9VdFPR4ijYfPNMwXXEPG3K3+yzuIVHbYpk8Y=;
+        b=myaT99tqIZR7pDz9Q+IHVHk8YmG2yEWXSsuhxdZO6crtK+czn/uo123BK+FAY1xZw6
+         D/ka7jHEjQ7MEF2t7lTQYWBAypE5aWMs6RARK5uZz1/fUThQInWzBTRbAU9M2XiYf4cJ
+         Ko++EphDUURwDAfR5Wsw2IAILqxpbuQ3ffLdY78tzknZs8Ox0bWId5JyVCxbjaPb8g91
+         BU+UvK8NXeKl80Q4ldYsG3IGS0gSmT6jGFs7CI3/Oe+5K9akuxaKpZFpa+u7JwA13GR+
+         DdnpxqqwWncHnbtKdrcDlvqGQnleklkOh5Ze1II5SHKesOGp11oCGOqHClW2OAT193+Z
+         sufg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760696761; x=1761301561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n/OsjTn9VdFPR4ijYfPNMwXXEPG3K3+yzuIVHbYpk8Y=;
+        b=KUFHHesd9oVv1DhDVYukr16JvCkDQXctVXE++KcO2kprq6UsLPBDtXYx+bqPbJPdLX
+         Jr2OL/33I6ThpC2Mc5GOJr7uciHYnc6xwQllREsAPT8sJZ4tBULW/R6tZfmkHvmh62dP
+         1mLlCZCPZqpaj1L92AXSaJTowiKBZbm+ryya8NCBcKxakHFWQXVNDXPDC6JyI2d3inrH
+         IrRSnkZBODNx7UAo1TOikUJPNPE4fRQn0iQm4ySmIUrS1FEaON5sD68Ea36MiXxVp4St
+         p8IltuWHYXkLo5YyzFXMkStedgnWJ9Tu09JNhmihzHeZdhv22cllTxTBzFxIGayOHlUw
+         j/Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFxtbRBLDgpchJNIMyIxni9Vi6eEbA+egxDWG78A6Lre9Zz3uId2LO8j2bMwZ2yby+O8zGLalL1Oc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymdfmbp8wX7Dbj/2n+rDz2etnwDn4qgkJ3+ZSdHecELn6wa1FQ
+	n2G0b6PCCstDMyeZ1QD68Fl/n2/n3LsV66nWM768t/MolWxL5wprbqT7zhSg9mEMsxkkn8lQCzc
+	EXUACkv6rWtsfmz2aeRC/a1uc0tF01+3KAqT40caEPg==
+X-Gm-Gg: ASbGncuCwC7LYev6TUWhK6sHDKfmJLiur6g3em2CfJzn0SbAlS2m8SisFkYg7SkfOnL
+	r1hNUuwJwaDB6VofGhtg3G+69vjsCV1ujQSbe0EefJqTAmNy05SYSW/Lv+bwePUusHk2iU5BAEk
+	Zbr8og7BWYcjjOpjyGgP93vPp89v64t4L4YTBMoFc/oWrZypyDzP+SZ+NvDbmpZk9iNJZBEFiNx
+	NyoUeOhtAg0dHx6DRwYPXQHHGk3Xbk+doBHHPNQEI56Ww+b51KdusW/SBfVnQgvaaULB5q2nW0H
+	azteoyk=
+X-Google-Smtp-Source: AGHT+IFn1VwAhnoPXvpFj8XoWiOkxr0D4fTn9Pem2dOtZG7RvoB/abQSaOFpSfF0WSBvYdwsy2j6m3u3u+23VcfAJoQ=
+X-Received: by 2002:a05:690e:4090:b0:63e:f79:39bb with SMTP id
+ 956f58d0204a3-63e0f793d3fmr4402609d50.14.1760696760753; Fri, 17 Oct 2025
+ 03:26:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+References: <20250919-rda8810pl-mmc-v1-0-d4f08a05ba4d@mainlining.org> <20250919-rda8810pl-mmc-v1-9-d4f08a05ba4d@mainlining.org>
+In-Reply-To: <20250919-rda8810pl-mmc-v1-9-d4f08a05ba4d@mainlining.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 17 Oct 2025 12:25:24 +0200
+X-Gm-Features: AS18NWAaBq9lU5nEqCy6u6OpuUx30_1yPC5Vif21uPlv5j3x7X7P2Hn4QI7dtMY
+Message-ID: <CAPDyKFp=NeqTk=vW1CJkVtTEKYSq7s3J5UYy1J5ff0c1SFy_-A@mail.gmail.com>
+Subject: Re: [PATCH 09/10] mmc: host: Add RDA Micro SD/MMC driver
+To: dang.huynh@mainlining.org
+Cc: Manivannan Sadhasivam <mani@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-unisoc@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Bartosz,
+On Thu, 18 Sept 2025 at 20:50, Dang Huynh via B4 Relay
+<devnull+dang.huynh.mainlining.org@kernel.org> wrote:
+>
+> From: Dang Huynh <dang.huynh@mainlining.org>
+>
+> RDA Micro RDA8810PL includes an SD/MMC controller. This controller
+> supports SD/SDIO/MMC interface.
+>
+> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
 
-On Fr, 2025-10-17 at 10:02 +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->=20
-> There are no more users of this code. Let's remove the exported symbols
-> and the implementation from reset core.
->=20
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Dang,
+
+I just wanted to let you know that I have looked through this patch -
+and while I have a few minor comments, I thought it was better for me
+to await your new version of the series.
+
+Kind regards
+Uffe
+
 > ---
->  drivers/reset/core.c             | 120 +--------------------------------=
-------
->  include/linux/reset-controller.h |  33 -----------
-
-Ah, the best kind of patch.
-
->  2 files changed, 2 insertions(+), 151 deletions(-)
->=20
-> diff --git a/drivers/reset/core.c b/drivers/reset/core.c
-> index 22f67fc77ae531c6efba3ce92cc73a2d57397762..9ca4ac27daf955d7fe74f7684=
-819072a6f32492b 100644
-> --- a/drivers/reset/core.c
-> +++ b/drivers/reset/core.c
-[...]
-> @@ -1081,70 +1054,6 @@ __of_reset_control_get(struct device_node *node, c=
-onst char *id, int index,
->  }
->  EXPORT_SYMBOL_GPL(__of_reset_control_get);
-> =20
-> -static struct reset_controller_dev *
-> -__reset_controller_by_name(const char *name)
-> -{
-> -	struct reset_controller_dev *rcdev;
-> -
-> -	lockdep_assert_held(&reset_list_mutex);
-> -
-> -	list_for_each_entry(rcdev, &reset_controller_list, list) {
-> -		if (!rcdev->dev)
-> -			continue;
-> -
-> -		if (!strcmp(name, dev_name(rcdev->dev)))
-> -			return rcdev;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
-> -static struct reset_control *
-> -__reset_control_get_from_lookup(struct device *dev, const char *con_id,
-> -				enum reset_control_flags flags)
-> -{
-> -	bool optional =3D flags & RESET_CONTROL_FLAGS_BIT_OPTIONAL;
-> -	const struct reset_control_lookup *lookup;
-> -	struct reset_controller_dev *rcdev;
-> -	const char *dev_id =3D dev_name(dev);
-> -	struct reset_control *rstc =3D NULL;
-> -
-> -	mutex_lock(&reset_lookup_mutex);
-> -
-> -	list_for_each_entry(lookup, &reset_lookup_list, list) {
-> -		if (strcmp(lookup->dev_id, dev_id))
-> -			continue;
-> -
-> -		if ((!con_id && !lookup->con_id) ||
-> -		    ((con_id && lookup->con_id) &&
-> -		     !strcmp(con_id, lookup->con_id))) {
-> -			mutex_lock(&reset_list_mutex);
-> -			rcdev =3D __reset_controller_by_name(lookup->provider);
-> -			if (!rcdev) {
-> -				mutex_unlock(&reset_list_mutex);
-> -				mutex_unlock(&reset_lookup_mutex);
-> -				/* Reset provider may not be ready yet. */
-> -				return ERR_PTR(-EPROBE_DEFER);
-> -			}
-> -
-> -			flags &=3D ~RESET_CONTROL_FLAGS_BIT_OPTIONAL;
-> -
-> -			rstc =3D __reset_control_get_internal(rcdev,
-> -							    lookup->index,
-> -							    flags);
-> -			mutex_unlock(&reset_list_mutex);
-> -			break;
-> -		}
-> -	}
-> -
-> -	mutex_unlock(&reset_lookup_mutex);
-> -
-> -	if (!rstc)
-> -		return optional ? NULL : ERR_PTR(-ENOENT);
-> -
-> -	return rstc;
-> -}
-> -
->  struct reset_control *__reset_control_get(struct device *dev, const char=
- *id,
->  					  int index, enum reset_control_flags flags)
->  {
-> @@ -1157,7 +1066,7 @@ struct reset_control *__reset_control_get(struct de=
-vice *dev, const char *id,
->  	if (dev->of_node)
->  		return __of_reset_control_get(dev->of_node, id, index, flags);
-> =20
-> -	return __reset_control_get_from_lookup(dev, id, flags);
-> +	return ERR_PTR(-ENOENT);
-
-I think this should be:
-
-	bool optional =3D flags & RESET_CONTROL_FLAGS_BIT_OPTIONAL;
-
-	/* ... */
-
-	return optional ? NULL : ERR_PTR(-ENOENT);
-
-With that,
-
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-regards
-Philipp
+>  MAINTAINERS                |   6 +
+>  drivers/mmc/host/Kconfig   |  12 +
+>  drivers/mmc/host/Makefile  |   1 +
+>  drivers/mmc/host/rda-mmc.c | 853 +++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 872 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 923101a9d6c2edea339d1211b1cfdf4b917d1208..442dc8218541c1c05c03383f13b3f062f06cdae9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21430,6 +21430,12 @@ S:     Maintained
+>  F:     Documentation/devicetree/bindings/dma/rda,ifc.yaml
+>  F:     drivers/dma/rda-ifc.c
+>
+> +RDA MICRO SECURE DIGITAL AND MULTIMEDIA CARD DRIVER
+> +M:     Dang Huynh <dang.huynh@mainlining.org>
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/mmc/rda,mmc.yaml
+> +F:     drivers/mmc/host/rda-mmc.c
+> +
+>  RDACM20 Camera Sensor
+>  M:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+>  M:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 4afa0130779d97ca9d1c0ed2102b0babdedcaeeb..e7e747ef9a860cbe88dc8fac1015a915a62f10d3 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -1040,6 +1040,18 @@ config MMC_MTK
+>           This is needed if support for any SD/SDIO/MMC devices is required.
+>           If unsure, say N.
+>
+> +config MMC_RDA
+> +       tristate "RDA Micro SD/MMC Card Interface support"
+> +       depends on ARCH_RDA || COMPILE_TEST
+> +       depends on COMMON_CLK
+> +       depends on HAS_DMA
+> +       help
+> +         This selects the RDA Micro Secure digital and Multimedia card interface. The
+> +         controller supports SD/SDIO/MMC interface.
+> +         If you have a board with RDA SoC and it uses this interface, say Y or M here.
+> +
+> +         If unsure, say N.
+> +
+>  config MMC_SDHCI_MICROCHIP_PIC32
+>         tristate "Microchip PIC32MZDA SDHCI support"
+>         depends on MMC_SDHCI && PIC32MZDA && MMC_SDHCI_PLTFM
+> diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+> index 5057fea8afb696e210e465a6a2aafc68adad7854..d819e18a478e35cb7de6d67b1cf827e1b3d09815 100644
+> --- a/drivers/mmc/host/Makefile
+> +++ b/drivers/mmc/host/Makefile
+> @@ -29,6 +29,7 @@ obj-$(CONFIG_MMC_ALCOR)       += alcor.o
+>  obj-$(CONFIG_MMC_MTK)          += mtk-sd.o
+>  obj-$(CONFIG_MMC_OMAP)         += omap.o
+>  obj-$(CONFIG_MMC_OMAP_HS)      += omap_hsmmc.o
+> +obj-$(CONFIG_MMC_RDA)          += rda-mmc.o
+>  obj-$(CONFIG_MMC_ATMELMCI)     += atmel-mci.o
+>  obj-$(CONFIG_MMC_TIFM_SD)      += tifm_sd.o
+>  obj-$(CONFIG_MMC_MVSDIO)       += mvsdio.o
+> diff --git a/drivers/mmc/host/rda-mmc.c b/drivers/mmc/host/rda-mmc.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..c358d170a930cbb7bf93a9066044c3b7ac957229
+> --- /dev/null
+> +++ b/drivers/mmc/host/rda-mmc.c
+> @@ -0,0 +1,853 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * SD/MMC driver for RDA Micro platform
+> + *
+> + * Copyright (C) 2013 RDA Microelectronics Inc.
+> + * Copyright (c) 2025 Dang Huynh <dang.huynh@mainlining.org>
+> + */
+> +
+> +#include <linux/of.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/mmc/host.h>
+> +#include <linux/mmc/mmc.h>
+> +#include <linux/mmc/slot-gpio.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/reset.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/scatterlist.h>
+> +#include <linux/spinlock.h>
+> +
+> +/* Registers Definitions */
+> +#define SDMMC_REG_CTRL 0x0
+> +#define SDMMC_REG_FIFO_TXRX 0x8
+> +#define SDMMC_REG_CONFIG 0x800
+> +#define SDMMC_REG_STATUS 0x804
+> +#define SDMMC_REG_CMD_INDEX 0x808
+> +#define SDMMC_REG_CMD_ARG 0x80C
+> +#define SDMMC_REG_RESP_INDEX 0x810
+> +#define SDMMC_REG_RESP_ARG3 0x814
+> +#define SDMMC_REG_RESP_ARG2 0x818
+> +#define SDMMC_REG_RESP_ARG1 0x81C
+> +#define SDMMC_REG_RESP_ARG0 0x820
+> +#define SDMMC_REG_DATA_WIDTH 0x824
+> +#define SDMMC_REG_BLOCK_SIZE 0x828
+> +#define SDMMC_REG_BLOCK_COUNT 0x82C
+> +#define SDMMC_REG_INT_STATUS 0x830
+> +#define SDMMC_REG_INT_MASK 0x834
+> +#define SDMMC_REG_INT_CLEAR 0x838
+> +#define SDMMC_REG_TRANS_SPEED 0x83C
+> +#define SDMMC_REG_MCLK_ADJUST 0x840
+> +
+> +/* Bits def */
+> +/* CTRL */
+> +#define SDMMC_CTRL_ENDIAN GENMASK(2, 0)
+> +#define SDMMC_CTRL_SOFTRST_L BIT(3)
+> +
+> +/* CONFIG */
+> +#define SDMMC_CFG_SENDCMD BIT(0)
+> +#define SDMMC_CFG_SUSPEND BIT(1)
+> +#define SDMMC_CFG_RSP_EN BIT(4)
+> +#define SDMMC_CFG_RSP_SEL GENMASK(6, 5)
+> +#define SDMMC_CFG_RD_WT_EN BIT(8)
+> +#define SDMMC_CFG_RD_WT_SEL BIT(9)
+> +#define SDMMC_CFG_S_M_SEL BIT(10)
+> +#define SDMMC_CFG_AUTO_FLAG_EN BIT(16)
+> +#define SDMMC_CFG_SAMPLE_EDGE_SEL_FALL_EN BIT(17)
+> +
+> +/* STATUS */
+> +#define SDMMC_STATUS_NOTOVER BIT(0)
+> +#define SDMMC_STATUS_BUSY BIT(1)
+> +#define SDMMC_STATUS_DLBUSY BIT(2)
+> +#define SDMMC_STATUS_SUSPEND BIT(3)
+> +#define SDMMC_STATUS_RSP_ERR BIT(8)
+> +#define SDMMC_STATUS_NO_RSP_ERR BIT(9)
+> +#define SDMMC_STATUS_CRC_STATUS GENMASK(14, 12)
+> +#define SDMMC_STATUS_DATA_ERROR GENMASK(23, 16)
+> +#define SDMMC_STATUS_DAT3_VAL BIT(24)
+> +
+> +/* INTERRUPTS */
+> +/* Mask and Clear */
+> +#define SDMMC_INT_NO_RSP BIT(0)
+> +#define SDMMC_INT_RSP_ERR BIT(1)
+> +#define SDMMC_INT_RD_ERR BIT(2)
+> +#define SDMMC_INT_WR_ERR BIT(3)
+> +#define SDMMC_INT_DAT_OVER BIT(4)
+> +#define SDMMC_INT_TXDMA_DONE BIT(5)
+> +#define SDMMC_INT_RXDMA_DONE BIT(6)
+> +#define SDMMC_INT_SDIO BIT(7)
+> +
+> +#define SDMMC_MCLK_INVERT BIT(4)
+> +#define SDMMC_MCLK_DISABLE BIT(5)
+> +
+> +struct rda_mmc_host {
+> +       struct device *dev;
+> +
+> +       struct mmc_host *mmc;
+> +       struct mmc_request *mrq;
+> +
+> +       unsigned int clock;
+> +       unsigned int bus_width;
+> +       unsigned int power_mode;
+> +       struct regulator *vmmc;
+> +
+> +       void __iomem *base;
+> +       int irq;
+> +
+> +       struct clk *clk;
+> +       struct reset_control *reset;
+> +
+> +       dma_cookie_t dma_cookie;
+> +       struct dma_chan *dma_tx;
+> +       struct dma_chan *dma_rx;
+> +
+> +       bool sdio_irq;
+> +       bool sdio_irq_trigger;
+> +
+> +       spinlock_t lock;
+> +       struct completion c;
+> +
+> +       /* device tree properties */
+> +       bool mclk_inv;
+> +       u8 mclk_adj;
+> +};
+> +
+> +static int rda_mmc_hw_init(struct rda_mmc_host *priv)
+> +{
+> +       void __iomem *base = priv->base;
+> +
+> +       disable_irq(priv->irq);
+> +
+> +       writel(FIELD_PREP(SDMMC_CTRL_ENDIAN, 1) | SDMMC_CTRL_SOFTRST_L,
+> +                       base + SDMMC_REG_CTRL);
+> +       writel(SDMMC_INT_RD_ERR | SDMMC_INT_WR_ERR | SDMMC_INT_DAT_OVER,
+> +                       base + SDMMC_REG_INT_MASK);
+> +       writel(0xFFFFFFFF, base + SDMMC_REG_INT_CLEAR);
+> +
+> +       enable_irq(priv->irq);
+> +
+> +       return 0;
+> +}
+> +
+> +static void rda_mmc_reset(struct rda_mmc_host *priv)
+> +{
+> +       reset_control_assert(priv->reset);
+> +       mdelay(1);
+> +       reset_control_deassert(priv->reset);
+> +       mdelay(1);
+> +}
+> +
+> +static void rda_mmc_recv_resp(struct mmc_host *host, struct mmc_command *cmd)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       u32 status;
+> +       int ret;
+> +
+> +       /* If the controller is busy, wait until it finishes */
+> +       ret = readl_poll_timeout(base + SDMMC_REG_STATUS, status,
+> +                       !(status & SDMMC_STATUS_NOTOVER), 50, 1000 * 1000);
+> +       if (ret) {
+> +               dev_err(dev, "Timed out waiting for the controller\n");
+> +               cmd->error = ret;
+> +               return;
+> +       }
+> +
+> +       if (status & SDMMC_STATUS_NO_RSP_ERR)
+> +               return;
+> +
+> +       if (status & SDMMC_STATUS_RSP_ERR) {
+> +               cmd->error = -EILSEQ;
+> +               return;
+> +       }
+> +
+> +       if (mmc_resp_type(cmd) & MMC_RSP_R2) {
+> +               cmd->resp[0] = readl_relaxed(base + SDMMC_REG_RESP_ARG3);
+> +               cmd->resp[1] = readl_relaxed(base + SDMMC_REG_RESP_ARG2);
+> +               cmd->resp[2] = readl_relaxed(base + SDMMC_REG_RESP_ARG1);
+> +               cmd->resp[3] = readl_relaxed(base + SDMMC_REG_RESP_ARG0) << 1;
+> +       } else {
+> +               cmd->resp[0] = readl_relaxed(base + SDMMC_REG_RESP_ARG3);
+> +       }
+> +
+> +       dev_dbg(dev, "response: resp[0] = 0x%x, resp[1] = 0x%x, resp[2] = 0x%x, resp[3] = 0x%x\n",
+> +                       cmd->resp[0], cmd->resp[1], cmd->resp[2], cmd->resp[3]);
+> +}
+> +
+> +static inline struct dma_chan *rda_mmc_get_dma_chan(struct rda_mmc_host *priv,
+> +               struct mmc_data *data)
+> +{
+> +       if (data->flags & MMC_DATA_WRITE)
+> +               return priv->dma_tx;
+> +       else
+> +               return priv->dma_rx;
+> +}
+> +
+> +static int rda_mmc_send_data(struct mmc_host *host, struct mmc_data *data)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       struct dma_slave_config slave_config;
+> +       struct dma_async_tx_descriptor *desc;
+> +       struct dma_chan *chan;
+> +       int ret;
+> +
+> +       if (!data) {
+> +               dev_err(dev, "No MMC request or data\n");
+> +               goto fail;
+> +       }
+> +
+> +       if (data->flags & MMC_DATA_WRITE) {
+> +               slave_config.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+> +               slave_config.direction = DMA_MEM_TO_DEV;
+> +       } else {
+> +               slave_config.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+> +               slave_config.direction = DMA_DEV_TO_MEM;
+> +       }
+> +
+> +       data->sg_count = dma_map_sg(dev, data->sg, data->sg_len, mmc_get_dma_dir(data));
+> +       if (data->sg_count == 0) {
+> +               ret = -ENOMEM;
+> +               goto fail;
+> +       }
+> +
+> +       chan = rda_mmc_get_dma_chan(priv, data);
+> +
+> +       ret = dmaengine_slave_config(chan, &slave_config);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to configure DMAC\n");
+> +               goto fail_dma;
+> +       }
+> +
+> +       desc = dmaengine_prep_slave_sg(chan, data->sg, data->sg_count,
+> +                       slave_config.direction, DMA_CTRL_ACK);
+> +       if (!desc) {
+> +               dev_err(dev, "Failed to allocate DMA descriptor\n");
+> +               goto fail_dma;
+> +       }
+> +
+> +       priv->dma_cookie = dmaengine_submit(desc);
+> +       if (!priv->dma_cookie) {
+> +               dev_err(dev, "Failed to submit DMA request\n");
+> +               goto fail_dma;
+> +       }
+> +
+> +       dma_async_issue_pending(chan);
+> +
+> +       return 0;
+> +
+> +fail_dma:
+> +       dma_unmap_sg(dev, data->sg, data->sg_len, mmc_get_dma_dir(data));
+> +fail:
+> +       return -EINVAL;
+> +}
+> +
+> +static int rda_mmc_prepare_data(struct mmc_host *host, struct mmc_command *cmd,
+> +               struct mmc_data *data, u32 *cfg)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       int hw_blksz = 2; /* 1 word */
+> +       int i = 0;
+> +
+> +       /* If we're still here, we'll assume there's data ops */
+> +       *cfg |= SDMMC_CFG_RD_WT_EN;
+> +
+> +       /* Tell the controller we have a write operation */
+> +       if (data->flags & MMC_DATA_WRITE)
+> +               *cfg |= SDMMC_CFG_RD_WT_SEL;
+> +
+> +       /* Multiple data read/write */
+> +       if (mmc_op_multi(cmd->opcode) || data->blocks > 1) {
+> +               *cfg |= SDMMC_CFG_S_M_SEL;
+> +
+> +               /*
+> +                * Tell the controller to automatically issue CMD12 when the last block
+> +                * transfer is completed on non-SDIO cards.
+> +                */
+> +               if (!mmc_card_sdio(host->card))
+> +                       *cfg |= SDMMC_CFG_AUTO_FLAG_EN;
+> +       }
+> +
+> +       /* Blocksize on this IP is calculated by how many words are requested */
+> +       if (data->blksz > 4) {
+> +               for (i = 4; i < data->blksz; i <<= 1)
+> +                       hw_blksz++;
+> +       }
+> +
+> +       if (unlikely(hw_blksz > 11)) {
+> +               dev_err(dev, "Requested %d but hardware can only support 11!\n", hw_blksz);
+> +               return -EINVAL;
+> +       }
+> +
+> +       writel_relaxed(data->blocks, base + SDMMC_REG_BLOCK_COUNT);
+> +       writel_relaxed(hw_blksz, base + SDMMC_REG_BLOCK_SIZE);
+> +
+> +       return 0;
+> +}
+> +
+> +static int rda_mmc_send_cmd(struct mmc_host *host, struct mmc_command *cmd,
+> +               struct mmc_data *data)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       void __iomem *base = priv->base;
+> +       u32 cfg = SDMMC_CFG_SENDCMD;
+> +       int ret;
+> +
+> +       switch (mmc_resp_type(cmd)) {
+> +       case MMC_RSP_R2:
+> +               cfg |= SDMMC_CFG_RSP_EN | FIELD_PREP(SDMMC_CFG_RSP_SEL, 2);
+> +               break;
+> +       case MMC_RSP_R3:
+> +               cfg |= SDMMC_CFG_RSP_EN | FIELD_PREP(SDMMC_CFG_RSP_SEL, 1);
+> +               break;
+> +       default:
+> +               cfg |= SDMMC_CFG_RSP_EN;
+> +               break;
+> +       }
+> +
+> +       /* No data */
+> +       if (!data)
+> +               goto send_to_soc;
+> +
+> +       /* Data operations */
+> +       ret = rda_mmc_prepare_data(host, cmd, data, &cfg);
+> +       if (ret < 0)
+> +               return -EINVAL;
+> +
+> +       ret = rda_mmc_send_data(host, data);
+> +       if (ret < 0)
+> +               return -EINVAL;
+> +
+> +send_to_soc:
+> +       writel(cmd->opcode, base + SDMMC_REG_CMD_INDEX);
+> +       writel(cmd->arg, base + SDMMC_REG_CMD_ARG);
+> +       writel(cfg, base + SDMMC_REG_CONFIG);
+> +
+> +       dev_dbg(priv->dev, "mmc_resp_type = %d, cmd->opcode = 0x%x, cmd->arg = 0x%x - cfg: 0x%x\n",
+> +                       mmc_resp_type(cmd), cmd->opcode, cmd->arg, cfg);
+> +
+> +       rda_mmc_recv_resp(host, cmd);
+> +
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Once data transfer failed (or aborted), the controller needs to be
+> + * cleaned up.
+> + */
+> +static void rda_mmc_data_abort(struct mmc_host *host, struct mmc_request *mrq)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       struct mmc_command stop;
+> +       int ret;
+> +
+> +       writel_relaxed(0, base + SDMMC_REG_BLOCK_COUNT);
+> +       writel_relaxed(0, base + SDMMC_REG_BLOCK_SIZE);
+> +
+> +       if (!host->card)
+> +               return;
+> +
+> +       /*
+> +        * Issue a stop command first, because if the controller timed out,
+> +        * it'll not return an IRQ or any indicator.
+> +        */
+> +       if (!mmc_card_sdio(host->card)) {
+> +               if (!mrq->stop) {
+> +                       stop.opcode = MMC_STOP_TRANSMISSION;
+> +                       stop.arg = 0;
+> +                       stop.flags = MMC_RSP_R1B | MMC_CMD_AC;
+> +                       ret = rda_mmc_send_cmd(host, &stop, NULL);
+> +               } else {
+> +                       ret = rda_mmc_send_cmd(host, mrq->stop, NULL);
+> +               }
+> +
+> +               if (ret < 0)
+> +                       dev_err(dev, "Failed to send stop command\n");
+> +       }
+> +}
+> +
+> +static void rda_mmc_request(struct mmc_host *host, struct mmc_request *req)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       struct mmc_data *data = NULL;
+> +       struct dma_chan *chan;
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&priv->lock, flags);
+> +
+> +       WARN_ON(priv->mrq);
+> +       priv->mrq = req;
+> +
+> +       if (req->data) {
+> +               dev_dbg(dev, "Block size = %d - Blocks = %d - Offset: %d - Length: %d\n",
+> +                               req->data->blksz, req->data->blocks,
+> +                               req->data->sg->offset, req->data->sg->length);
+> +               data = req->data;
+> +       }
+> +
+> +       if (rda_mmc_send_cmd(host, req->cmd, data) < 0) {
+> +               req->cmd->error = -EINVAL;
+> +               if (data)
+> +                       req->data->error = -EINVAL;
+> +
+> +               goto done_irqunlock;
+> +       }
+> +
+> +       /* Interrupt will pick up on this */
+> +       if (!data)
+> +               goto done_irqunlock;
+> +
+> +       spin_unlock_irqrestore(&priv->lock, flags);
+> +
+> +       /*
+> +        * On a data operation, we rely on our interrupt to tell us
+> +        * when the transmission is finished (or failed).
+> +        *
+> +        * However with this IP, if the operation timed out, it will
+> +        * not trigger an IRQ and we'll not return.
+> +        */
+> +       if (data) {
+> +               if (wait_for_completion_timeout(&priv->c,
+> +                                       msecs_to_jiffies(5000)) == 0) {
+> +                       spin_lock_irqsave(&priv->lock, flags);
+> +                       priv->mrq = NULL;
+> +
+> +                       dma_unmap_sg(dev, data->sg, data->sg_len,
+> +                                       mmc_get_dma_dir(data));
+> +
+> +                       chan = rda_mmc_get_dma_chan(priv, data);
+> +
+> +                       dmaengine_terminate_sync(chan);
+> +                       rda_mmc_data_abort(host, req);
+> +
+> +                       req->cmd->error = -ETIMEDOUT;
+> +                       req->data->error = -ETIMEDOUT;
+> +                       goto done_irqunlock;
+> +               }
+> +       }
+> +
+> +       return;
+> +
+> +done_irqunlock:
+> +       priv->mrq = NULL;
+> +       spin_unlock_irqrestore(&priv->lock, flags);
+> +       mmc_request_done(host, req);
+> +}
+> +
+> +static void rda_mmc_set_ios(struct mmc_host *host, struct mmc_ios *ios)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       unsigned long mclk_rate;
+> +       unsigned int clk_div;
+> +       unsigned long flags;
+> +       u32 reg_mclk = 0;
+> +       int ret;
+> +
+> +       spin_lock_irqsave(&priv->lock, flags);
+> +
+> +       if (priv->bus_width != ios->bus_width) {
+> +               priv->bus_width = ios->bus_width;
+> +               writel(BIT(priv->bus_width), base + SDMMC_REG_DATA_WIDTH);
+> +       }
+> +
+> +       if (priv->power_mode != ios->power_mode) {
+> +               priv->power_mode = ios->power_mode;
+> +               if (priv->power_mode == MMC_POWER_UP) {
+> +                       ret = regulator_enable(priv->vmmc);
+> +                       if (ret)
+> +                               dev_err(dev, "Failed to turn on vmmc\n");
+> +               } else if (priv->power_mode == MMC_POWER_OFF) {
+> +                       ret = regulator_disable(priv->vmmc);
+> +                       if (ret)
+> +                               dev_err(dev, "Failed to turn off vmmc\n");
+> +               }
+> +       }
+> +
+> +       if (priv->clock != ios->clock) {
+> +               priv->clock = ios->clock;
+> +               if (ios->clock) {
+> +                       /* trans speed  */
+> +                       mclk_rate = clk_get_rate(priv->clk);
+> +                       if (mclk_rate == 0) {
+> +                               dev_err(dev, "Invalid MCLK rate\n");
+> +                               goto bailout;
+> +                       }
+> +
+> +                       clk_div = mclk_rate / (2 * ios->clock);
+> +                       if (mclk_rate % (2 * ios->clock))
+> +                               clk_div++;
+> +
+> +                       if (clk_div >= 1)
+> +                               clk_div -= 1;
+> +
+> +                       if (clk_div > 255)
+> +                               clk_div = 255;
+> +
+> +                       /* mclk adjust */
+> +                       if (priv->mclk_inv)
+> +                               reg_mclk = SDMMC_MCLK_INVERT;
+> +
+> +                       reg_mclk |= priv->mclk_adj;
+> +
+> +                       writel_relaxed(clk_div, base + SDMMC_REG_TRANS_SPEED);
+> +                       writel_relaxed(reg_mclk, base + SDMMC_REG_MCLK_ADJUST);
+> +
+> +                       dev_dbg(dev, "set clk = %d - mclk = %ld - divider = %d\n",
+> +                                       ios->clock, mclk_rate, clk_div);
+> +               } else {
+> +                       writel_relaxed(SDMMC_MCLK_DISABLE, base + SDMMC_REG_MCLK_ADJUST);
+> +               }
+> +       }
+> +
+> +bailout:
+> +       dev_dbg(dev, "buswidth=%d, clock=%d, power=%d\n",
+> +                       ios->bus_width, ios->clock, ios->power_mode);
+> +
+> +       spin_unlock_irqrestore(&priv->lock, flags);
+> +}
+> +
+> +static void rda_mmc_crc_status(struct mmc_host *host)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       const char *crc_error;
+> +       u32 status;
+> +
+> +       status = readl_relaxed(base + SDMMC_REG_STATUS);
+> +
+> +       switch (FIELD_GET(SDMMC_STATUS_CRC_STATUS, status)) {
+> +       case 0b101:
+> +               crc_error = "Transmission Error";
+> +               break;
+> +       case 0b010:
+> +               crc_error = "Transmission Right";
+> +               break;
+> +       case 0b111:
+> +               crc_error = "Flash Programming Error";
+> +               break;
+> +       default:
+> +               crc_error = "Unknown";
+> +               break;
+> +       }
+> +
+> +       dev_err(dev, "CRC Error: %s - DATA_ERROR: 0x%lx\n", crc_error,
+> +                       FIELD_GET(SDMMC_STATUS_DATA_ERROR, status));
+> +}
+> +
+> +static irqreturn_t rda_mmc_irq(int irq, void *dev_id)
+> +{
+> +       struct rda_mmc_host *priv = dev_id;
+> +       struct mmc_host *host = mmc_from_priv(priv);
+> +       struct device *dev = mmc_dev(host);
+> +       void __iomem *base = priv->base;
+> +       struct mmc_request *mrq;
+> +       u32 status;
+> +       irqreturn_t irqret = IRQ_NONE;
+> +
+> +       status = readl(base + SDMMC_REG_INT_STATUS);
+> +       writel((status & 0xFF), base + SDMMC_REG_INT_CLEAR);
+> +
+> +       dev_dbg(dev, "IRQ requested - status: 0x%x\n", status);
+> +
+> +       if (!priv->mrq || !priv->mrq->data)
+> +               goto irq_done;
+> +
+> +       mrq = priv->mrq;
+> +
+> +       if (mrq->data && ((status & SDMMC_INT_RD_ERR) || (status & SDMMC_INT_WR_ERR)))
+> +               mrq->data->error = -EILSEQ;
+> +
+> +       if (priv->sdio_irq && (status & SDMMC_INT_SDIO))
+> +               priv->sdio_irq_trigger = true;
+> +
+> +       irqret = IRQ_WAKE_THREAD;
+> +
+> +       /* We got an error, no need to do the additional checks */
+> +       if (mrq->data->error)
+> +               goto irq_done;
+> +
+> +       /*
+> +        * If we don't have any error but DAT_OVER isn't triggered, then we'll assume
+> +        * that we got an unexpected IRQ (during a data transfer)
+> +        */
+> +       if (!mrq->data->error && !(status & SDMMC_INT_DAT_OVER))
+> +               irqret = IRQ_HANDLED;
+> +
+> +irq_done:
+> +       if (irqret == IRQ_NONE)
+> +               dev_info(dev,
+> +                       "Unexpected IRQ - was a data transfer requested? IRQ: 0x%x\n", status);
+> +
+> +       return irqret;
+> +}
+> +
+> +static irqreturn_t rda_mmc_irq_fn(int irq, void *dev_id)
+> +{
+> +       struct rda_mmc_host *priv = dev_id;
+> +       struct mmc_host *host = mmc_from_priv(priv);
+> +       struct device *dev = mmc_dev(host);
+> +       struct mmc_request *mrq;
+> +       struct dma_chan *chan;
+> +       struct dma_tx_state state;
+> +       enum dma_status dma_status;
+> +       unsigned long flags;
+> +
+> +       if (WARN_ON(!priv->mrq))
+> +               return IRQ_NONE;
+> +
+> +       spin_lock_irqsave(&priv->lock, flags);
+> +
+> +       mrq = priv->mrq;
+> +
+> +       if (mrq->data) {
+> +               chan = rda_mmc_get_dma_chan(priv, mrq->data);
+> +
+> +               if (mrq->data->error) {
+> +                       mrq->data->bytes_xfered = 0;
+> +                       rda_mmc_crc_status(host);
+> +                       dmaengine_terminate_sync(chan);
+> +                       rda_mmc_data_abort(host, mrq);
+> +               } else {
+> +                       mrq->data->bytes_xfered =
+> +                               mrq->data->blocks * mrq->data->blksz;
+> +
+> +                       /*
+> +                        * With this IP, just because a TXDMA/RXDMA interrupt is triggered,
+> +                        * doesn't mean the MMC is fully processed.
+> +                        */
+> +                       dma_status = dmaengine_tx_status(chan, priv->dma_cookie, &state);
+> +                       dev_dbg(mmc_dev(host), "DMA Status: %d\n", dma_status);
+> +                       if (dma_status != DMA_COMPLETE) {
+> +                               dev_err(dev, "Transmit IRQ triggered but DMA is not finished\n");
+> +                               mrq->data->error = -ETIMEDOUT;
+> +                               mrq->data->bytes_xfered = 0;
+> +                               dmaengine_terminate_sync(chan);
+> +                               rda_mmc_data_abort(host, mrq);
+> +                       }
+> +               }
+> +
+> +               /*
+> +                * Since we told the controller to automatically send a stop command,
+> +                * we don't have to send a stop command here.
+> +                */
+> +               dma_unmap_sg(dev, mrq->data->sg, mrq->data->sg_len,
+> +                               mmc_get_dma_dir(mrq->data));
+> +               dmaengine_terminate_sync(chan);
+> +       }
+> +
+> +       priv->mrq = NULL;
+> +       spin_unlock_irqrestore(&priv->lock, flags);
+> +
+> +       complete(&priv->c);
+> +       mmc_request_done(host, mrq);
+> +
+> +       if (priv->sdio_irq && priv->sdio_irq_trigger)
+> +               mmc_signal_sdio_irq(host);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static int rda_mmc_card_busy(struct mmc_host *host)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       void __iomem *base = priv->base;
+> +       u32 status = readl(base + SDMMC_REG_STATUS);
+> +
+> +       return (status & SDMMC_STATUS_DLBUSY);
+> +}
+> +
+> +static void rda_mmc_sdio_enable_irq(struct mmc_host *host, int enable)
+> +{
+> +       struct rda_mmc_host *priv = mmc_priv(host);
+> +       void __iomem *base = priv->base;
+> +       u32 intmask = readl(base + SDMMC_REG_INT_MASK);
+> +
+> +       if (enable) {
+> +               intmask |= SDMMC_INT_SDIO;
+> +               priv->sdio_irq = true;
+> +       } else {
+> +               intmask &= ~SDMMC_INT_SDIO;
+> +               priv->sdio_irq = false;
+> +       }
+> +
+> +       priv->sdio_irq_trigger = false;
+> +
+> +       writel(intmask, base + SDMMC_REG_INT_MASK);
+> +}
+> +
+> +static const struct mmc_host_ops rda_mmc_ops = {
+> +       .request = rda_mmc_request,
+> +       .set_ios = rda_mmc_set_ios,
+> +       .get_cd = mmc_gpio_get_cd,
+> +       .get_ro = mmc_gpio_get_ro,
+> +       .card_busy = rda_mmc_card_busy,
+> +       .enable_sdio_irq = rda_mmc_sdio_enable_irq,
+> +};
+> +
+> +static void rda_mmc_of_parse(struct device_node *np, struct rda_mmc_host *priv)
+> +{
+> +       bool mclk_inv = false;
+> +       u8 mclk_adj = 1;
+> +
+> +       if (of_property_present(np, "rda,mclk-inv"))
+> +               mclk_inv = true;
+> +
+> +       of_property_read_u8(np, "rda,mclk-adj", &mclk_adj);
+> +
+> +       priv->mclk_inv = mclk_inv;
+> +       priv->mclk_adj = mclk_adj;
+> +}
+> +
+> +static int rda_mmc_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct rda_mmc_host *priv;
+> +       struct mmc_host *mmc;
+> +       struct clk *clk;
+> +       struct reset_control *reset;
+> +       struct dma_chan *tx, *rx;
+> +       struct regulator *vmmc;
+> +       void __iomem *base;
+> +       int irq;
+> +       int ret;
+> +
+> +       base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(base))
+> +               return dev_err_probe(dev, PTR_ERR(base), "Cannot get iomap\n");
+> +
+> +       irq = platform_get_irq(pdev, 0);
+> +       if (irq < 0)
+> +               return dev_err_probe(dev, irq, "Cannot get IRQ: %d\n", irq);
+> +
+> +       clk = devm_clk_get_enabled(dev, "mclk");
+> +       if (IS_ERR(clk))
+> +               return dev_err_probe(dev, PTR_ERR(clk), "Cannot get clock device\n");
+> +
+> +       vmmc = devm_regulator_get(dev, "vmmc");
+> +       if (IS_ERR(vmmc))
+> +               return dev_err_probe(dev, PTR_ERR(vmmc), "Failed to obtain regulator\n");
+> +
+> +       reset = devm_reset_control_get_by_index(dev, 0);
+> +       if (IS_ERR(reset))
+> +               return dev_err_probe(dev, PTR_ERR(reset), "Failed to obtain reset\n");
+> +
+> +       tx = dma_request_chan(dev, "tx");
+> +       if (IS_ERR(tx))
+> +               return dev_err_probe(dev, PTR_ERR(tx), "Failed to request tx channel\n");
+> +
+> +       rx = dma_request_chan(dev, "rx");
+> +       if (IS_ERR(rx))
+> +               return dev_err_probe(dev, PTR_ERR(rx), "Failed to request rx channel\n");
+> +
+> +       mmc = devm_mmc_alloc_host(dev, sizeof(*priv));
+> +       if (IS_ERR(mmc)) {
+> +               dev_err(dev, "Cannot allocate memory for MMC\n");
+> +               ret = PTR_ERR(mmc);
+> +               goto fail_release_dma;
+> +       }
+> +
+> +       priv = mmc_priv(mmc);
+> +       priv->dev = dev;
+> +       priv->base = base;
+> +       priv->irq = irq;
+> +       priv->clk = clk;
+> +       priv->reset = reset;
+> +       priv->dma_tx = tx;
+> +       priv->dma_rx = rx;
+> +       priv->vmmc = vmmc;
+> +       spin_lock_init(&priv->lock);
+> +       init_completion(&priv->c);
+> +
+> +       mmc->ops = &rda_mmc_ops;
+> +
+> +       mmc->max_segs = 1;
+> +       mmc->max_blk_size = 4096;
+> +       mmc->max_blk_count = 0xFFFF;
+> +       mmc->max_req_size = 0xFFFF;
+> +       mmc->max_seg_size = 0xFFFF;
+> +
+> +       mmc->f_min = 1000000;
+> +       mmc->caps = MMC_CAP_4_BIT_DATA;
+> +       mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
+> +
+> +       rda_mmc_of_parse(dev->of_node, priv);
+> +
+> +       ret = mmc_of_parse(mmc);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to parse device tree: %d\n", ret);
+> +               goto fail_release_dma;
+> +       }
+> +
+> +       rda_mmc_reset(priv);
+> +       rda_mmc_hw_init(priv);
+> +
+> +       priv->bus_width = -1;
+> +
+> +       ret = devm_request_threaded_irq(dev, irq, rda_mmc_irq, rda_mmc_irq_fn,
+> +                       IRQF_ONESHOT, mmc_hostname(mmc), priv);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to request IRQ: %d\n", ret);
+> +               goto fail_release_dma;
+> +       }
+> +
+> +       ret = mmc_add_host(mmc);
+> +       if (ret) {
+> +               dev_err(dev, "Failed to add MMC host: %d\n", ret);
+> +               goto fail_release_dma;
+> +       }
+> +
+> +       platform_set_drvdata(pdev, mmc);
+> +       return 0;
+> +
+> +fail_release_dma:
+> +       dma_release_channel(rx);
+> +       dma_release_channel(tx);
+> +       return ret;
+> +}
+> +
+> +static void rda_mmc_remove(struct platform_device *pdev)
+> +{
+> +       struct rda_mmc_host *host = platform_get_drvdata(pdev);
+> +
+> +       mmc_remove_host(host->mmc);
+> +       dma_release_channel(host->dma_rx);
+> +       dma_release_channel(host->dma_tx);
+> +}
+> +
+> +static const struct of_device_id rda_mmc_dt_ids[] = {
+> +       { .compatible = "rda,8810pl-mmc", },
+> +       { .compatible = "rda,mmc", },
+> +       {},
+> +};
+> +MODULE_DEVICE_TABLE(of, rda_mmc_dt_ids);
+> +
+> +static struct platform_driver rda_mmc_driver = {
+> +       .probe          = rda_mmc_probe,
+> +       .remove         = rda_mmc_remove,
+> +       .driver         = {
+> +               .name   = "rda-mmc",
+> +               .probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> +               .of_match_table = rda_mmc_dt_ids,
+> +       },
+> +};
+> +module_platform_driver(rda_mmc_driver);
+> +
+> +MODULE_AUTHOR("Dang Huynh <dang.huynh@mainlining.org>");
+> +MODULE_DESCRIPTION("RDA Micro SD/MMC driver");
+> +MODULE_LICENSE("GPL");
+>
+> --
+> 2.51.0
+>
+>
+>
 
