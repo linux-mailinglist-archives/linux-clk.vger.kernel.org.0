@@ -1,155 +1,169 @@
-Return-Path: <linux-clk+bounces-29250-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29252-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B3FBE83AA
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 13:04:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 303A5BE8484
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 13:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 896115806B5
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 11:02:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1767E189E4D5
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Oct 2025 11:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94AF320394;
-	Fri, 17 Oct 2025 11:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B595343D7C;
+	Fri, 17 Oct 2025 11:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bu3Ob7ej"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC02E32F751
-	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 11:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A83343219
+	for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 11:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760698935; cv=none; b=pmDIYmIexiRxgncWWjb1E+Tpz9HXVD0g7BqBNEPdp2zgFvMtTcYXgJXzILQARxYwVd47wPzAnrBiQAIU8RnYmngf6N5oF6jlURJeAH17tM2Zw/2vyBGt6rmxGQvsrA6DoO64owQrtM1tDUxMLpAPw7DFwHMNeeU+UM8R89ccNfU=
+	t=1760700108; cv=none; b=Q79sAkfLoh/N6/w8XxPV6AYwN1FtKYgAhfHQQjXISml4HrgbZsY+Hyr2CubLZV6+LTem0cIj9pQtvaiG5GqYj6KLQ1jxO1zVdPjIaDBdHvXwJF17I7J+umVF6ZQNtECvFo+hmjRHP9gGwG1aVQr6Lv45UJgFDrP9cayBBqDYa3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760698935; c=relaxed/simple;
-	bh=7roeWK5AtO/7ZwDK0dlN3Uu9wiMocaa5toCTUlYqJaM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QKBzM/kDKWKFA3Aox7mbdALzYml3GBJ/q2XorkVv8k/iskdxLJQcphsjloGfIBXtmRZV8q3oX9yTLZn9gE0VDWTxtwDCUnA3Aegh3owGl04nLHH/gUhTDXCroPUJbxLO9ivp55HrPicemTOFvkxovKYRyfBN3j/uHI0aA8Wn8w4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1760700108; c=relaxed/simple;
+	bh=DzYhdD6dLeuq6gx9bQoxTIgwouCWI7ls/2GGuSYzyK4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NnnCsvrv+wnIAJNJdEVHQCqP3Xghs2BR2TEfQhJ4PN+ifq75TbmQrmv2QLGh+K+Lh1K+hBqNNtNliPS0ResUYA3x7zmTZLKpPXcDnloEERxBzCiLVvGxYZYNbkHdNSJxbhCwz2TONHGg8DrG7KZjBJVk0iTz6cG6Qy51Y896lqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bu3Ob7ej; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7930132f59aso2477012b3a.0
-        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 04:02:12 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b3f5e0e2bf7so340666166b.3
+        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 04:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760700103; x=1761304903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uoOJKVjcja+pZfFrIKEYfKv+zueerFYrO1gT2duocao=;
+        b=Bu3Ob7ejedR8FywGfcI0fza6WRE2Wc3feBWQfO/VAnHR6V8b1zG5r4o+WZ2z2or8Kd
+         A922tvzqauujo4LtFJJ2THQGiwHOdnsSE5F/HKmcJyj9ty7pCw5Bmp+WqGbM7lyX5CQV
+         5h81cZKHPmWonK0iTDDSnDgwvPcnQlkDemOMBemOR73FHWa+stgRQwGmXOAp8nYWOKiT
+         rPqLn6+nLSIn7PG4+YUFHaB7L1Ok3a+lzvx9de3++gkRBmcdiqDUGzWz306HE3OFy0a/
+         8howBW35j2UDPoxerUHnxJRzKhC5fFpGt/2fyicACrJwQNgwZNqz8KAnXhXyddYvQDIB
+         zWQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760698932; x=1761303732;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1760700103; x=1761304903;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zPE9WHNZsdRI3QmdRcH/wWeYzKksV+R5Ry8aWltKbjU=;
-        b=O9tEAOntaKmL9iMEoVlkO3UlIfeNJmqjYVUX+OxCCl0Cz/L+o/FiXUzv3ca2SGS4gs
-         u0P7U/VraL/ToKxVHieBoUUoSwKYtfjsIWcc9JYn0QtrPuv8QpzZQ0AP6wAY9q8tgFaH
-         /6nOOHz2JKOGGyyB/lqODm2h4dUUK/AUEVKrFzv4viec2EH+oF//LkQ4+ty9QljHUywe
-         9/yIIlRnx0CkyuKnAyU4jLr8DpJ6R/cmhBt4yRxPC/FiNN5BCciY0s6bP6DUBBXEkCqo
-         ZzoSN/lVJsNkeOwE1zFkPWVeYBf3tElpQL1UalCSxmj3dyf3UC8yxpMncuuIuyuYokFn
-         njsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXeLhAq5yNBsLNtQRkLjCKXnZ3AW9jCfK7i4dFMLuB41dXMXIlePhEr24fw/UoBiwujbAwSrOabTyI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxogAG1r7GyMX+XQ5GK7dKhmMNKa3Bn8cX3TVgythsPNa3APeBH
-	aFy+UNTqV1sswu+WekAeDgwadAdJZ+zALWHPhnFXWLMJKPqSKlX92b+7aamtHFlX
-X-Gm-Gg: ASbGncsmEix8258Y0Kr5wwj1TXvkq2+/AMJ/m3HqYOHN0+t+Ag0B8TCsARvkKuRVQOU
-	deqSUvmjHirbgUeXyD7SJjrx2ToOQoeLeJaNB4njsSGtIJxZ2kubi7Vtf2VoFan8L52FqRNfaWo
-	wlxBYGuA2OIeLoLI242zQhrVJoGFKVDPtMDKiJOV7gKuIJl+1sOa+F5ENIyvqN2OBwOJEHEmsX6
-	rDeIoKy7vbPvLU1RFllFPOqQXMin2RneoI1LM5wFfcpAj5pykp7u0Wh8P+uvgER61VQvkZitmvX
-	9B3f1GXwzoBynIfto/FaUgVHv7eqZ8PyX7gu+oGXXmxBk5089l+XLlv5pRD8PtBX6MW9mFp5kdg
-	ly4oG4cKxRB6MmTjdbO09oTjC5ZSXF98MU0ewijufqQvXgF+gswQ4Qx0v4L0Nb56filgrSVL66s
-	1qoa+OiRl7ya+jW4DjKQM4nnxCJe9qNPT+4YZAWx5Mci9aiGjdR7vt
-X-Google-Smtp-Source: AGHT+IH725wlKCW1f5FBE/LsaSa9KxszjPw0J38br1GyqOWCf3Zw+Wr6zyuoSnoRUeXkL/9Eedm2aQ==
-X-Received: by 2002:a05:6a00:9299:b0:776:1de4:aee6 with SMTP id d2e1a72fcca58-7a220d232b3mr4188480b3a.16.1760698931398;
-        Fri, 17 Oct 2025 04:02:11 -0700 (PDT)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com. [209.85.210.173])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992b63a03dsm25282293b3a.19.2025.10.17.04.02.11
-        for <linux-clk@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Oct 2025 04:02:11 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7a213c3c3f5so2463741b3a.3
-        for <linux-clk@vger.kernel.org>; Fri, 17 Oct 2025 04:02:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXghG+Pe8kG/+/lNtRz6vsza2IOwJCtWMa0sY3fQgGc8XFym1NIfyK8Kuj1+OGHeKoa9nQ17TLdWmY=@vger.kernel.org
-X-Received: by 2002:a05:6102:5111:b0:5d5:f766:333e with SMTP id
- ada2fe7eead31-5d7dd5934demr1126362137.15.1760698513447; Fri, 17 Oct 2025
- 03:55:13 -0700 (PDT)
+        bh=uoOJKVjcja+pZfFrIKEYfKv+zueerFYrO1gT2duocao=;
+        b=pQ90mbpheesCBGb4bSsH2x8OqANrKo4WCRks7pUOPg5Q/WAe7laFco5NDCM/V6bIp+
+         Pqm0n9kwqUf/nTqBcdkkxSXe9guHPmPTN8LAtT5vGB9yB0CYt0c8bb/e4LzNbF5ASBA/
+         wS35C7EWAwpWFUZgrRQKMnQLkt+1dKqbIj4u434YZEg7YKfdHDDs5OHlsrwN/0EX0UIQ
+         56AtqmjyiT+6uVT/X8BErQXbKdkG0tPNtNwq4UD2/CmO9CK1r4NWb3h112VNAaaoZw8W
+         15jJR6wQZn7ls368SPVBXnGaDmGUppXviqBqtFyk9com3rvJU9w9Fc0f0fzNesiusxCp
+         +UBg==
+X-Gm-Message-State: AOJu0Yy34Vgyde+SEjKLkZqb391okeEsJz6jm/HMn9RgmjEN8sRBh6rj
+	6y25r7pXjrsRgz3og8K3TWVEaKcnlphZ3dx46TLkiYNzK6jSzIBmVqcS
+X-Gm-Gg: ASbGncs4nHzgOHLiQJJ+xiwTCFQUsIgumtltxB8AvgqsjM2EaaKTy55APgsFNwWCoGV
+	pb5j7I45AgiOoQZTYVaxIWHHmSWQPHZgdbH8i/d8+MnuWsEOl/i5e0aushxCimX+pQg88EQPiE4
+	2qDpG5QcMkulP6SSvbBKBkRbzRU2hFvA8yJUE6VkV+DwkPZToShX/O6/hkwgeVB9tD6Ryut6lKF
+	SNOakBX0somr+07FaDq9685ObqDuqDjkZRU352azHiiujOBe2LUaz665vhTq02Rba+3gj1Om2hM
+	lz9BiC+VbQ7Q8SHT9iSbuA4nZudgszGqqNGUF7ZmQMaXTUkJOW/j7U10bFcX6st/8ITfQPwcsBd
+	emhojIIOh4grUaYzZ2ewy5ZUed/8BMXmeO7+ydCe0GiiyCbBp3Z6NGOY2O6dzdOUGt9tJScBug/
+	/vyv0UAH/6ejLl6KVpyOkyZ82Y/sJmvzDutIhuUMLrF2hKlx60
+X-Google-Smtp-Source: AGHT+IGFhQUxhV6SF10u6CZSFFpi31Ect63oJZfFFTLF//BzPbI6yY/eC/VY0xS8OHwPwrYiIx73tg==
+X-Received: by 2002:a17:907:2d88:b0:b40:33ec:51de with SMTP id a640c23a62f3a-b6472b60651mr339169666b.8.1760700103306;
+        Fri, 17 Oct 2025 04:21:43 -0700 (PDT)
+Received: from SMW024614.wbi.nxp.com ([128.77.115.157])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5ccd1af35fsm788256166b.60.2025.10.17.04.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 04:21:42 -0700 (PDT)
+From: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
+To: Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc: linux-clk@vger.kernel.org,
+	imx@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH v2 0/8] Add support for i.MX8ULP's SIM LPAV
+Date: Fri, 17 Oct 2025 04:20:17 -0700
+Message-ID: <20251017112025.11997-1-laurentiumihalcea111@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1739540679.git.geert+renesas@glider.be> <2d30e5ffe70ce35f952b7d497d2959391fbf0580.1739540679.git.geert+renesas@glider.be>
- <20250214073402.0129e259@kernel.org> <20250214164614.29bbc620@pumpkin>
-In-Reply-To: <20250214164614.29bbc620@pumpkin>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 17 Oct 2025 12:55:02 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXost7vL5uTocMGtrqhEk5AY3QUWvyP5w7_hBtf3MkMfA@mail.gmail.com>
-X-Gm-Features: AS18NWAcP6voBjoIoEi-7RxJ0pdmzXqhfe5FdHBNP60R0y-DyUBofdEL44euygw
-Message-ID: <CAMuHMdXost7vL5uTocMGtrqhEk5AY3QUWvyP5w7_hBtf3MkMfA@mail.gmail.com>
-Subject: Re: [PATCH treewide v3 2/4] bitfield: Add non-constant
- field_{prep,get}() helpers
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
-	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Alex Elder <elder@ieee.org>, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, qat-linux@intel.com, linux-gpio@vger.kernel.org, 
-	linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi David,
+From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
 
-On Fri, 14 Feb 2025 at 17:46, David Laight <david.laight.linux@gmail.com> wrote:
-> On Fri, 14 Feb 2025 07:34:02 -0800
-> Jakub Kicinski <kuba@kernel.org> wrote:
-> > On Fri, 14 Feb 2025 14:55:51 +0100 Geert Uytterhoeven wrote:
-> > > The existing FIELD_{GET,PREP}() macros are limited to compile-time
-> > > constants.  However, it is very common to prepare or extract bitfield
-> > > elements where the bitfield mask is not a compile-time constant.
-> > >
-> > > To avoid this limitation, the AT91 clock driver and several other
-> > > drivers already have their own non-const field_{prep,get}() macros.
-> > > Make them available for general use by consolidating them in
-> > > <linux/bitfield.h>, and improve them slightly:
-> > >   1. Avoid evaluating macro parameters more than once,
-> > >   2. Replace "ffs() - 1" by "__ffs()",
-> > >   3. Support 64-bit use on 32-bit architectures.
-> > >
-> > > This is deliberately not merged into the existing FIELD_{GET,PREP}()
-> > > macros, as people expressed the desire to keep stricter variants for
-> > > increased safety, or for performance critical paths.
-> >
-> > I really really think that people should just use the static inline
-> > helpers if the field is not constant. And we should do something like
-> > below so that people can actually find them.
->
-> Especially since you really don't want to be calling ffs() on variables.
+The LPAV System Integration Module (SIM) is an IP found inside i.MX8ULP's
+LPAV subsystem, which offers clock gating, reset line
+assertion/de-assertion, and various other misc. options.
 
-It is not that bad, as most temporary architectures have an instruction
-for that.
+This series adds support for the IP by introducing a new clock HW provider
+driver and by modifying i.MX8MP's AUDIOMIX block control reset driver to
+allow it to be used for i.MX8ULP's SIM LPAV as well.
 
-> Much better to have saved the low bit and field width/mask.
+This series is a spin-off from [1].
 
-While that would allow some space saving (only 10 or 12 bits needed to
-store low + width), gcc would generate quite some code to create the
-mask (even on PowerPC, where I expected a single instruction would
-do ;-).
+[1]: https://lore.kernel.org/lkml/20240922174225.75948-1-laurentiumihalcea111@gmail.com/
 
+---
+Changes in v2:
 
-Gr{oetje,eeting}s,
+* drop redundant description for "#clock-cells"/"#reset-cells" properties
+  from binding
+* make "mux-controller" and "#reset-cells" properties mandatory
+* add "mux-controller" child to binding example node
+* drop the compatiblity with syscon - this was never actually needed and
+  it was done to allow using "mmio-mux", which requires a syscon parent
+* modify the auxiliary reset driver to use regmap - this will allow the
+  mux controller, clock control and reset control APIs to use the same
+  spinlock
+* rename "imx8ulp-reset-sim-lpav.h" to "fsl,imx8ulp-sim-lpav.h"
+* drop the "IMX8ULP_CLK_SIM_LPAV_END" macro, which doesn't belong to the
+  binding headers
+* fix the values of "IMX8MP_AUDIOMIX_EARC_RESET_MASK" and
+  "IMX8MP_AUDIOMIX_EARC_PHY_RESET_MASK", which were previously incorrect
+* drop redundant macros from auxiliary reset driver - replace their
+  occurrences with their values
+* squash the binding-related macro additions into the binding patch
+* add mux-controller child node to the sim_lpav node
+* make the "gates" array static
+* link to v1: https://lore.kernel.org/lkml/20250804155407.285353-1-laurentiumihalcea111@gmail.com/
+---
 
-                        Geert
+Laurentiu Mihalcea (8):
+  reset: imx8mp-audiomix: Fix bad mask values
+  dt-bindings: clock: document 8ULP's SIM LPAV
+  clk: imx: add driver for imx8ulp's sim lpav
+  reset: imx8mp-audiomix: Drop unneeded macros
+  reset: imx8mp-audiomix: Switch to using regmap API
+  reset: imx8mp-audiomix: Extend the driver usage
+  reset: imx8mp-audiomix: Support i.MX8ULP SIM LPAV
+  arm64: dts: imx8ulp: add sim lpav node
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ .../bindings/clock/fsl,imx8ulp-sim-lpav.yaml  |  72 ++++++
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi    |  17 ++
+ drivers/clk/imx/Makefile                      |   1 +
+ drivers/clk/imx/clk-imx8ulp-sim-lpav.c        | 211 ++++++++++++++++++
+ drivers/reset/reset-imx8mp-audiomix.c         | 174 +++++++++++----
+ include/dt-bindings/clock/imx8ulp-clock.h     |   5 +
+ .../dt-bindings/reset/fsl,imx8ulp-sim-lpav.h  |  16 ++
+ 7 files changed, 453 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,imx8ulp-sim-lpav.yaml
+ create mode 100644 drivers/clk/imx/clk-imx8ulp-sim-lpav.c
+ create mode 100644 include/dt-bindings/reset/fsl,imx8ulp-sim-lpav.h
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.43.0
+
 
