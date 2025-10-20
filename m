@@ -1,211 +1,155 @@
-Return-Path: <linux-clk+bounces-29446-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29449-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937A7BF2454
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Oct 2025 18:00:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8869FBF2A03
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Oct 2025 19:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EFCCE4F5B77
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Oct 2025 15:59:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6737189C9E3
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Oct 2025 17:11:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE7927B324;
-	Mon, 20 Oct 2025 15:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E86331A72;
+	Mon, 20 Oct 2025 17:11:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="CIqNZUYN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTQz/DbS"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7190024BD1A;
-	Mon, 20 Oct 2025 15:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760975998; cv=pass; b=HwWBQHP6llaRZp5pqU/yAGHnS/QThBLxXaAYg5MFu87/NYtysOm6XdThLozt0ybxA/862/DGSUL9lRrqto5q40orjWk0St5UlZNgo81wuYlai6qndUqYqiaswI19/P9VlQvekw5B/Q4fkiigLxI5QXuxcNShmnamK8MkjX67KhE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760975998; c=relaxed/simple;
-	bh=ZG1Avcj97+DuLAUg3cK2NE+DlJ8sgcNUDHLqJdRW+Fk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sPIVmz0Sb3BvX1mVPlx7iyGxQskzFYx6sUn4vrS/V+4zqTjOUWjWQLwhFg/H7ulmNwpxvve4bkIfiTRJk7z9UbJ2D6WgXLg8a/gU32szziuu6NoXFpe1+6XMe6q+hGFQwzXi65pjrl4qgvUYxYfCHNZjkfULTSC+y1aL0k1SoNs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=CIqNZUYN; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1760975979; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Wy0NOCnKfBjwkN1+ttbmqreAXMxrEFfBhHLur1okXEVB8hGchpzFBxF24zQq262j2EPG6VZfHZSmP4USowJRFr+Z6lioLlMEvaHijQE+Nn5HTVQZbHRs1wdx4xFPJS644ufSUkEswDomYYIXFqVSKbv4dRaPFk4ZA5dMMUpw7n8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760975979; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=zrRTMDRoKEij/qgsmjlkkItncpY8TQi3dW/HAP1V1O4=; 
-	b=DUWu+26nuvDQigb7XaIUdxyQGTczedqCMJO/SY5kloFvFuWPLZkInxx29MAZTg7WDeNaQMXfUZacUqlFBBEd3LbPIxS/mGT5uLhT5WLsLgT0/xQ0n7U7abTOQ18VZ+tdcIR2eABIbiDeekEdJq7QDRftFcvyNgzS1G6l9Fes9p8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760975978;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=zrRTMDRoKEij/qgsmjlkkItncpY8TQi3dW/HAP1V1O4=;
-	b=CIqNZUYNWpVGH2I7WLmeDPFtveMCn0pQ2wDLLwd58MBwsleeFPHnqkWJ4YKq/OoL
-	I7cbgvwlgvfSblNpOu4m4Xs6KGbAV7WI4vx/8TC4ADXbrDa6iWeHSjUppx4QcNRSGsw
-	VQyNbCMfk+C1PqkHa+15qNQ4KC6mvNv6pkY8c464=
-Received: by mx.zohomail.com with SMTPS id 1760975975377620.3381568170347;
-	Mon, 20 Oct 2025 08:59:35 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 4BE16180B11; Mon, 20 Oct 2025 17:59:29 +0200 (CEST)
-Date: Mon, 20 Oct 2025 17:59:29 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: Quentin Schulz <quentin.schulz@cherry.de>, mturquette@baylibre.com, 
-	sboyd@kernel.org, zhangqing@rock-chips.com, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, Andy Yan <andy.yan@rock-chips.com>
-Subject: Re: [PATCH] clk: rockchip: rk3588: Don't change PLL rates when
- setting dclk_vop2_src
-Message-ID: <j6ondk5xnwbm36isdoni5vtdq5mf5ak4kp63ratqlnpwsgrqj2@paw5lzwqa2ze>
-References: <20251008133135.3745785-1-heiko@sntech.de>
- <2749454.BddDVKsqQX@diego>
- <eumxn7lvp34si2gik33hcavcrsstqqoxixiznjbertxars7zcx@xsycorjhj3id>
- <4856104.usQuhbGJ8B@phil>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F2532F754;
+	Mon, 20 Oct 2025 17:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760980280; cv=none; b=KL4JMiuQ1GKOFFkAUnSVz03AM0ogk/zwwzGBNPxHc3GZlIbshzcv4hm1C3u982P5Ay7bHMJLsf+VT9VR+/DgnpWneG85Za9lWLSeRAcZ74F4agyvN3Gdmsx99PwfnCtErJRKDNhEDpKcwIfuTAyGso/O+WIn3C+SJIqV46qR1ug=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760980280; c=relaxed/simple;
+	bh=TJPYa24Z5KTj/XUQBDA+4muq/sKdsaWSFY+S+sPkdkw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nIfTC1fQRqpNr66bAWuk4T6M9eiIOTdheb/qPSCuISI2/s3pua+2mntMwNlnMTrrKPlNq9n91m3GM/iGciLfC4tqz9pTTOdUQHTmTRisQnS2BPTznNdzbBcdNl9741XH6rqsayyyKW/3PEAVCcBZEDKNuW3exIwRucp/ab84wiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTQz/DbS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B395C4CEF9;
+	Mon, 20 Oct 2025 17:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760980280;
+	bh=TJPYa24Z5KTj/XUQBDA+4muq/sKdsaWSFY+S+sPkdkw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RTQz/DbS3nDJtiW0gDdrU4/D+mk33QWYGezbsuDwSgW+xyVGsCuE7m2lbKyKoZDYg
+	 Qxd2TUg5S8DD4fruNkVcz6j9K2v0gJFpE6uo4SZaiwN6gkdyVwLfkaneT53r5mDLH7
+	 WoUBvzrF4qdszKMcVpagSm4DAFS+/vF12j6AL74W6f3HsqSeqZ3cfBsFgCvUocr291
+	 Q84eyOe8eHgi1cUIQiImKIl+am2qIMJjFA3bkyY05VTwx/oHMC06eQm5Aq1xnKVWUt
+	 odkOIZ8CHk2n+GNqzHgdEF7a5pMxYN0hWChZwXnFGS4LMAX5WhEe+eSD+gJ7lXcQdw
+	 MLoZ4bYpOegMA==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 1D6D45FDC3; Tue, 21 Oct 2025 01:11:18 +0800 (CST)
+From: Chen-Yu Tsai <wens@kernel.org>
+To: Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Mark Brown <broonie@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>
+Cc: linux-sunxi@lists.linux.dev,
+	linux-sound@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] allwinner: a523: Enable I2S and SPDIF TX
+Date: Tue, 21 Oct 2025 01:10:46 +0800
+Message-ID: <20251020171059.2786070-1-wens@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d64jzfl74qyxt42h"
-Content-Disposition: inline
-In-Reply-To: <4856104.usQuhbGJ8B@phil>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/260.922.11
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+
+Hi folks,
+
+This series enables the SPDIF and I2S hardware found on the Allwinner
+A523/A527/T527 family SoCs. These SoCs have one SPDIF interface and
+four I2S interfaces. All of them are capable of both playback and
+capture, however the SPDIF driver only supports playback.
+
+The series is organized by subsystem, so each maintainer can find the
+patches they need to take.
+
+Patch 1 adds SoC/hardware specific compatibles for the two DMA
+controllers in the A523 SoC.
+
+Patch 2 adds an SoC specific compatible for the I2S interface
+controllers in the A523 SoC.
+
+Patch 3 adds an SoC specific compatible for the SPDIF interface
+controller in the A523 SoC.
+
+Patch 4 adds driver support for the SPDIF interface.
+
+Patch 5 marks a clock related to the DMA controller as critical. The
+docs are quite vague on how this particular clock gate ties in with
+the other memory bus gate that the DMA controller needs.
+
+Patch 6 tweaks the software lower limit of the audio PLL.
+
+Patch 7 adds devices nodes for the DMA controllers.
+
+Patch 8 adds a devices node for the SPDIF interface controller.
+
+Patch 9 adds device nodes for the I2S interface controllers.
+
+Patch 10 adds one set of pinmux settings for I2S2.
+
+Patch 11 is what I used to test the changes, and serves as an example
+for how to use these new interfaces.
 
 
---d64jzfl74qyxt42h
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] clk: rockchip: rk3588: Don't change PLL rates when
- setting dclk_vop2_src
-MIME-Version: 1.0
+Patch 1 can go through the dmaengine tree, or I can take it through the
+sunxi tree.
 
-Hi,
+Patches 2 through 4 should go through the ASoC tree.
 
-On Mon, Oct 20, 2025 at 02:49:10PM +0200, Heiko Stuebner wrote:
-> Am Donnerstag, 16. Oktober 2025, 00:57:15 Mitteleurop=E4ische Sommerzeit =
-schrieb Sebastian Reichel:
-> > On Wed, Oct 15, 2025 at 03:27:12PM +0200, Heiko St=FCbner wrote:
-> > > Am Mittwoch, 15. Oktober 2025, 14:58:46 Mitteleurop=E4ische Sommerzei=
-t schrieb Quentin Schulz:
-> > > > On 10/8/25 3:31 PM, Heiko Stuebner wrote:
-> > > > > dclk_vop2_src currently has CLK_SET_RATE_PARENT | CLK_SET_RATE_NO=
-_REPARENT
-> > > > > flags set, which is vastly different than dclk_vop0_src or dclk_v=
-op1_src,
-> > > > > which have none of those.
-> > > > >=20
-> > > > > With these flags in dclk_vop2_src, actually setting the clock the=
-n results
-> > > > > in a lot of other peripherals breaking, because setting the rate =
-results
-> > > > > in the PLL source getting changed:
-> > > > >=20
-> > > > > [   14.898718] clk_core_set_rate_nolock: setting rate for dclk_vo=
-p2 to 152840000
-> > > > > [   15.155017] clk_change_rate: setting rate for pll_gpll to 1680=
-000000
-> > > > > [ clk adjusting every gpll user ]
-> > > > >=20
-> > > > > This includes possibly the other vops, i2s, spdif and even the ua=
-rts.
-> > > > > Among other possible things, this breaks the uart console on a bo=
-ard
-> > > > > I use. Sometimes it recovers later on, but there will be a big bl=
-ock
-> > > >=20
-> > > > I can reproduce on the same board as yours and this fixes the issue=
-=20
-> > > > indeed (note I can only reproduce for now when display the modetest=
-=20
-> > > > pattern, otherwise after boot the console seems fine to me).
-> > >=20
-> > > I boot into a Debian rootfs with fbcon on my system, and the serial
-> > > console produces garbled output when the vop adjusts the clock
-> > >=20
-> > > Sometimes it recovers after a bit, but other times it doesn't
-> > >=20
-> > > > Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
-> > > > Tested-by: Quentin Schulz <quentin.schulz@cherry.de> # RK3588 Tiger=
- w/DP carrierboard
-> >=20
-> > I'm pretty sure I've seen this while playing with USB-C DP AltMode
-> > on Rock 5B. So far I had no time to investigate further.
-> >=20
-> > What I'm missing in the commit message is the impact on VOP. Also
-> > it might be a good idea to have Andy in Cc, so I've added him.
->=20
-> Hmm, it brings VP2 in line with the other two VPs, only VP2 had this
-> special setting - even right from the start, so it could very well
-> have been left there accidentially during submission.
+The rest, except the example, will go through the sunxi tree.
 
-I did the initial upstream submission based on downstream (the TRM
-is quite bad regading describing the clock trees, so not much
-validation has been done by me). The old vendor kernel tree had it
-like this, but that also changed a bit over time afterwards and no
-longer has any special handling for VP2. OTOH it does set
-CLK_SET_RATE_NO_REPARENT for all dclk_vop<number>_src, which you
-are now removing for VP2.
 
-FWIW these are the two flags:
+Please take a look.
 
-#define CLK_SET_RATE_PARENT     BIT(2) /* propagate rate change up one leve=
-l */
-#define CLK_SET_RATE_NO_REPARENT BIT(7) /* don't re-parent on rate change */
 
-So by removing CLK_SET_RATE_NO_REPARENT you are allowing dclk_vop2_src
-to be switched to a different PLL when a different rate is being
-requested. That change is completley unrelated to the bug you are
-seeing right now?
+Thanks
+ChenYu
 
-> So in the end VP2 will have to deal with this, because when the VP
-> causes a rate change in the GPLL, this changes so many clocks of
-> other possibly running devices. Not only the uart, but also emmc
-> and many more. And all those devices do not like if their clock gets
-> changed under them I think.
 
-It's certainly weird, that VP2 was (and still is in upstream) handled
-special. Note that GPLL being changed is not really necessary.
-dclk_vop2_src parent can be GPLL, CPLL, V0PLL or AUPLL. Effects on
-other hardware IP very much depends on the parent setup. What I try
-to understand is if there is also a bug in the rockchipdrm driver
-and/or if removing CLK_SET_RATE_NO_REPARENT is a good idea. That's
-why I hoped Andy could chime in and provide some background :)
+Chen-Yu Tsai (11):
+  dt-bindings: dma: allwinner,sun50i-a64-dma: Add compatibles for A523
+  ASoC: dt-bindings: allwinner,sun4i-a10-i2s: Add compatible for A523
+  ASoC: dt-bindings: allwinner,sun4i-a10-spdif: Add compatible for A523
+  ASoC: sun4i-spdif: Support SPDIF output on A523 family
+  clk: sunxi-ng: sun55i-a523-r-ccu: Mark bus-r-dma as critical
+  clk: sunxi-ng: sun55i-a523-ccu: Lower audio0 pll minimum rate
+  arm64: dts: allwinner: a523: Add DMA controller device nodes
+  arm64: dts: allwinner: a523: Add device node for SPDIF block
+  arm64: dts: allwinner: a523: Add device nodes for I2S controllers
+  arm64: dts: allwinner: a523: Add I2S2 pins on PI pin group
+  [EXAMPLE] arm64: dts: allwinner: a527-cubie-a5e: Enable I2S and SPDIF
+    output
 
-Greetings,
+ .../dma/allwinner,sun50i-a64-dma.yaml         |   5 +-
+ .../sound/allwinner,sun4i-a10-i2s.yaml        |   4 +-
+ .../sound/allwinner,sun4i-a10-spdif.yaml      |  44 +++++-
+ .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 135 ++++++++++++++++++
+ .../dts/allwinner/sun55i-a527-cubie-a5e.dts   |  52 +++++++
+ drivers/clk/sunxi-ng/ccu-sun55i-a523-r.c      |   2 +-
+ drivers/clk/sunxi-ng/ccu-sun55i-a523.c        |   2 +-
+ sound/soc/sunxi/sun4i-spdif.c                 |  28 +++-
+ 8 files changed, 259 insertions(+), 13 deletions(-)
 
--- Sebastian
+-- 
+2.47.3
 
---d64jzfl74qyxt42h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmj2XF0ACgkQ2O7X88g7
-+poMyxAAkrvmSp4lAynpMvLbEurz1nIp5X6KpJxALZHkLQhTbIMdkzYvjh504H9x
-f9m8anU4Vz0uzwNWNNWMeYKieOC8hcdj6SWEPkgfk0lWNwZfbu1lu1z4wesNh5Ey
-6y796JBjOKUUfFxuH9Z7ejA0w0ZEFrsjjr8cjzCB1/ZC3XDyA+t309e4w/28k9mx
-n+CobUeYsehMLyV2bT3ykWRaLkFwx9Wt1/+k4fPCL0hiEmZYcDRXZpjq6i1L1T3x
-DmT5wY8Yxfa2IMypKI7y08EXJHqGqgoW1gNJUuCpom2sQXCnEyVAdoGlW1J9wHNy
-+lY0ucMa/fMPMReP4FtVxDCavxziANOutp4ZSM1ubU71ZsnyN0BRbPt+l3Mw6wUf
-J2PF91DmuWlYVyDSP2PCL8ziIp6ManlPZtdJ9ZbqwN8huG8nhCIYx0SRoeAxnKRT
-Zd8f0nXzFH8oLxVT48R1pmhalavydtAHBq3+PAAMf0RhQ0eGOQ9S+0zwU9lvPnvR
-nvduTJMnGvVYQBzvzyV4BgCJ8Gpt1bHGauhzraHOmOdFLQn9vFtTXw2hCcPU5/1I
-PG3wapsmCaramEwbIC2TPnw2FGEf3QuTfvOBAb/QLL8r+mFTMdUdLJzRzgnNX/r2
-lcvCOEN8REWVCxqvdaHUNlX0eX0yG/LBd6Dj9YslosfRI3/Mp8o=
-=J09E
------END PGP SIGNATURE-----
-
---d64jzfl74qyxt42h--
 
