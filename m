@@ -1,141 +1,241 @@
-Return-Path: <linux-clk+bounces-29539-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29541-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E5DDBF5D32
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 12:38:55 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94588BF5D77
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 12:40:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 997D2188E182
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 10:39:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 776EF4F6F1E
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 10:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA3832E6A4;
-	Tue, 21 Oct 2025 10:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D8432B9A3;
+	Tue, 21 Oct 2025 10:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fI4IDXhU"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="inIlSqT/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1898B32E738;
-	Tue, 21 Oct 2025 10:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54252ED848
+	for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 10:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761043047; cv=none; b=QzcFhGsASQc9nzvRx9cXcam9kfQjkOGYcy8mGMjNjZsiFvRgWzprgS6R+awvVgtTQWu1kCJjk57L0WBJq9t9QYSraG2O0ee9eDh+BUTE71r0KLl+Fi5+uwZF7TtiZCZV5qRRH8+uEMLFHuKBIBJ8w8qmWwT18gKPWl6O/b3fEP8=
+	t=1761043183; cv=none; b=IXqIgSZ0F6ZUMiFFSirTAtKvUjH2cOkveP+OJK6Zwc28M/1lP3u9+t1wewfLsHW+nGBU03SWTbdqXnwG+gEwt7MoPeAHA/+rfJHocPOCW0ONFnhhq04My2tD8CjxNluf4F1gwrYsXMVNonhxIDbgSK44NIsFuRzULAVmU7HEStE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761043047; c=relaxed/simple;
-	bh=Wv4YlboMbpQNw6u3IhV6GaaoBps8Bfhjrkcb7CsF0xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwN9+4WRr8nEq4io0ByWR4qsfw6CKco9Xn8xcdaKBkrrtCQDfDQQNObfHHhTr28snuPXuVmEPms/TOOxJ4ThF8pebBvF5gu/8zeEfkcelWbBjku/oDf5fZtCSJ/S3kEtA7XZAnz2/uFJqUo6T5Ehf2raz8qoAHJG9Xd4JEY9CTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fI4IDXhU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27116C19421;
-	Tue, 21 Oct 2025 10:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761043046;
-	bh=Wv4YlboMbpQNw6u3IhV6GaaoBps8Bfhjrkcb7CsF0xc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fI4IDXhUCP7sgAbKQnnlEnGS+mH6+q/DVxfBVgsj499VkGJQLro2SipZv+UsgT+zu
-	 8B9BQ/N8PLADF+mv0npm2WR18SHOSCTkY6IIWB+/4KWxdz0HaqNaCd+VpwNF+jRHei
-	 3ov8wsowSbIjE7ehwZJQCM5XDSZ8yb88yR9ym4/iD1GrsxZuohsf4L75d3zn6Oo8ZL
-	 n/EM6KAHijRdlgGUc7o7fjyhsti167l3ftZbDgbosTZ+9qyXpVrt8OKaPBS6REela5
-	 1PzcamUK2QhpQhPmKuhJ64ytVkT/HOGaF6eImS7MwUdj0xA7m9KQpsd53N7fkQp+0Z
-	 1s/kfAndNZ8Fg==
-Date: Tue, 21 Oct 2025 11:37:15 +0100
-From: Lee Jones <lee@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-phy@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: Fix inconsistent quoting
-Message-ID: <20251021103715.GA475031@google.com>
-References: <20251015232015.846282-1-robh@kernel.org>
+	s=arc-20240116; t=1761043183; c=relaxed/simple;
+	bh=3eyts/YvSz6Z2j6Hh2fF5Du51iRzLiZUzcVSn7JWyXI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NxnCaRplCkSopscqW/jdczSZZfeYO0NhZRH/R+PHSu3P8rhQWLDUb9BBDwvwAfqTv8L48k7nxSMQQCt4UnRIoFgT9FBD4bvF39CgXmRAdco2Mdfn7a/fJYHnQW/SIz1EhSf7KMhbmzGYchRpc787ksd7FsUQngmZRKFuK7AsCQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=inIlSqT/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59L80r0s010742
+	for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 10:39:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	s7+c3xtc3nVt94h0Qqk1xzCCdoDbTh3wKr1i/jVXoiQ=; b=inIlSqT/7z1qJObo
+	aFHVFRIbL3hSfwahrjlnoSimCr0gpopnU8SnPGbwmv9OE0ZzirnnTGANUlNrNnt1
+	PjPMMLhfWn4uLICAReZL82xHVlYoP9S+AfPxpka97gpNja8aGaI0ZCKPCvvOIEvI
+	SYfBv9Pjij/Gs4YzQs6G2DFHTsJGRpO9Dnsy8a0GtI8ZtPc0nF+BSkBGMPJd+LSe
+	MHScDvZKNOoWvz8zxvmxA3FnZeZT/wI9F+jnMAaEKUc66FZpLZKKDNO2IGNaehcP
+	YFCD4jK9cN9/H+pINb9RjKRQYcbJWyzQ0tv9Sa0fHb0KZNxpYXmEWDEDcKL4k6JM
+	OP1s7Q==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49wtgetmc0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 10:39:40 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-890c743a001so163490085a.1
+        for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 03:39:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761043180; x=1761647980;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7+c3xtc3nVt94h0Qqk1xzCCdoDbTh3wKr1i/jVXoiQ=;
+        b=IQ4BM+4u7cOawH1SDuw/KpAlDiz4bRy00LYhd0wgzEIErrLtfR3d16GVlh7RKLNfWC
+         rzvJUk9K3jVQh8uT0JfQGwTa9eJ8toQpuRyrVFFNvqJ03bPEBJ15on93bcFY+bPJ6bjv
+         Su/RADDA/duvJj5FvOsQ1fSF0cBWTCjEFdvOpVmnRP6eqok2XlZAsOWxAku1pgqC+ima
+         rJgFe/DhAu3UijyzOa/5SbbOsajGbiDp8jLCTgsGEHDpZlrjmOyf0AkmOjJLn0OfP7jF
+         YOme69Ss8ITFc2+Qgu5tyG1h0rku+KSZ2LCL6Nc4c1IyGPOR9dZuYXA3afWTYUBVm2Jo
+         cToA==
+X-Forwarded-Encrypted: i=1; AJvYcCWR0VNm1jFRsv/ZJ6XPvIPB0knl0qiXxF1H4Z99Rg9+TrdSPbNFvz+/dKTkslH5XPrjFIWm1WUDkl0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+4/H2TlUe1VwCdC8TWWVqxm4UiTQOJ7DvScxp+lMIbOS34vdS
+	rHnshtIdzNlOfA3ltPUmG5ZMEOAVXV2fF3JiykyL6v9qWBHc2X1ydpwospUwuE+QjOJ3FPa6wO5
+	U3126TCtnWuSbBirYCYU4MLwqjkcMULGdNatej5GUsvh8GD5xS0+13TvkM2mnDTc=
+X-Gm-Gg: ASbGncu6V9g3kuppYGS7qltJ4gwdmDabm14oHTZNr1K53ag+zxyCiBGbsXttLdVeW2o
+	r9adPFTW6vsvMrdNNk8pYtx/mvMSsn6ySSuGk8KhDIsjmi+0ekxUBSBq1/YJGhZfJNK+imkkqoU
+	itcUKF7Ap4QppPF7DPdT9Zcnmc4lrqLzG9n1M9oe4vufQvNZ2zAorATN8hWtCPweG7tPAMEkGkN
+	pVfZ2eyS1lYoEqfa1InY2R127VBoQqMQ/B7yLr7Vy8YLPQKoO2PeF5cjriAr1P7kvK9LYNMDW9l
+	sLyUVULrBdnCuiiUfTyz2uPWSyxyno+5c1wirY9ltRLT4SyZ3rB/rckMj+t9+zfGVrK9ESFcGxH
+	Pu4u6E+wh04vHZUJIEVqR2HlEECWdervyX6zyeqsNxwG1UnVo8Jagvv4O
+X-Received: by 2002:ac8:5f10:0:b0:4dc:cb40:706e with SMTP id d75a77b69052e-4ea117e0b30mr20960081cf.13.1761043179643;
+        Tue, 21 Oct 2025 03:39:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFAeB5jrQGCav3qSKZ0xPgQHNQotUHpiAd/WgCgMc2vlJjKdTeD+j5g4MFS9sBZG3oO/Qm9bQ==
+X-Received: by 2002:ac8:5f10:0:b0:4dc:cb40:706e with SMTP id d75a77b69052e-4ea117e0b30mr20959941cf.13.1761043179164;
+        Tue, 21 Oct 2025 03:39:39 -0700 (PDT)
+Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65eb03649dsm1041530466b.50.2025.10.21.03.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Oct 2025 03:39:38 -0700 (PDT)
+Message-ID: <f4dc003b-d193-4016-bf37-7172300f0464@oss.qualcomm.com>
+Date: Tue, 21 Oct 2025 12:39:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251015232015.846282-1-robh@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8550: Additionally manage MXC
+ power domain in camcc
+To: Luca Weiss <luca.weiss@fairphone.com>,
+        Taniya Das <taniya.das@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20250303225521.1780611-1-vladimir.zapolskiy@linaro.org>
+ <20250303225521.1780611-3-vladimir.zapolskiy@linaro.org>
+ <dbxvzgqs5slrl5edqunal3wplg5jiszqv46dr4nzgowwlhkhxa@qwtfq7nfjwfo>
+ <3210a484-b9c3-4399-bee1-9f5bbc90034c@linaro.org>
+ <CAA8EJprP9Z181VDCT=xfyrBipzgiB0tfb8M_XZ4H=yOrvEnB0w@mail.gmail.com>
+ <f41061a2-cf45-4588-8df7-22270c936ee2@quicinc.com>
+ <D8EZ47Z557OX.37FDVYA5AHET0@fairphone.com>
+ <d64c0776-0b12-42d3-aed3-4e6a13487f51@quicinc.com>
+ <DDKNL43NWFMA.1S03T0SUYFVMY@fairphone.com>
+ <85bf3468-24bf-4f14-afcd-28878ad84dc9@oss.qualcomm.com>
+ <DDNXN4IVYLIL.3083X63IIT9B2@fairphone.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <DDNXN4IVYLIL.3083X63IIT9B2@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: YtrMn7SUYS2POwh8gB-fXNZRWJjITgnY
+X-Authority-Analysis: v=2.4 cv=JeaxbEKV c=1 sm=1 tr=0 ts=68f762ec cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=z5B4IXqlO_MRCTr_IEYA:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: YtrMn7SUYS2POwh8gB-fXNZRWJjITgnY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDIwMDE1NCBTYWx0ZWRfX6uCI2t+g8Mhu
+ XxGXbQ9Lctu87HVOoFDGOpCapaBDc2/KHYxmfElVTQPoTQEElwu4FtYIUIsnc+lbR475XtR4Rl4
+ uQL4s4FBgIEJ97ToqHvl/uQCb5dKcID2wgI5yB2ZR1pnI4pewYtNxTTmzczvFnXgfEeyLGSQGT7
+ BqRm6MncdNK7Iu1zbCu54BLH/9umOMT7yNeJJ+XjvLgSumb55q32tUqHDrBcOYlmsV/gXayksXG
+ ZvQgSPAi0rYAFj5B0BW11bLcFOZ539fqNWZhATq6UlJfT/hLBQADcDZ7qFMHQhgvd1SFJu/9tuE
+ 0fD05CxvlpWKqY+k8bqv+zORqmxpn6wMh6dDSY72ibciSmltBWIWiFdQJsJx0DhPbUkCSqk0eRY
+ KrAorsmcxBrjQjqxm9LR2NcqAKWuhw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-21_01,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 clxscore=1015 malwarescore=0 impostorscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510200154
 
-On Wed, 15 Oct 2025, Rob Herring (Arm) wrote:
-
-> yamllint has gained a new check which checks for inconsistent quoting
-> (mixed " and ' quotes within a file). Fix all the cases yamllint found
-> so we can enable the check (once the check is in a release). Use
-> whichever quoting is dominate in the file.
+On 10/21/25 12:36 PM, Luca Weiss wrote:
+> On Mon Oct 20, 2025 at 2:21 PM CEST, Konrad Dybcio wrote:
+>> On 10/17/25 4:05 PM, Luca Weiss wrote:
+>>> Hi Taniya,
+>>>
+>>> On Thu Mar 13, 2025 at 12:57 PM CET, Taniya Das wrote:
+>>>>
+>>>>
+>>>> On 3/13/2025 1:22 PM, Luca Weiss wrote:
+>>>>> Hi Taniya,
+>>>>>
+>>>>> On Thu Mar 13, 2025 at 5:39 AM CET, Taniya Das wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 3/4/2025 2:10 PM, Dmitry Baryshkov wrote:
+>>>>>>> On Tue, 4 Mar 2025 at 09:37, Vladimir Zapolskiy
+>>>>>>> <vladimir.zapolskiy@linaro.org> wrote:
+>>>>>>>>
+>>>>>>>> On 3/4/25 01:53, Dmitry Baryshkov wrote:
+>>>>>>>>> On Tue, Mar 04, 2025 at 12:55:21AM +0200, Vladimir Zapolskiy wrote:
+>>>>>>>>>> SM8550 Camera Clock Controller shall enable both MXC and MMCX power
+>>>>>>>>>> domains.
+>>>>>>>>>
+>>>>>>>>> Are those really required to access the registers of the cammcc? Or is
+>>>>>>>>> one of those (MXC?) required to setup PLLs? Also, is this applicable
+>>>>>>>>> only to sm8550 or to other similar clock controllers?
+>>>>>>>>
+>>>>>>>> Due to the described problem I experience a fatal CPU stall on SM8550-QRD,
+>>>>>>>> not on any SM8450 or SM8650 powered board for instance, however it does
+>>>>>>>> not exclude an option that the problem has to be fixed for other clock
+>>>>>>>> controllers, but it's Qualcomm to confirm any other touched platforms,
+>>>>>>>
+>>>>>>> Please work with Taniya to identify used power domains.
+>>>>>>>
+>>>>>>
+>>>>>> CAMCC requires both MMCX and MXC to be functional.
+>>>>>
+>>>>> Could you check whether any clock controllers on SM6350/SM7225 (Bitra)
+>>>>> need multiple power domains, or in general which clock controller uses
+>>>>> which power domain.
+>>>>>
+>>>>> That SoC has camcc, dispcc, gcc, gpucc, npucc and videocc.
+>>>>>
+>>>>> That'd be highly appreciated since I've been hitting weird issues there
+>>>>> that could be explained by some missing power domains.
+>>>>>
+>>>>
+>>>> Hi Luca,
+>>>>
+>>>> The targets you mentioned does not have any have multiple rail
+>>>> dependency, but could you share the weird issues with respect to clock
+>>>> controller I can take a look.
+>>>
+>>> Coming back to this, I've taken a shot at camera on SM6350 (Fairphone 4)
+>>> again, but again hitting some clock issues.
+>>>
+>>> For reference, I am testing with following change:
+>>> https://lore.kernel.org/linux-arm-msm/20250911011218.861322-3-vladimir.zapolskiy@linaro.org/
+>>>
+>>> Trying to enable CAMCC_MCLK1_CLK - wired up to the IMX576 camera sensor
+>>> on this phone - results in following error.
+>>>
+>>> [    3.140232] ------------[ cut here ]------------
+>>> [    3.141264] camcc_mclk1_clk status stuck at 'off'
+>>> [    3.141276] WARNING: CPU: 6 PID: 12 at drivers/clk/qcom/clk-branch.c:87 clk_branch_toggle+0x170/0x190
+>>>
+>>> Checking the driver against downstream driver, it looks like the RCGs
+>>> should be using clk_rcg2_shared_ops because of enable_safe_config in
+>>> downstream, but changing that doesn't really improve the situation, but
+>>> it does change the error message to this:
+>>>
+>>> [    2.933254] ------------[ cut here ]------------
+>>> [    2.933961] camcc_mclk1_clk_src: rcg didn't update its configuration.
+>>> [    2.933970] WARNING: CPU: 7 PID: 12 at drivers/clk/qcom/clk-rcg2.c:136 update_config+0xd4/0xe4
+>>>
+>>> I've also noticed that some camcc drivers take in GCC_CAMERA_AHB_CLK as
+>>> iface clk, could something like this be missing on sm6350?
+>>>
+>>> I'd appreciate any help or tips for resolving this.
+>>
+>> Is CAMCC_PLL2 online?
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  .../arm/altera/socfpga-clk-manager.yaml       |  4 ++--
->  .../bindings/clock/nvidia,tegra124-car.yaml   |  8 ++++----
->  .../bindings/clock/nvidia,tegra20-car.yaml    |  6 +++---
->  .../devicetree/bindings/gpio/gpio-mxs.yaml    |  9 +++++----
->  .../bindings/gpio/snps,dw-apb-gpio.yaml       |  4 ++--
->  .../bindings/iio/temperature/adi,ltc2983.yaml | 20 +++++++++----------
->  .../mailbox/qcom,apcs-kpss-global.yaml        | 16 +++++++--------
->  .../mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  2 +-
->  .../bindings/media/fsl,imx6q-vdoa.yaml        |  2 +-
+> I'd assume so given nothing in dmesg is complaining about that?
+> 
+> But not sure how to check. Debugcc can't do PLLs, right?
 
->  .../devicetree/bindings/mfd/aspeed-lpc.yaml   |  4 ++--
->  .../devicetree/bindings/mfd/ti,twl.yaml       |  4 ++--
+The PLLs have a .is_enabled, so you can take a look in debugfs
 
-Acked-by: Lee Jones <lee@kernel.org>
+> In any case adding CLK_IS_CRITICAL to the camcc_pll2 doesn't change
+> anything.
 
->  .../bindings/net/ethernet-switch.yaml         |  2 +-
->  .../pci/plda,xpressrich3-axi-common.yaml      |  2 +-
->  .../bindings/phy/motorola,cpcap-usb-phy.yaml  |  4 ++--
->  .../pinctrl/microchip,sparx5-sgpio.yaml       | 12 +++++------
->  .../bindings/pinctrl/qcom,pmic-gpio.yaml      | 10 +++++-----
->  .../bindings/pinctrl/qcom,pmic-mpp.yaml       |  6 +++---
->  .../bindings/pinctrl/renesas,pfc.yaml         |  4 ++--
->  .../bindings/pinctrl/renesas,rza1-ports.yaml  |  2 +-
->  .../pinctrl/renesas,rzg2l-pinctrl.yaml        |  2 +-
->  .../pinctrl/renesas,rzv2m-pinctrl.yaml        |  2 +-
->  .../bindings/power/renesas,sysc-rmobile.yaml  |  4 ++--
->  .../soc/microchip/atmel,at91rm9200-tcb.yaml   |  8 ++++----
->  .../soc/tegra/nvidia,tegra20-pmc.yaml         | 12 +++++------
->  24 files changed, 75 insertions(+), 74 deletions(-)
+Was worth a shot :(
 
-[...]
-
--- 
-Lee Jones [李琼斯]
+Konrad
 
