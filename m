@@ -1,88 +1,74 @@
-Return-Path: <linux-clk+bounces-29512-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29518-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74514BF4C5F
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 08:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48D9DBF524F
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 10:04:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7BF694F0D09
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 06:55:53 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 771B74F8888
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 08:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2DE726B760;
-	Tue, 21 Oct 2025 06:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="VL0LgpC7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E0C2EBDF6;
+	Tue, 21 Oct 2025 08:04:01 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81164257AEC;
-	Tue, 21 Oct 2025 06:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CED29BDAC;
+	Tue, 21 Oct 2025 08:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761029751; cv=none; b=nqD+dX51Wjl6bkxUFutPxSA2EHKi+8cIVAnpf0wpCHNfaqe7je++MjkGym7ca8D8uQNwIyeawfPPfKBkbnpDV1bWUq5Bt3uHxaGHyMv3aMkDiT6DG7fa+zHUCpfP3U9M9/Hjl879KvkjLiLmLSXwn+YYL1Bn7akWO+9JjNwHoYQ=
+	t=1761033841; cv=none; b=ST70bSVPjVT49S/PyZO319Cw5F4ZyvyRds6u5pvYYbBk11GCcmi5/ohP+q6eVkv0u5KxkNRkWIZhbhd/zyvwnzERALWsDuZXEn8v4qi9ghYCKvuP+IHdlcFLiWwTmH7/yoVfcnoxM5Q9a51SYyTKV7CRjzvqzJ9OZI/Wufmp5Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761029751; c=relaxed/simple;
-	bh=DFANFfBDNfwmZS1bR1NCqrK1UHkNYLSanN2dGOSuM3A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y6HBY1qv82gelhW0y1lBKcRYmq/AFDMXCFY8LMD9dIftjoVNdLrGKydKfuVDQCMC0SloXLEC0Nw+fkDfVmgPz9JaPG4I+DyPZ6KONWDM+tMLulV8bG8VsnhjYdqfrx93oXU+SXUgzLvhZi2sGhZwNa6TFogRzsELgh6F6MpgTzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=VL0LgpC7; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=DFANFfBDNfwmZS1bR1NCqrK1UHkNYLSanN2dGOSuM3A=; b=VL0LgpC7cBFIhouCJRLnPx2gJ1
-	TuanLtezDC53PVxzz/0H1xG5Bjg6zI/yEOpKAS39hAb2vtIeo5/ZD3FZ+TNJkdUkih4m93OAdQPZO
-	NHmq18Z0P8/7lT5o4VjtXHncTsNScDaB7kNM/UQqG4hNuZrwLW3Gf2kBD54E1wxz/YavdY3VjgI4A
-	uMM8iUa357mODJGIBHI6E3HRi7KFPeeyB0fSZX1Wq4zihRuWySYd7D/6KXmUL4/dooI6jIl5nBOne
-	VF9vhQqFqSZ/UOY/yvD9VoB/2Cy+wgBywkALZlMPwxGi7p5u+cq5ubGBZ/eC4dnX9hO3/tGpLulE8
-	y5JLkD9w==;
-Received: from [212.111.240.218] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1vB6HO-0000XV-AT; Tue, 21 Oct 2025 08:55:34 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: mturquette@baylibre.com, sboyd@kernel.org, sugar.zhang@rock-chips.com,
- zhangqing@rock-chips.com, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, Elaine Zhang <zhangqing@rock-chips.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, huangtao@rock-chips.com,
- finley.xiao@rock-chips.com
-Subject:
- Re: [Resend PATCH v4 0/7] clk: rockchip: Add clock controller for the RV1126B
- and RK3506
-Date: Tue, 21 Oct 2025 08:55:33 +0200
-Message-ID: <8637519.NyiUUSuA9g@phil>
-In-Reply-To: <20251021065232.2201500-1-zhangqing@rock-chips.com>
-References: <20251021065232.2201500-1-zhangqing@rock-chips.com>
+	s=arc-20240116; t=1761033841; c=relaxed/simple;
+	bh=2gHaaqXyKyG2dX+elCvrKh1JmB9OH4MXLU/Yn2bFckE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X98FPX8o0r0O8QMsKBr4ILztARQvkkUAt5CUZ7M7nRiAfBPGC/bV2PO0X3+WoY5U5MVUGf/m5wGbBMfeWp2vQYUG1QZ16kuj4yLKTV0CzzqzYArecu+eUGjC+BoYoU4q6rVqqQSbiy0kxEtvmNC/hLs8N2QVaCWDpinuAjr6LgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA3FC4CEF1;
+	Tue, 21 Oct 2025 08:03:59 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] clk: renesas: cpg-mssr: Spelling s/offets/offsets/
+Date: Tue, 21 Oct 2025 10:03:56 +0200
+Message-ID: <47bf5186c3a234f6a6e53d8fdc81fafd2e981534.1761033805.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Elaine,
+Fix a misspelling of "offsets".
 
-Am Dienstag, 21. Oktober 2025, 08:52:25 Mitteleurop=C3=A4ische Sommerzeit s=
-chrieb Elaine Zhang:
-> Add yaml and dt-bindings for the RV1126B and RK3506.
-> RK3506 depend on patches 1/7 and 5/7, so it is merged and submitted.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+To be queued in renesas-clk for v6.19.
+---
+ drivers/clk/renesas/renesas-cpg-mssr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks a lot for also including the rk3506 :-) .
-
-I was about to start looking at the rk3506 clock controller,
-but can now focus on the other parts of the soc.
-
-
-Heiko
-
+diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
+index a3d171ddaab9923b..9e61abcba6c852da 100644
+--- a/drivers/clk/renesas/renesas-cpg-mssr.c
++++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+@@ -41,7 +41,7 @@
+ #endif
+ 
+ /*
+- * Module Standby and Software Reset register offets.
++ * Module Standby and Software Reset register offsets.
+  *
+  * If the registers exist, these are valid for SH-Mobile, R-Mobile,
+  * R-Car Gen2, R-Car Gen3, and RZ/G1.
+-- 
+2.43.0
 
 
