@@ -1,92 +1,88 @@
-Return-Path: <linux-clk+bounces-29508-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29512-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94DFBF4BF3
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 08:52:49 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74514BF4C5F
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 08:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E13A189445D
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 06:53:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7BF694F0D09
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 06:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD2025F973;
-	Tue, 21 Oct 2025 06:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2DE726B760;
+	Tue, 21 Oct 2025 06:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufgJENoW"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="VL0LgpC7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C59224245;
-	Tue, 21 Oct 2025 06:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81164257AEC;
+	Tue, 21 Oct 2025 06:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761029565; cv=none; b=dN5AQXQkv6dIDR7BkSJH0QOZI7IKY7s7VJAp866CgmnWwIUEAcCWqlZLISoAExLReGp/gU+KigA23GMSI8hgNHNlkSynfHEx9l7t80ZlmX9hsbpOeiLl+2NUCmlE5TCv6AbBQ/4THfMSGvJ+axl/ptuSiBddbZgP4PqFpHIY4PE=
+	t=1761029751; cv=none; b=nqD+dX51Wjl6bkxUFutPxSA2EHKi+8cIVAnpf0wpCHNfaqe7je++MjkGym7ca8D8uQNwIyeawfPPfKBkbnpDV1bWUq5Bt3uHxaGHyMv3aMkDiT6DG7fa+zHUCpfP3U9M9/Hjl879KvkjLiLmLSXwn+YYL1Bn7akWO+9JjNwHoYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761029565; c=relaxed/simple;
-	bh=kEveI288R5aLgEy1LfWmXLzg1vJMJmJhDW/u+SLA3ys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h0We3WHs/T8x44wN3TvWV1GUXKs2FOsuNhtKqweQrtYTXX8Ee+QPyL1D85Ho+UXmbP82tIJQytqSg8h+sUl5hc1nU0go7gNnHZRCzgDCXzeI0mRO4m1IfufzJUHNhe6qC9AxRgIR0LDI+r4NPg5odeX1G+0NQFXHi+KtEFDBaJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufgJENoW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119D9C4CEF5;
-	Tue, 21 Oct 2025 06:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761029564;
-	bh=kEveI288R5aLgEy1LfWmXLzg1vJMJmJhDW/u+SLA3ys=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ufgJENoWaQrbt1LbWl7US2kpvPAXm6hP4SYC0sBEkppguWvqx4odoeREOZ1hzvcGH
-	 T9puAiLpk8ER0bHDe+9wfqX+bS1+J00ibNQc5Q34vqQUr2Z/VbZaiNtXT5b7nPfxE9
-	 x3thfr7qGTtlUbZ/qk+m0cjtv6PT/V+URbn6Ar+0wMPpOtKABk2ZHCO4ISJUlIxFIl
-	 sBujnreUL9haT+U2tsiifPloDnhX93Helsh60Bhwd484BroWUlphn78V/HSabn7DSR
-	 nEpicEoTQiKy2nsGxdymT+5neEkdjAHbVQW6Df7K3aQe7y0lwCaNsBw10mJ7voRV9f
-	 al5JbcNESGw/g==
-Date: Tue, 21 Oct 2025 08:52:41 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Liu Ying <victor.liu@nxp.com>
-Cc: Rob Herring <robh@kernel.org>, Marek Vasut <marek.vasut@mailbox.org>, 
-	dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 01/39] dt-bindings: display: imx: Document i.MX95 Display
- Controller DomainBlend
-Message-ID: <20251021-mighty-artichoke-crayfish-dc85b7@kuoka>
-References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <20251011170213.128907-2-marek.vasut@mailbox.org>
- <20251015132442.GA3241958-robh@kernel.org>
- <5c5bb009-3463-4282-946f-3ae93fab11ec@nxp.com>
+	s=arc-20240116; t=1761029751; c=relaxed/simple;
+	bh=DFANFfBDNfwmZS1bR1NCqrK1UHkNYLSanN2dGOSuM3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y6HBY1qv82gelhW0y1lBKcRYmq/AFDMXCFY8LMD9dIftjoVNdLrGKydKfuVDQCMC0SloXLEC0Nw+fkDfVmgPz9JaPG4I+DyPZ6KONWDM+tMLulV8bG8VsnhjYdqfrx93oXU+SXUgzLvhZi2sGhZwNa6TFogRzsELgh6F6MpgTzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=VL0LgpC7; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=DFANFfBDNfwmZS1bR1NCqrK1UHkNYLSanN2dGOSuM3A=; b=VL0LgpC7cBFIhouCJRLnPx2gJ1
+	TuanLtezDC53PVxzz/0H1xG5Bjg6zI/yEOpKAS39hAb2vtIeo5/ZD3FZ+TNJkdUkih4m93OAdQPZO
+	NHmq18Z0P8/7lT5o4VjtXHncTsNScDaB7kNM/UQqG4hNuZrwLW3Gf2kBD54E1wxz/YavdY3VjgI4A
+	uMM8iUa357mODJGIBHI6E3HRi7KFPeeyB0fSZX1Wq4zihRuWySYd7D/6KXmUL4/dooI6jIl5nBOne
+	VF9vhQqFqSZ/UOY/yvD9VoB/2Cy+wgBywkALZlMPwxGi7p5u+cq5ubGBZ/eC4dnX9hO3/tGpLulE8
+	y5JLkD9w==;
+Received: from [212.111.240.218] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1vB6HO-0000XV-AT; Tue, 21 Oct 2025 08:55:34 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: mturquette@baylibre.com, sboyd@kernel.org, sugar.zhang@rock-chips.com,
+ zhangqing@rock-chips.com, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, Elaine Zhang <zhangqing@rock-chips.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, huangtao@rock-chips.com,
+ finley.xiao@rock-chips.com
+Subject:
+ Re: [Resend PATCH v4 0/7] clk: rockchip: Add clock controller for the RV1126B
+ and RK3506
+Date: Tue, 21 Oct 2025 08:55:33 +0200
+Message-ID: <8637519.NyiUUSuA9g@phil>
+In-Reply-To: <20251021065232.2201500-1-zhangqing@rock-chips.com>
+References: <20251021065232.2201500-1-zhangqing@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5c5bb009-3463-4282-946f-3ae93fab11ec@nxp.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Oct 16, 2025 at 10:07:26AM +0800, Liu Ying wrote:
-> On 10/15/2025, Rob Herring wrote:
-> >> +properties:
-> >> +  compatible:
-> >> +    const: fsl,imx95-dc-domainblend
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> > 
-> > No clocks or other resources?
-> 
-> As patch 39 shows, there are 3 interrupts - domainblend{0,1}_shdload,
-> domainblend{0,1}_framecomplete and domainblend{0,1}_seqcomplete.
+Hi Elaine,
 
-So they should be here. Just like all other resources, because bindings
-should be complete (see writing-bindings doc).
+Am Dienstag, 21. Oktober 2025, 08:52:25 Mitteleurop=C3=A4ische Sommerzeit s=
+chrieb Elaine Zhang:
+> Add yaml and dt-bindings for the RV1126B and RK3506.
+> RK3506 depend on patches 1/7 and 5/7, so it is merged and submitted.
 
-Best regards,
-Krzysztof
+thanks a lot for also including the rk3506 :-) .
+
+I was about to start looking at the rk3506 clock controller,
+but can now focus on the other parts of the soc.
+
+
+Heiko
+
 
 
