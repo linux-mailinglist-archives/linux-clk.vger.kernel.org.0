@@ -1,108 +1,147 @@
-Return-Path: <linux-clk+bounces-29532-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29535-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FFABBF5B75
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 12:12:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72A8CBF5C66
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 12:26:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D137189A906
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 10:13:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15ABC1884028
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Oct 2025 10:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1FE132AAD1;
-	Tue, 21 Oct 2025 10:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UGBXTSBo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DF532B980;
+	Tue, 21 Oct 2025 10:26:24 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2732E88B7;
-	Tue, 21 Oct 2025 10:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C303298CB7
+	for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 10:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761041567; cv=none; b=hflgbPrI9PY/91/nYu98xomIzWpMVB3GTaCeZ4XiX5YYcMA0B9FRumGoSYn8NlQhG8bKQR/jpKiN2FKI4AzpeQGnzq0y81kbIz+uOPBT8AppoXXx1SWs+E0QIFGxtPLlWI4SiupdOfK8PEJVpBzMtGX9fPvizEVIKJMR1dI8s3A=
+	t=1761042384; cv=none; b=cI0Qfn5Zr/Xs+F1Iwob6gQKunP1qXn8dgMVLhYB+ZnPt4KU3fRhx8lj7VS0iZqd0fij4U/DJZ3H77IUarVFjQ3q20ZrjhO9rjbMGbrpY3gEI5QC5MZlIBZHFCJztp7+7oTexRUS5J3b9QQCuPddsqQW9gk9/bXT/7Hm9IxH16K8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761041567; c=relaxed/simple;
-	bh=lXJHHFptBMpEYGRhwmXvUj9/TcSk3rk7mp2Kop2wt9E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=poMBYn6/+GSgG1gy512Jz5aR2vDFS9SCXXL5gWTlC/Kro1wI4iBFxkbThvxWzlaIUiInhK0eUpNSiGj7k4ov8ct28xSwS1qTsFalOkhzpPihy4KFO8Rzqy6kLpN9gfPI3+OvYIHaVRgUVf+9AeKwyZhOxQS/hfnsU2Np2KPGHzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UGBXTSBo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CC1FC4CEFF;
-	Tue, 21 Oct 2025 10:12:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761041567;
-	bh=lXJHHFptBMpEYGRhwmXvUj9/TcSk3rk7mp2Kop2wt9E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=UGBXTSBoU4r/S+NZXqhliuLYbstQY8dOy0nH6RUhm91QvPFnmEnoOlM9S8fgReF+4
-	 9PwJVabUwkI6b2BRAK1usBU2EygbxdsF6nNQ5ZT2Z8om9RE5dVRJpc6qq6Cwo6W385
-	 DHAQKIyfDR+mt1QKYPo/DSY1dzkWyp1ot4htAGydAWa4UrDJJqOV/U6ZOl2eA4NDAL
-	 UxwHQKRjezLLf7vJwA3iiWkbEFQzrgzHaXVgDcx2xD17TRyzcv2Q+ZbWmC4eNq2qiI
-	 Bw4MT4Mb95zsScm0tpo4WmLz25R65LFJdTJ490ogM71qtr6S2RFZwJMMjb7bjb+hS1
-	 ojAKYDrsTW27w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EBB5CCD184;
-	Tue, 21 Oct 2025 10:12:47 +0000 (UTC)
-From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
-Date: Tue, 21 Oct 2025 18:12:31 +0800
-Subject: [PATCH 2/2] clk: divider: improve the execution efficiency of
- determine_rate()
+	s=arc-20240116; t=1761042384; c=relaxed/simple;
+	bh=va4WxH64kPG8XCl6w3KCXlFAiPzGBJtiTtCajxRETjY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MxDSk0sAaBeyrq1cmyBTNTHka/44agcZXhOtSmwyLUpa0TJ3QuUC1HEufVxzfwnjqopWlERIFUVCQveKlb3mleKw3jo2YQC0NrhI5gvlP9EM8YAskC3+ok1R3vYVXYzsID/2ID/HpBET13K81kV4JLqYKBcb4amF7byiBvNezpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-54bc6356624so5450142e0c.1
+        for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 03:26:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761042381; x=1761647181;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tDNH9pDF9LBAisWYpnrCUtwA+9hrIVu2UeAytlJC/r0=;
+        b=bvlWMGS+QCoifrPg3oNEX7emjV9wHuc3fs2Rdnl4g+cEwSbUohmcfKlSH63ptd+I7n
+         dQ5JC9gsS0rukW63t2MSUmZeUxi2yHraMYeadhcaJxCrL6TVzkAYEtQZRZtesdp30A7M
+         0NPxy8PsGhVjah0XUQxquboF7QM6CDZCkJA2yWamDJwaZaNntcHqAXbgU7c5VgeZ6VPE
+         yU1UlpBE+8QRxafCq/aVj6KifJU15kbdxIEc0VtirlwWjl5vaIur9Lfqb2/Cl/oo9mTW
+         BTduotJxLsX+hMZE/v29y5cTZIj/ed7cgc5EizHCAc1+zze2n3dxzukQVqIhqXS5vJ/w
+         3kBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2G+NSDvq+kJ18D6o4JRrLZyuJvWzq83O24Eh8rPaBYZZ5TuRds4uotjJijEy650QcxyANlJexQxw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1XRGcwvTHcTTkiU8oDWrlSbzt+cAfWCdrImUsAPMwztl2KdA8
+	KSovyazo93XKTNDIBi2lJk0XGtzl5Z/65tGASk4zT+KB0ueV494+wmxDrk2zXxg/
+X-Gm-Gg: ASbGncuDRm6czAEFatu47mQLdkz7guIDwxIJuv83KqcK+/1cdEq880PMxa+l5YDg+gL
+	iuQvTTgp2KaNszKOdNMgmlLXT9wCL2XVZEPaVoI/okIXDTgNXOem1257HH4SuqO1GAC21x5jeq3
+	cb7Ek3BTJE4kM3PM0f/VGU33OJ0xHbd3u6nRBIuroj0SwV9K+f1PkgINahtVJZq/L93NTOSOkeZ
+	TYQKy/KMJtchi6M3k8feoOGybVzYG0EJ0MAgvz3rlwT9bdDi+ebYLUsKRFiyMSijVm+uL7kgQ1G
+	e+mm/P69gWefaZT9m+xfkY9L+NKJ7ocRvEg/cCQ0HTxy89gcvUrB1n5GWpv9sFBaJn1041dwxtq
+	rkg1SOoSyoXFXbIXP7H3RvJIxuUUkCuSAbQRZ7dBFKaNct6EAKvloyCtknarmOJKtfKSjhKMaAK
+	9StstF9iDvINcL5q4ai/WuoKQnnfBEYtyV4XYWSQ==
+X-Google-Smtp-Source: AGHT+IHDOn0w3dyLq/cfblXIf/ecL61l1CkFZQeDfK3iACSABx8pe62vZUA1sJ3S9qFGzC6H0SFlOw==
+X-Received: by 2002:a05:6123:db:b0:54a:a2a3:b16b with SMTP id 71dfb90a1353d-556401f5b3cmr4675189e0c.3.1761042380889;
+        Tue, 21 Oct 2025 03:26:20 -0700 (PDT)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55661f9e8bdsm3215356e0c.10.2025.10.21.03.26.20
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Oct 2025 03:26:20 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5d5fbfca7e2so4549603137.0
+        for <linux-clk@vger.kernel.org>; Tue, 21 Oct 2025 03:26:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWnBTivGQ/ZWisR1wpdSbRtQNBz7YVWzk+PBySc39W4837catM044Y/6D1x2bX/3sdixhUZYTKwxbo=@vger.kernel.org
+X-Received: by 2002:a05:6102:e08:b0:529:7c2f:ceb5 with SMTP id
+ ada2fe7eead31-5d7dd5035afmr5261434137.1.1761042379969; Tue, 21 Oct 2025
+ 03:26:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251021-improve_efficiency_of_clk_divider-v1-2-e2bf7f625af6@amlogic.com>
-References: <20251021-improve_efficiency_of_clk_divider-v1-0-e2bf7f625af6@amlogic.com>
-In-Reply-To: <20251021-improve_efficiency_of_clk_divider-v1-0-e2bf7f625af6@amlogic.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Chuan Liu <chuan.liu@amlogic.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1761041565; l=652;
- i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=4yJ8TlYve5AF/Eq9UZTnZIGY2BOewY1lDoBVTOtUsrQ=;
- b=VxzxRsKA+iZOgpD1UJltY5o1FNELeaOzfb/BDwqRVvD76/IppmfZ9jTzZLKPqGAMOhcmHJAjj
- rl/nsdMNhmcCEN7UCfH8OZkpW8gduzzcOFoM8CGg2yw+nVCORYeyBAO
-X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
- pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
-X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
- auth_id=203
-X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
-Reply-To: chuan.liu@amlogic.com
+References: <20251015192611.241920-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20251015192611.241920-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 21 Oct 2025 12:26:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW1B7Yk1hUU9MSJsiL8wSmjAUGN7Qd_wgBHv8Ct=-wi4Q@mail.gmail.com>
+X-Gm-Features: AS18NWA5TDVRnTdlKeYEusciZZnf69CtVCQ6CEB6928Ztx_Tex5oqUI1hZkbQkE
+Message-ID: <CAMuHMdW1B7Yk1hUU9MSJsiL8wSmjAUGN7Qd_wgBHv8Ct=-wi4Q@mail.gmail.com>
+Subject: Re: [PATCH v11 0/7] Add support for DU/DSI clocks and DSI driver
+ support for the Renesas RZ/V2H(P) SoC
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Chuan Liu <chuan.liu@amlogic.com>
+Hi Prabhakar et al,
 
-There is no need to evaluate further divider values once _is_best_div()
-finds one that matches the target rate.
+On Wed, 15 Oct 2025 at 21:26, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> This patch series adds DU/DSI clocks and provides support for the
+> MIPI DSI interface on the RZ/V2H(P) SoC.
+>
+> v10->v11:
+> - Split CPG_PLL_CLK1_K/M/PDIV macro change into separate patch
+> - Updated rzv2h_cpg_plldsi_div_determine_rate()
+>   while iterating over the divider table
+> - Added Acked-by tag from Tomi for patch 2/7 and 3/7
+> - Added Reviewed-by tag from Geert for patch 2/7 and 3/7
 
-Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
----
- drivers/clk/clk-divider.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think this series is ready for merging.
 
-diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-index 2601b6155afb..b92c4f800fa9 100644
---- a/drivers/clk/clk-divider.c
-+++ b/drivers/clk/clk-divider.c
-@@ -339,6 +339,9 @@ static int clk_divider_bestdiv(struct clk_hw *hw, struct clk_hw *parent,
- 			best = now;
- 			*best_parent_rate = parent_rate;
- 		}
-+
-+		if (best == rate)
-+			break;
- 	}
- 
- 	if (!bestdiv) {
+> Lad Prabhakar (7):
+>   clk: renesas: rzv2h-cpg: Add instance field to struct pll
+>   clk: renesas: rzv2h-cpg: Use GENMASK for PLL fields
+>   clk: renesas: rzv2h-cpg: Add support for DSI clocks
+>   clk: renesas: r9a09g057: Add clock and reset entries for DSI and LCDC
+>   dt-bindings: display: bridge: renesas,dsi: Document RZ/V2H(P) and
+>     RZ/V2N
+>   drm: renesas: rz-du: mipi_dsi: Add LPCLK clock support
+>   drm: renesas: rz-du: mipi_dsi: Add support for RZ/V2H(P) SoC
 
--- 
-2.42.0
+As this touches both clk and drm, let's discuss the merge strategy.
+My proposal:
+  1. I queue patches 1-3 in an immutable branch with a signed tag,
+     to be used as a base for the remaining patches,
+  2. I queue patch 4 on top of 1 in renesas-clk for v6.19,
+  3. The DRM people queue patches 5-7 on top of 1.
+
+Does that sound fine for you?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
