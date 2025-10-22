@@ -1,242 +1,148 @@
-Return-Path: <linux-clk+bounces-29643-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29645-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E472BFC4D4
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 15:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A01F7BFC4E9
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 15:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CFB91886BD4
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 13:52:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA7B5188D825
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 13:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3211C338904;
-	Wed, 22 Oct 2025 13:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B18134886A;
+	Wed, 22 Oct 2025 13:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="su1un/vT"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="tvNmJjLb"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023108.outbound.protection.outlook.com [52.101.127.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B55345CA4;
-	Wed, 22 Oct 2025 13:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761141085; cv=fail; b=NPgT9wsgTvHyAVJvu/DNl7nJYkv1X/4twJa/aPpHC0G/Lemzeqb8rAWqqB51KXB7MCnkvWJfQqI16iN8Rfb3NJjfvsOqMVRvfyjnyCV57t+eQFkKxBOrHArXH1zBU5VaCpKVmoTDwu0mTd+4tmJ7/e+sCjS+6+EQ3NEXQoB3uGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761141085; c=relaxed/simple;
-	bh=Np2WCwzYaQVP7QvYBIeQ37iDkalm9Zi679FEdpzpHvs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BdN6JD3zNCYdaTFdZss8SIH+y6JEz2GHJdFbjLV0Zc7hYPsAQqtfwnHqF9yGdnJAWSgi+pvyGt85+5Yrx0N+WUxHSyUv7fejxsM/YI5XvEvFFnI7xtlIdNYhWxkw6IahyrAc/96conyvzWLeQ0fNu7c5Mrin6j5i6TFQGOLZfOw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=su1un/vT; arc=fail smtp.client-ip=52.101.127.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=u2womspi+Jx9ymvgU8CO5rzw8DhvbVf4teDjNHKl3GUuPXS3/zaAwK9sf7YW89IO5DdRVIZ2raMLj6uXXe3nuBvtViR21UwIQSeLqAE6ooL/XbI10h7p+AL2AEMo919i3fyQ8juGKgvFNe9Z8eGjU4UVRACz4Lk5RJzVucZqkQs5Epo1o2ClM7gRZRMi4tmUABl1o+q2oNI/USxM5YYIgFH8v9rakO+zMSQR/X6fmHO/uFfXAQZASnot0r/BbqIawO97gS2th/KwS3974WVNonTVYUjdhvdBrQDBOp6LBf8040aGy3V23RGiC3HIBZXDgjDzkA2ejL9udP8MEqmL2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5/gH7evc9urr0jmbJLRT3jh3pmc/vRdSMeNjhGo4qlg=;
- b=gB3lQdZEEbaqbYVv22Z74MgYUeLpx6qjw0QZjGGso4QZ3w4CGuzTOypekivMUBgbiJynbVwEeMIhqlgathp5T/5/Fy84iQ5hYzo7QddcgsAdXfZpMR/dPhtqpn9tge2SeowzZWK4c41jjy74IyJIp4AaC/TctqG9uzLaPW0eFjPRznuLvsjlL9Im8Vvj2kXDeBLs/Ggl9/5tigcYMmDEWfHPGWZbNt40thxTzbZx2BVAsrtWBRB2wMSFG6xTdBdNNlgqZsmHN9uxkH91hz4reM3qYwz0pEvXJqzgQx9f8fD+V5AG7kiAEJO6zXhMOisL2gf5OQ0i44QUvnKrFCyD6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5/gH7evc9urr0jmbJLRT3jh3pmc/vRdSMeNjhGo4qlg=;
- b=su1un/vTk/sH+WH5vox7IFnhoWKuhZpf57h9xHjquUK6fz+6dJBWXNqJzkgoVc9uZv5N5UL30HVYIIj2EGY0MBaq84obyXK001bPNu61X+xTscipBVzQOPo1VcmqjbVbK5H8IOA1Xtu2C6KbnPwSiJzMasxMeqUueTEpd+wo4/5FzLn3NLUYFTIkUIGE2P3JnZ3btqIBbT6XzfAAtcuhuM5qeorBogyU33YvsH4972e0PA/DMETsv/mrT4GYRrFu2/aAtTKZVRABP4tsWBuFuLiKOtzizJyGPIHIkk9k3CeVBLVwRP3xdF0bJ5mDJDJaU5hLZBFrJTn0j7+09QswhA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from KL1PR03MB5778.apcprd03.prod.outlook.com (2603:1096:820:6d::13)
- by KL1PR03MB6975.apcprd03.prod.outlook.com (2603:1096:820:ba::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Wed, 22 Oct
- 2025 13:51:19 +0000
-Received: from KL1PR03MB5778.apcprd03.prod.outlook.com
- ([fe80::e1e:5c95:a889:828e]) by KL1PR03MB5778.apcprd03.prod.outlook.com
- ([fe80::e1e:5c95:a889:828e%5]) with mapi id 15.20.9253.011; Wed, 22 Oct 2025
- 13:51:19 +0000
-Message-ID: <7be1f72e-00b1-4e86-88b2-260200b10480@amlogic.com>
-Date: Wed, 22 Oct 2025 21:50:47 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] clk: amlogic: Fix out-of-range PLL frequency setting
-To: Jerome Brunet <jbrunet@baylibre.com>,
- Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20251022-optimize_pll_driver-v1-0-a275722fb6f4@amlogic.com>
- <20251022-optimize_pll_driver-v1-1-a275722fb6f4@amlogic.com>
- <1j8qh34098.fsf@starbuckisacylon.baylibre.com>
-From: Chuan Liu <chuan.liu@amlogic.com>
-In-Reply-To: <1j8qh34098.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TY4PR01CA0071.jpnprd01.prod.outlook.com
- (2603:1096:405:370::6) To KL1PR03MB5778.apcprd03.prod.outlook.com
- (2603:1096:820:6d::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6429934320D
+	for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 13:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761141109; cv=none; b=XpPiLp4/jkuxSUDCgyufdtWjXLwV/QYr96iXhhHXHfqJVF/F+LANiyl4es+2WfRsYW44nV5eWMSkS1NF2pFfKJ0b8ExZhVXeaPlvYBmommwAYrohFfkkF1t7eTtosNcye+KrWWkXEEE0/zuE3BJRrcM+ZeuHNPy/ZiXFGZT81MM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761141109; c=relaxed/simple;
+	bh=U74wioQnuceda/q2sXRx79FU1EiFVj6GAjFp3nVj0E0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RXxHMtfbJmxGENk27vUytd+Iy9UaEX8PaQ6GcQsE0QZCoqiufsC6McvS/ZajJEIvXAraTl+9CrMjmGVrbTHYtGB9XzIL3D3EUEUWPdImatfg1CoqAMBzakheULjLfXtvJDqaADVjJk3IRkdg2DQSLMLdL1KIB63z9P8OrQxlVgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=tvNmJjLb; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4711f156326so54487495e9.1
+        for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 06:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1761141102; x=1761745902; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EORvstfENo4plQ/h9GLmP9GLzzW3c5B2lznPYlyShI0=;
+        b=tvNmJjLbBZ2+JlQmR48Fl/0BTNMmp6PIVUaaITrvF9rfyjsk+zC9qWXZ3qD5AWvqop
+         6D1imaZuaoAMJoKiF43wF3PqtVOxDzd1ZdTTmHfBOsDOEyUQXQRVhCHqvplG8mPvIBJ1
+         yg2qGZhh53u9m2jiR/GRDe6xMbEx8scZdzEYJoHIhv+74odaoRt7mmhmOGLYkFMlbQ9m
+         zyXrM7xUqVrSoSXXu10x1I7OZgvowhNFhwxNmV75VtGFUlQHeE4bhC+TKcNL50SjIDp7
+         P0ED39C0aPD5319YMZPzpQ1gNlrzky9R7T7hEGxiVg6g10OJzSW8FcKkosjkYWVX0Qrn
+         U4BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761141102; x=1761745902;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EORvstfENo4plQ/h9GLmP9GLzzW3c5B2lznPYlyShI0=;
+        b=FQXUottgUedjYdViG0su2A73DcSLfOUfuZlzv+V4krGMbN3cuwLGcBty8pITpQgYK1
+         QvqCyxyBVBYNk7ovvplgmAFvaw3Rq+oSXI3s+SiHSAhLzyvAl/EiAhA2MDUwXt/REJvC
+         y1ZbKxclHIobVI4BTifpzcrQDxlh+K4QrnDfKXM5TEtLftkmn3Tk85KIL2X5J5sWtA5N
+         bTgTXyBqLjb8wzUx+dwQCUk9MOJvOie+icHjQm2eMoANzxT4EVwb9FG0Baxc23QFFXHt
+         Kc+EqHjcL6CZNTuEaNKJh9JkJVfOVjGLUXi1WmvT3JvbMtg6205qCP9tbunjeIhrrEQG
+         /8eQ==
+X-Gm-Message-State: AOJu0YztTm/R9+dNrTsIaF2lx6paJdBv6jbVZu1AajvnOF9ttetNbgYH
+	zm5GbP3aOvXdqANQufesUmrHx1C/cqod08KxlKItSFECQqheII/84xpJ1sKq8ZZTDlrU3WrZqbB
+	H4HB+1EcmoQ==
+X-Gm-Gg: ASbGnctAWGKhKePAzN03TqhxeOB8G0VsLj1Fcm1hH7SKJ2UKhRqA+hR3LMizWbone6K
+	q9PaxjZ/reL2vWeUnyy2AglesHFCEL+Ttl6RXocP1J5JI0FV2gUsQZtQIBzGaoPanfLSS9KihzY
+	HyoJcpjAeSv4ccMKogfwHJMFpT/jxAkVl6Hlk4fhx32ffaQn6vQBWZxTm3oPAdkaZSTKUvFRKp7
+	nZ/xjxth9+NIEmq5YBJiDI0kcU7tXwqSLtemluju8x7fzNDN/aW7JINsCXOIron7JRpLk3mRu0W
+	R1eBDYv/I84o/kknVeOt9nRBOlk9Ngl3todX4WxpGUb30KMZbHn1ci4DETWaLprzz0lhGvdlLdD
+	Q6TIyWNMtyK8Lcyjxc4V29ZytGBcRqW+Ev4x9DG6ytXD+N5r80OL0pfpaktEVazylAsIKZg==
+X-Google-Smtp-Source: AGHT+IHgKrkNbpQTEKm9A6howyV8sS439Mh/bF1HfCO6EObvZ7XnGkbmh43ZP5i1Er51qjnFckLAxg==
+X-Received: by 2002:a05:600c:4710:b0:471:115e:9605 with SMTP id 5b1f17b1804b1-4711791fc13mr149827175e9.35.1761141102312;
+        Wed, 22 Oct 2025 06:51:42 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:69df:73af:f16a:eada])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47496c2c9dasm38474625e9.4.2025.10.22.06.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 06:51:41 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v2 0/2] reset: remove last remaining user of the legacy
+ lookup and drop unused code
+Date: Wed, 22 Oct 2025 15:51:30 +0200
+Message-Id: <20251022-da850-reset-lookup-v2-0-c80f03831f63@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR03MB5778:EE_|KL1PR03MB6975:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b7294ed-b629-4198-369b-08de117213a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SDNCa0ZpQkVHUy95eWNSeGpoT2NvaC9kVSthMUlqdXducFZUSHpvOWFPSSs5?=
- =?utf-8?B?SjM0azRFWU84MVVNYTFQT2cyUjZlVlZEY1JKOHAwc2ZXdDZMZDBuWWliL3dn?=
- =?utf-8?B?VGR3RklHM29yOXBGUFk4RllHNDIvSEhZTVhmTkV1NU0vWjRaNVFJZ0VpMi9k?=
- =?utf-8?B?cGVrSWE1S29BZkRIWVhhWGJRV1lPR0NNUGYrTFJhVkMwRHpJRzBKVFlFN3hH?=
- =?utf-8?B?aWEzbWE1ajRoQ2wvOTcyWXJlM3d5QkxVNWZxVnJ4MWdJNkkyOUpaY1dYUlp6?=
- =?utf-8?B?OUhBUjVhVUM4aGJlQk9kekpwc0h4VmVhTWYxK3pEUkF4SWt6Q0pHL3A4ZVBD?=
- =?utf-8?B?L3UyQmNQbENDSjViTnQ4RCsrZ1ZZTmU1MlVKS1BqQTZTU3kvRDlVQzR1dWxP?=
- =?utf-8?B?NmZGR2xLdENURVBxZW9tTVRxSU5xRW1LQWlPbE1OQVNwRFlUYkYyd0hYRU9B?=
- =?utf-8?B?OXFXOEdUYkRuMm5UQ0dIemNMeGU5b2N6VnFsMU1sejdTMGFGai9rcmswQmhS?=
- =?utf-8?B?VjIybjU5S2JqZkxpK3Z0RVA0VHpDWWVFMFE1RVh2TU9TaGxML1U5TFVBN2NZ?=
- =?utf-8?B?cGxsN1FkVExPWE9HdVVrUU13c2QvNlk1dkM0ZGZyN29qc0JFNy9PTU5lcHlE?=
- =?utf-8?B?SVhhaGMwUVdUTm80ZDV4VVVvMG93aHZKMDdRaUxvNlFzbE1vZzlGY0hTT28y?=
- =?utf-8?B?NHdFaDFvSGt5WkhPUWRYYjZJeWFIT0FrSmZ2b0FHU21FZ3lLUU9kVWdTMnFY?=
- =?utf-8?B?clZXeERNMEUybDRRNEpDTnVZQk9WZ3FZVlBzS2h0MHlJb0dCWUtKV3g2TDV1?=
- =?utf-8?B?MkdOT3VXTmJuR0pwQ2JrSFRzb1lXeGZZVUJPTEVMRm5KS0psUnY3cTZyTEUz?=
- =?utf-8?B?OUFwVkhYbnk4VzBWWHpsZkIxcjd5dHQ2ZmE5SERUazcrMDNOZGdzc3Bxc3J5?=
- =?utf-8?B?RmkvRWdYdlY0VmxqZGxxa1BvbjJUUEZtSTR5MEZ6cEVUME5CeTl5WmpOaGpP?=
- =?utf-8?B?c3R6QU13ck1mOXRDcjhjQWFGQjlkVk1nVkVvcmt0bk83STEvMC9tSHNHZ0lE?=
- =?utf-8?B?SHd5aHRkTnAxZGVNRllueVVCL1kxSDI0RDV0Z2dSNFNYcWhEb1dmM2NkUFN0?=
- =?utf-8?B?bmc5UWtQS2cvUDk2ck9kOXZRakJEOTcyQWhBdW5mOWF5S003MHhjbEM5VFBa?=
- =?utf-8?B?MG96VUVJQUZFY1NEZXZjSGdtd0RpM2pVenBuYVdzdEJIWklhU2dhQmZLaERW?=
- =?utf-8?B?TStiNHFMSGRMQVU2d1VMQndHT1dBSE5XOG4yODBCalRUdnJoM05rZXdmZjU3?=
- =?utf-8?B?TGpvZlp0ZERhdUlxcU9rYVc0bFk1ZEk1VnFRLzBLQWxGZnVabERCNWtCZzZ3?=
- =?utf-8?B?dzkyYmlUTzRqY3IxVk9NTlQ5bXVOSFk5OUR2VFlUeitBY3A2RXk3QnJxNmlv?=
- =?utf-8?B?bEkrV010V1RjZUVrSUpJQmdyU1Q5NHl3SFZoWVEvL01TeTluT21rWGh6Q0FK?=
- =?utf-8?B?Tmtwd3o5cWI0Wmg4VDUzMCtCRmlkcVlSMDEzNlVxbFhBRFlRSG5KZHNvRHNB?=
- =?utf-8?B?T0ZSMXlERVFRTHBGcGJnYTVSNFFqY3R2Y2ROakptSzl4UUozczh6TW9ZcUdV?=
- =?utf-8?B?YVRQNlRaMVlhKzFvTWxDeDA3bEFJZnRHSEYra2JKdXE1U0xIdjkzOTRCTnZP?=
- =?utf-8?B?bWNKMXIxMk4wYkw3UWJxVUdkck44YXg1aFVpTzgyeGtyOTBMcUNZdXYvbFdL?=
- =?utf-8?B?cFBLdmNoVmhXeUlMa0k2ZUozMUtKTWJoSHpKbkwrRGpNaTIxbXYzOFRZRWFL?=
- =?utf-8?B?WUJNMDhxODVJaDFuTzZiYmVJVGQ2dmV5MkVIbjNaRlJrczQ4TE53ZlJjaXRv?=
- =?utf-8?B?eEs3bjJRMEplNVB4bE13MXhXWU9rcVFzV0lxSmtOalFyaEh1bmdhQ1RBQ1hH?=
- =?utf-8?Q?slFnfvUwnrS2tsJlw3DBtYISvh5wL+Jy?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5778.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SFFYZnpzUFZmMkhrL3UvaUF2OSs3dU1wMWd6bXg4SVg1WlVKaTk1WE5FZ080?=
- =?utf-8?B?ZHh1RDROUWNmMC83QnpwZHRXaXlvTEVVa1NnTlNCeVBoRUkzUW9OZFREWkNo?=
- =?utf-8?B?TDg5YmZmTlFadklJeUVwMnZrQlhlTVhhSVFwV3VvL2w1bGJtWWJKQVZQTWp1?=
- =?utf-8?B?K2xZRm1XajJRaHdRNjZ4U2xWd2oyTlJrOHIwWXNIbVhrWXM0NnRjdzZVWm96?=
- =?utf-8?B?bGdObzN3T21rRVBFbW5NdUl4U3NrYmt6bXhyenFIRVNNV3FpamFTRmlMR3R0?=
- =?utf-8?B?c1N6Ti8ya2JrbVo3eVRMcTc5bjBscTNpQnorWkVoOXJmU01zaW9QSFdJMGNU?=
- =?utf-8?B?Yk50c0xUWW9sNHRNaWJqRUJUMnQ5T29kYkZZZDB0OGx1MlZOUzl1QitnUXpl?=
- =?utf-8?B?Q2d5SnBrdVNUN2Jkak9SSWU0cm9LVzJpVk4ydG4vSXdLRG11bUhpbWM3WEQ4?=
- =?utf-8?B?VytDcktGQlYyN3hscUNTSlV2MU9LMnhJaHd5MXlPSlZSV1l2QWhoZUVYMzVD?=
- =?utf-8?B?WCtyaUxVVFQ1LzVNdHFjbEYzOTQyL0FBMkplNThva3piYmJOWEMzbklmbkJh?=
- =?utf-8?B?VDhIaWV2NkVldHl0eGFwWFUxNEpqenp4Q1ZjOGh4eDB2TXhhWWlyNCtVSlp1?=
- =?utf-8?B?eTBWVmVtUUFBSVZpeHhjbE5OOERDMUNWdjFjb1lZR05wM0VtNFZmZ3hsM1ht?=
- =?utf-8?B?NGJxRVdGekRkdGczQ3M3Y3F0RVZ0UTZ3MWJ6RVR4eksxSzY4OEdQcFlvcUhh?=
- =?utf-8?B?RHA3Sk1NRFVNcmlRTWUxN2M1MElBQjFGcVVOcUlDTm95U294S2U4YlF5ZS9G?=
- =?utf-8?B?YVh3cGtycjlzK1lETFVTdGx6TDFwd25aRCtXeTZTUnFJTW9iTWxpa3plSzdD?=
- =?utf-8?B?Mi9ERFl5dFJOYjVtSU9mZFpuTk9OS1hNZmRXL1hoa3dHQzRUU0lWalp5aFlS?=
- =?utf-8?B?aWVaa01rOHFJTHFUM1NXMlQwamc3WEd4VlUraEwwOVV6NE5OblNTQVZJbzU0?=
- =?utf-8?B?K3VXbnZjSHd2aEUxWHNHVEhmeXFhcWdGYzN5bjFiREJST1QvK2ZnT2gxTTJr?=
- =?utf-8?B?bFVxa3JwUCsvZWo5c01wOFZBZVZLUmZqY0pEaDN1MUF1Q0p1WjVoL1VJYktK?=
- =?utf-8?B?WDZHclZ1eEpNcE8yREdLZ2M0N253Q1c5eWhCUm1oL0RBV2c0b1dFajJIbENR?=
- =?utf-8?B?TzV2MW1vcWRiN1NHY05NZmZUeXRTZG1tZUdsamtxZG56alpKeDB1ajVPTWpP?=
- =?utf-8?B?L2VSNHMyVGtsUHNMZ1VJUW1MNHpXRnAyMklWNi9mVjVXelczV2VKYjF5c05N?=
- =?utf-8?B?S1BHTXlsb2RuM0ZsNjBEWVJuT2MxbUZSVU1nb3hOQnRoWFpSdUFOanAvTlYy?=
- =?utf-8?B?OGRyalgrQ3lxbDlSdEZDVHVXUG1YUDIrRXRES3JqL3F3VWZaeVIxeE52OWRS?=
- =?utf-8?B?clVvQUl5Vk00Z2crZHp0Si9Fa3V5ZXF6eGNybFVPRG9GbTRWdEpJYUJWSG55?=
- =?utf-8?B?RjcyaWFGR0xVMm5oQ0VLMEJ3clBUU0J6bWROeTJxMFl1K1Y5bVJOb1ZueFlQ?=
- =?utf-8?B?MzZNUFdDVU41MktqRGgvUnVjdWtXRGRpR2YwTlJjL1lSR0svQjVmdGFOQ3VM?=
- =?utf-8?B?Q0o3QlVWeUZnVE0yeXdrVk1Bc3F6NU00ajJYWFpjbUlNbHdEd0xtdVB5dGVM?=
- =?utf-8?B?RUp6Wi9FMEpXcUtKWEFwNmY0UjBFZk5wdE5LZ2dFZnNhYnFpQ2hSL2s0MTll?=
- =?utf-8?B?U3B3ZGdwaGpHRktzOHpsNVZ6VXNkTkdiVUtaSzVBOFRQb2VxSE9OaDk4Nmt0?=
- =?utf-8?B?VzRUVnBGS2RqeXFJN2VVdEtuWXRJUk8yZG9nTzJNaFRDcUxhcjFzdFNNWmpO?=
- =?utf-8?B?NDF4aGNGUXhnZ3g2NlFyTWVQUVJTb3kyaFdxZENieXdINGFHeFFUWmdrUE9X?=
- =?utf-8?B?REx3RkhGdTdxSDNhMjZIMi9MSFhIbHZReHNnaXFNejM0RlNZMktpUExpVitp?=
- =?utf-8?B?S3RjRDFKQVdYSUs5aHFMTGtzZmhpcWVEcEU5ZTE1dmF5M2I3WFJ3R3praHVx?=
- =?utf-8?B?bDlmdnRtWnNBT0dxcGxFa2xBak9BSzBCdDVYbTBGU1MwYmJCN0huNWlRREFC?=
- =?utf-8?Q?8Eo0GISOCcNC9rWpJQUap9glB?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b7294ed-b629-4198-369b-08de117213a1
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5778.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2025 13:51:18.9044
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rZnMkNV7uQg2BBY6hmbACrQgdrLjPsTTBzmk8JXXDv/vJNxx+RsskSwMOh3WZHBV62volQv3XmTNIfdyQXDULA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB6975
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGLh+GgC/32NQQ6CMBBFr0Jm7Zi2BLGuuIdhUekAEwklUyQa0
+ rtbOYDL95L//g6RhCnCrdhBaOPIYc5gTgV0o5sHQvaZwShTaaVr9O5aKRSKtOIUwvO1IHWurL3
+ xtbcPyMNFqOf3Eb23mUeOa5DP8bHpn/2b2zQqLC/Glco62yvbTDw7CecgA7QppS8eb6MvtQAAA
+ A==
+X-Change-ID: 20251017-da850-reset-lookup-eca37d2d7d9b
+To: David Lechner <david@lechnology.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1202;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=U74wioQnuceda/q2sXRx79FU1EiFVj6GAjFp3nVj0E0=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBo+OFjMB8dfknrX7tjnUQViDL236Lb5paODHeCM
+ O3TzhGtOsSJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaPjhYwAKCRARpy6gFHHX
+ ctcHD/sF0P6BUcY/DGS2EQIZokY4U30syA3CkCEYxkAuHG/Ot3hEd+KjGsnQQn5pkGUzjYpH13U
+ Gu/GU876AhEKAxyZrHOtPojC/B/eOO8yvm0AaIXOnEGfgq1Tz0s6Aj69h3cmbZpiRzY2SQlHPVP
+ MC+POqRbEg4yZQhh/5ha3vLgv03hNWkejDiORn8x3zs384/WdIxAOwh1nXXLJaXdz5Y6O4Mz46v
+ cYBQNwmupsjxUdTV9oQLGFwLKFOg4bnj1L6sv+oC1l/TrjPM/kiZGeBRSHGur2hCprPQ5XIcoy7
+ QEo6J/rS8jmjJ7m1LSHqepQJ2YrZaJRESWVTr4yLY1sXKws0uObA3Y5ZImrW4oXa8LyPUzx6Ctg
+ LFsU1NorUTVhI39hf4UKWKsgCsD+2K4ohqc1glJGM+h6073L6PUWGZXqSq2BGDEj13Om2ybW/IR
+ ByrYvF5G4pbpmRCacoNQ15m9eNK5jXgH0CcqUuXC5HYDrbyXmpiCiSREgj+3qcBMmx1b6HBuWw9
+ BED6Dwivqu5XUJO//Lk0UKnaweZlW1IDZiSHVwiM/qyMJbNYfU2Pzoya0V/GzAjhQiaz3FXM6F9
+ rqlXBQRW7/vyGpuB3AQiabTECQe+NzT5EnMcvitPMqZLpu8PmKg93FPmpgirYjYYaS96M/hlAbk
+ 3lFNpwd62NwxuAw==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-Hi Jerome,
-Thanks for your review.
+The TI DaVinci platform is the only remaining user of reset platform
+lookup. Except that we no longer have any legacy, non-DT boards in
+mainline so we can now safely remove it from the PSC driver and drop the
+legacy lookup support from reset core.
 
+The DaVinci clock driver doesn't see a lot of traffic these days so I
+suggest a simple Ack from the clock maintainers and routing it through
+the reset core for v6.19.
 
-On 10/22/2025 7:57 PM, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On Wed 22 Oct 2025 at 14:58, Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org> wrote:
-> 
->> From: Chuan Liu <chuan.liu@amlogic.com>
->>
->> meson_clk_get_pll_range_index incorrectly determines the maximum value
->> of 'm'.
-> 
-> This explanation is little light !
-> 
-> How did the problem show up ? Under which condition ? How did you come
-> this conclusion ?
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+Changes in v2:
+- Fix handling of optional resets
+- Link to v1: https://lore.kernel.org/r/20251017-da850-reset-lookup-v1-0-362a309a9f09@linaro.org
 
-In actual use cases, we haven't encountered any issues caused by this,
-because we ensure that range->max <= (1 << pll->m.width) when
-configuring the range.
+---
+Bartosz Golaszewski (2):
+      clk: davinci: psc: drop unused reset lookup
+      reset: remove legacy reset lookup code
 
-If the calculated 'm' falls into the range:
-- range->max < m < (1 << pll->m.width)
-An incorrect 'm' value may be selected here. Therefore, comparing
-against range->max is more appropriate in this case.
+ drivers/clk/davinci/psc-da850.c  |   7 ---
+ drivers/reset/core.c             | 121 +--------------------------------------
+ include/linux/reset-controller.h |  33 -----------
+ 3 files changed, 3 insertions(+), 158 deletions(-)
+---
+base-commit: 2433b84761658ef123ae683508bc461b07c5b0f0
+change-id: 20251017-da850-reset-lookup-eca37d2d7d9b
 
-> 
-> Other people having problems might benefit from the explanation
-> 
->>
->> Fixes: 8eed1db1adec6 ("clk: meson: pll: update driver for the g12a")
->> Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
->> ---
->>   drivers/clk/meson/clk-pll.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/meson/clk-pll.c b/drivers/clk/meson/clk-pll.c
->> index 1ea6579a760f..b07e1eb19d12 100644
->> --- a/drivers/clk/meson/clk-pll.c
->> +++ b/drivers/clk/meson/clk-pll.c
->> @@ -191,7 +191,7 @@ static int meson_clk_get_pll_range_index(unsigned long rate,
->>        *m = meson_clk_get_pll_range_m(rate, parent_rate, *n, pll);
->>
->>        /* the pre-divider gives a multiplier too big - stop */
->> -     if (*m >= (1 << pll->m.width))
->> +     if (*m > pll->range->max)
-> 
-> Making sure m does not exceed the maximum value is valid too.
-> You should check both conditions then
-
-Ok, fix it in the next version.
-
-> 
->>                return -EINVAL;
->>
->>        return 0;
-> 
-> --
-> Jerome
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 
