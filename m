@@ -1,81 +1,81 @@
-Return-Path: <linux-clk+bounces-29644-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29646-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ABFBBFC4E6
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 15:54:35 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68590BFC561
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 15:59:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37ABC188C8DD
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 13:52:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2CBDB5807F0
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Oct 2025 13:52:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D095348469;
-	Wed, 22 Oct 2025 13:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B164E34A78A;
+	Wed, 22 Oct 2025 13:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="XtJc3VQ4"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="flPGK7q1"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEB834027C
-	for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 13:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1AF34320D
+	for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 13:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761141108; cv=none; b=FJkjBSoEaCYjW1ZKA3S9bOu+Zl5qH3hfPt1VeR3PL8YwPZaftIa26MDzW/irzc5NuTA3KDGK7e+ujcMfvXuxu2DYIe6PzWR5/OyyVWJPB/DLeg7gc33WNcBdefpESt0t0zKo5wmjVgpSeRdIuI/aSnQNUc+Z47PoR9kVHSYE9qA=
+	t=1761141112; cv=none; b=XbbH/ul0RMaXj/yaGVlKcwpWodh7x34hED3BOv0RJdYdKeqpMqFKLoqVbChQ9H3usWyiVnYKuYsOlM1ZgsHjurpUor+VedIf7weCYXnud67Pb0J/JUUvlt5qy+Byc3sa/llF31IE9O0BMEH3VnpCMCnfbxXj46mOb8YxSUKr1S4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761141108; c=relaxed/simple;
-	bh=ahY8cqJej6WQifsWXROQdHcvhwcArd92M4vlAfVPn9o=;
+	s=arc-20240116; t=1761141112; c=relaxed/simple;
+	bh=wZ+o+hwAKnLlNs+A0VYTT8wN6AfjaPJ6mj3D+4Vo+d8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u5oSK6vgENnkvf9ITlK06A6vxOzgAHi0uJrTilRdl3hbt5zb5r05HHm7IwLAx0OGiTnJ3My1dHNXGvi3A0i4NuAyGQUmupwn64c/9+Ptnxgeax9IEoplkBrdkISEsy7MJtsCZx0a4WfkmCwOLZJWkBQBGy/N4rIrI0zP5FyqBT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=XtJc3VQ4; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:To:Cc; b=V9sUrgS2vNk3VIxtvmclQ6Z/fe9CJvTiitmGm0DsYfzmBR9uUwVf10dg8xdz8w706nS+P6RpK+jTpQu6jUU0Fiue1GPiPcN+1SrMBGS//ICerDh1oBkdvP//Ssk5rMdS7VczUVk1cVL9JPgBRXjnup0/2Zo5IuS7DUt46RujvrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=flPGK7q1; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4711810948aso48886605e9.2
-        for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 06:51:46 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4712c6d9495so15029465e9.2
+        for <linux-clk@vger.kernel.org>; Wed, 22 Oct 2025 06:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1761141104; x=1761745904; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1761141106; x=1761745906; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6vpqXmEuFVERfrJK4S9HS5UBFe3EstmRsCR0kjyhhN4=;
-        b=XtJc3VQ4buam0PEAiMSzB9Od4MuIHNt6op4X3JX/uV9O1MIyCyLw6qw3a2fN7Yn/6t
-         t6cvgwCmXQ4qSZDqLTVusuNEHW3ajViBu0TRQIeH+x55FqmOnYhi5/3VJxUvNvL/K1gZ
-         RtoKPD4/vUDCdc5uDuSWOp4PcPlfqRZCSxvw7XjY2Fcm5AAM6nncj9uzWiyUO9YRY2hN
-         txbSgqALt4gJmB/No2NwnLMOvG+iM7DrGZzFYe/eX71NKgZKMZ2eNO/m58Ze93U8RefY
-         ot6PeGSRJ6ggFt9eroqW6OdkAxNAi4ZHFFL4lMVFKe1IYfW6Sy9yB7JeZG2kBEXrXyrW
-         wFnQ==
+        bh=XurdmkccZ/HxUILJCt4rZndcxIWry1SfSRWQL/ewAlQ=;
+        b=flPGK7q1gtIxoJHxvMyryvUieL8cpuymk4qvsSjCkiqQWzw3pdzGa7774HUqkRrKdY
+         +sHD2l/crpMLaXo8EiNlqXgw3qAvRbyHu4yMoLIJuAwiALQTmtaU4fD3avzW8LzUFGTD
+         4S8a20u+YKLHjqqMabIMX8WucC+GELZH5dcrWvUbizSUGUiKk3kYES11NQuisWIz8var
+         rzmsIb0Ad7OZ797mP2E0v8/5bDKp6/F37DcVYUhACTltETJPXNLOIlxLLW+EQTPaonLl
+         jB4x9fvrCg4Mz2NQAgt4UtavzumdU8aIL9Lg7928WGoh/QO3dpEtLTHsl2ikvjcrHR6E
+         YiIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761141104; x=1761745904;
+        d=1e100.net; s=20230601; t=1761141106; x=1761745906;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6vpqXmEuFVERfrJK4S9HS5UBFe3EstmRsCR0kjyhhN4=;
-        b=I3Ro+60A7D5iqq8hfH5RjZxakeWOxzlYzi/AKAc3ajpZjnNQA/pe03xBO42VhVCbbs
-         QKD673Eb0U+XiSUkGHyeLh5CreVBUbxca3C3iacT0U9X8tmaJzydlarxCCTYSlbtrFdo
-         hti5qaC74VIxrzRq0g6Jl8TzpG6HfDCXcmc5NommeEn2d2IGlqk+10RXZwGGXKgL/DMV
-         N8PejrSOD5J53imLdp3kMpvP0LKuS1apR+7DgTnlJJC2knNxOrdinZi2oyRu1K4Kx5xg
-         VZ6RwlrAWEbm6JkXuJQx5Ybsrm254WdnHGvGJYN3tYhkD1KjqCyMDfZ0e4gr3WdNiiz9
-         VJlg==
-X-Gm-Message-State: AOJu0Yy9ytUFhwCSE6ph2G/JoZqTSOSQUhyOnnmsZVuFbWbpvCTzqX54
-	8+Cps4GnYjvxkb5EXo1TMrFAaYhTUlz6aUHJEK6E/1+anendFuzgOzVql0MteLpaKB8=
-X-Gm-Gg: ASbGncvtRbqSE3GYoh5OeLGdgImtcpXUhJH2PrnTMf1COjaE1MF7PvgU/XGH1nE+NLh
-	ZwCdTaG6GK8Gpg1WhNPo6gCq7Iqv5mVedan8si+uGrUl9z3sC/fhYFenI0gXeLNHlCNh4S4TvCY
-	IAXhVq7cCDZ4r0ogAsnfud1x0JZR4iHJ7BdmLgs7y5+Woz0aTj7qyBQ2iu7hW0WSSz7iNyUpCKq
-	19YKgo8L5++inUJnWixVkfSWb27wpawR2OXaFg4dJfbmESlUvZWYIA+q3fV+49sc9/aminh7ISv
-	aGO24bUPGssz0Y3hX1BpqV+EaMJ/BbAyKCfiQNjY3bq4+HTPHxyu6P8B4z65ots1W4E2edO6wlk
-	if18nlwsC6sfDHBlfcojmiDVtCFLyNfKwbLJFNNClPI+QAOtIbhojZabshtZeLfT4h52XRSrQUB
-	tmj4JXWk4en11ssEk=
-X-Google-Smtp-Source: AGHT+IHPzaVKrOun27QTyu8Z61wqMO2ufTRuV5m0h9jH3Uupa5Quc6C1+Oatewc83oC8toYDcSpSSQ==
-X-Received: by 2002:a05:600c:548a:b0:46f:b42e:edce with SMTP id 5b1f17b1804b1-47117925db7mr141311515e9.39.1761141104344;
-        Wed, 22 Oct 2025 06:51:44 -0700 (PDT)
+        bh=XurdmkccZ/HxUILJCt4rZndcxIWry1SfSRWQL/ewAlQ=;
+        b=hXgFei4Krv7iiB8G2Rb8E80ZojXdtryiJfHypGF6199xPPNgq6NT9yvZG+I6tU3WTS
+         y9Dge19ZoyvIlmDDQVeVAWsV8PXQhfzOOWEtuaewFjeH8/buMtskYF7nqWxy5MVBOYIn
+         98F6rjL5nL3ll1rr7Z0KYNwN7YtQdYt51/yp5iTKWVQpNJr9ucgKkJvyiJC6rgd3h1NY
+         ObvyROnsoly9Hl+X1Nx0NxSCVq8rr7Bv3en4AUPNJv/WmdbqiRbRxIbFGti8mmgYb+mZ
+         oj/bsm1vqUFyupbI8Zx6835SmAckWpBBEI+lL/nDZ6w7tgOPgqUCnkvQ5StIquYxqW2j
+         Ewcw==
+X-Gm-Message-State: AOJu0YwbV58xcM4VPOtmjuJ1k87aNB46pmhwJ6RTUjC0KcdXduRK2kAb
+	8E+qVAkeDz1MTybaYhO7T7yLMcq7pHUyfgXM2wSsclg3+DZgDgq346Od1XdUfi4z/DY=
+X-Gm-Gg: ASbGncuEI2M8B5/4FeHrCZyLPr1IJUDjmJEm1zkcwZdItsHMRbmKW58koax/WnP7DMB
+	NNaVa35Y+77h6oVedvqI369AEprtRjIbVHZl3bFzcMAqbTJkU/8CFrwb7WGEpgP+nozCbcMKa2g
+	XqAuq4H089OpMmy2FgggAcguivbO8nzITd9fp8KeFvWwFH14jDSW3gFquwz+6sI3cAOX+SLDMhx
+	hhouKKCsMRc6Sz8d3ShTqOuU0fRbIWmOzkoKQJPA0fWas4WsSV0DFYpgcNjzYRZdtEw9mnH9OUx
+	4qVQbTTInaICbDd+cQ2kripjMXYij1eC2Z004kFyUwrQ8KCcPAx6Iz0YEMx1M4azRyStSrqaqGU
+	G0T/GNi091gKtC7HeWKuCR4jiIkncG5JA+iJE+AmQ/lX9TkqYSDWL6d88VWt2qL193dmyV+9MMq
+	mstUJpNuhW+WrbvhI=
+X-Google-Smtp-Source: AGHT+IHsZ7KZICEtERPW/M6aeAmKp4ZxpzWPoGZkMg4b46VjEQUp923eei/p89+58xNcqQn8+OeSqQ==
+X-Received: by 2002:a05:600c:871a:b0:46f:b43a:aeef with SMTP id 5b1f17b1804b1-4711791d923mr127420505e9.38.1761141106480;
+        Wed, 22 Oct 2025 06:51:46 -0700 (PDT)
 Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:69df:73af:f16a:eada])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47496c2c9dasm38474625e9.4.2025.10.22.06.51.42
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47496c2c9dasm38474625e9.4.2025.10.22.06.51.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 06:51:42 -0700 (PDT)
+        Wed, 22 Oct 2025 06:51:44 -0700 (PDT)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 22 Oct 2025 15:51:31 +0200
-Subject: [PATCH v2 1/2] clk: davinci: psc: drop unused reset lookup
+Date: Wed, 22 Oct 2025 15:51:32 +0200
+Subject: [PATCH v2 2/2] reset: remove legacy reset lookup code
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251022-da850-reset-lookup-v2-1-c80f03831f63@linaro.org>
+Message-Id: <20251022-da850-reset-lookup-v2-2-c80f03831f63@linaro.org>
 References: <20251022-da850-reset-lookup-v2-0-c80f03831f63@linaro.org>
 In-Reply-To: <20251022-da850-reset-lookup-v2-0-c80f03831f63@linaro.org>
 To: David Lechner <david@lechnology.com>, 
@@ -93,61 +93,258 @@ To: David Lechner <david@lechnology.com>,
 Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1225;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7207;
  i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=BEFSWjFwHX6uExLjBneDWL7iOS7pXsOG61qh122CNKk=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBo+OFsK51ACOD/ph6HTgR/PWuteV0sKOsHzuDZJ
- rVM/PUWeC2JAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaPjhbAAKCRARpy6gFHHX
- cp9qEADhDRVM3pxdk4GAGxN3WTBZRNwRovTMGBVfOIQyAY9cUZZ2Q2RrdObgHEvHzennf4cg358
- YtbRKs7E+NQMSevYJ02nXw/T2RMsySJZLFGmaNkvnLYNzE3xtRf1jmkWyhh1/T/SwKvjqGwCcgw
- XC4jUs8+qzUw9iuTUHyEtgEjtJ8kaG5i8IcPKAYOtrb+P+5H0kFMcpSPSzezYv0tpFGnXWoV2Nv
- a08L/ORJmUolVJpYfz3SMm68LoPKaMAA7kiF0yxG/zOCQ/QFsnLEbIC/IyionhnUGOonHWA1wPH
- NxhhlsVmUo0zQ8fFJuv4hZFz2Bv5mJuX0aBjS//X5D5zTbciEQEGv2maGIPnME5ZMUZEaOe4s65
- 8/3wj4lHdnw3+4iJur2DPGLVdJpu31uRY6YMulT8+97TjELp+0HFAD3cVyYsvO2XKy6McfP13Tl
- itYf1fCdWkW93PMjqWKWFvdy/a/S/x9QUiHTFCLjpDSnVGe5+oSspfTtlqsm4d2EBUIXUdcwhK1
- EXjhzXpEKzTVclshLayBYmYFbZxip+thF24vYZEdncfgWoBAGM+gGuyZb3XZfGuejx/a5G/RG3T
- MQVRAGaWPjzquG7LjJzGxHo9iFbuFwmQkJt4YzxrfzgoE+IH8iv5rpLnLVzP/lhcMjCbMqrDj3E
- yLdYS1av28GX5Uw==
+ bh=Wy6M9Sm8KHFxc4nB1a90t6BthKTqvLVK5O+m0RSU8b0=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBo+OFtZCqOA2nVH3fYnx4YIjHmIE3s6JOUsv4ny
+ HDUwStumK+JAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaPjhbQAKCRARpy6gFHHX
+ cicZEACe8UkAX4MUaTjkwgvn2b7lp8JqF8XQs/wdGRY9vWell7EVWF47AQ0M34giYckjMc/rPDT
+ T5E1139YmFvYQ4tfLR0hUGS3bdTijOKwYhLRasy+OIyDputID9qjte3aVRnvALG3AC4WjF2bhww
+ Rcs1TGkGif1utRVSYQcuReTE4q9jIhPY34zPeDRZ5sY/K//tbmUl2jFBm3EQlnT9gVAQAlyAk3X
+ GzuTaUJ/OYz6s5hSa0OCKGPWcqobFIu7Vv5VunG5HB8M3+0I7jlFvHOsqZz2Mgk77gl3ixNkIBS
+ /vRHQVBYdG5oL9FJQj/PgleQVZosXYN9GpkqdK5mwCuIDFMBQmG7beyIVCJgyI2x4XHROr+y4AX
+ qA3RUU1oL0h+gGPw+IiZxuJ6MQPMMVz7cQ/SA3xmTBjx5ljPEndn106je18JW3V11QLFlxnl+/e
+ PzijwzJdz6jVGuKlAjjQAuwxqQ90xh6pY3fg07mxOIePctzf1IM08Ew8wieovHBqYqSBD3sPEWq
+ 9tP+bUrr8ncdE5SnYEFy5xG/zc8bzKfCJBNc8+E3q0N7K4aqkjlVYHr30XMKOX1/nrO24EC+QDb
+ Gx3JNYWNFDPOAUdsmx1nZoIT1TaOp5CjcCGTqQIRz7LuQ1j3NKj5tRK23X7I8+ttHefiOVtvzru
+ CjBpD9xPAOM4mFg==
 X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
  fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-We no longer support any non-DT DaVinci boards so there are no more
-users of legacy reset lookup.
+There are no more users of this code. Let's remove the exported symbols
+and the implementation from reset core.
 
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/clk/davinci/psc-da850.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/reset/core.c             | 121 +--------------------------------------
+ include/linux/reset-controller.h |  33 -----------
+ 2 files changed, 3 insertions(+), 151 deletions(-)
 
-diff --git a/drivers/clk/davinci/psc-da850.c b/drivers/clk/davinci/psc-da850.c
-index 5a18bca464cdaf3a0f3573cf9d70b79ca591cf28..94081ab1e68872d978e4cb162d8f9101de656d3a 100644
---- a/drivers/clk/davinci/psc-da850.c
-+++ b/drivers/clk/davinci/psc-da850.c
-@@ -6,7 +6,6 @@
-  */
+diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+index 22f67fc77ae531c6efba3ce92cc73a2d57397762..8029e547e3db90ddb85c717dfd735bc8a314dd44 100644
+--- a/drivers/reset/core.c
++++ b/drivers/reset/core.c
+@@ -190,33 +190,6 @@ int devm_reset_controller_register(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_reset_controller_register);
  
- #include <linux/clk-provider.h>
--#include <linux/reset-controller.h>
- #include <linux/clk.h>
- #include <linux/clkdev.h>
- #include <linux/init.h>
-@@ -66,14 +65,8 @@ LPSC_CLKDEV3(ecap_clkdev,	"fck",	"ecap.0",
- 				"fck",	"ecap.1",
- 				"fck",	"ecap.2");
+-/**
+- * reset_controller_add_lookup - register a set of lookup entries
+- * @lookup: array of reset lookup entries
+- * @num_entries: number of entries in the lookup array
+- */
+-void reset_controller_add_lookup(struct reset_control_lookup *lookup,
+-				 unsigned int num_entries)
+-{
+-	struct reset_control_lookup *entry;
+-	unsigned int i;
+-
+-	mutex_lock(&reset_lookup_mutex);
+-	for (i = 0; i < num_entries; i++) {
+-		entry = &lookup[i];
+-
+-		if (!entry->dev_id || !entry->provider) {
+-			pr_warn("%s(): reset lookup entry badly specified, skipping\n",
+-				__func__);
+-			continue;
+-		}
+-
+-		list_add_tail(&entry->list, &reset_lookup_list);
+-	}
+-	mutex_unlock(&reset_lookup_mutex);
+-}
+-EXPORT_SYMBOL_GPL(reset_controller_add_lookup);
+-
+ static inline struct reset_control_array *
+ rstc_to_array(struct reset_control *rstc) {
+ 	return container_of(rstc, struct reset_control_array, base);
+@@ -1081,75 +1054,12 @@ __of_reset_control_get(struct device_node *node, const char *id, int index,
+ }
+ EXPORT_SYMBOL_GPL(__of_reset_control_get);
  
--static struct reset_control_lookup da850_psc0_reset_lookup_table[] = {
--	RESET_LOOKUP("da850-psc0", 15, "davinci-rproc.0", NULL),
+-static struct reset_controller_dev *
+-__reset_controller_by_name(const char *name)
+-{
+-	struct reset_controller_dev *rcdev;
+-
+-	lockdep_assert_held(&reset_list_mutex);
+-
+-	list_for_each_entry(rcdev, &reset_controller_list, list) {
+-		if (!rcdev->dev)
+-			continue;
+-
+-		if (!strcmp(name, dev_name(rcdev->dev)))
+-			return rcdev;
+-	}
+-
+-	return NULL;
+-}
+-
+-static struct reset_control *
+-__reset_control_get_from_lookup(struct device *dev, const char *con_id,
+-				enum reset_control_flags flags)
+-{
+-	bool optional = flags & RESET_CONTROL_FLAGS_BIT_OPTIONAL;
+-	const struct reset_control_lookup *lookup;
+-	struct reset_controller_dev *rcdev;
+-	const char *dev_id = dev_name(dev);
+-	struct reset_control *rstc = NULL;
+-
+-	mutex_lock(&reset_lookup_mutex);
+-
+-	list_for_each_entry(lookup, &reset_lookup_list, list) {
+-		if (strcmp(lookup->dev_id, dev_id))
+-			continue;
+-
+-		if ((!con_id && !lookup->con_id) ||
+-		    ((con_id && lookup->con_id) &&
+-		     !strcmp(con_id, lookup->con_id))) {
+-			mutex_lock(&reset_list_mutex);
+-			rcdev = __reset_controller_by_name(lookup->provider);
+-			if (!rcdev) {
+-				mutex_unlock(&reset_list_mutex);
+-				mutex_unlock(&reset_lookup_mutex);
+-				/* Reset provider may not be ready yet. */
+-				return ERR_PTR(-EPROBE_DEFER);
+-			}
+-
+-			flags &= ~RESET_CONTROL_FLAGS_BIT_OPTIONAL;
+-
+-			rstc = __reset_control_get_internal(rcdev,
+-							    lookup->index,
+-							    flags);
+-			mutex_unlock(&reset_list_mutex);
+-			break;
+-		}
+-	}
+-
+-	mutex_unlock(&reset_lookup_mutex);
+-
+-	if (!rstc)
+-		return optional ? NULL : ERR_PTR(-ENOENT);
+-
+-	return rstc;
+-}
+-
+ struct reset_control *__reset_control_get(struct device *dev, const char *id,
+ 					  int index, enum reset_control_flags flags)
+ {
+ 	bool shared = flags & RESET_CONTROL_FLAGS_BIT_SHARED;
+ 	bool acquired = flags & RESET_CONTROL_FLAGS_BIT_ACQUIRED;
++	bool optional = flags & RESET_CONTROL_FLAGS_BIT_OPTIONAL;
+ 
+ 	if (WARN_ON(shared && acquired))
+ 		return ERR_PTR(-EINVAL);
+@@ -1157,7 +1067,7 @@ struct reset_control *__reset_control_get(struct device *dev, const char *id,
+ 	if (dev->of_node)
+ 		return __of_reset_control_get(dev->of_node, id, index, flags);
+ 
+-	return __reset_control_get_from_lookup(dev, id, flags);
++	return optional ? NULL : ERR_PTR(-ENOENT);
+ }
+ EXPORT_SYMBOL_GPL(__reset_control_get);
+ 
+@@ -1492,31 +1402,6 @@ devm_reset_control_array_get(struct device *dev, enum reset_control_flags flags)
+ }
+ EXPORT_SYMBOL_GPL(devm_reset_control_array_get);
+ 
+-static int reset_control_get_count_from_lookup(struct device *dev)
+-{
+-	const struct reset_control_lookup *lookup;
+-	const char *dev_id;
+-	int count = 0;
+-
+-	if (!dev)
+-		return -EINVAL;
+-
+-	dev_id = dev_name(dev);
+-	mutex_lock(&reset_lookup_mutex);
+-
+-	list_for_each_entry(lookup, &reset_lookup_list, list) {
+-		if (!strcmp(lookup->dev_id, dev_id))
+-			count++;
+-	}
+-
+-	mutex_unlock(&reset_lookup_mutex);
+-
+-	if (count == 0)
+-		count = -ENOENT;
+-
+-	return count;
+-}
+-
+ /**
+  * reset_control_get_count - Count number of resets available with a device
+  *
+@@ -1530,6 +1415,6 @@ int reset_control_get_count(struct device *dev)
+ 	if (dev->of_node)
+ 		return of_reset_control_get_count(dev->of_node);
+ 
+-	return reset_control_get_count_from_lookup(dev);
++	return -ENOENT;
+ }
+ EXPORT_SYMBOL_GPL(reset_control_get_count);
+diff --git a/include/linux/reset-controller.h b/include/linux/reset-controller.h
+index 357df16ede328657478eceb1ba6065f42a210ea2..46514cb1b9e0626872fe71357b24d54ff0e81a8b 100644
+--- a/include/linux/reset-controller.h
++++ b/include/linux/reset-controller.h
+@@ -26,31 +26,6 @@ struct module;
+ struct device_node;
+ struct of_phandle_args;
+ 
+-/**
+- * struct reset_control_lookup - represents a single lookup entry
+- *
+- * @list: internal list of all reset lookup entries
+- * @provider: name of the reset controller device controlling this reset line
+- * @index: ID of the reset controller in the reset controller device
+- * @dev_id: name of the device associated with this reset line
+- * @con_id: name of the reset line (can be NULL)
+- */
+-struct reset_control_lookup {
+-	struct list_head list;
+-	const char *provider;
+-	unsigned int index;
+-	const char *dev_id;
+-	const char *con_id;
 -};
 -
- static int da850_psc0_init(struct device *dev, void __iomem *base)
+-#define RESET_LOOKUP(_provider, _index, _dev_id, _con_id)		\
+-	{								\
+-		.provider = _provider,					\
+-		.index = _index,					\
+-		.dev_id = _dev_id,					\
+-		.con_id = _con_id,					\
+-	}
+-
+ /**
+  * struct reset_controller_dev - reset controller entity that might
+  *                               provide multiple reset controls
+@@ -90,9 +65,6 @@ void reset_controller_unregister(struct reset_controller_dev *rcdev);
+ struct device;
+ int devm_reset_controller_register(struct device *dev,
+ 				   struct reset_controller_dev *rcdev);
+-
+-void reset_controller_add_lookup(struct reset_control_lookup *lookup,
+-				 unsigned int num_entries);
+ #else
+ static inline int reset_controller_register(struct reset_controller_dev *rcdev)
  {
--	reset_controller_add_lookup(da850_psc0_reset_lookup_table,
--				    ARRAY_SIZE(da850_psc0_reset_lookup_table));
- 	return davinci_psc_register_clocks(dev, da850_psc0_info, 16, base);
+@@ -108,11 +80,6 @@ static inline int devm_reset_controller_register(struct device *dev,
+ {
+ 	return 0;
  }
+-
+-static inline void reset_controller_add_lookup(struct reset_control_lookup *lookup,
+-					       unsigned int num_entries)
+-{
+-}
+ #endif
  
+ #endif
 
 -- 
 2.48.1
