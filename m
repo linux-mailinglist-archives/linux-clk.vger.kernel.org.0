@@ -1,69 +1,122 @@
-Return-Path: <linux-clk+bounces-29829-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-29832-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C01A9C0B97D
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Oct 2025 02:23:09 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA6CC0B9FA
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Oct 2025 02:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A8743BA52E
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Oct 2025 01:23:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 769B84EE5AD
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Oct 2025 01:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F97264609;
-	Mon, 27 Oct 2025 01:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EEF62BDC0B;
+	Mon, 27 Oct 2025 01:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Zn2iSZVO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED63122129B;
-	Mon, 27 Oct 2025 01:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
+	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761528185; cv=none; b=NhZ7I2FnOPnmeOoTaTvsBLGKXcKs/6NUKExN2Vvrd0vHAITRLu4ZHSYLMtlMTrBOTw78FmOLoX8p7yjZmXEAYGylSB+mO+oz7xyYzZmli7oq0mZjXgpe5Akb/fso9lud89ZMwMu2p8gVHOA61/NpowcCUp6T7WSqjQY3ABy3CJ4=
+	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761528185; c=relaxed/simple;
-	bh=2NVjVK98UhB3Y21CFxnmh/3oR38w9ufdRbfalTn5BRg=;
+	s=arc-20240116; t=1761529826; c=relaxed/simple;
+	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQItbB250PRXqsiaX0MNNddpgnF/ykeRv6NVyXeX2kcg9Genku25rnfOeUokXU+DxtS0IvuSSk+k0u3c/PFUG+EyEz33ulQW+I8FYsRfrUHriq2Up8Z04zfYagZXlga5q4m8rJFaU0q/37O5GmBs3vQ96i4zsoZiaZPbvQtED7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Zn2iSZVO; arc=none smtp.client-ip=18.132.163.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1761528144;
-	bh=YFqnaQXbGn6xdpcNOP814zAlTHleVU+KgUL5SVGaMpQ=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=Zn2iSZVOMGKCMCIrlqbX47mDEBSdSWKQDLrpXpijLy8IV/gXgDFHrTgCadW6m42gU
-	 /Joi1frrfTu5Bi2dEMGPf/gULXGb8PTRgJFsoYuXRgIo1iG3mk6Z07ql+EMzhzse0I
-	 PueuHILhxM13QOUR68VCJNqeFxXvjhudFK4AqlKQ=
-X-QQ-mid: zesmtpsz5t1761528136ta7becb60
-X-QQ-Originating-IP: Qzn6Gh3dF5mQyqK/6O3ihXXcFnqBQdYjHjd+FkTWnwk=
-Received: from = ( [183.48.247.177])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 27 Oct 2025 09:22:14 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13636534776712087437
-EX-QQ-RecipientCnt: 17
-Date: Mon, 27 Oct 2025 09:22:14 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Junhui Liu <junhui.liu@pigmoral.tech>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761529825; x=1793065825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
+   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
+   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
+   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
+   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
+   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
+   w==;
+X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
+X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="75050337"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
+X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
+X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="188967609"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
+Date: Mon, 27 Oct 2025 09:36:28 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 0/6] clk/reset: anlogic: add support for DR1V90 SoC
-Message-ID: <0E60AA15166FED21+aP7JRmPzDIq2WhWw@kernel.org>
-References: <20251026-dr1v90-cru-v2-0-43b67acd6ddd@pigmoral.tech>
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -72,51 +125,18 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251026-dr1v90-cru-v2-0-43b67acd6ddd@pigmoral.tech>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: N+/GyfuFbcLi0yesWPY/w8SSsQTT4ZUmo8kWT9abRFNYSwRm+J+l2MRV
-	q+AxTMB0a/xvOWKW49aFyy2U7RcHsbJEjeDkYCAyKwneTlcOOF4muRpVuIiijuiGLnPw5KR
-	uX5Fp0CaX/l2cowEzpze9nPRco8R6i3j5+/Zd8xhkz3/ZPNHhIUVj6WKbyJRW5DJR4gVJrD
-	zqoR88dc1kLKULG6mp9R/qcQ8spmmipOoJLZCuB0+cow/NsfHXUxeMyJPB3AxDvi2jNs0px
-	npY+ORtW39JJsMkJrnbpPu9vpNAAQnw3twPHCTH9Kn4f6OTC6t6m7jnAXyqoLezMUbgwIeZ
-	O48sbZKK04wsBJdLLJk3FXh+bPhyN4jfdKgptrhHWODTu0kdSPPjlCyFQo1mkDdvhqoU2fv
-	/yslAgxrZtsLA5VXLzqmXyyW9MlCW+w4M+bb4+fpgKNVd7roN4PRkyrT9tX2a5ehYmAkZkW
-	WlsMW6rLUeDr17+lqf2ZFE1y3e/EFmc/d11YujXkX1WAnpV8uBFG3KhxOWHcHfkEyVmifGi
-	wJa+2hpiCbQXPzqWDdAluilnmR+pQFJ3BmBJA3F1X9TTXkKfhdRxbFQmKh4Z71GHv3fdSGh
-	GCzfZDCVHkWb7nbOxq03QIKkQoEw0aCpKKo/MJWZ/AQ7WzpIBCrcvfJvl1E60/cWmbqcXkh
-	TDcLoLjOmnKZMWP5O29aoNhszk/2CdzWB9l1cObGr/WsCJPGVdqHWC4bmmN+amocB1VMwNW
-	8gDzE+6UQI2bTRcVQTLbgEZTsLUnzIFNsx+ffA/jghL/5E/P4q36MASazckLFCh+JMsE2MO
-	YGOaMTE/ncKRadQJArj2FvqK46nG6P9G7559kQD6ZcUfZwpN8b2kr3GE6X0Xv/dsj0eftYh
-	UDrSGkIgKV+hOPf/jabZVs2eNU++US9clQ725Hgr5BCy1W2bzEBFhGkOsV/XUbKElC35D0F
-	CqLEdSa3WXWMkXWedbY0US0LjpCB5M/z6XWKYBC+G6z/ebIHGXzr+0x+NQ4foIzyb+tvx1E
-	dEUikEzlomI9hG3oKUD6FAAR/54BGkd16lDew9nB1VEDFKGoXvEgROHarYn+w=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-On Sun, Oct 26, 2025 at 10:00:40PM +0800, Junhui Liu wrote:
-> This adds Clock and Reset Unit (CRU) support for the Anlogic DR1V90 SoC,
-> as well as corresponding dts bindings and dts integration.
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
 > 
-> The CRU driver framework is built around the clock controller as the
-> primary device, with the reset controller implemented as an auxiliary
-> device. The clock part refers to the vendor's code [1] to determine the
-> structure of the clock tree.
-> 
-> The Anlogic DR1 series includes not only the DR1V90 (based on the Nuclei
-> UX900 RISC-V core), but also the DR1M90 (based on the Cortex-A35 ARM64
-> core). Most of the clock tree and CRU design can be shared between them.
-> This series only adds CRU support for DR1V90. Nevertheless, the driver
-> is structured to make future extension to other DR1 variants like
-> DR1M90.
-> 
-> This depends on the basic dt series for DR1V90 SoC [2].
-> 
-> Link: https://gitee.com/anlogic/linux/blob/anlogic-6.1.54/drivers/clk/anlogic/anl_dr1x90_crp.c [1]
-> Link: https://lore.kernel.org/all/20251021-dr1v90-basic-dt-v3-0-5478db4f664a@pigmoral.tech/ [2]
-> ---
-Do we really need a cover-letter? Since you only have one patch, Is it
-better to put the above information below the --- line in the actual patch?
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-                                      - Troy
+[...]
+
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
