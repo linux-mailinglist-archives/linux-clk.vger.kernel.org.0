@@ -1,162 +1,149 @@
-Return-Path: <linux-clk+bounces-30033-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30035-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EA0C1B073
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E3D94C1B522
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 15:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C1775A8E76
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 13:43:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D5C15A1F7C
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EEE0325705;
-	Wed, 29 Oct 2025 13:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804262D4805;
+	Wed, 29 Oct 2025 13:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ou1VjCWO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjrUJgpt"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558EA302161;
-	Wed, 29 Oct 2025 13:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B813B277818
+	for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 13:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761744826; cv=none; b=BBspC1ngBHAxsZ79Djil4H/CRYgMOf2diltm3E9skpwMVN+8qnzQTXO+nOTt9Eime1pxi/E5uOSb2cJw/VdCDofYoNIo125zZdM1j0ddHaN6bdAa8ZpTC3RoEi6CDwvgJhTyO02+B2yTgu8kddrY4drLEVCPqUCi5BCzN2icuIY=
+	t=1761746165; cv=none; b=Y7SpUgboERFq++i8tOneCPo0beSlfRTWaw36qs3aZ5RywdbnBXZsgPH2m74EoxnzEd9g11cNxdUPOCBVESqGBMeOvYfxGewpbRsoWj2YNueLupxjfkAjUODG91K7cRLhI3/ygrdBSGSSZkszciX6xywJIGiNf7klKIiKwYi/svs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761744826; c=relaxed/simple;
-	bh=ZHmNvpRE/27NOb0eEnH0tbeTut2ItrA5+TdUUFpGM7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=blT7SeGxknvoDOgCUWRw1MXmnYjAQPPeXzgTUU0nXX4/0hLbguuFLh/Wn56SI6jAXCRakPuTwh4HzbmDMEWQGe0IQtAtoiTcrvJ1KGr5Kj2hq9JooXH2vKIEOEi2ldh679ICRalEnqSE5AvxfCdykTNe1wwqAIZel9coKGDlFI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ou1VjCWO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078FAC4CEFF;
-	Wed, 29 Oct 2025 13:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761744825;
-	bh=ZHmNvpRE/27NOb0eEnH0tbeTut2ItrA5+TdUUFpGM7k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ou1VjCWOsp1l3s9vFI6F5hFO11knjGvnOej6wvPkNlcz5O9trZBuWS6cxW8obzWkb
-	 bMx37vdpUgjTmxB1gh1eVoiWHzy9/LiGlSL5LwAwAnGCSci6axkvgrSmx3KVIvRbxQ
-	 IYMNOrwm9nD8i7eRIW/WLbIs7RFi0pynXPTtFmRhO0WpmqOi9pwHNWRfUkMcm59dDr
-	 1DE6Df080zlVN+aRrOSPvvPx/0CyqeYw/EleSE9D7UKDMpMfH4tb3kBC/qRvroBooU
-	 LcYu8vzysBKt0so2mGg1SLT7NK+fR2PoP9EpZlRpeFx4hWkqjS/6m859KMB9Mj428o
-	 8GPcdUi8cgYWQ==
-Message-ID: <b81502cc-d91d-4801-ad72-034c20b1c72a@kernel.org>
-Date: Wed, 29 Oct 2025 14:33:39 +0100
+	s=arc-20240116; t=1761746165; c=relaxed/simple;
+	bh=j0EXgrYnvVA59AWsBuPviuInGMrdX8MUdYFnXuN3nj8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bcAe5DCd6VQ2lHNGo3PCTwjigOqppPnPmPyRzOTSH3nntG1l+12yv/Gb9zA6qBDLjS89tSXGg+RYyq4JB0EaDuXBimRDdrXlTnndxTi3U7Hu8zQRI02ZlXVa3lrAHbK/lbJ3xlrGJiBP52DgxCYotS1oHSZiwqBXMcJ7e17smqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjrUJgpt; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b704db3686cso56062966b.3
+        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 06:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761746161; x=1762350961; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hQ5uBVedfr9KMSyQo0sT0JGcllMUFdDYdUnW2PHKUXc=;
+        b=kjrUJgptY7kUXvzbzgSuOIk3nRcChEkdH9EfIq2si4HVohLV9EHM2pgC46i53SAvHy
+         OwZNgmnU1SoGylK5ZhcnUj92AVbTtOdThtWwEsrxAxwMwhudrBxYCZ+zARILVq02e3K+
+         NNbbsKOm7GgHTAz9gGyQ3Yjo6IbuSbg5BPqmzOlaUqRjJDhxJKEVIytlly8S3WW/fAvs
+         H4aIkky0fsvLtBgu92tUcxI0aw063Ns8kqv3u43eZ9phlonJ7SYdpPhMRhjA9KUSyoeh
+         C0HhmFqLnYdmBZL5V+yTLA9QohOxM4jds0Jubwoe+nVLi4Hz0T16zh/L9lSkBVGHJPRc
+         M3Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761746161; x=1762350961;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hQ5uBVedfr9KMSyQo0sT0JGcllMUFdDYdUnW2PHKUXc=;
+        b=eIGhZxeXOA2iJTRY9lY1IR5t/r5sKJRdLHv3cKg04FqjRQFYKT0J/oDw+izW/HNDZW
+         XbLh9Rq0CJ3rdYiQkIw9dCYY5x3KhmpvwJ5YmUSkOfBq+28gcwj14bUOOMrES02IOjNb
+         npkCzrXr1T+i61AdVWr85M3doStBp6LB/fDukrT5s0cmFXrWdqGAU2uJAkFHwpiTwW+j
+         QexzuKx4P8EUO71bdmHANAdr1ollj+/KVvMoVra9ColH7KCZnPtECaG/ofYUFGA989ja
+         jM6V7ZwXGi25OZysg2B+gEg/KO4ELwXwe4otXdjXzquwKovJyNxOBBkKCm6fJdBfqD5C
+         BU4g==
+X-Gm-Message-State: AOJu0YxbXVt277gIOsUsqVfLua5ur8dYLnQlI/JnPPibCDsJUXgaKG4w
+	pL9LpOB2p2ME6ahm2X91UneHOc/81tu1rD+LeQXBqGwHnWyb2Lf61eKn
+X-Gm-Gg: ASbGncttPnn98bRIRXw3rZEDpHm5QijSxGiR3hjPVjuAg0Pf39P9CJts6IH/UuHMLWx
+	VuSCNrLKOBRKJHVbAbUrLX9ndWO06tghCSFm/6VhCpb19H3r01Bbi9ph4uI3QhnO0494B1xP4QX
+	FmKZM4lLz8JcfLvzGN5/gEYQ/6Ohk+xgqznC9XsiWngWiqPNsMf5iVgOijgRh6gZBSp9H2pNesc
+	x04Mck/d49a8moKj4xUigjMT0phaXDWW2f/VaFDizoiRGShLivkbSHj7XtJqOW5HdfNzgYMehar
+	AbYRvj1CI7+DlCPcR2e0aShIQINF+3oOrf3Rwow2vyTO9MsWdXqADpk7h761pfbFWn/ELiuUwB7
+	61pAbwIXiHorl+1HRMxhQQHSveaTB+qF0vFwIJlj/FdK5CBF366/uz6CyTnd0+FxKH7HkxVKXgD
+	d30wwu1/QKzbeePOECxl+4ScVQm62aKg==
+X-Google-Smtp-Source: AGHT+IHrghZaQi+o1U9HBM80X1LpTX8WL6sxC8J/8ai0EXsL/1XFPVew5l5qwKEGLRSKZrM0eDMeIw==
+X-Received: by 2002:a17:907:96ab:b0:b6d:c44a:b698 with SMTP id a640c23a62f3a-b703d4aeeecmr296884866b.40.1761746161026;
+        Wed, 29 Oct 2025 06:56:01 -0700 (PDT)
+Received: from SMW024614.wbi.nxp.com ([128.77.115.157])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b6d8534d99dsm1444960766b.21.2025.10.29.06.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 06:56:00 -0700 (PDT)
+From: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
+To: Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc: linux-clk@vger.kernel.org,
+	imx@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH v3 1/8] reset: imx8mp-audiomix: Fix bad mask values
+Date: Wed, 29 Oct 2025 06:52:22 -0700
+Message-ID: <20251029135229.890-2-laurentiumihalcea111@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251029135229.890-1-laurentiumihalcea111@gmail.com>
+References: <20251029135229.890-1-laurentiumihalcea111@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/15] dt-bindings: Add trickle-charge upper limit
-To: Linus Walleij <linus.walleij@linaro.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Andreas Kemnade <andreas@kemnade.info>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <b13b733e7e0fba05652f49f727412fed9e0ceb02.1761564043.git.mazziesaccount@gmail.com>
- <20251029-adamant-mamba-of-patience-cddb65@kuoka>
- <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
- <CACRpkdZcszMZEU2Wzx8kaoR46ytziqtedmCrsjEL3QOrDtDgzg@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CACRpkdZcszMZEU2Wzx8kaoR46ytziqtedmCrsjEL3QOrDtDgzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 29/10/2025 14:26, Linus Walleij wrote:
-> On Wed, Oct 29, 2025 at 7:22 AM Matti Vaittinen
-> <mazziesaccount@gmail.com> wrote:
-> 
->>> But I believe this is wrong. Trickle charging does not switch to
->>> anything more, there is no fast charging after trickle. You have some
->>> sort of pre-pre-charging, which is just pre-charging.
->>
->> There is trickle, pre and fast-charge phases. Furthermore, the
->> fast-charge is further divided to CC and CV. Finally, if my memory
->> serves me well, Linus W did explain me that some chargers use
->> 'trickle-charging' as a _last_ charging phase for a full battery. Thus
->> the term 'trickle-charging' is slightly confusing - but it is already
->> used by the existing bindings...
->>
->> https://lore.kernel.org/all/20211116001755.2132036-1-linus.walleij@linaro.org/
-> 
-> I think we need to refer to a textbook or IEEE articles to get this
-> terminology right.
-> 
-> As you say it appears "trickle-charging" is ambiguous.
-> 
-> Maybe what Krzysztof suggest to use: "pre-pre-charging" or
-> "empty-battery-charging" or something like this is needed.
-> 
-> But we really need a trustworthy academic source here.
+From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
 
-Trickle charging is accurate for both cases - pre-pre and top-off -
-because it just describes very small current. That's why I found it in
-many TI datasheets - mostly for Li-Ion batteries describing Matti's
-case, but also in at least one case for Ni-Mh describing top-off (or
-maintenance).
+As per the i.MX8MP TRM, section 14.2 "AUDIO_BLK_CTRL", table 14.2.3.1.1
+"memory map", the definition of the EARC control register shows that the
+EARC controller software reset is controlled via bit 0, while the EARC PHY
+software reset is controlled via bit 1.
 
-I am fine with the naming, but I want to be clear that this property
-will describe trickle only in case of pre-pre charging. Termination
-voltage simply does not fit the top-off/maintenance mode.
+This means that the current definitions of IMX8MP_AUDIOMIX_EARC_RESET_MASK
+and IMX8MP_AUDIOMIX_EARC_PHY_RESET_MASK are wrong since their values would
+imply that the EARC controller software reset is controlled via bit 1 and
+the EARC PHY software reset is controlled via bit 2. Fix them.
 
-Best regards,
-Krzysztof
+Fixes: a83bc87cd30a ("reset: imx8mp-audiomix: Prepare the code for more reset bits")
+Cc: stable@vger.kernel.org
+Reviewed-by: Shengjiu Wang <shengjiu.wang@gmail.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+Signed-off-by: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
+---
+ drivers/reset/reset-imx8mp-audiomix.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/reset/reset-imx8mp-audiomix.c b/drivers/reset/reset-imx8mp-audiomix.c
+index 6b357adfe646..eceb37ff5dc5 100644
+--- a/drivers/reset/reset-imx8mp-audiomix.c
++++ b/drivers/reset/reset-imx8mp-audiomix.c
+@@ -14,8 +14,8 @@
+ #include <linux/reset-controller.h>
+ 
+ #define IMX8MP_AUDIOMIX_EARC_RESET_OFFSET	0x200
+-#define IMX8MP_AUDIOMIX_EARC_RESET_MASK		BIT(1)
+-#define IMX8MP_AUDIOMIX_EARC_PHY_RESET_MASK	BIT(2)
++#define IMX8MP_AUDIOMIX_EARC_RESET_MASK		BIT(0)
++#define IMX8MP_AUDIOMIX_EARC_PHY_RESET_MASK	BIT(1)
+ 
+ #define IMX8MP_AUDIOMIX_DSP_RUNSTALL_OFFSET	0x108
+ #define IMX8MP_AUDIOMIX_DSP_RUNSTALL_MASK	BIT(5)
+-- 
+2.43.0
+
 
