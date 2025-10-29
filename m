@@ -1,189 +1,147 @@
-Return-Path: <linux-clk+bounces-30034-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30046-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C94CC1B8A7
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 16:06:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79A88C1BE72
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 17:03:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 259656615E5
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:04:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5994645292
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9DC25A328;
-	Wed, 29 Oct 2025 13:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GipmGrKT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F9833508C;
+	Wed, 29 Oct 2025 14:37:21 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF9324E00F
-	for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 13:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB72132F77B
+	for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 14:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761746160; cv=none; b=ctYeXYiPhacns46erX39lj4yH5L2luaWgT8NubsZeYOVlB9IJpCRBT2xcn0z8TUbHmfu9njs5Zax2hASi/zf/28Hd/5IQYAlsvYuLoijlQ+ucldrsewriyFK7T/Z5R+FeUMC49x499Ile3P38p9cNS6zmQtWKb+UN9QFGySmERk=
+	t=1761748641; cv=none; b=blIc7kF+o9xTMm46Wr90KswaVkijVL1Vgp20eVVbPTN+i5O5MSXM9IP/BMl3uJbQ29qWhaeotoygpt+qZMw5GzFt0SsPnIlWCqMMnlsswmBf2emvjAsFFw7mMsjgVVrH9uG1jRp/IX3Tbk9O/nLFWqggWeC2JJdBdglCfLMfUwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761746160; c=relaxed/simple;
-	bh=sHPEcCDYogiAcXc5LYqps5Dm5uc9aiRfkvHMbT9kJm4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mTreKqkdM0H4PVP9NVLqiR0O8FR8zySlfLYC6BznB9IkfW+rdBkwHWNnW6WmQwhwfesFdxRLDrn2Gq/NQhscPX37GidR3nsEiLiXoCkZWYDGWXiTor+5g9dJB5bLPQE6ETwQYtHss6J9gqXAoOxDXq+Qjp6ZWkjWPRM4l4d+Zcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GipmGrKT; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1761748641; c=relaxed/simple;
+	bh=RiCdWEkCDNsJiKATmU0RbHd3Kb5B/0yb//UgjVnVdPE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s8ks8OfXL0iyWrgMzMhrldG1zbpHf2BGp4YhqAkLm5CZYV3IcRx/ZwPyXIQJqtpGDxuPId/pmnNPTUfP5wAqaN1LEp7ZU70ChRTfaCajXII5i/9KtbH3lc8OCBCGWlygtvGTekzMAGkBwD3JW5q6ndEeYONuaxjsaTFQFVUE+eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b7042e50899so165018066b.0
-        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 06:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761746157; x=1762350957; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3O1Iu/ksHRGyZsz6LMTY3M2UTA+pLqkjIUkkgFcc18=;
-        b=GipmGrKTbokji/z//tbAN+Td6HP2NlQqf+jhZoVmiCL97kSldcR6fTl9AuIYi9m0Po
-         r5A4hSB1Gl12gsOkJfHouAOGdiFaNSDq0VOyi/FICuU4m14hclwb4mSowK9tyXwHtaVW
-         BgSsFH3bBXHZI+elsJDCG5INH7AWiy7KzyPobXDw0iXjW7aQo36HBDtKp2jPSxb4fuUQ
-         LkYQeUNMqGsjy4prx5iRnNWTlzBFnORsFQzoNFp5gDeUE8TDsxBono3SZ+l17RbNSV9p
-         yds05VIxpsKCQO8ZGvTikeqruqoWa7V+FR7RaGhfkJALkr7n64vVxnnFF2rfJHvvtpcz
-         9p6g==
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-81efcad9c90so85975116d6.0
+        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 07:37:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761746157; x=1762350957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3O1Iu/ksHRGyZsz6LMTY3M2UTA+pLqkjIUkkgFcc18=;
-        b=NkU//8m9DUNHK+NoqDPDQ34q4YEBR7ASIwhTQUJowPrSbP8Myoqh0OHmsfThSTU1G6
-         2fuqC3VadFtguOnhzbMtbZRAmFO6nP9DdRmcJ0u+HrBMh7/dkOT2iofJ1Vym5p1axgiB
-         IEMbMKxEW1z3qeXZlIZiXkdxGwvUrVuMVLpQqlsHKcd5b9sCS8XIelHYEvyrbdSFBjpK
-         eVg6CwdZ+k7z2tZFxiVeBMW/0QHAH0PF0UqyZQDXAwofJ4tmG96WTVqXuaWrN0RCBheW
-         kv5Jug8IDBrjMa88waiHSZ/KH5C8Zyf2y5cbi7oJ71O1o/tKwd+ZDEM9TKKyFQGNGrgH
-         ezfg==
-X-Gm-Message-State: AOJu0Yw8plpRDwBp1PlNWzUfr1m1glerCVz50ezznhom/nKVOOzkkXya
-	9uV7iQeXc4PUGIuBzVfYdUC1qJ8Wu+F3lzagNqE9uf0BLrdPHEVG0Bj9
-X-Gm-Gg: ASbGncu8K7LaQLV9maY5DtWjyCuCP+2vXU8Ct5d7zvchhU5xQdkMs0jesEAjH38Zjbg
-	gF82GgmAWQkOyjL99jPCcevG6aP8alRTLeYKDaCpmiQ42ug+osPWXA10hdj094C0Y4NJTNapoQW
-	DsYNLwfni1dFbi3vfK238R7wlN9DFPsjt8zMmPuo+vt34V5iZtahv7ZVE9zI87x4xlQvqKfbBGZ
-	hC6InV0bFtLbKUs4gEwkBxoeZ0tlhgcmOcNSO6lgfwUN2dZPJnrdMcoCkJCGE8ghqiRZzSWQaEL
-	n07TBcKXrjpD0GF7xAnWlavxySDZN5CDt4613v7fM31uyoBNJBePqncBt4QPKfjczwm3yX/00+f
-	LYDX7PVd+ftT4Ui3Q/TLvnKgx90yUQcT9IX2a3tXMDdCAXhOBLrSYS55ocR6RB/HM7h9kLCa01b
-	O7mOKDH46ryd57mR1BmRNl4KxO7A==
-X-Google-Smtp-Source: AGHT+IG3fjXdxPy5yprhsiCpSi+P154WFnEbny0GwxKhkE7eZydOCcZ5Zo9k8sLJC5ZAu8sCW+HiNg==
-X-Received: by 2002:a17:906:ee8b:b0:b45:913d:f523 with SMTP id a640c23a62f3a-b703d2fe6ffmr341163266b.18.1761746157108;
-        Wed, 29 Oct 2025 06:55:57 -0700 (PDT)
-Received: from SMW024614.wbi.nxp.com ([128.77.115.157])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b6d8534d99dsm1444960766b.21.2025.10.29.06.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 06:55:56 -0700 (PDT)
-From: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
-To: Abel Vesa <abelvesa@kernel.org>,
-	Peng Fan <peng.fan@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc: linux-clk@vger.kernel.org,
-	imx@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v3 0/8] Add support for i.MX8ULP's SIM LPAV
-Date: Wed, 29 Oct 2025 06:52:21 -0700
-Message-ID: <20251029135229.890-1-laurentiumihalcea111@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1761748639; x=1762353439;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UmTxX9Lp/E6iQMSfd9sSFodFiE1yd68ZDUJdx86zE5s=;
+        b=XQcTW0Dxem9quENuGXDA230jz4UCXZvQk4ARPyyC7s8b7qgowTAUfOIhQkghhhrLor
+         MogD7GFFI2LyKSZeMBGtQk25RMb+SlHu9mj5IhaflcxHRojmwf/i8KQHz+TZmDakIv+o
+         ghN2qZUtR2DFk5j/9z9WMuwfBom9iVyAdt841gxtbTmNmK3E5Z3IMP1NylIbnRJIg0ui
+         o1dyc2Q8Gw06vuLhmgnsxUQAKRxFJDUyaxdQFYPF2KsVcweyE97nRH3U+j6jfH+iqs3c
+         zpcPX3Bh2WQwM8FxkXE9DRgbFrwMBcLPZS6+/wWVVIkXs51gEfWkcR3NCCPrVQtpMtMJ
+         Z8vw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiT/O/cO6czEq4AeqATzqFRULPt08gGMmawYL+93r2Fgt8r7+RelTFhkVzSK7dJMEnD1VXY5NLzUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycPONFEz5v18TY9ci5zkCgQmQicdo7xLTGR/cPdkTXgYFtPt7P
+	0CsHf1EXiZammp4xnf8TkmXABd7OAC+HIrvE0ppSWzc8edEOYpY1uqUgLv30yNm4
+X-Gm-Gg: ASbGnctJSAj/VSQ8VatI1fqDxyPBISJwfi2r8qzoRnV4WdJwjkgFQZBs9SqUV69CF5y
+	n0T0IW0w+zKlhuTkRCckqs3lgGAPfPua3o68/2WWI3UlTFcDOugwduM8cEuhqpbTFxaefcxnlAV
+	K6IVt6Sr9tewd+ls6xfnm5ac4FD6PkOn3XcWfWRbZCa52PFq+rnRG6opZZtbqCC8+vgTOer3oF3
+	FuKB7gqWWsM68hbftRQ+gnXTdlzy0zkGbCn/ZRCnzUegXzvtFxjz/UHJxYyc61u/z1bgZLWf7mL
+	ucXVZmFAcoeFONsPj+lqUuMZ9+wQXLLQ0rf++FZg5BjvrdQoKf3xPbJ9SUMyEXFIGGqI1RJ2/pI
+	f6tixuzpWFt+tCIPx9byJx/DOwaaUDtS40R//8g2SpE/PIwlUiW6xm73Gt6BvLAWB+3v8ACG4sp
+	YGgpSS4e0MOWuPr+UANEb4fZy4uPTge+gP52jjap1AG8b55tX6qRSrKjSr
+X-Google-Smtp-Source: AGHT+IFNbHaptBDLorUeMsfs6MHfo7ZXvIXuhJarWxroONabWgg3ZKbEXsNaEqRK5ow8nJiCrkYOLA==
+X-Received: by 2002:a05:6214:2023:b0:87c:2bb6:741 with SMTP id 6a1803df08f44-88009b34e02mr39609266d6.29.1761748638037;
+        Wed, 29 Oct 2025 07:37:18 -0700 (PDT)
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com. [209.85.222.172])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87fc48a8a10sm103302876d6.10.2025.10.29.07.37.17
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Oct 2025 07:37:17 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-89048f76ec2so810020185a.1
+        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 07:37:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXXPafvknGnUaiLO4yVeNvri02byIilLoulC8elb6LRAVkGvGKhaJYr7fM/i8Eza0hiQ3dcLmQ6wic=@vger.kernel.org
+X-Received: by 2002:a05:6102:3e95:b0:5db:38a1:213b with SMTP id
+ ada2fe7eead31-5db90656011mr932905137.27.1761748238614; Wed, 29 Oct 2025
+ 07:30:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1761588465.git.geert+renesas@glider.be> <03a492c8af84a41e47b33c9a974559805d070d8d.1761588465.git.geert+renesas@glider.be>
+ <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+In-Reply-To: <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 29 Oct 2025 15:30:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWriu9eUHMSKcv7ojSqbquP3=z2oaquQZLx5nmN0EcGaA@mail.gmail.com>
+X-Gm-Features: AWmQ_blleyKJMjc4oETFxToQhJJ0bdzSdD1fdMmRWAHt71coVgn8wIHcAFgDdM8
+Message-ID: <CAMuHMdWriu9eUHMSKcv7ojSqbquP3=z2oaquQZLx5nmN0EcGaA@mail.gmail.com>
+Subject: Re: [PATCH v5 07/23] pinctrl: ma35: #undef field_{get,prep}() before
+ local definition
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Kim Seer Paller <kimseer.paller@analog.com>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Richard Genoud <richard.genoud@bootlin.com>, 
+	Cosmin Tanislav <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Jianping Shen <Jianping.Shen@de.bosch.com>, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org, qat-linux@intel.com, 
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
+Hi Linus,
 
-The LPAV System Integration Module (SIM) is an IP found inside i.MX8ULP's
-LPAV subsystem, which offers clock gating, reset line
-assertion/de-assertion, and various other misc. options.
+On Wed, 29 Oct 2025 at 15:20, Linus Walleij <linus.walleij@linaro.org> wrot=
+e:
+> On Mon, Oct 27, 2025 at 7:43=E2=80=AFPM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
+>
+> > Prepare for the advent of globally available common field_get() and
+> > field_prep() macros by undefining the symbols before defining local
+> > variants.  This prevents redefinition warnings from the C preprocessor
+> > when introducing the common macros later.
+> >
+> > Suggested-by: Yury Norov <yury.norov@gmail.com>
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Do you want me to just merge this patch to the pinctrl tree or do
+> you have other plans?
 
-This series adds support for the IP by introducing a new clock HW provider
-driver and by modifying i.MX8MP's AUDIOMIX block control reset driver to
-allow it to be used for i.MX8ULP's SIM LPAV as well.
+My plan (cfr. cover letter) was to take it myself, as this is a hard
+dependency for 11/23.
+Thanks!
 
-This series is a spin-off from [1].
+Gr{oetje,eeting}s,
 
-[1]: https://lore.kernel.org/lkml/20240922174225.75948-1-laurentiumihalcea111@gmail.com/
+                        Geert
 
----
-Changes in v3:
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-* rename "lpav_bus", "hifi_core", and "hifi_plat" to "bus", "core", "plat"
-* don't assign the "name" field of "struct clk_parent_data". Previously, we
-  were assigning the local parent name to this field, which wouldn't have
-  worked anyways if, for whatever reason, the fallback mechanism would kick in.
-* replace the whole auxiliary reset driver creation chunk by
-  a single devm_auxiliary_device_create() call.
-* replace the "shift" field from "struct imx8mp_reset_map" with the usage of
-  ffs()
-* shorten commit description for patch 6
-* cast "id->driver_data" to "void *" instead of the previous
-  "const struct imx8mp_reset_info *", which makes the line shorter.
-* open question resulting from Peng Fan's comment on V2: how to access
-  interconnect QoS registers? do we need to model the sim_lpav as an
-  interconnect provider as well or is it fine to have another interconnect
-  provider that references the sim_lpav node and accesses its registers
-  via regmap (dev_get_regmap(), specifically, NOT syscon).
-* link to v2: https://lore.kernel.org/lkml/20251017112025.11997-1-laurentiumihalcea111@gmail.com/
-
-Changes in v2:
-
-* drop redundant description for "#clock-cells"/"#reset-cells" properties
-  from binding
-* make "mux-controller" and "#reset-cells" properties mandatory
-* add "mux-controller" child to binding example node
-* drop the compatiblity with syscon - this was never actually needed and
-  it was done to allow using "mmio-mux", which requires a syscon parent
-* modify the auxiliary reset driver to use regmap - this will allow the
-  mux controller, clock control and reset control APIs to use the same
-  spinlock.
-* rename "imx8ulp-reset-sim-lpav.h" to "fsl,imx8ulp-sim-lpav.h"
-* drop the "IMX8ULP_CLK_SIM_LPAV_END" macro, which doesn't belong to the
-  binding headers
-* fix the values of "IMX8MP_AUDIOMIX_EARC_RESET_MASK" and
-  "IMX8MP_AUDIOMIX_EARC_PHY_RESET_MASK", which were previously incorrect
-* drop redundant macros from auxiliary reset driver - replace their
-  occurrences with their values
-* squash the binding-related macro additions into the binding patch
-* add mux-controller child node to the sim_lpav node
-* make the "gates" array static
-* link to v1: https://lore.kernel.org/lkml/20250804155407.285353-1-laurentiumihalcea111@gmail.com/
----
-
-Laurentiu Mihalcea (8):
-  reset: imx8mp-audiomix: Fix bad mask values
-  dt-bindings: clock: document 8ULP's SIM LPAV
-  clk: imx: add driver for imx8ulp's sim lpav
-  reset: imx8mp-audiomix: Drop unneeded macros
-  reset: imx8mp-audiomix: Switch to using regmap API
-  reset: imx8mp-audiomix: Extend the driver usage
-  reset: imx8mp-audiomix: Support i.MX8ULP SIM LPAV
-  arm64: dts: imx8ulp: add sim lpav node
-
- .../bindings/clock/fsl,imx8ulp-sim-lpav.yaml  |  72 ++++++++
- arch/arm64/boot/dts/freescale/imx8ulp.dtsi    |  17 ++
- drivers/clk/imx/Makefile                      |   1 +
- drivers/clk/imx/clk-imx8ulp-sim-lpav.c        | 160 +++++++++++++++++
- drivers/reset/reset-imx8mp-audiomix.c         | 164 +++++++++++++-----
- include/dt-bindings/clock/imx8ulp-clock.h     |   5 +
- .../dt-bindings/reset/fsl,imx8ulp-sim-lpav.h  |  16 ++
- 7 files changed, 392 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/fsl,imx8ulp-sim-lpav.yaml
- create mode 100644 drivers/clk/imx/clk-imx8ulp-sim-lpav.c
- create mode 100644 include/dt-bindings/reset/fsl,imx8ulp-sim-lpav.h
-
--- 
-2.43.0
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
