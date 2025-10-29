@@ -1,144 +1,223 @@
-Return-Path: <linux-clk+bounces-30058-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30067-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A91FC1C780
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 18:35:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3DEDC1CB99
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 19:15:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 838D46687FA
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 16:12:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 729F3627BDF
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 17:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81DC3491F4;
-	Wed, 29 Oct 2025 16:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B344354AF3;
+	Wed, 29 Oct 2025 17:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0gI1KfZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MW48nfcn"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1C92EC088;
-	Wed, 29 Oct 2025 16:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2395333F394;
+	Wed, 29 Oct 2025 17:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761754311; cv=none; b=qGJsrMpm+uNSQa3w6KTx7ZbPniO2Gh2WoT+7Cmgn6qHhxFnoJJdQOcj2Hhbl6PLYVd8guDCKh7Yve7FIJoEQaDR0ca0z1UcY95fPeDUNHslyikAOZxzell4evgd5lf/fJAtWjWurllSoDhNz5hWb/Q4755k/t/XTtJMGaSgGg+A=
+	t=1761760734; cv=none; b=Rm4Qw004WKuTTY1qOQMTGrB29lEJh1bvFbqY4RQOrzY6zUMPD6I/xEjAEENvK5VBRqDrtd99RNOlqsreXy/uD3EETjfKK0k9ioE3OJLUqlZ1F5u8tNYjS8JtM5tptVXcRElHKVrst2Toh1aVm01pxrM0R2BZSpYUYC9KJRRVqeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761754311; c=relaxed/simple;
-	bh=o06pwj8GQhduMpl8X9PMCjFDAGlLMLElJucB88tSCYo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CdvFEkSQ28Rh24DuPo4AhByiRPwLgAVe+GyjJ2Q+nL6afTn7+3GKwolHhU5GsuL+QkqQRFQhzVNKaCbEqjQVIRAI1swvW844jYmIuajW3Wh36ACIOXRJ4iYGXpSObQJUs0aiv7/zKi1fl7C/lyHKTNNj3Icaj2ckOfsMzOaCcig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O0gI1KfZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FEFC4CEF7;
-	Wed, 29 Oct 2025 16:11:47 +0000 (UTC)
+	s=arc-20240116; t=1761760734; c=relaxed/simple;
+	bh=ZTqNfE12/OY2hJBlOM+SDakOKIOgcInVy8P7IwXldec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TeIPspRRhu6/RxK2p7y2kuRKfYlvU4R/ZwFW+zwA2aYQgHYOLJNTDZK8Xg3aQKkDm0o36lq5VWtJmb8OlXR+0M9OeKHNtdm7P50AP0krFJVwbHfoAkormsDImurY1JO4DX7ANigsjX/k9d9Rthw6RTj8ZsFnvD2gRBdNadoxj1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MW48nfcn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C137DC4CEF7;
+	Wed, 29 Oct 2025 17:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761754310;
-	bh=o06pwj8GQhduMpl8X9PMCjFDAGlLMLElJucB88tSCYo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O0gI1KfZlA0/45L4U9eJrx6qpu2IGzA4wsjML93oPVhLNXOYtnWX6CXllgZboqBWY
-	 vhyfgBB7crP61m7dAm7gSTWaW2puf4AiUZ0jf2IkEAYPPAsdIeOWZ46byVOAJny4vt
-	 vCJBbKeyLaK6wA0nB1rKUpAWQmZh4kYAkvaqM4xicqU5J/X+9ELkj97AtmW2+tIXA1
-	 mOQw9x9JmMJRo7iiaGICMrZLj6sNQ9IweicaszD5IzK59M50W6DfWee2Nm6kQWLMB6
-	 FLvzrC/+KfgsiMu13uEq2OeZqvvKZpp0eFsDRZSnXJak8K7tXoyndkITATDw8434ED
-	 dcNcJp4fIBM5g==
+	s=k20201202; t=1761760733;
+	bh=ZTqNfE12/OY2hJBlOM+SDakOKIOgcInVy8P7IwXldec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MW48nfcnhyPke7+bwVWNs4hq0w1hddXCPFQBiJGapm/WvzmP90voWL2BCmSFCVz9Q
+	 kJ7nfZH0bmYJUy9xLw+A72lHekoe+TqVkhIhFrg74+PtBufx+GCF1e1nuNR2W9mRw2
+	 n/SNJ7loGvcQdkpKVoYrCnZhu0qKWHM1toNSznvV4J4R3aDuKZPQAkZy9ifJcDcHGb
+	 oj/6X25NOIE/IRJI3OTS7nb4IDQuVFAbLb1lvdxG60eF5MNFMqUF26S2Gt+QsOV8fY
+	 fgLr+kB9wbO0lOpChRjhJC3WNA0PUBSPrUUDmeLhtR4xMnHWqEI00CwG4EJ/2h7dL8
+	 fvCXCGW9Api7Q==
+Date: Wed, 29 Oct 2025 17:58:48 +0000
 From: Conor Dooley <conor@kernel.org>
-To: claudiu.beznea@tuxon.dev
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	pierre-henry.moussay@microchip.com,
-	valentina.fernandezalanis@microchip.com,
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-riscv@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/7] riscv: dts: microchip: convert clock and reset to use syscon
-Date: Wed, 29 Oct 2025 16:11:21 +0000
-Message-ID: <20251029-polyester-dubiously-55915f5c7962@spud>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251029-chewing-absolve-c4e6acfe0fa4@spud>
-References: <20251029-chewing-absolve-c4e6acfe0fa4@spud>
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-spi@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 11/14] dt-bindings: spi: renesas,rzv2h-rspi: document
+ RZ/T2H and RZ/N2H
+Message-ID: <20251029-relieving-prude-c097e63f368e@spud>
+References: <20251028133151.1487327-1-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20251028133151.1487327-12-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2216; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=+zR8fbMXO9YW4YzwKnjp5SrmA8iRht4FGjwYBRXJ6yY=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDJlMNut3HPy0mnNWf/rhFwWOM+01G8SW19s+mH++M/St6 h4r7aurO0pZGMS4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCR0/EMfwWVq15GmWRs9jj8 +qGyFMu2KuEjAlv03W977glfPo/p5yWGf1qL9SO2Rmddm/bttfaSq9/2h0pYNjKHWDqx8XfUNU7 ezgEA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FWiBg5MDrLC1yaeJ"
+Content-Disposition: inline
+In-Reply-To: <20251028133151.1487327-12-cosmin-gabriel.tanislav.xa@renesas.com>
 
-From: Conor Dooley <conor.dooley@microchip.com>
 
-The "subblock" clocks and reset registers on PolarFire SoC are located
-in the mss-top-sysreg region, alongside pinctrl and interrupt control
-functionality. Re-write the devicetree to describe the sys explicitly,
-as its own node, rather than as a region of the clock node.
-Correspondingly, the phandles to the reset controller must be updated to
-the new provider. The drivers will continue to support the old way of
-doing things.
+--FWiBg5MDrLC1yaeJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/boot/dts/microchip/mpfs.dtsi | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+On Tue, Oct 28, 2025 at 03:31:42PM +0200, Cosmin Tanislav wrote:
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have four SPI
+> peripherals.
+>=20
+> Compared to the previously supported RZ/V2H, these SoCs have a smaller
+> FIFO, no resets, and only two clocks: PCLKSPIn and PCLK. PCLKSPIn,
+> being the clock from which the SPI transfer clock is generated, is the
+> equivalent of the TCLK from V2H.
+>=20
+> Document them, and use RZ/T2H as a fallback for RZ/N2H as the SPIs are
+> entirely compatible.
+>=20
+> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>  .../bindings/spi/renesas,rzv2h-rspi.yaml      | 62 ++++++++++++++++---
+>  1 file changed, 52 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yam=
+l b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> index ab27fefc3c3a..65ba120a6b23 100644
+> --- a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> @@ -9,12 +9,15 @@ title: Renesas RZ/V2H(P) Renesas Serial Peripheral Inte=
+rface (RSPI)
+>  maintainers:
+>    - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> =20
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+> -    const: renesas,r9a09g057-rspi # RZ/V2H(P)
+> +    oneOf:
+> +      - enum:
+> +          - renesas,r9a09g057-rspi # RZ/V2H(P)
+> +          - renesas,r9a09g077-rspi # RZ/T2H
+> +      - items:
+> +          - const: renesas,r9a09g087-rspi # RZ/N2H
+> +          - const: renesas,r9a09g077-rspi # RZ/T2H
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -36,13 +39,12 @@ properties:
+>        - const: tx
+> =20
+>    clocks:
+> +    minItems: 2
+>      maxItems: 3
+> =20
+>    clock-names:
+> -    items:
+> -      - const: pclk
+> -      - const: pclk_sfr
+> -      - const: tclk
+> +    minItems: 2
+> +    maxItems: 3
+> =20
+>    resets:
+>      maxItems: 2
+> @@ -62,12 +64,52 @@ required:
+>    - interrupt-names
+>    - clocks
+>    - clock-names
+> -  - resets
+> -  - reset-names
+>    - power-domains
+>    - '#address-cells'
+>    - '#size-cells'
+> =20
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r9a09g057-rspi
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: pclk_sfr
+> +            - const: tclk
+> +
+> +      required:
+> +        - resets
+> +        - reset-names
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r9a09g077-rspi
+> +              - renesas,r9a09g087-rspi
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index f9d6bf08e717..5c2963e269b8 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -251,11 +251,9 @@ pdma: dma-controller@3000000 {
- 			#dma-cells = <1>;
- 		};
- 
--		clkcfg: clkcfg@20002000 {
--			compatible = "microchip,mpfs-clkcfg";
--			reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
--			clocks = <&refclk>;
--			#clock-cells = <1>;
-+		mss_top_sysreg: syscon@20002000 {
-+			compatible = "microchip,mpfs-mss-top-sysreg", "syscon", "simple-mfd";
-+			reg = <0x0 0x20002000 0x0 0x1000>;
- 			#reset-cells = <1>;
- 		};
- 
-@@ -452,7 +450,7 @@ mac0: ethernet@20110000 {
- 			local-mac-address = [00 00 00 00 00 00];
- 			clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
- 			clock-names = "pclk", "hclk";
--			resets = <&clkcfg CLK_MAC0>;
-+			resets = <&mss_top_sysreg CLK_MAC0>;
- 			status = "disabled";
- 		};
- 
-@@ -466,7 +464,7 @@ mac1: ethernet@20112000 {
- 			local-mac-address = [00 00 00 00 00 00];
- 			clocks = <&clkcfg CLK_MAC1>, <&clkcfg CLK_AHB>;
- 			clock-names = "pclk", "hclk";
--			resets = <&clkcfg CLK_MAC1>;
-+			resets = <&mss_top_sysreg CLK_MAC1>;
- 			status = "disabled";
- 		};
- 
-@@ -550,5 +548,12 @@ syscontroller_qspi: spi@37020100 {
- 			clocks = <&scbclk>;
- 			status = "disabled";
- 		};
-+
-+		clkcfg: clkcfg@3e001000 {
-+			compatible = "microchip,mpfs-clkcfg";
-+			reg = <0x0 0x3e001000 0x0 0x1000>;
-+			clocks = <&refclk>;
-+			#clock-cells = <1>;
-+		};
- 	};
- };
--- 
-2.51.0
+Do these platforms have optional resets? If they do not, please add
+"resets: false" & "reset-names: false" below. If they do have optional
+resets,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
+If they don't, you can apply the tag when you add the ": false"s.
 
+Cheers,
+Conor.
+
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: pclkspi
+> +
+>  unevaluatedProperties: false
+> =20
+>  examples:
+> --=20
+> 2.51.1
+>=20
+
+--FWiBg5MDrLC1yaeJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQJV2AAKCRB4tDGHoIJi
+0nFGAQDSmQ4OK0aex2kkGKOPqcTZtWEKmOCHzGqia+7z1QcHGgD/VQwGjfiKeEGv
+C0Sz7D4lzzgi1XrCQm0Ulwe35AHLLgY=
+=LqV+
+-----END PGP SIGNATURE-----
+
+--FWiBg5MDrLC1yaeJ--
 
