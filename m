@@ -1,74 +1,72 @@
-Return-Path: <linux-clk+bounces-30044-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30048-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B31C1B4D2
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 15:41:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39869C1B742
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 15:56:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD121585536
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:21:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BA251A63696
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 14:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA1A265CC2;
-	Wed, 29 Oct 2025 14:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iPmuKBsz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3812F6932;
+	Wed, 29 Oct 2025 14:42:50 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32C625BEE8
-	for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 14:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6816262FFF
+	for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 14:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747708; cv=none; b=BnAzvosF1FJ5JPo36+wjZRROAb17W0ead/7oy2PxYVKjUw8Ggbv6qATXNbKFwha57XFjT7MHX7N975xJaVMJpVxTJzbmptqY3QKfxXrY1kD/+6dLkNbZTeFIcOLY8RRJWSTcI+22Ki16+2qtcV/xj4gyhk7Y+9XePr4PYhRPbvg=
+	t=1761748970; cv=none; b=CadStNAtcblnoipdZQuOUPzccX7B07YafXeuPb9qP47CqAc8duZR59K4wk/k+Fhu2yqs2hTyvHr6bty80fJqoFog2+IClD2Zlr13BvuK3Ux9AIxvWCiqr9GqqtS1eFngKLTo0QnBqzwuiB75ABPC86ND7UluoQn1APK0crCE6Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747708; c=relaxed/simple;
-	bh=W2MmcX2vCweI9Q0W0BLZEPy3CkT01KpRkvvdhb0j4RU=;
+	s=arc-20240116; t=1761748970; c=relaxed/simple;
+	bh=QXFJ9Wye89l5k56IzhXHnCZ5vP4dVOGIaGxaTnibrdI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OfgSwpSlkEuvf7RrZXKHFC/kBtpFgF+iS/SdX8SPnv7xXO3EUiPprmISUQE9RHiKF6nmvQaXvd11hRQnMiwnYsBTa3IIlvRlchrUXWnMr7IspbywsdFt9g8Q4VFLcX7B3chTk9bCrnQMiKRz7QnjJb3nmsMBQUlkZKbjIAp0adk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iPmuKBsz; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-57f0aa38aadso9232262e87.2
-        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 07:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761747705; x=1762352505; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LVuX2dWoAgb7QHLLOTB16BwhmwEzZ8jO6zQdan0Y+2I=;
-        b=iPmuKBszqzRuJQbXmV7ZqrHkGQ7zzFPI5fCiy2pzoDtPjlRPUxn/iBGENRd/ptR9K7
-         3VBKIZJP1O0yUFj7/fCcbOwJ6Jrfg+aPV8Qe6xEI+yJbt3zW5MFm2vbkHPWUEusZbsG9
-         9pDt6yHUt7It5usEE7V6f8zm2g/wPOsuVhT8wJtzZZCpNR5pe56ZlKHI8y6UiF8K+aW0
-         6QnQ2mRi0kkStXvJzZuY7GofiTxN0n9PLm4/uCs5Swf6Aq4grVIHoojnEHTsOwvkPK9h
-         byUFAKzmTHWTLC+KE+CJwCtlAzXP6ZbY547Jy05lqxEPqw1USDxJedUjrktORkWq++Nc
-         KPLw==
+	 To:Cc:Content-Type; b=t2K3pfPNj6W3eGIGTY+sKW3e46Fcb3sXwS+HSPTA7RgHl2PFFQYYv6SZ8GawsE/qUcHK4kkmqUo3b0UTL0kIki6QwQGGETeH1wv92L6LGqW2pzsZaqA7XjHivM3cTeTFQS/5+uJMMXThhz+HJ6Jbl2VcsgoR9DrPtaBBQU8+9K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-557d71a96f3so807864e0c.0
+        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 07:42:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761747705; x=1762352505;
+        d=1e100.net; s=20230601; t=1761748967; x=1762353767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LVuX2dWoAgb7QHLLOTB16BwhmwEzZ8jO6zQdan0Y+2I=;
-        b=TUv8HfQTRrCfVfZrI3OtlWrb/c5G4tJpiKmrDuHpxjn69dt3g/bL4aZsNTXoyTyvw6
-         5FZXgbtn+kfHxnlsFLoacAbdOIzO/fJteEQPDQ3ZjOeyuFpFpN/4tixmhsLwuI0nau6t
-         nyBSqU5l9GtIH1LqfqpXqxhA5hp229hK7yU/WyS+589rPWiNdeKs25BIxKPYnXrSI4xr
-         FVDIBT6/hLWwxkmBus4IHLwZ/72YSz4w8q44DvL95jnyPPqgCWRVO0KRMaeGrp2/T/JH
-         +S0f+NvVHDfyb+vXaxH+IVK0WJ8B2ytC/ZL3WdebeSucgT+X3AvtrdjvOuftgTp2Mk2u
-         IKUw==
-X-Forwarded-Encrypted: i=1; AJvYcCW8w9vEz92i4zfPStzShyQ5J1OTtXL2oXbS00UOnJFq7jShQm1Y5m0QP5VX7dWoBZjPYaeCmvkDKzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuCVnv2KqDwM5DhRTIyDUE2acR0vwCWdd2ZHAIS7R7CeGUqz+c
-	F8sgscL/r2LoOKwh8a1zDRLrWNKJOvkf3SevHDDmEmX8/GhUDNQgad8NegXUzgr9/GZMVzUxo1l
-	os+EOtI1zZ9L5+M3fjzd60LFHMd7wYXrUmMCzQ0BdYw==
-X-Gm-Gg: ASbGncsLFBRdlK8kzA8GGlwIzRkSXYVbIvigE05pl51HKCLzKRggxwIjfFbQ/QafJb8
-	tCSGHT0KWnOUj4f822lHgoWuummaPufwozjVf74LGPq36OdS1l3TLoy/BPSkmIsmJQH/3br5TEO
-	t9MAAbydLDOSaCCe5O6su+hvupqFIkIcRC4zQIgK96OK+mJWvAdRqOswzyzlvVudF3j3nBDpeTc
-	Z7xjXDaplLd9WWSvJBNYLiAC0FY10A3pvYjZ36SDgawzM+6WrvGIsCaeQKP
-X-Google-Smtp-Source: AGHT+IH/WV9TTRDue/YlQPKqZJ/rOmSLCumqELYgQ//HXfU7luOPdKKEVQrj3vn51BUY/zZkRojEs9B5VMPxZwJpOnE=
-X-Received: by 2002:a05:6512:238f:b0:592:f814:3852 with SMTP id
- 2adb3069b0e04-594128b7bd8mr1157709e87.20.1761747703432; Wed, 29 Oct 2025
- 07:21:43 -0700 (PDT)
+        bh=ohi/8MFIs+pUNYTuSKDH5KUVpFMJO5wn0YyhdMa7QIc=;
+        b=XLPCnzD3kgvxfuOQWuKl3A1chQfx13svn/6+KsIrU0o2uIUGV0rU6WYdXAw4Gt8pk7
+         LSbqXVQ5m96eTKMGYykaEW0Hf2dud/VjyPH2RNI6zN4q3PZQyfl95oihbr1lUJbI39TX
+         2kW4UcGw9r/vqr/ClMrjxRYt2h9XjXwZI3PRL6qVATStMZKoHCYj9ljbRGv6TTXGEAOw
+         PtocpIutQDmL4Wi5uEFtnfquRyG5iZn4igkYcKG1ufMaQavSoJNvLXD6OEUZIHrh1rcQ
+         mVSWjx4yzasi9SfCwQcYKaMJOTDE7gWnqprP5Khg37GtNP/Ku4ER90oxWhAL9ivM/Nzv
+         lMtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmtTqF04RRLBtS14/7i2BTvrZai1zIx0KoyLtgsq8XIzsmDV1UMp5DCReiMVYevCU5jgNrIDk249g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8h6Hczb/FIRJ0HFJkY4qGUjTtaiNiXXPTfeIdpOvI/dBsOMn2
+	D+G3hr2OBAkGvWBt62qe9EEbxJTk3ZUH60JOFUgrDZeJvkazkoBfSo6ECS1fPbA0
+X-Gm-Gg: ASbGncugdjpqJo6EW4UWk2Q9QU95gPiOwuRNm8YEOqAFZ2ZOITm0+QP8/9n1fuxqnJJ
+	pvj6VIjBLKoP6LgnWp/zhx3tm2RHkQjTGuYNNloIHC1ulyO8NGULIgK5q8fEf8YtZYgmZbcPSmK
+	q9VJ+ZvsqJzbCNlJPH6btcACdHeuyR597ImvLkDZ+QVRioqxUlxT/b63pgrjfOQ0J3baHgzT0bd
+	0OusxmlAOQOrXvVqMLlggTmmkJJTnXrOQjWjQD1ASbTG8EPxohWwnYD/VOA079zU3rTjeVSoQm0
+	29YQkOvaCytEsCPkvxKJprODyJpTWSiDLu4h8Ok0Gj4IVOxLLeei6TGCQp3oFht8oQs7NZoAbSI
+	7qSCW0heaLRkRadrdmcemlA/V5SmvUZ4p0s8ELJLTiFpNZaaIupp3O0k2L92kuDyanoOtDy6fOW
+	tZUR4I2kcU/vtjiFECcWUhposD43hVzDisj4ZqzFKlTYWp9DiHd8duUJZBNcCkqQs=
+X-Google-Smtp-Source: AGHT+IFsXeSWa5zC7nELxKZKhsOEfG9Wm2H14xMdQlADDXSVDu4fFgXqGJWF6PSD3Aw3IqU5InQpRQ==
+X-Received: by 2002:a05:6122:901:b0:557:c538:699e with SMTP id 71dfb90a1353d-55813ce857dmr1256159e0c.5.1761748967361;
+        Wed, 29 Oct 2025 07:42:47 -0700 (PDT)
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-557ddb5b68bsm5438956e0c.15.2025.10.29.07.42.47
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Oct 2025 07:42:47 -0700 (PDT)
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5d96756a292so1312145137.0
+        for <linux-clk@vger.kernel.org>; Wed, 29 Oct 2025 07:42:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWebwhmhP50OgZKWxWrok+sJmALy6wiqMY3fzwa50jXsGSsnPnxa7XS4BJ7+5Z4fdkfGszUPuRUHOk=@vger.kernel.org
+X-Received: by 2002:a05:6102:2acd:b0:5db:9b88:1fec with SMTP id
+ ada2fe7eead31-5db9b88219emr535412137.9.1761748503547; Wed, 29 Oct 2025
+ 07:35:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -76,14 +74,16 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1761588465.git.geert+renesas@glider.be> <ac3e718c5de6a23375055dd3c2e4ed6daf7542d5.1761588465.git.geert+renesas@glider.be>
-In-Reply-To: <ac3e718c5de6a23375055dd3c2e4ed6daf7542d5.1761588465.git.geert+renesas@glider.be>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 29 Oct 2025 15:21:32 +0100
-X-Gm-Features: AWmQ_bn0qj1HdhGI-E5owVSGvqmNxBgXc48MF5-9CHRtkVWKXcvNelNuCdps5kE
-Message-ID: <CACRpkdYMv+R-NJ5R4+UyhK1+DJia0z72kZgt45+0eubXMuGpEw@mail.gmail.com>
+ <CACRpkdYMv+R-NJ5R4+UyhK1+DJia0z72kZgt45+0eubXMuGpEw@mail.gmail.com>
+In-Reply-To: <CACRpkdYMv+R-NJ5R4+UyhK1+DJia0z72kZgt45+0eubXMuGpEw@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 29 Oct 2025 15:34:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUvLH-8yNRoqBdTB+mcmOUedwVGpJ_HGdq8sqgLNB4dvw@mail.gmail.com>
+X-Gm-Features: AWmQ_blZ8dUVr2aBwtWAAkAOaE93AtUSPNFDpslgvmXepFfW4tMWIOUWnRJkksY
+Message-ID: <CAMuHMdUvLH-8yNRoqBdTB+mcmOUedwVGpJ_HGdq8sqgLNB4dvw@mail.gmail.com>
 Subject: Re: [PATCH v5 18/23] pinctrl: ma35: Convert to common
  field_{get,prep}() helpers
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
 	Nicolas Ferre <nicolas.ferre@microchip.com>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
@@ -109,22 +109,42 @@ Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 27, 2025 at 7:44=E2=80=AFPM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+Hi Linus,
 
-> Drop the driver-specific field_get() and field_prep() macros, in favor
-> of the globally available variants from <linux/bitfield.h>.
+On Wed, 29 Oct 2025 at 15:21, Linus Walleij <linus.walleij@linaro.org> wrot=
+e:
+> On Mon, Oct 27, 2025 at 7:44=E2=80=AFPM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
 >
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v5:
->   - Extracted from "bitfield: Add non-constant field_{prep,get}()
->     helpers".
+> > Drop the driver-specific field_get() and field_prep() macros, in favor
+> > of the globally available variants from <linux/bitfield.h>.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> > v5:
+> >   - Extracted from "bitfield: Add non-constant field_{prep,get}()
+> >     helpers".
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks!
 
-I guess this needs to go with the rest of the patches?
+> I guess this needs to go with the rest of the patches?
 
-Yours,
-Linus Walleij
+There is no hard requirement for that, but if 07/23 goes in, why not
+include this one, too?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
