@@ -1,212 +1,292 @@
-Return-Path: <linux-clk+bounces-30066-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30054-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FD5EC1C554
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 18:04:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F30E8C1C7CB
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 18:37:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EFD5584F52
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 16:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38DA196568C
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 16:11:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C923491FC;
-	Wed, 29 Oct 2025 16:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B398C329C52;
+	Wed, 29 Oct 2025 16:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iaX6WodE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vL3wKFOI"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013022.outbound.protection.outlook.com [52.101.83.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3511348890;
-	Wed, 29 Oct 2025 16:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761756290; cv=fail; b=q71J7S7jWt3Wehthfd1YKtV0rHKd5kSPvXlZZ2k2/cCXWuvmNrUMBkg0PEkQ/CnhkYsxhIt5RLNk8x7OVkIYibiTzRoVYS9gwwfqJyApccb41GGPRAO8qilc2XaNbnVn1iNsn0dqr7xwCWEwhhD3M92kfhZocr3OrsBj3Dh72pQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761756290; c=relaxed/simple;
-	bh=/oqbmjNrL70pxHfIcQb9PChTTgNxB/0IH4Ud7sVfYkM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=gikfDGAOXik6rVQQTJ23nspjtf+rImETvvi3I/S1eutNG8GxdaYolryvS7zewujn42XnBOPU12365t8NEVBAx2PF9LokOH6ZX/AEMccYQILY5+KVZ7ucuNHpC0kZP3uI6ysOm+S+wpggeu2pGeABx5lbz/B0UJ3tZtjcCeJQLgA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iaX6WodE; arc=fail smtp.client-ip=52.101.83.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qnEP/QezDhIRv7ERbs2HIGbUVUyozo4pIGZ2ZRvwAuqXuO1+gtdb9u98fBTv9qfja1pHSLk1Zei/BOWbnRDRDwd8NnInVsZViX/htGH8VtBqIYAPJdDLRwlwH7c8Ixd9Bf3lIZk3WAR4OJTzM+zmyzbMy1Mzup6/NCeknmJqSgFMmO301vEV9sA9eqlzCh60R2mU3Qvg40pc/pCxiRHYQkgWisbh+hfN4OMvm2Z+Ndokl8CBbBDhFHaP2BJDIdTyFdXuJyWss/l+Woj2hrk7P36AXjlNHKH19b3lMMZWcbgfL2W36ILCKkGg1TZwLGQ9XwP9ovfgCe/AFdfzOtY+0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IGkvAIwuHJwOg/pdQe8w7pth9hr1P4q0juN9Gca7CfM=;
- b=lPqAlkHv5PHUhU54pqd5MK5qqzqkmeg3swHqljbhrcsjFXPU6uZ+ztGAqRzVpi7ikhfLHGgOWo2hEp9hZe/pbjDrYPg7d+YpPAEqKriDd/hpy0WlGWcR2w+jqWsaBX++t9LvShH5T7s1ZT+0zBrKWinENldzonb9bL/hYs5fn/ejVuasveP83xoZ4TDnahzk/1vCxbOQqHf3XAmj7obgjTggoxpOUITwrSnp716f6I82VK3Dnv0bxsGrOkfkzxoCzE71KxJC+VuA+1/61C8Dxkb3GPHt7gV7IAJ7EgOnqecCA3TxDruSxKwN/DV+gEacKtFK4tHysqoSfes2jFZTsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IGkvAIwuHJwOg/pdQe8w7pth9hr1P4q0juN9Gca7CfM=;
- b=iaX6WodERsFpTsAr6S7SqB3rfzQpirWXGlULGPjLQP2263YcthA6yFiFvXglPz8o5G+D2KsKaJ/bZ8BDNHJgsnoEv16AdM6cBMIYAdXcDhTzEt8WFw9wllrdxxLSMBzo76hzyoDduKmDiJS/lvlsTSuQw0RhuJY4sPjuBXhILzs3qRV+AyISHOi5xhI+beRoVCJMpyJ9dytiaP7VbqH1lRBiPfU2jAwvEBZLYZjx+07MPqkbtK3l2oIHMlQDUPDfDc/kmyRJgo2oGI9n1HkgomcQ5oWNliB/XN02OmJOD/ZNlDMsI2ibNzpp7npxYsP/C24pl87ZFu17Hga8IimfVg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
- by AM0PR04MB7156.eurprd04.prod.outlook.com (2603:10a6:208:19b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.13; Wed, 29 Oct
- 2025 16:44:46 +0000
-Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
- ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
- ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9275.011; Wed, 29 Oct 2025
- 16:44:46 +0000
-Date: Wed, 29 Oct 2025 12:44:36 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>
-Cc: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B522F25E0;
+	Wed, 29 Oct 2025 16:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761754298; cv=none; b=A1NRlftlOsWZWSJlGW3a8fXwTu2b4rlkMb15XqeVVu3x3XXenAdCVT2GWA37g8FTbUPpLsuhR4Rgr5esLpRkvPM3hY1do9lZUJeViM7piYMVfs6CIRamd2MM89EuNYkSbReY98/8CXz3cgAT1ma6hWQ65Mx1pJHfmqBmerEU5X0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761754298; c=relaxed/simple;
+	bh=SBPUsQQts6myI7KNC8yymj9GqGzDulDYvcTpau9/ALk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DUwY9wnm8x1Mc228oaElWjMc8KYN4KZU6wMcR5qKfN2MTv2Ym0CTnkdse+kvp2frojq+knfB9FIheFDuUp4pIxReRcZmNz4zTuGzPGjbm7wj592+0pBP64jPBreahiKJ/ePcwXW7ByJ6UlYGxuCECFo/R09GtXqgwD3Jgq0AgG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vL3wKFOI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50589C4CEF7;
+	Wed, 29 Oct 2025 16:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761754298;
+	bh=SBPUsQQts6myI7KNC8yymj9GqGzDulDYvcTpau9/ALk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=vL3wKFOIoq91uTTR96HuBCNCR0G7LITKAB33GwdtWlZeoGAyn+DRgPe0glvKcknJq
+	 M9dMTaEPAloeCsn6TK7lZM9RlOw7cUNUGcpknMdVf+CSTmLtZTHZjnDHZ5+KZWA8Jv
+	 e0VsXgB/8ulVgFyGI+viPeK1eZw66zUZaL4ZsnL34lkm/2q7H83ZUE0gXJCfSAUbZU
+	 QTJ2p9BZGr+TaXt1s0YcydKPPTW0I8OtPD0HnRh6m66XQCO1B20aARMNxTKscYWj/9
+	 hKRJN5h/fHLcopvATVbruTVkBSHhP8STh4N2SZh3s+wSpQ6gDjyLDLxscXROACoR8V
+	 d3FiA4wXgiqzQ==
+From: Conor Dooley <conor@kernel.org>
+To: claudiu.beznea@tuxon.dev
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	pierre-henry.moussay@microchip.com,
+	valentina.fernandezalanis@microchip.com,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Shengjiu Wang <shengjiu.wang@nxp.com>, linux-clk@vger.kernel.org,
-	imx@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH v3 8/8] arm64: dts: imx8ulp: add sim lpav node
-Message-ID: <aQJEdCqLajoCsFh+@lizhi-Precision-Tower-5810>
-References: <20251029135229.890-1-laurentiumihalcea111@gmail.com>
- <20251029135229.890-9-laurentiumihalcea111@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251029135229.890-9-laurentiumihalcea111@gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0220.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::15) To PAXSPRMB0053.eurprd04.prod.outlook.com
- (2603:10a6:102:23f::21)
+	linux-riscv@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/7] reset: mpfs: add non-auxiliary bus probing
+Date: Wed, 29 Oct 2025 16:11:17 +0000
+Message-ID: <20251029-macarena-neglector-318431fec367@spud>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251029-chewing-absolve-c4e6acfe0fa4@spud>
+References: <20251029-chewing-absolve-c4e6acfe0fa4@spud>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|AM0PR04MB7156:EE_
-X-MS-Office365-Filtering-Correlation-Id: d5c2504b-a5cd-4244-b43c-08de170a77bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|52116014|19092799006|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ijeyk1rB+++mpHwlcz+u9+xG5h4JSPIxBKBwtDne7YNSrfVVGElP6kctdElD?=
- =?us-ascii?Q?KCOFqZAQgRLg/gXQWocf9rpzGv/XhiBfjhOvkBqG1Zp5zrOzRO6uLN3VfIz3?=
- =?us-ascii?Q?6HkMeafP41uLwtJQFOeZXpuEzk3oXcf6dM/Sm/4XMswRo9+lqhozRhxgmNnZ?=
- =?us-ascii?Q?MGPLalwt+fgZpVgZU8w7ElWMHBwUlxaSjb+gxDecuLbLaIpzHpaCSTsp8Ns9?=
- =?us-ascii?Q?qqfDNOi7L/AFPcIYCPXs3Ps3mWHb4ms8AwnNPyBLrJRNosnECiOkNbsrmz9h?=
- =?us-ascii?Q?bP30EC8TiBQXlHxzx8mahtq/aK+A3YNMP6o/mGalpT/MikGSnQxaH9DjmRtQ?=
- =?us-ascii?Q?iPLf9YFKBPeZ6vK1hCW/Rh3zRxUFgMEeIb8pGwjTAJakyGVK8EW1SdqmBBFv?=
- =?us-ascii?Q?dlO0GmWHW7kQVGr32tA21bwT7S1JXD92lT/Ub4klCaKEPu6Hqc4LuyY44Oxx?=
- =?us-ascii?Q?PXaJjSSiLGcsbsJUugVM5EA91VEwREgIFvzbvZKXwmO28+atjmBFkmokzWzp?=
- =?us-ascii?Q?V+nnm3vDXyeH4VUNTRtz9M2uLGc8nPiqxg/cXi/64+ap9buzhyyoIx8gQlOp?=
- =?us-ascii?Q?AqMA4QMLTLHm5lBSB8H/RXge0dqz3U0R96GVMkqmvnZ9pAvWxWWVYDpTw1+b?=
- =?us-ascii?Q?TA05qbwUiEoPxHcBMBKAStx6QNztlxhh0/3hYX6Yb62nBRuOTiIgx0W1nQSX?=
- =?us-ascii?Q?d3XkV4e+Ahe6ofIzpbdNFwzYtUOdeWPPA9LA6XCnPvezCAxUpsaeh6q2Qbz3?=
- =?us-ascii?Q?4bYtaekHHyxilVZcdZWn6d4mxrX9PDick0SZOqXsgmZcyEh6wA2nBHf7+orG?=
- =?us-ascii?Q?lEAgcaBajeBCVqX4jEGIXDgH/kLX+3YQzgjHAF4xxNiB4x3KSAzwLt3/JEeN?=
- =?us-ascii?Q?ccIxqisbuuns1nIbIHfgtp7XKPJ8k2DtEuNwnxFR8w5CJN2MZZ+bqmyg13bs?=
- =?us-ascii?Q?Wmj316ItCFRX+oDQ254RGNishIDK1IECN7dM8vraBXbjxbCCCMv2icI9vTD0?=
- =?us-ascii?Q?zssNN0GI1sf5hNcQrS0JCuvS+cg5u0PhytE4lPRIIKtyaN8+ntcjF6+vhgzF?=
- =?us-ascii?Q?EFJ5F8eLNyCQhI89vDMKRXVHhxJ0vFFAhbCaFlNI/d1+zpdUDOnc9TnlItae?=
- =?us-ascii?Q?HLl4PT1IV3H49Umn+M9roPRdhGZZfcnDv8wBBmMGq4nKdSASGIUFch19ZdoO?=
- =?us-ascii?Q?g6qhliRIDvPCTN6OXUTFjGoZR/2aNqdSkk6NG/oDax6qY0z3lYZAlSNVdmaN?=
- =?us-ascii?Q?eVdW76euEhYrRXt/WywEfgh8HbVDBrClaKT5kWX5xkXzE9BCKIsVn+oP+IkE?=
- =?us-ascii?Q?BrjmZJSLf6sRwuhg14pW7kOSivtnp7MaSMCBNKU+bglZde+oo89v2mkAL+bb?=
- =?us-ascii?Q?GZ4RB/UOgQtysSXJTnqLn39+7AGT5Z7e4jCiYGectBBUinxQLzEIBAV29s+5?=
- =?us-ascii?Q?7F0WWdbZdghhx0ffhusZ25NLiMUA/Mxg2BhjzS344Cfh47wDchiWqgAzQ8Gc?=
- =?us-ascii?Q?8SSW+sFfJqPpEzlxjTU5UFg7wrGujNkElLRs?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(52116014)(19092799006)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/F02cyzjMPEjrvcS9VNBFXfzLM7NlLDh74ocqUPrXlkaJNonrSp4KA+Xf8Xk?=
- =?us-ascii?Q?ESkUltiR/6FwT5d/x+vNQ6hwpjI5rr6wOGFPqOTmNa7+y6NHRTAt/GFMZLUm?=
- =?us-ascii?Q?4WjwZ6eB2RfDbtG3hzdag9jF9jrmZoz7PRutgZDe7jGJMAE23DTzW7g9BRJ4?=
- =?us-ascii?Q?LPMe2iI0nEJ0175Y0x0uQPoitnlIS0MvpgVsuFAxAR+tMnoLon0r8RMmebNf?=
- =?us-ascii?Q?O3LFBDCxrAUteTcEVp+qFDnxky0F6cIc0hFeX3/5hRwguHayMvnyGHqlZBTj?=
- =?us-ascii?Q?AKTTVx1D9J+Ji+rjen4zFyk5zd3GCJ0X39km+iVZxHvmJdLiIdRmPWgdFuM/?=
- =?us-ascii?Q?MC5nIbhaPEeP6pPhFvxxrfswDDIhXLbtoxSoJrsxL0mv/GJTYp9qkSN5EN+a?=
- =?us-ascii?Q?s4Ez3YRv6SA0h5U8Pm4cxehYm/xvLJuNEUWaQLmaDHYc37sflXybzzcFvY1R?=
- =?us-ascii?Q?ud2hGiK3tRn5dHFeT6Z8YfkSLmnz94URt65lkbHAEIHxUYSq20fTSeBOnuXC?=
- =?us-ascii?Q?uYfR3SKVmGy1rVA7Nrbk6FneElQQhVmhg5xslqFNLFev1PQYujhPo2Vm4Wz8?=
- =?us-ascii?Q?WWNcnJAa02LiHIovwgnyq92pgegggJAk259tanwrU8syDdoUPG3lN4nHNv4j?=
- =?us-ascii?Q?Z7FmmvNySChPObLfpM9Vf+LRvORymRRhIEpfcTG0YZ8juq5eA6+rXPVk+tJe?=
- =?us-ascii?Q?05YJLKSDT12Vq+83JbNq6dParvPYDLlu97wNq2L7C2xRA/ABDr1im70zDllO?=
- =?us-ascii?Q?kwl2n7AtuP7rcCexZ44mdBav5/+H2xqraM5he+Jp3S9ovlkxUDvDIy3kV63d?=
- =?us-ascii?Q?slsN4W/jm5h1W56uzXZvnTGsHmSY688yfk9/4HZwA5LM5MaTihoEZnkyQR36?=
- =?us-ascii?Q?JPCdkFa/yjHMdTpqhLlEBAQtxt5ObFREvnoVl36o+nmQDOi2+AwcIa0NgiwJ?=
- =?us-ascii?Q?NV4WkGi9NCIEkLnDK1go+dcroe1AZJth+0vescBZjAPFoJCvD00ap6wweMkh?=
- =?us-ascii?Q?7RMrNPeB9W5Z1nNO4vhDSih7APISYCTSLfO8P+9Gz6qijLDJb8ZsxTGSUfTV?=
- =?us-ascii?Q?eF/yiM4PaNkAXu43klzXBkI8ie0gvZ+dd7MyhjEQJSoZdMqlPQNjcM/T9MHL?=
- =?us-ascii?Q?5+MUkZ2d6bSQKGF80c3ZWRTucwhcaU6lk+zyTwtG5EOrCpPpGYGo3EjpfiWH?=
- =?us-ascii?Q?Q6qz0xnpSkOJLinQPlY1FTUrkhVJaFDLyFeSo+oBNSvdJFWiZObF20mEwegf?=
- =?us-ascii?Q?4ofYrIOgPCdFWIa3kQkjokEPMeGaVU3Swmg/irtXmoTSy2JoPVWWjpoCdRuE?=
- =?us-ascii?Q?09x3I8yAX/3M+WHxV1lLnnBhZmOlgeRTtl+xbKoKQsfvMGPPxeEZK658t90L?=
- =?us-ascii?Q?W8j31AYls4BOlqTfhvfbMMJ61UYb7vn0/tI1QG06URRzxHXFeTekTgZQ8EZ+?=
- =?us-ascii?Q?xhLamqfM0UPcaTmP4226aSp+eb3PyZfNoJWxDCzUHUu67Kt6dzLpHpAXS3Do?=
- =?us-ascii?Q?xRUkwqhDFfXJ72bQqzE+1064FdXDzDNKfHBJyiH8oqd9hPTkmIvc0xaLIyb9?=
- =?us-ascii?Q?iV7lzuQjz4UzjRWNgJm8cHaawdVHhYk7kZZzzteW?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5c2504b-a5cd-4244-b43c-08de170a77bd
-X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2025 16:44:46.0845
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 40BuJni1rkzinYEptJUbc3J5LRDe1zt+7bOtDxadQJp4OjDS+wCUkmSPgwdGzPrJQ8ZDKxk7aljbJwyTp8pRQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7156
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6690; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=WjSYxPHoiecG3YZVCMCzeZtGrY72vr6u1gmlrYkaGJE=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDJlMNusucCmdWFN9dEqkWdThu5L3a33SHX3fBXR6vp3+K bros658RykLgxgXg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACby6TcjQ/sq8czfXZ9/R5SZ +MfoHvu39vKcGU3K8g/llG8w7PoZtJCR4ccnFW6d3HN9xX3FZs84N9Z/8HoSZTn1yqxZV4psHsS t4wIA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 29, 2025 at 06:52:29AM -0700, Laurentiu Mihalcea wrote:
-> From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
->
-> Add DT node for the SIM LPAV module.
->
-> Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
-> Signed-off-by: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+While the auxiliary bus was a nice bandaid, and meant that re-writing
+the representation of the clock regions in devicetree was not required,
+it has run its course. The "mss_top_sysreg" region that contains the
+clock and reset regions, also contains pinctrl and an interrupt
+controller, so the time has come rewrite the devicetree and probe the
+reset controller from an mfd devicetree node, rather than implement
+those drivers using the auxiliary bus. Wanting to avoid propagating this
+naive/incorrect description of the hardware to the new pic64gx SoC is a
+major motivating factor here.
 
-> ---
->  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> index 13b01f3aa2a4..9b5d98766512 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> @@ -776,6 +776,23 @@ edma2: dma-controller@2d800000 {
->  						"ch28", "ch29", "ch30", "ch31";
->  			};
->
-> +			sim_lpav: clock-controller@2da50000 {
-> +				compatible = "fsl,imx8ulp-sim-lpav";
-> +				reg = <0x2da50000 0x10000>;
-> +				clocks = <&cgc2 IMX8ULP_CLK_LPAV_BUS_DIV>,
-> +					 <&cgc2 IMX8ULP_CLK_HIFI_DIVCORE>,
-> +					 <&cgc2 IMX8ULP_CLK_HIFI_DIVPLAT>;
-> +				clock-names = "bus", "core", "plat";
-> +				#clock-cells = <1>;
-> +				#reset-cells = <1>;
-> +
-> +				sim_lpav_mux: mux-controller {
-> +					compatible = "reg-mux";
-> +					#mux-control-cells = <1>;
-> +					mux-reg-masks = <0x8 0x00000200>;
-> +				};
-> +			};
-> +
->  			cgc2: clock-controller@2da60000 {
->  				compatible = "fsl,imx8ulp-cgc2";
->  				reg = <0x2da60000 0x10000>;
-> --
-> 2.43.0
->
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+v6:
+- depend on MFD_SYSCON
+- return regmap_update_bits() result directly instead of an additional
+  return 0
+
+v4:
+- Only use driver specific lock for non-regmap writes
+
+v2:
+- Implement the request to use regmap_update_bits(). I found that I then
+  hated the read/write helpers since they were just bloat, so I ripped
+  them out. I replaced the regular spin_lock_irqsave() stuff with a
+  guard(spinlock_irqsave), since that's a simpler way of handling the two
+  different paths through such a trivial pair of functions.
+---
+ drivers/reset/Kconfig      |  1 +
+ drivers/reset/reset-mpfs.c | 79 ++++++++++++++++++++++++++++++--------
+ 2 files changed, 63 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 78b7078478d4..0ec4b7cd08d6 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -200,6 +200,7 @@ config RESET_PISTACHIO
+ config RESET_POLARFIRE_SOC
+ 	bool "Microchip PolarFire SoC (MPFS) Reset Driver"
+ 	depends on MCHP_CLK_MPFS
++	depends on MFD_SYSCON
+ 	select AUXILIARY_BUS
+ 	default MCHP_CLK_MPFS
+ 	help
+diff --git a/drivers/reset/reset-mpfs.c b/drivers/reset/reset-mpfs.c
+index f6fa10e03ea8..25de7df55301 100644
+--- a/drivers/reset/reset-mpfs.c
++++ b/drivers/reset/reset-mpfs.c
+@@ -7,13 +7,16 @@
+  *
+  */
+ #include <linux/auxiliary_bus.h>
++#include <linux/cleanup.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+-#include <linux/slab.h>
++#include <linux/regmap.h>
+ #include <linux/reset-controller.h>
++#include <linux/slab.h>
+ #include <dt-bindings/clock/microchip,mpfs-clock.h>
+ #include <soc/microchip/mpfs.h>
+ 
+@@ -27,11 +30,14 @@
+ #define MPFS_SLEEP_MIN_US	100
+ #define MPFS_SLEEP_MAX_US	200
+ 
++#define REG_SUBBLK_RESET_CR	0x88u
++
+ /* block concurrent access to the soft reset register */
+ static DEFINE_SPINLOCK(mpfs_reset_lock);
+ 
+ struct mpfs_reset {
+ 	void __iomem *base;
++	struct regmap *regmap;
+ 	struct reset_controller_dev rcdev;
+ };
+ 
+@@ -46,41 +52,46 @@ static inline struct mpfs_reset *to_mpfs_reset(struct reset_controller_dev *rcde
+ static int mpfs_assert(struct reset_controller_dev *rcdev, unsigned long id)
+ {
+ 	struct mpfs_reset *rst = to_mpfs_reset(rcdev);
+-	unsigned long flags;
+ 	u32 reg;
+ 
+-	spin_lock_irqsave(&mpfs_reset_lock, flags);
++	if (rst->regmap)
++		return regmap_update_bits(rst->regmap, REG_SUBBLK_RESET_CR, BIT(id), BIT(id));
++
++	guard(spinlock_irqsave)(&mpfs_reset_lock);
+ 
+ 	reg = readl(rst->base);
+ 	reg |= BIT(id);
+ 	writel(reg, rst->base);
+ 
+-	spin_unlock_irqrestore(&mpfs_reset_lock, flags);
+-
+ 	return 0;
+ }
+ 
+ static int mpfs_deassert(struct reset_controller_dev *rcdev, unsigned long id)
+ {
+ 	struct mpfs_reset *rst = to_mpfs_reset(rcdev);
+-	unsigned long flags;
+ 	u32 reg;
+ 
+-	spin_lock_irqsave(&mpfs_reset_lock, flags);
++	if (rst->regmap)
++		return regmap_update_bits(rst->regmap, REG_SUBBLK_RESET_CR, BIT(id), 0);
++
++	guard(spinlock_irqsave)(&mpfs_reset_lock);
+ 
+ 	reg = readl(rst->base);
+ 	reg &= ~BIT(id);
+ 	writel(reg, rst->base);
+ 
+-	spin_unlock_irqrestore(&mpfs_reset_lock, flags);
+-
+ 	return 0;
+ }
+ 
+ static int mpfs_status(struct reset_controller_dev *rcdev, unsigned long id)
+ {
+ 	struct mpfs_reset *rst = to_mpfs_reset(rcdev);
+-	u32 reg = readl(rst->base);
++	u32 reg;
++
++	if (rst->regmap)
++		regmap_read(rst->regmap, REG_SUBBLK_RESET_CR, &reg);
++	else
++		reg = readl(rst->base);
+ 
+ 	/*
+ 	 * It is safe to return here as MPFS_NUM_RESETS makes sure the sign bit
+@@ -130,11 +141,45 @@ static int mpfs_reset_xlate(struct reset_controller_dev *rcdev,
+ 	return index - MPFS_PERIPH_OFFSET;
+ }
+ 
+-static int mpfs_reset_probe(struct auxiliary_device *adev,
+-			    const struct auxiliary_device_id *id)
++static int mpfs_reset_mfd_probe(struct platform_device *pdev)
+ {
+-	struct device *dev = &adev->dev;
+ 	struct reset_controller_dev *rcdev;
++	struct device *dev = &pdev->dev;
++	struct mpfs_reset *rst;
++
++	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
++	if (!rst)
++		return -ENOMEM;
++
++	rcdev = &rst->rcdev;
++	rcdev->dev = dev;
++	rcdev->ops = &mpfs_reset_ops;
++
++	rcdev->of_node = pdev->dev.parent->of_node;
++	rcdev->of_reset_n_cells = 1;
++	rcdev->of_xlate = mpfs_reset_xlate;
++	rcdev->nr_resets = MPFS_NUM_RESETS;
++
++	rst->regmap = device_node_to_regmap(pdev->dev.parent->of_node);
++	if (IS_ERR(rst->regmap))
++		dev_err_probe(dev, PTR_ERR(rst->regmap), "Failed to find syscon regmap\n");
++
++	return devm_reset_controller_register(dev, rcdev);
++}
++
++static struct platform_driver mpfs_reset_mfd_driver = {
++	.probe		= mpfs_reset_mfd_probe,
++	.driver = {
++		.name = "mpfs-reset",
++	},
++};
++module_platform_driver(mpfs_reset_mfd_driver);
++
++static int mpfs_reset_adev_probe(struct auxiliary_device *adev,
++				 const struct auxiliary_device_id *id)
++{
++	struct reset_controller_dev *rcdev;
++	struct device *dev = &adev->dev;
+ 	struct mpfs_reset *rst;
+ 
+ 	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
+@@ -145,8 +190,8 @@ static int mpfs_reset_probe(struct auxiliary_device *adev,
+ 
+ 	rcdev = &rst->rcdev;
+ 	rcdev->dev = dev;
+-	rcdev->dev->parent = dev->parent;
+ 	rcdev->ops = &mpfs_reset_ops;
++
+ 	rcdev->of_node = dev->parent->of_node;
+ 	rcdev->of_reset_n_cells = 1;
+ 	rcdev->of_xlate = mpfs_reset_xlate;
+@@ -176,12 +221,12 @@ static const struct auxiliary_device_id mpfs_reset_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(auxiliary, mpfs_reset_ids);
+ 
+-static struct auxiliary_driver mpfs_reset_driver = {
+-	.probe		= mpfs_reset_probe,
++static struct auxiliary_driver mpfs_reset_aux_driver = {
++	.probe		= mpfs_reset_adev_probe,
+ 	.id_table	= mpfs_reset_ids,
+ };
+ 
+-module_auxiliary_driver(mpfs_reset_driver);
++module_auxiliary_driver(mpfs_reset_aux_driver);
+ 
+ MODULE_DESCRIPTION("Microchip PolarFire SoC Reset Driver");
+ MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
+-- 
+2.51.0
+
 
