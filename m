@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-30011-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30009-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A315C19373
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 09:54:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3827CC18D16
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 09:00:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55A511AA0C7D
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 08:51:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D5A5B4EDFFA
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Oct 2025 07:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A9D31D742;
-	Wed, 29 Oct 2025 08:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41716311951;
+	Wed, 29 Oct 2025 07:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="QCRL6f0y"
+	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="NkAaHME4"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mo-csw-fb.securemx.jp (mo-csw-fb1802.securemx.jp [210.130.202.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6EA2BEC20;
-	Wed, 29 Oct 2025 08:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EE231195F;
+	Wed, 29 Oct 2025 07:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761727873; cv=none; b=LIVKPczi259bZKejTjnBzOBldoqwtDxY2l62gTrFg6GJdQkP5RLKj5XwSKXeL3koVaphQE5wkK6ZSu6NWhDBHR2sV6cUH+xdMXGM8qVAkBBG0pJ+1zchz9pj3wo1pOv/E+V4Y8UHYHVJraIYPAsr71TgLNp6tqN+acGX9ZlT6Jk=
+	t=1761724708; cv=none; b=dV7HlPQRRy4rrcNUTJyt2F3GA5eZSXGEsIQIma5Yqdep9tlc6GIY6NkAXjtAAX94pcINemosHTR4vgkicS2InR16kR3AIUh2JwlxAlz07t2CSTXL1aZ+YUqNCk5Ot//iuFzWyyAgx+uGQUSLlVo6tJYUNgh+zh8SlxpX2k9wz3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761727873; c=relaxed/simple;
-	bh=RR32p+M9C599dIleJAbw+9d5tlMsoBTx0doNI9BbweY=;
+	s=arc-20240116; t=1761724708; c=relaxed/simple;
+	bh=XQbm9gT0FmsvNn/DCDwiVeIZ+/JgLi9QBanOXYYx3M4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S3DYlmA+pLkQ5BphPDy2JFzCuaTvJrE8IHP7dBff+HE5Lh9eoioBHiljmzBuOCQPH5twgg2sV8bqwm2OKaP0Fyg02scTf37QAEBOfowYguzmEM1KY/73IaSY+w/46A1IIM2F1R3ZOu6FpTqSUFvlkpIUF/s8xy0nz0M7Ci9ppOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=QCRL6f0y; arc=none smtp.client-ip=210.130.202.161
+	 MIME-Version; b=MMG6cR0HZFhJ3x8ht76RpvK/96lbSmeLsdw+3N+bpeqOPWYmqxj2aw+SIe+/xnu9moRj+XpZiM/HKfAEiW4w7aB+SXAG837eEKW3ZSdD4iMyTzS33vWFaCSgGKKedRJbVMoNulhEdVqV9oYdnf7pNnudMBZLJrcuWdxdxaZHocs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=NkAaHME4; arc=none smtp.client-ip=210.130.202.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1802) id 59T6JiIY2014904; Wed, 29 Oct 2025 15:19:44 +0900
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1802) id 59T6JjeM2015011; Wed, 29 Oct 2025 15:19:45 +0900
 DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
 	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
 	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key1.smx;t=
-	1761718755;x=1762928355;bh=RR32p+M9C599dIleJAbw+9d5tlMsoBTx0doNI9BbweY=;b=QCR
-	L6f0yHuItdZpDFLJ0ibR3IBdcPDooG9Uj+kGR0DiPvh1pTDp4nmlY//34a+I7E6uptLKhG3jNcDjg
-	7IWkyUxNkWSKUHuZ66OYF2Rn6CPRybyzwiVOu0/fgIfIWBJLBc3+VEecvy4pRKB6nCRtrEQrCQs3J
-	89xjxnswcrgMv4N6y5EOwu3x+Le6dDX88jFv617KMbjIP7AI3vJPts+vblOPwNVJ/wvCSWPQsjRoF
-	DUTZ2ga0TChUo48g1VMGd6SgftYButAP1q2p33E3KIriJy7ou7NgxAdZATNNjMk0oRcxRfQY+8mDP
-	MekKAXzjQ4fzeK8wo7P/E4WzFX25Ctg==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1801) id 59T6JEwI3507518; Wed, 29 Oct 2025 15:19:14 +0900
-X-Iguazu-Qid: 2yAbrg0HuZq9EQydsG
-X-Iguazu-QSIG: v=2; s=0; t=1761718754; q=2yAbrg0HuZq9EQydsG; m=AgqxK7maNBCk8YpXbPqC12la+75KSurRAdfqNdqMxkA=
+	1761718755;x=1762928355;bh=XQbm9gT0FmsvNn/DCDwiVeIZ+/JgLi9QBanOXYYx3M4=;b=NkA
+	aHME4WgdZ7HUujpiLX+NIB4iI1nTVQSXiXv/6MO5bBDcP4r+mZH19HjpSCi6LjbF+7zyLVFINqLIp
+	DIXVVdxsucADivJDWH4yEavDpaAQ/Uzcqmc8aqnHf1q8V4xIesR1I9rrukTPJC76psKbPw5OLKppT
+	kyGI/ZzpZqDqNl/gxZJOQjEYjlbDe9xTZDT2jH3xrSCleFSGo9G5FjIoN6AhPoe4jAuyWYHILVRoC
+	plYvTl1okMVlqSdqEVb82TpmICTfYpdMhLvLuHGuIq0pgschGYdJq6P2WelqDg7TvBXtGjls8pY5s
+	Eq5pcM4a1kUvbwmnRGfyZ1AuGP8YpDg==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1800) id 59T6JEMD1316549; Wed, 29 Oct 2025 15:19:14 +0900
+X-Iguazu-Qid: 2yAbDoX6mRH41gehdo
+X-Iguazu-QSIG: v=2; s=0; t=1761718753; q=2yAbDoX6mRH41gehdo; m=pclAYtZ7pBrHZt8LYmpYud/jNnTsExEG04RaG1tDPQk=
 Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	 id 4cxHBm6SXDzyPQ; Wed, 29 Oct 2025 15:19:12 +0900 (JST)
-X-SA-MID: 53851523
+	 id 4cxHBm4wzRz1xnc; Wed, 29 Oct 2025 15:19:12 +0900 (JST)
+X-SA-MID: 53851528
 From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To: Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -61,10 +61,10 @@ To: Michael Turquette <mturquette@baylibre.com>,
 Cc: linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Subject: [PATCH v2 1/2] dt-bindings: clock: Add identifiers for VIIF on Toshiba Visconti TMPV770x SoC
-Date: Wed, 29 Oct 2025 15:13:43 +0900
+Subject: [PATCH v2 2/2] clk: visconti: Add definition of VIIF on Toshiba Visconti TMPV770x SoC
+Date: Wed, 29 Oct 2025 15:13:44 +0900
 X-TSB-HOP2: ON
-Message-Id: <20251029061344.451222-2-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20251029061344.451222-3-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251029061344.451222-1-yuji2.ishikawa@toshiba.co.jp>
 References: <20251029061344.451222-1-yuji2.ishikawa@toshiba.co.jp>
@@ -76,72 +76,127 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add clock and reset identifiers for the Video Input Interface.
-These identifiers support two instances: VIIF0 and VIIF1.
+Add the control sequence of register bits to handle the clocks and the
+resets of Video Input Interface.
 
 Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 ---
 Changelog v2:
-- Do not modify existing identifiers to avoid breaking ABI.
-  Keep existing identfiers for VIIF0.
-  Introduce new idenfifiers for VIIF1, following the same naming conventions.
+- Update clk_gate_tables to reflect changes in bindings identifiers.
 ---
- include/dt-bindings/clock/toshiba,tmpv770x.h | 15 +++++++++++++--
- include/dt-bindings/reset/toshiba,tmpv770x.h | 10 +++++++++-
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ drivers/clk/visconti/clkc-tmpv770x.c | 71 ++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/include/dt-bindings/clock/toshiba,tmpv770x.h b/include/dt-bindings/clock/toshiba,tmpv770x.h
-index 5fce71300..ff4ef1be5 100644
---- a/include/dt-bindings/clock/toshiba,tmpv770x.h
-+++ b/include/dt-bindings/clock/toshiba,tmpv770x.h
-@@ -141,7 +141,10 @@
- #define TMPV770X_CLK_PIREFCLK		124
- #define TMPV770X_CLK_SBUS		125
- #define TMPV770X_CLK_BUSLCK		126
--#define TMPV770X_NR_CLK			127
-+#define TMPV770X_CLK_VIIFBS1_L2ISP	127
-+#define TMPV770X_CLK_VIIFBS1_L1ISP	128
-+#define TMPV770X_CLK_VIIFBS1_PROC	129
-+#define TMPV770X_NR_CLK			130
+diff --git a/drivers/clk/visconti/clkc-tmpv770x.c b/drivers/clk/visconti/clkc-tmpv770x.c
+index 6c753b2cb..b3f4de671 100644
+--- a/drivers/clk/visconti/clkc-tmpv770x.c
++++ b/drivers/clk/visconti/clkc-tmpv770x.c
+@@ -28,6 +28,10 @@ static const struct clk_parent_data pietherplls_parent_data[] = {
+ 	{ .fw_name = "pietherpll", .name = "pietherpll", },
+ };
  
- /* Reset */
- #define TMPV770X_RESET_PIETHER_2P5M	0
-@@ -176,6 +179,14 @@
- #define TMPV770X_RESET_PIPCMIF		29
- #define TMPV770X_RESET_PICKMON		30
- #define TMPV770X_RESET_SBUSCLK		31
--#define TMPV770X_NR_RESET		32
-+#define TMPV770X_RESET_VIIFBS0		32
-+#define TMPV770X_RESET_VIIFBS0_APB	33
-+#define TMPV770X_RESET_VIIFBS0_L2ISP	34
-+#define TMPV770X_RESET_VIIFBS0_L1ISP	35
-+#define TMPV770X_RESET_VIIFBS1		36
-+#define TMPV770X_RESET_VIIFBS1_APB	37
-+#define TMPV770X_RESET_VIIFBS1_L2ISP	38
-+#define TMPV770X_RESET_VIIFBS1_L1ISP	39
-+#define TMPV770X_NR_RESET		40
++static const struct clk_parent_data pidnnplls_parent_data[] = {
++	{ .fw_name = "pidnnpll", .name = "pidnnpll", },
++};
++
+ static const struct visconti_fixed_clk fixed_clk_tables[] = {
+ 	/* PLL1 */
+ 	/* PICMPT0/1, PITSC, PIUWDT, PISWDT, PISBUS, PIPMU, PIGPMU, PITMU */
+@@ -64,6 +68,41 @@ static const struct visconti_clk_gate_table pietherpll_clk_gate_tables[] = {
+ 		TMPV770X_RESET_PIETHER_125M, },
+ };
  
- #endif /*_DT_BINDINGS_CLOCK_TOSHIBA_TMPV770X_H_ */
-diff --git a/include/dt-bindings/reset/toshiba,tmpv770x.h b/include/dt-bindings/reset/toshiba,tmpv770x.h
-index c1007acb1..d711006d6 100644
---- a/include/dt-bindings/reset/toshiba,tmpv770x.h
-+++ b/include/dt-bindings/reset/toshiba,tmpv770x.h
-@@ -36,6 +36,14 @@
- #define TMPV770X_RESET_PIPCMIF		29
- #define TMPV770X_RESET_PICKMON		30
- #define TMPV770X_RESET_SBUSCLK		31
--#define TMPV770X_NR_RESET		32
-+#define TMPV770X_RESET_VIIFBS0		32
-+#define TMPV770X_RESET_VIIFBS0_APB	33
-+#define TMPV770X_RESET_VIIFBS0_L2ISP	34
-+#define TMPV770X_RESET_VIIFBS0_L1ISP	35
-+#define TMPV770X_RESET_VIIFBS1		36
-+#define TMPV770X_RESET_VIIFBS1_APB	37
-+#define TMPV770X_RESET_VIIFBS1_L2ISP	38
-+#define TMPV770X_RESET_VIIFBS1_L1ISP	39
-+#define TMPV770X_NR_RESET		40
++static const struct visconti_clk_gate_table pidnnpll_clk_gate_tables[] = {
++	{ TMPV770X_CLK_VIIFBS0, "viifbs0",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 1, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS0_PROC, "viifbs0_proc",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 18, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS0_L1ISP, "viifbs0_l1isp",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 17, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS0_L2ISP, "viifbs0_l2isp",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 16, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS1, "viifbs1",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 5, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS1_PROC, "viifbs1_proc",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 22, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS1_L1ISP, "viifbs1_l1isp",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 21, 1,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIFBS1_L2ISP, "viifbs1_l2isp",
++		pidnnplls_parent_data, ARRAY_SIZE(pidnnplls_parent_data),
++		0, 0x58, 0x158, 20, 1,
++		NO_RESET, },
++};
++
+ static const struct visconti_clk_gate_table clk_gate_tables[] = {
+ 	{ TMPV770X_CLK_HOX, "hox",
+ 		clks_parent_data, ARRAY_SIZE(clks_parent_data),
+@@ -185,6 +224,22 @@ static const struct visconti_clk_gate_table clk_gate_tables[] = {
+ 		clks_parent_data, ARRAY_SIZE(clks_parent_data),
+ 		0, 0x14, 0x114, 0, 4,
+ 		TMPV770X_RESET_SBUSCLK, },
++	{ TMPV770X_CLK_VIIF0_CFGCLK, "csi2rx0cfg",
++		clks_parent_data, ARRAY_SIZE(clks_parent_data),
++		0, 0x58, 0x158, 0, 24,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIF0_APBCLK, "csi2rx0apb",
++		clks_parent_data, ARRAY_SIZE(clks_parent_data),
++		0, 0x58, 0x158, 2, 4,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIF1_CFGCLK, "csi2rx1cfg",
++		clks_parent_data, ARRAY_SIZE(clks_parent_data),
++		0, 0x58, 0x158, 4, 24,
++		NO_RESET, },
++	{ TMPV770X_CLK_VIIF1_APBCLK, "csi2rx1apb",
++		clks_parent_data, ARRAY_SIZE(clks_parent_data),
++		0, 0x58, 0x158, 6, 4,
++		NO_RESET, },
+ };
  
- #endif /*_DT_BINDINGS_RESET_TOSHIBA_TMPV770X_H_ */
+ static const struct visconti_reset_data clk_reset_data[] = {
+@@ -220,6 +275,14 @@ static const struct visconti_reset_data clk_reset_data[] = {
+ 	[TMPV770X_RESET_PIPCMIF]	= { 0x464, 0x564, 0, },
+ 	[TMPV770X_RESET_PICKMON]	= { 0x410, 0x510, 8, },
+ 	[TMPV770X_RESET_SBUSCLK]	= { 0x414, 0x514, 0, },
++	[TMPV770X_RESET_VIIFBS0]	= { 0x458, 0x558, 0, },
++	[TMPV770X_RESET_VIIFBS0_APB]	= { 0x458, 0x558, 1, },
++	[TMPV770X_RESET_VIIFBS0_L2ISP]	= { 0x458, 0x558, 16, },
++	[TMPV770X_RESET_VIIFBS0_L1ISP]	= { 0x458, 0x558, 17, },
++	[TMPV770X_RESET_VIIFBS1]	= { 0x458, 0x558, 4, },
++	[TMPV770X_RESET_VIIFBS1_APB]	= { 0x458, 0x558, 5, },
++	[TMPV770X_RESET_VIIFBS1_L2ISP]	= { 0x458, 0x558, 20, },
++	[TMPV770X_RESET_VIIFBS1_L1ISP]	= { 0x458, 0x558, 21, },
+ };
+ 
+ static int visconti_clk_probe(struct platform_device *pdev)
+@@ -272,6 +335,14 @@ static int visconti_clk_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	ret = visconti_clk_register_gates(ctx, pidnnpll_clk_gate_tables,
++				    ARRAY_SIZE(pidnnpll_clk_gate_tables),
++				    clk_reset_data, &tmpv770x_clk_lock);
++	if (ret) {
++		dev_err(dev, "Failed to register pidnnpll clock gate: %d\n", ret);
++		return ret;
++	}
++
+ 	return of_clk_add_hw_provider(np, of_clk_hw_onecell_get, &ctx->clk_data);
+ }
+ 
 -- 
 2.34.1
 
