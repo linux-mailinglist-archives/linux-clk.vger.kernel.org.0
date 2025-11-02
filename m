@@ -1,264 +1,182 @@
-Return-Path: <linux-clk+bounces-30190-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30192-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96DA2C29308
-	for <lists+linux-clk@lfdr.de>; Sun, 02 Nov 2025 18:03:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3089C2936B
+	for <lists+linux-clk@lfdr.de>; Sun, 02 Nov 2025 18:16:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EA4304E2374
-	for <lists+linux-clk@lfdr.de>; Sun,  2 Nov 2025 17:03:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F4323AC009
+	for <lists+linux-clk@lfdr.de>; Sun,  2 Nov 2025 17:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057E227FD4A;
-	Sun,  2 Nov 2025 17:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7DE2DC78F;
+	Sun,  2 Nov 2025 17:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="n2Q1XX2L";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="iRvrAYr4"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="quS86mGp"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53501F4169;
-	Sun,  2 Nov 2025 17:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D3A23D7D7;
+	Sun,  2 Nov 2025 17:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762102988; cv=none; b=BLjmO8jHYHcQSoJe3vKg/nim7JbDVO/NdUi5JlxBVYwkT4RkMFRSAHM1QeCa8CRIlNgaDu5ZgwW8+6vumW9y2uAKkUDaa1sQahs49IRaBnWbcYi9/0QrVNVYYohAb/g5VDhv9DjJwAuqnngvdaJhmVnF3TvrDMB86iIHip0KL6o=
+	t=1762103736; cv=none; b=rr3k4ou0ossNJtUq5cZUUFCbVR6SZx9+3YPfc6cdshS7Lii5Ddc/2zMF4mIY7//Fvn7teF/agB/rUiuU1MJZPMIL6qfTpNf4CzuUedG2/C1RP0UbLoB2d00euy1D8cMBNY/zaKEUW8sSs8JPcQyB4tYg8iq5njpMB5vf0H1YHlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762102988; c=relaxed/simple;
-	bh=Q44u91lhf5R27Cl1jnURa9DZbc9cRDZspfIyAdqwurY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I2jdljUkVcer5KefvGmGCgBp9SfDwjjvtfVM5UBMHKkqVm+kHiThNZP6LofYLkpd+bWsHbKPs4LdIRaS60MkdR25zxpbyBA7/koZ/2jrLZ+MDyWWNT4l5VkqW1kbsIt53uBO8I1I6KPIEIqJfafSCbF5PeXdO9xBUris3ei5CSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=n2Q1XX2L; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=iRvrAYr4; arc=none smtp.client-ip=80.241.56.171
+	s=arc-20240116; t=1762103736; c=relaxed/simple;
+	bh=Trik11Yqm+XRVDcW+Mbo9bwMRBkImhUigihtn3CNMRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r2GEtwGY8cX48027pAEbBDl4+HMd/y937dEXDLOoDWkscX/+u22EuU5nQ7orL41DZcC2lD7l/3uSwIIA8YSGbPgHKt0SLbizJ0yykMUgyOeh6Al0+Cx2Qxcqx8QOAPtp1YmlIFdqKhy9X0s0esZTY+47qQIrQ61dBZF9PC5+yzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=quS86mGp; arc=none smtp.client-ip=80.241.56.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4d01Hr69VNz9tWy;
-	Sun,  2 Nov 2025 18:03:04 +0100 (CET)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4d01Z55FGKz9svb;
+	Sun,  2 Nov 2025 18:15:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1762102984;
+	t=1762103725;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cObXJ30PSUthwthSYfE+TCB57ZPuOUf5acEEf646mE0=;
-	b=n2Q1XX2LmiQ/N2Mkv3nqCEAW57yBf3oAFd/XIEY92LJCgpXFFM/rOquUPeSzHcodQIP0jj
-	kTIgPHcGfZURrQgPkaOgKZXa0WXzbhChKaBq65Iq4SrTeLR/zu9wYu97Xp6wscT9mXCsav
-	1d62AVGPtijgbe8BXNZcHNGKBJ+QwQcD4ooSqOjXFdbYWeWoYLqnACKwrl1EblsZaOxTvB
-	GHwxzYc8psf2tnHLZ+lqG3YSP9byE21ENYKcrfthmfG8b+JFFamfPEA5iTZRq4M89IQpM0
-	DyfJR6a6QT2XzGVeGGXGFXKwulNzZ+4kywdCFTnMAg3PKfqD4JGfLn9L5Ozy8w==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=iRvrAYr4;
-	spf=pass (outgoing_mbo_mout: domain of marek.vasut@mailbox.org designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=marek.vasut@mailbox.org
-From: Marek Vasut <marek.vasut@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1762102983;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cObXJ30PSUthwthSYfE+TCB57ZPuOUf5acEEf646mE0=;
-	b=iRvrAYr4FO7AzaJkf8eBmFevGmmIb+djXPYubKgKxQmGZmQqcTQK4UGrqDgKr8IIEDxzPr
-	0JqqYJxZ1fSjgOaWZlot8P69AO8eKAS3zYuT1FZ2K0gm+16zBLhdWS2njea6YQIenKxt34
-	hIFtklgZ5r154mq91B+Qu27HipodPiJRIfAFpa7/XlKXtT7YNrG6AA4QjzgnO7NRj8vreq
-	ILdHwrmgU97EQW3W/nWzF/kg1B0WvuxNuDBfHUS1G0jco/lBE1dma2arhnO61BOifwUUXo
-	Bv08mHPeL+zySrbVc/RomM+vY6rDxbPrYYefqjg8xsgxMHaZXR3Cf1t5pwKbqQ==
-To: dri-devel@lists.freedesktop.org
-Cc: Marek Vasut <marek.vasut@mailbox.org>,
-	Abel Vesa <abelvesa@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Liu Ying <victor.liu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Peng Fan <peng.fan@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH v2] drm/bridge: fsl-ldb: Parse register offsets from DT
-Date: Sun,  2 Nov 2025 18:02:18 +0100
-Message-ID: <20251102170257.65491-1-marek.vasut@mailbox.org>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XFm7eiCIYsEt1LADD+pGz2W73e0ELKXIO4tKK1fzlbU=;
+	b=quS86mGp30ZHlr7CTGngypnx4gV9dzF8e8MJ567F4mkRLGwosDGo2diTDI1SE3L5/Hzz61
+	PFFBtsU7Y/21wRRAOSZ7OjwGebDCj6XIw3Qz2s7J6PCZqoVc9cgy57jOgwAMGIWPGV0yaE
+	t4r0argx5VoTZ8a+0xFCMXyVtWQRXDdmx5kh3P8BYmU6TrOjoE2z54T2NYvEu7GXIZWYQL
+	zbo1t3nBof8VNXvy5mqAMtitXVjQcsmfvtsMx5TPrtUKTI+5+vuH88kMldWrAQmNiur8FE
+	rtBjrV3FxW4kw4zQ4mCV1QwHdT9QuDcX96+oScfd88wxvdAVJIzpVoTaFOexXQ==
+Message-ID: <ad7c080f-38e3-4579-8cd8-148df7769826@mailbox.org>
+Date: Sun, 2 Nov 2025 17:33:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH 00/39] Add i.MX95 DPU/DSI/LVDS support
+To: Ying Liu <victor.liu@nxp.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Cc: Abel Vesa <abelvesa@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "imx@lists.linux.dev" <imx@lists.linux.dev>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+References: <20251011170213.128907-1-marek.vasut@mailbox.org>
+ <174ec43e-4cac-4452-a77b-e2e3b8413d05@nxp.com>
+ <2c4a42eb-8c49-4ba3-baa3-921ec52f730d@mailbox.org>
+ <92d928cc-d9df-4c9c-8571-da39001b91a7@nxp.com>
+ <e0507800-7e86-4fbb-95cb-e64d8cca1e49@mailbox.org>
+ <AM7PR04MB70466BF64A1CD8EB01D2DD9C98F5A@AM7PR04MB7046.eurprd04.prod.outlook.com>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <AM7PR04MB70466BF64A1CD8EB01D2DD9C98F5A@AM7PR04MB7046.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: xcxj75s7zio9aapmup5yw6jehygx1ii8
-X-MBO-RS-ID: 309f2c2b1c1acb202cc
-X-Rspamd-Queue-Id: 4d01Hr69VNz9tWy
+X-MBO-RS-ID: 7f4bcc52baaa7a7d700
+X-MBO-RS-META: z1oqdk571amguuwo8hkt3n46j3h64r98
 
-The DT binding for this bridge describe register offsets for the LDB,
-parse the register offsets from DT instead of hard-coding them in the
-driver. No functional change.
+On 10/20/25 4:15 AM, Ying Liu wrote:
 
-Signed-off-by: Marek Vasut <marek.vasut@mailbox.org>
----
-Cc: Abel Vesa <abelvesa@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Liu Ying <victor.liu@nxp.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: devicetree@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: imx@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-clk@vger.kernel.org
----
-V2: - Switch to of_property_read_reg()
-    - Parse single-register LDB variants from DT too
----
- drivers/gpu/drm/bridge/fsl-ldb.c | 58 ++++++++++++++++++++------------
- 1 file changed, 36 insertions(+), 22 deletions(-)
+Hello Liu,
 
-diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c b/drivers/gpu/drm/bridge/fsl-ldb.c
-index 5c3cf37200bce..2357cb2fbbe39 100644
---- a/drivers/gpu/drm/bridge/fsl-ldb.c
-+++ b/drivers/gpu/drm/bridge/fsl-ldb.c
-@@ -8,6 +8,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-@@ -61,24 +62,13 @@ enum fsl_ldb_devtype {
- };
- 
- struct fsl_ldb_devdata {
--	u32 ldb_ctrl;
--	u32 lvds_ctrl;
- 	bool lvds_en_bit;
--	bool single_ctrl_reg;
- };
- 
- static const struct fsl_ldb_devdata fsl_ldb_devdata[] = {
--	[IMX6SX_LDB] = {
--		.ldb_ctrl = 0x18,
--		.single_ctrl_reg = true,
--	},
--	[IMX8MP_LDB] = {
--		.ldb_ctrl = 0x5c,
--		.lvds_ctrl = 0x128,
--	},
-+	[IMX6SX_LDB] = { },
-+	[IMX8MP_LDB] = { },
- 	[IMX93_LDB] = {
--		.ldb_ctrl = 0x20,
--		.lvds_ctrl = 0x24,
- 		.lvds_en_bit = true,
- 	},
- };
-@@ -90,8 +80,11 @@ struct fsl_ldb {
- 	struct clk *clk;
- 	struct regmap *regmap;
- 	const struct fsl_ldb_devdata *devdata;
-+	u64 ldb_ctrl;
-+	u64 lvds_ctrl;
- 	bool ch0_enabled;
- 	bool ch1_enabled;
-+	bool single_ctrl_reg;
- };
- 
- static bool fsl_ldb_is_dual(const struct fsl_ldb *fsl_ldb)
-@@ -204,15 +197,15 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 		reg |=	(fsl_ldb->ch0_enabled ? LDB_CTRL_DI0_VSYNC_POLARITY : 0) |
- 			(fsl_ldb->ch1_enabled ? LDB_CTRL_DI1_VSYNC_POLARITY : 0);
- 
--	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->ldb_ctrl, reg);
-+	regmap_write(fsl_ldb->regmap, fsl_ldb->ldb_ctrl, reg);
- 
--	if (fsl_ldb->devdata->single_ctrl_reg)
-+	if (fsl_ldb->single_ctrl_reg)
- 		return;
- 
- 	/* Program LVDS_CTRL */
- 	reg = LVDS_CTRL_CC_ADJ(2) | LVDS_CTRL_PRE_EMPH_EN |
- 	      LVDS_CTRL_PRE_EMPH_ADJ(3) | LVDS_CTRL_VBG_EN;
--	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl, reg);
-+	regmap_write(fsl_ldb->regmap, fsl_ldb->lvds_ctrl, reg);
- 
- 	/* Wait for VBG to stabilize. */
- 	usleep_range(15, 20);
-@@ -220,7 +213,7 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 	reg |=	(fsl_ldb->ch0_enabled ? LVDS_CTRL_CH0_EN : 0) |
- 		(fsl_ldb->ch1_enabled ? LVDS_CTRL_CH1_EN : 0);
- 
--	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl, reg);
-+	regmap_write(fsl_ldb->regmap, fsl_ldb->lvds_ctrl, reg);
- }
- 
- static void fsl_ldb_atomic_disable(struct drm_bridge *bridge,
-@@ -231,12 +224,12 @@ static void fsl_ldb_atomic_disable(struct drm_bridge *bridge,
- 	/* Stop channel(s). */
- 	if (fsl_ldb->devdata->lvds_en_bit)
- 		/* Set LVDS_CTRL_LVDS_EN bit to disable. */
--		regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl,
-+		regmap_write(fsl_ldb->regmap, fsl_ldb->lvds_ctrl,
- 			     LVDS_CTRL_LVDS_EN);
- 	else
--		if (!fsl_ldb->devdata->single_ctrl_reg)
--			regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl, 0);
--	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->ldb_ctrl, 0);
-+		if (!fsl_ldb->single_ctrl_reg)
-+			regmap_write(fsl_ldb->regmap, fsl_ldb->lvds_ctrl, 0);
-+	regmap_write(fsl_ldb->regmap, fsl_ldb->ldb_ctrl, 0);
- 
- 	clk_disable_unprepare(fsl_ldb->clk);
- }
-@@ -296,7 +289,7 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	struct device_node *remote1, *remote2;
- 	struct drm_panel *panel;
- 	struct fsl_ldb *fsl_ldb;
--	int dual_link;
-+	int dual_link, idx, ret;
- 
- 	fsl_ldb = devm_drm_bridge_alloc(dev, struct fsl_ldb, bridge, &funcs);
- 	if (IS_ERR(fsl_ldb))
-@@ -309,6 +302,27 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	fsl_ldb->dev = &pdev->dev;
- 	fsl_ldb->bridge.of_node = dev->of_node;
- 
-+	/* No "reg-names" property likely means single-register LDB */
-+	idx = of_property_match_string(dev->of_node, "reg-names", "ldb");
-+	if (idx < 0) {
-+		fsl_ldb->single_ctrl_reg = true;
-+		idx = 0;
-+	}
-+
-+	ret = of_property_read_reg(dev->of_node, idx, &fsl_ldb->ldb_ctrl, NULL);
-+	if (ret)
-+		return ret;
-+
-+	if (!fsl_ldb->single_ctrl_reg) {
-+		idx = of_property_match_string(dev->of_node, "reg-names", "lvds");
-+		if (idx < 0)
-+			return idx;
-+
-+		ret = of_property_read_reg(dev->of_node, idx, &fsl_ldb->lvds_ctrl, NULL);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	fsl_ldb->clk = devm_clk_get(dev, "ldb");
- 	if (IS_ERR(fsl_ldb->clk))
- 		return PTR_ERR(fsl_ldb->clk);
--- 
-2.51.0
+>>>> I wanted to put this whole thing on the list first, before I start splitting it
+>> up.
+>>>>
+>>>> For starters, I think I can send these separately:
+>>>
+>>> Before discussing how to split, a bigger question is that is it fine to
+>>> support both i.MX8qxp DC and i.MX95 DC in the same imx8_dc_drm
+>> module?
+>>> Separate modules look more reasonable to me, considering the fact that
+>>> there are quite a lot difference between the two DCs.
+>>
+>> (maybe I do not quite understand your suggestion with "separate module",
+>> I assume this means entirely duplicate driver, is that correct? I
+>> operate with that assumption in the text below.)
+> 
+> I'd expect separate modules: the existing imx8_dc_drm(which can be
+> modprobe'd) and something like imx95_dc_drm.  I wouldn't call them
+> *entirely* duplicated drivers since I mentioned common part of the DCs
+> could be wrapped as helpers in an additional module(something like
+> imx_dc_drm_common).
 
+How would this look if everything is built into the kernel ?
+
+>> This series indicates that the functional units in the DC are basically
+>> identical, with the majority of changes being register base addresses of
+>> the whole DC and an odd bit or register offset here and there. Most of
+>> the code can be reused, as can be seen in the first half of the series.
+> 
+> The major differences between the i.MX95 and i.MX8qxp DCs are
+> different components in Display Engines(especially the additional
+> Domain Blend Unit in i.MX95 DC)
+
+This seems to be one component in the whole pipeline, with links going 
+into it. Those links are already in place. Maybe I am not seeing the 
+specialty of this particular DB component ?
+
+> plus i.MX8qxp DC's capability
+> to connect with the prefetch engines(DPRC & PRG).
+
+Isn't the prefetch engine only a bit of register configuration, that can 
+be abstracted out ?
+
+> Both would
+> have significant impact on how we implement the drivers.  We'll
+> certainly end up having different implementations for callbacks to
+> enable/disable CRTCs or update/disable planes.
+
+It doesn't seem they have to be entirely different so far, do they ?
+
+> The sort of minor difference is in Pixel Engine(including Blit Engine)
+> where FethUnit types and numbers are different plus different numbers
+> of Scaler Engine.  I'd expect logics to allocate FetchUnits for planes can be
+> implemented in the imx_dc_drm_common module
+
+This part is fine, but ultimately, it would have to be possible to build 
+both the MX8Q and MX95 drivers into the kernel too. And then there would 
+have to be some logic to deal with that, likely based on driver data, as 
+it is done here.
+
+>> The addition of iMX95 into the iMX8QXP DC also does not seem to be
+>> making the driver in any way more complicated.
+> 
+> Disagree. The addition would introduce quite a few i.MX95 or i.MX8qxp
+> DC specific code branches due to the differences mentioned above.
+
+This does not need to be the case, see the first half of this series ?
+
+> I'd say i.MX95 DC support could be in drivers/gpu/drm/imx/dc, but it
+> needs to be in a separate module like again imx95_dc_drm.
+> 
+> This makes feel that the debate here becomes kind of similar to what
+> we did for single mxsfb module vs  mxsfb + imx_lcdif separate modules...
+
+The mxsfb (the old iMX23 LCDIF) and lcdifv3 (the new iMX8MP/iMXRT LCDIF) 
+are entirely different hardware IPs, the former is from SigmaTel , the 
+later is from somewhere else, right ?
+
+>> What would be the benefit of having duplicate driver for IP that is
+>> basically identical, for i.MX95 ?
+> 
+> Cleaner driver implementation and easier to maintain.  I don’t want
+> to test both i.MX95 and i.MX8qxp platforms when only either
+> i.MX95 DC specific or i.MX8qxp DC specific code is changed.
+> 
+> But again, they won't be entirely duplicated drivers.  Common
+> part could be shared between the drivers with software techniques,
+> like the imx_dc_drm_common module mentioned above.
+Please have a look at the first part of this patchset, there do not seem 
+to be that many new or complex branches.
 
