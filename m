@@ -1,136 +1,106 @@
-Return-Path: <linux-clk+bounces-30191-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30193-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90DAC2935F
-	for <lists+linux-clk@lfdr.de>; Sun, 02 Nov 2025 18:15:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B340DC2936E
+	for <lists+linux-clk@lfdr.de>; Sun, 02 Nov 2025 18:16:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C956E188C591
-	for <lists+linux-clk@lfdr.de>; Sun,  2 Nov 2025 17:16:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A1613AC20D
+	for <lists+linux-clk@lfdr.de>; Sun,  2 Nov 2025 17:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A419E1DED63;
-	Sun,  2 Nov 2025 17:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFCF2DCF69;
+	Sun,  2 Nov 2025 17:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="kiczCTwo"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="v3olOY/+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B401DFF7;
-	Sun,  2 Nov 2025 17:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2471EC018;
+	Sun,  2 Nov 2025 17:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762103734; cv=none; b=ntpGVhz5QH3ERPBRht+fTWA4qzujCW8PuYGz6rENaiS59PDZ8vHpphZEVTcNnfz2+a3YzlcO++Q78nCA4ZqgdJB8xcWgxkezyxOSHr5UTNUuc3zSeZ7TZAvKpT3/SWZJI/fo6AKIGMPJ+VbT5Wo9S8UNJMJyoqQrA96g2EYV98U=
+	t=1762103737; cv=none; b=iHC9g/G3mVDon043cmOy0aUij2unW61Jft4BN4wsVYeslCGDB1huNks6BURmBJHYZgw1LTJh9jzuXFd6hgnsrXcAmsNXGdjVt/gSfgNdWe5qgBusw4H34Tnl6ocD5vkzgYhpBBp8v7x7Uk5I0S3JDLQFZmTp9n1HiO8wN+4eMTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762103734; c=relaxed/simple;
-	bh=xT949QnlKDE7dcvNlbG90TUllLCvWqwftQN6fQuJ4dE=;
+	s=arc-20240116; t=1762103737; c=relaxed/simple;
+	bh=VsJ5HmXia8ZCsXpoL9mzkkg0CaKKLph3Q+M5l/Hm2z0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BbB+yzSI10/Prsv4aIdgWqoEFHdvGonI5UI3mXwZFNdM/roRtmye2LGM5Rsl3b/warIa66T1mWQ/AtnnQuVoWG2i80Br9Lk4BUlTf6kdvSUUFyGLxnD6E/D3UvJMPEEwtRh9ccLeQHQQDf7JPM8FCsHkRroHj1ZELEFZ2P9H5OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=kiczCTwo; arc=none smtp.client-ip=80.241.56.151
+	 In-Reply-To:Content-Type; b=hG3e4I4yitoZDt0Pr29kxpIqyhGHB1dy95DKHMObXOxPMmTzfs95qB/+QmSp1tM5YkQIMNyIx/IA7QPxU7a6uGekD6VsYM13FPmIi0DkW6M7mexoGGGzAevs9zQm/5QKB4S4pGNWUBvsC32PCXL4KJNRTxXvsdF2W7zkF89kJI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=v3olOY/+; arc=none smtp.client-ip=80.241.56.161
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4d01Z91lrSz9tKX;
-	Sun,  2 Nov 2025 18:15:29 +0100 (CET)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4d01ZD6v3Tz9slM;
+	Sun,  2 Nov 2025 18:15:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1762103729;
+	t=1762103733;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pVIWxvbG6hS59cIjcOfk1tNz+O1dirw/jStQigJNNw8=;
-	b=kiczCTwovFK3kcxFGIgvfX7t7jHPp/LysnFqW8CukOZyAt9lddGQ3LZjsRc5kBbNyeJQkE
-	35C0ueF8JCz0yG3IyQpmCn0bFCzpCDOKrClYy+nRQlL/NOMItmREuCjsRRHaNFJJSm6UBW
-	yyRGaOsuByxhyHLPHbPURhYEbLg9Y/Vtpx7ea27bu1uJ43EUn62mWBPFiTjIMSqzhTsXz9
-	/PjwErrRPgda7/G2Dx93s5x9DRwJZkIM1aMbr6fn1xPpcKkZv7kE4/HcZGG/U/7BcCT/dB
-	eQPnaZ5pkUV7XVbP4EL2CidnZ4JR0FZht6OIObCeXliM0b1y9wG0gZFoosE5ZA==
-Message-ID: <30dc382c-6b26-4b2a-81ab-67ac5bbf7150@mailbox.org>
-Date: Sun, 2 Nov 2025 17:41:38 +0100
+	bh=Yvcra83KqAtjzan9YfLxcRGbh7hLfnp0iWgeFUv/vLM=;
+	b=v3olOY/+S43PgZ9sly6XeJ1t0BL0X1kTGqmKwACZXIjXTLKeL+5+kvcV/OEN4BCDEjlNvd
+	XHY//vVJgwf3llsBggueCMWpJUdtplR1Jj9yn2y74Re6lwDIKMhmnMUr0sQSic67IT62yZ
+	gTNdo9WnNf1/z6G7oA6OYK2e3n7ieAt6d1V3/uQlllhRbTflMMrB+c1oEQTHtloYE9UDmP
+	pu4V6OHmWFLUAKVHqVKLXgGnfcg7nyrhMc/0xY0cXHo24xUPf+MGUXY+vaCUQ+1HcupTnn
+	SW0jYPlVjgbRrbjfKpXMFDNP+VPFfE4meoaSfwXjX4fV+FEb1iNBqdp3Q+jQSA==
+Message-ID: <55d44163-4f37-462f-b860-c862cb5ada5a@mailbox.org>
+Date: Sun, 2 Nov 2025 17:59:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 01/39] dt-bindings: display: imx: Document i.MX95 Display
- Controller DomainBlend
-To: Ying Liu <victor.liu@nxp.com>, Rob Herring <robh@kernel.org>
-Cc: "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- Abel Vesa <abelvesa@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+Subject: Re: [PATCH] drm/bridge: fsl-ldb: Parse register offsets from DT
+To: Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org
+Cc: Abel Vesa <abelvesa@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
  Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ <krzk+dt@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
  Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
  Pengutronix Kernel Team <kernel@pengutronix.de>,
- Shawn Guo <shawnguo@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-References: <20251011170213.128907-1-marek.vasut@mailbox.org>
- <20251011170213.128907-2-marek.vasut@mailbox.org>
- <20251015132442.GA3241958-robh@kernel.org>
- <5c5bb009-3463-4282-946f-3ae93fab11ec@nxp.com>
- <c712dae1-00a5-4cc0-baef-2ce014bd470f@mailbox.org>
- <AM7PR04MB7046685E946417FD795C810198F7A@AM7PR04MB7046.eurprd04.prod.outlook.com>
+ Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org
+References: <20251017154029.105099-1-marek.vasut@mailbox.org>
+ <dc4b1b65-542f-4bd2-bd91-af3fe4223b63@nxp.com>
 Content-Language: en-US
 From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <AM7PR04MB7046685E946417FD795C810198F7A@AM7PR04MB7046.eurprd04.prod.outlook.com>
+In-Reply-To: <dc4b1b65-542f-4bd2-bd91-af3fe4223b63@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: b47hecses99gtkdixbqohop36pxjecdy
-X-MBO-RS-ID: df5e035099bd363f9aa
+X-MBO-RS-META: owwnz8df3ensc6z3bmdy7xxp57c41417
+X-MBO-RS-ID: 6daf2627d9b070bd268
 
-On 10/18/25 8:09 AM, Ying Liu wrote:
+On 10/20/25 8:21 AM, Liu Ying wrote:
 
 Hello Liu,
 
->>> BTW, I confirm that two Domain Blend Units exist in i.MX95 DC while they
->> don't
->>> exist in i.MX8qxp/qm DCs.  And, as you can see, this unit supports multiple
->>> modes, this would impact how an OS implements a display driver a lot,
->> especially
->>> Blend mode and SidebySide mode.
->>
->> There is one thing which specifically concerns me about the DB, it seems
->> to be capable of blending two inputs from different security domains, is
->> that correct ?
+>> +++ b/drivers/gpu/drm/bridge/fsl-ldb.c
+>> @@ -61,24 +61,16 @@ enum fsl_ldb_devtype {
+>>   };
+>>   
+>>   struct fsl_ldb_devdata {
+>> -	u32 ldb_ctrl;
+>> -	u32 lvds_ctrl;
+>>   	bool lvds_en_bit;
+>>   	bool single_ctrl_reg;
 > 
-> For now, I know nothing more than the DT binding description here, i.e.,
-> two inputs are combined to one output in four modes. And, DB cannot be
-> bypassed IIUC.
-
-I see.
-
->>> As patch 39 shows, there are 3 interrupts - domainblend{0,1}_shdload,
->>> domainblend{0,1}_framecomplete and domainblend{0,1}_seqcomplete.
->> It seems we currently do not use either clock or interrupts on either
->> domainblend or layerblend IPs, but maybe DB and LB are different and LB
->> really has no clock/interrupts ?
+> single_ctrl_reg can be dropped then, as it can be expressed by failing to
+> get the second register.
 > 
-> If you take a look at NXP downstream kernel, it uses
-> domainblend{0,1}_shdload IRQs in CRTC driver and I believe that upstream
-> driver should use them too.
+> Furthermore, with this done, lvds_en_bit is the only member left and hence
+> struct fsl_ldb_devdata can also be dropped, as IIRC there is no need to
+> use a structure for device data with only a flag.
+I plan to add more bits into the driver match data when adding the MX95, 
+so I would like to retain these instead of removing them and the adding 
+them back.
 
-Can you please tell me what exactly is this IRQ signalling ?
-
-> DB and LB are different. DB is in Display Engine, while LB is in Pixel Engine.
-> This pipeline sort of tells how LD and DB are connected: LB -> ED -> DB.
-> 
-> LB has no interrupts.  And since it processes pixels in Pixel Engine with AXI
-> CLK and it can be configured via the AHB interface of DC with CFG CLK, I'd
-> say it kind of inherits AXI CLK and CFG CLK from Pixel Engine and DC
-> respectively.  See the diagram in fsl,imx8qxp-dc.yaml, you'll find those
-> clocks.
-
-Thank you for the clarification. And sorry for my late reply.
-
--- 
-Best regards,
-Marek Vasut
+The rest is fixed in V2, thanks !
 
