@@ -1,189 +1,216 @@
-Return-Path: <linux-clk+bounces-30265-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30268-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8AA3C310A2
-	for <lists+linux-clk@lfdr.de>; Tue, 04 Nov 2025 13:45:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 787FBC31B31
+	for <lists+linux-clk@lfdr.de>; Tue, 04 Nov 2025 16:03:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 96E154E246B
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Nov 2025 12:45:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5188518C118E
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Nov 2025 15:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F811A0728;
-	Tue,  4 Nov 2025 12:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9D13370ED;
+	Tue,  4 Nov 2025 14:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="dt2pAaql"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYmW0PZi"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013056.outbound.protection.outlook.com [40.107.159.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3136119D8A8;
-	Tue,  4 Nov 2025 12:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762260323; cv=fail; b=mDxlWEC9oYPIp96tLgcGj5KrIeSQxZ5CgxpQloItCcmgX3d1hdCLntRnLeTJBZJXyEQAVCXCPyZWGhfnkobTJsS/C99mN+I43/1u8BwNhoE7aTgzBELpux4agAoouTNujm/p+bhN2CMSsE6J1OwTMaLTQg0W9SrmVU4fzDeo0kY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762260323; c=relaxed/simple;
-	bh=rN1OwvELmtEtwPp8gjeyUCVdjs7sXQgXjr/896K/c28=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=EiT5B51gYgGe3Ih1g54uVv4bUpw4as4BGxoL7f0AMjXWxtxknSnTPpUEpiKCd50JmI151QqJ9JLl5f0ezghJ0dBMARw6NZpOALUgqFrZERCtHu6eftwlGO/0vjKgRbI9tY22n0IJ3t/aW+ydnmTMxCQTyDkqzFfQspyVV3MnGus=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=dt2pAaql; arc=fail smtp.client-ip=40.107.159.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aU+4xUncqjHMKw052z6UcJ4GZJ7RTdTO3P/EsaZMF7kLiYzTob4DxrZb1hN6IIxjfpA7hIKwdQLV33f8mzuS+AnCCG8brnvPwPX87NHCbOMg5GzMewU/zz/7mGJM/IHDWkytTWgVi3dd1IXtSYKrpkI0FLnu4Xz8GUqubiqzYFaXT086gP8YgvPW+MOJorqGyHfZBz8fuv4lRG4hWSYK8CoZjr89lGvKARmX67LSGfJ85HQIaMX8nsU8Zwg/jNyjpn1CETwB0aADthF6/Gf3ak058ghT4rcvwi1BCUklWSYumk9AZX6svq4HAWNQMjCoZIZ8Q5QAlqS19Pt4jIKZ2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rN1OwvELmtEtwPp8gjeyUCVdjs7sXQgXjr/896K/c28=;
- b=e2Sk7nAXCMU0lVmybsdUVCBrrci3sa5sr81+kpSS7MAJHsCOXwBbT47DZCOC0Li8Lg+I+qSNju5V5t8e86PnIuovRm0P1k7zW218Ccn4F54SAUo2luv2NXycWHDGeCPrZ8c5VLcPnwUWEGUEZOuSRB/fuMnAS1YwQnj0cDQXJacaP5hkTXePEE9hr0Hw1c10GwmWKiZdHTtJRZ5r50qtXQe7dhyv1wwKAuvMcqZ4cDNtuy0pKl5tYTktk5Axe3bUiHPfE+WyKJH946aKru7izxXvfC0P7ghbs6/TT50IQchV6KdNNYXDAV7Ia3R+ZO2o+mnOrLwuJb7Kcttkb/XYJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rN1OwvELmtEtwPp8gjeyUCVdjs7sXQgXjr/896K/c28=;
- b=dt2pAaqlC4JQMA8yf76W2HuBg+HgkB3g6UehphgQiLhhJ0LUokqBzRTcqvfKyZB7wu39Xjg2ETqF13cOWt/m5CuWXV+Nbmdm++APWW3+BQxD7917eAOUWoeKP0RPLERWVpfSAt3JzYZjT79v9/iPpZH/7MAK9Qsgwyx2YZcRAnNbMvRre6FUqoB15oDN0vwmosIGbPHPOjegQieNhgRruZrnhsoQlP7/+wR2DQ4Tn0EtDNnHYALPuLSpBv8a6X6XUJvfd+fekBdPGArlR9zUk/8cvnB1EYAZiLF1bj+orbTovFhgUvmU+q6py+pyambL78fGATuIwaHPI237pdNHLw==
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by AM7PR04MB6790.eurprd04.prod.outlook.com (2603:10a6:20b:dd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.15; Tue, 4 Nov
- 2025 12:45:17 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9298.006; Tue, 4 Nov 2025
- 12:45:17 +0000
-From: Peng Fan <peng.fan@nxp.com>
-To: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>, Abel Vesa
-	<abelvesa@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Fabio Estevam
-	<festevam@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, Daniel Baluta
-	<daniel.baluta@nxp.com>, "S.J. Wang" <shengjiu.wang@nxp.com>, Frank Li
-	<frank.li@nxp.com>
-CC: "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Pengutronix Kernel Team
-	<kernel@pengutronix.de>
-Subject: RE: [PATCH v4 3/8] clk: imx: add driver for imx8ulp's sim lpav
-Thread-Topic: [PATCH v4 3/8] clk: imx: add driver for imx8ulp's sim lpav
-Thread-Index: AQHcTYNXHATylbq+lEOFLnjYuXp+VrTidpcg
-Date: Tue, 4 Nov 2025 12:45:17 +0000
-Message-ID:
- <PAXPR04MB845969CF96F1AFAD5EB1DE4E88C4A@PAXPR04MB8459.eurprd04.prod.outlook.com>
-References: <20251104120301.913-1-laurentiumihalcea111@gmail.com>
- <20251104120301.913-4-laurentiumihalcea111@gmail.com>
-In-Reply-To: <20251104120301.913-4-laurentiumihalcea111@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|AM7PR04MB6790:EE_
-x-ms-office365-filtering-correlation-id: 8d359ef1-2754-4f58-5a7f-08de1ba0021d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|19092799006|38070700021|921020;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?Y3J8u6AZ9NtGVm7B7tbIMeV2rFLgHmpK+PjOMgH6jHf1ChkTOGuEuzyNmjJP?=
- =?us-ascii?Q?m+sDEkeY7YQehxnSLv5AzItibuhSkJdQnxkVhH1VYjdApps/eKEJCiDEglLG?=
- =?us-ascii?Q?DTYCfdt4aXhuLITZlNxtNYK1zUSS0lOZXpptUq/70u86HgxBOG/AwoligJoY?=
- =?us-ascii?Q?X3DdOjERDnlLCA2mQNwD2Ejm5boIeArkjKWt7H27Izmt/It8CjV+eJgDlxuT?=
- =?us-ascii?Q?nYGZVnoXg+jSbnPwIcG3ZPm6iQGxubfHJCO4FOgz9AQnvrW1d/v9Og0XMDBA?=
- =?us-ascii?Q?NOR9BDbqKcHcE0epiVKxLB+LQHe8yWuG3STYJd0Kmux0mDi9vzhEDUA8y/0Z?=
- =?us-ascii?Q?XzZdfSJ0nGuPMX+3dhVgL7IJpQZKZuCnCVbEG90Y/hjmraPg7+nxFcalQSCP?=
- =?us-ascii?Q?XaRbzP2jx1Q6J3mCmEltVs2klu0QIHmayMBy592ycxccJC+Qd7FgNH9kEOZB?=
- =?us-ascii?Q?fanNutOtE02LMzbxDiynPFF/XDBJp2DsOo0/RiOIIevZZ4KC4LmFQNzDoXhu?=
- =?us-ascii?Q?g/9loJ8JZFm6qxcP1K+p1b4lavz+kgRIkE4d9LHU5eWzQgNrUINqAV88CE9m?=
- =?us-ascii?Q?kl7vk6M5c1IMlvJByRLscq8txotLYPj0TP1J7+UFo9gg6sBu5vT0fQI8IC4W?=
- =?us-ascii?Q?4Q/F5a0nz0YXTH8NE70udxlkUpQTAkXnBSO7Zpb/LV2cikcbWG8MS1mULR0V?=
- =?us-ascii?Q?K3L8Bc3sMdzPHx/kDrrdjyrnVlLR0z++qiKX/485rUakpZR1GSocBenn+Htg?=
- =?us-ascii?Q?VvTe07IrG/L9cR+bgPg4mTXBKvQg0W6gbisclUM/bymLMsBMrREYHp3YTh3J?=
- =?us-ascii?Q?aSmo5ei5nKBW8qrSM8h7tPjaEesMzKjvu7Fwpgtb6urex+Eb0BejWXniG1/4?=
- =?us-ascii?Q?19bSbmxD/lDrNJSNiZQMXkQh1a5sJZTMlIIh5I9zZ1k1rQM6gvoZu8OpuoVL?=
- =?us-ascii?Q?ZdLXjWYsziEYe0RIxRrm62+A9gmGCzaEhg6yw/ghbeg1TgSC6IlYHt1h1q3g?=
- =?us-ascii?Q?87iq088nxfymjcI9eI9TXazzRbi0bQq/yAZ9K44vyKmPY1D0CMJAs+jZRUmc?=
- =?us-ascii?Q?fw9otOJzqWyIXfvYNuUw2JKL1RbXSUojmRLJQxf5rNZESfM3vxOvsrUXzBMt?=
- =?us-ascii?Q?xETDwGw61vyOZ5WcLmMkWpWjhXT9j5JqrFt58u+5IYmCu46wGxRYx6Q+GRLh?=
- =?us-ascii?Q?Pk/sAYzFuQLtPNX/pOhno+3ieAHNd+NmDFlemJ9+d2hx3K+i1uHlzOoSIfgf?=
- =?us-ascii?Q?SzD8IibBr5i6TIW+iNrVqUctVSpdWgb0kvX6go1ROoh+i0+OtazjfHuLVYdD?=
- =?us-ascii?Q?leDZ0AFdRKXg9qv/Nl8ZFCk68jGGcrg+wHRPUdBPezoWWLcNdk8PEN33J1k+?=
- =?us-ascii?Q?wpHQgfQUTH1/RTJIITyJCloW5ppy6rhjlQGHc82DRzJYKFGJuLN39jUctuWc?=
- =?us-ascii?Q?BABD7cVjKl078cfQIQyN6w6WA92IQMuHzspgJJtTlyXrklxwiGUiR3Hyq6Ne?=
- =?us-ascii?Q?WG1+mq5VJF2+jjWW6SnwroaQtOjNYYHwSL2FgN2uO/Mu+eb6yqIxyAi66A?=
- =?us-ascii?Q?=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(19092799006)(38070700021)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?TegaraErJJP0Bo+iRDROIzG6ZpqBJ/Xq695T0g2PP9+QVEnwWKbMD4nEbk8q?=
- =?us-ascii?Q?Q8Ri/HtQyYXxpZN+OYs3D4txxRolJS7oYdgKDS+U9qd+TUBebRuwd2m0glBZ?=
- =?us-ascii?Q?s5BgnGHHbTAlm5saqp5Qmg1K20xNGAqggCrKh+eYSTVl57Dc5y0IbzpFPKhd?=
- =?us-ascii?Q?7Oqb6XDPe9NOWfl4VZtXuUEa+Wzf+zECauGvhJwEjc2Y5w3CjVD+2OBLkilh?=
- =?us-ascii?Q?Vg6RnuhwE1nl/vCnTvhIRJYOBrRh//vjSTb9NbWo5laOD1CTZfRnrOaxGphY?=
- =?us-ascii?Q?FpVAHAszkAlZoOT9nGco3815Uhz2FXcQnc+t5RZH1YHrBA4W9b73g11rB7uV?=
- =?us-ascii?Q?UX7zE5CwXOkGEU4Ov5g8NgI0AB8It5M1/kYRkzd0jPUmaN4CCJCaypojtOKe?=
- =?us-ascii?Q?3U0tU9FIMu6Z05MQp9zNsLOZdcHaHSsnBnCAh37akYzDdVWV4CqRoTfgI+q2?=
- =?us-ascii?Q?mq4ob+3iG1M4AOwXZQWXTBCK21rMgrKrxWvITDujDf+qGJptMtlyD8IPum8R?=
- =?us-ascii?Q?STOgQNTkmhoMP5ZZonSumwsLdCh3axQGU2PH/rtIajJVy5v30lxA960V/UqP?=
- =?us-ascii?Q?cvVLCXZJXrCdiQAVlZJFS8k/0KW4a3Uf5Z0cNsW286nENQ+D8HYAYr7I3F3U?=
- =?us-ascii?Q?njthCyGws5cs0q7EiiechmeQ2pcFQPX8baAi/JUhdlNFrDebSRvztjq6RdCC?=
- =?us-ascii?Q?N0W/Kt5ZFltogGxkrjJAdno/R6bt5H/qL/tSY33urwpZQs8fkF5J/o3XKSrm?=
- =?us-ascii?Q?n1/w2fR+lZSLT+du6J6d2ISqPOthYP8Nu6nfxTwYqM6j4/n4DIz7LQBRdP0h?=
- =?us-ascii?Q?jWSKn16qsrfCpqaCiCEd3qAGbPM3LxG6wvjmi3hHiUT5VhzL2NZ12LAizkx8?=
- =?us-ascii?Q?n6oK4PZRE2g5R+wfAIHjwbjgH0q8nI3utmPz1JsmhFCvyH/UpNSruXGddf5i?=
- =?us-ascii?Q?TQRfOdkf2f+TaLXib/eDMHRe63U/3Hw/feWEyDkKojIHQiXmS8k8AU27Ue5J?=
- =?us-ascii?Q?4kmtd2/RiLLEJ+LZ/aLxIFbdnO5d/APiwZtGIAWstNMigcP/cvBsYl8WMm3K?=
- =?us-ascii?Q?LrRFFDJ5fj1iqodJ+K8Dui9yFElKWxMUV5QRLQYy4uxQXs5h8/3Uoa/QjHOE?=
- =?us-ascii?Q?wP8qAa9iTYXINynnwptMizKI3bJysCRv6jjUAnM+Kc47cNcv4r8doH+8cwVv?=
- =?us-ascii?Q?HtakkNG7mGZeLPvDZ3wN0VsWMANOwGx8AidPTHtQhpME9bBjJxGjZtwgWHIh?=
- =?us-ascii?Q?U/oD+7GGjACQoB6X4ISneL8WkE97VWaz7ipVrhwBoOBPTpPcsFIih8CFePLW?=
- =?us-ascii?Q?QdFyzEZ1la3g9OsJUMHnF/zZX9x++y+9UqCxPGzXUnDvKqbMMpCQn/txLJdK?=
- =?us-ascii?Q?9E0dXFBeIL1AyY7f9mzNS7bs12sAkLoMZ5zZ2my/+RdanDDyV5uLqJuQGgej?=
- =?us-ascii?Q?ZVc8DPRibmmUkdCqjDUbhe/HZ8nNeiGUdZpkrgRsJAE/K4meAERxt92YKLXE?=
- =?us-ascii?Q?imTtT905X5CSwYv6hEzm1f1D+1f+fwarHYc8Lg+mS35YFfnupMwudgfNs/hD?=
- =?us-ascii?Q?ynGxHV4rK3Fc5Z6pd0I=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C1C33554E
+	for <linux-clk@vger.kernel.org>; Tue,  4 Nov 2025 14:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762268313; cv=none; b=lYaVJcGnqNCBmadn5/W2GnFc9lYEIF+cYr9O0ViIrDcx8S5P/hNa9MMF6muoo/5meZRIce1X00MLz+nZAtdGca5tLDh+fKKLhTH6hw1WTtDp5NO016snlongOCpFE2uLzpSRIZicGyms5uFeOIBbSh+ML1p/EMVehU9BCN0UIxc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762268313; c=relaxed/simple;
+	bh=W9g+YJ6BtshhuZpzIE3hQJ772deNaUpm9Z9F4iVdSVk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=U+0HpEcJwdYaV4E+QrmKI3xEx7Rw4Bhoxlrx7kFCZNMAFigx2u25kotXHu1c8gp7iKS/EfedRO6GG+uUwTVEU8k4XYDY+mzdO2KsDaJqKYxYuJPcLYvA5hndpGpqqlEUzVv3ab7EpUFY0rd3ehijNcaSBPlxVNmVJhegsoiOsOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RYmW0PZi; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64074f01a6eso9221550a12.2
+        for <linux-clk@vger.kernel.org>; Tue, 04 Nov 2025 06:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762268308; x=1762873108; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8yDoZvnl9i2PCVqQpO58zWzoD91W2IfT5tAZBQV3TwY=;
+        b=RYmW0PZiAx88z+3Xj/OA9RvHi5JsqA6OHbwOkDW/JlNii+V+/M/CfZh7gyOGClZnm0
+         pAu7tf3Qy549y4XfixE8BYUb51gOrok4NnXl9jlb1tmtzvDiU8y8aUgPs7nv1HnTE5dN
+         edR7LP9Lt4qD2L9O0fvQCx6+729fcTdVVaWtsWvw0INl0o9nSz/qKAm4jWlxd2vIMh4M
+         /a8wUguHUpq3Dxiwyi6vkNGq8HL8/OLzZmroIaRK0O6lY93Skn0LamGOd6YlZk3KXFpQ
+         DhPnEgFq4vHMxQmse3S8pn2RSaZEI6PFuRr1uFpXa6TnYJnNqlfq71PFHJgVhemOVWT/
+         3+aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762268308; x=1762873108;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8yDoZvnl9i2PCVqQpO58zWzoD91W2IfT5tAZBQV3TwY=;
+        b=uAzHu9USruIHMIFkcsI745VYc8G9uagR9XWzp1uR0e2gMl45fXYpUpZE29mSSKKKFA
+         qH5zTaT32K08Lqn/dt9khRDXfZPT44poSRpqpficjH+gBb0m69+6MQJjSEPWjK7sdMEw
+         yYX9/InQyn+orbSURB41Pq/tyINyXCwo1qF8DcE3OQ26USqlhpARkAAtxL1HBR4plX6H
+         GneoUpYekg9IV5sqAafednovZ90gKR6v5qBQXc2PWQAOZVttnRNMr1+La6/mU6oIpocn
+         4KcnIlijCQl+m6edJZ8hOI79nLAEfObp55NJMb5OLTvsZfGjJOQO/xhmoPj5C3TdbJvs
+         KJHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVclHuK3FqIEo2oVHwV80qlWmWX+fQ+286nZXj21LoaozCvOEXHe1F4L635Ol3CAc08i1C+ZRoOkFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfyFeNoH2/SNKWM05BDBMncSM8ON2DPVOFA68UNvEb5gBGAyPg
+	tXJmcGfjjJqxiByY/pcuUp8X4W3qA3KGb/6GgA3tvvS1dKCigougmz7D
+X-Gm-Gg: ASbGncua2CUXgRSTEn86uqt1w2jODyARTiHwxjVGpO90aOQl1aexUKT6hlLjeJ1E40V
+	wW2gTe5qP1s6Gr/qeFH6DtvR2nYLowNYseMvplNSB+PlRvbv2GUMOkl3KaXRNL280GI/JQ8nrMz
+	DtbTRqAmbjiLARPinnJ4NRuFGdHTGWB7UlSworxDDVOiYt33eo4aqpsrQ8Dw2+D7L+V6rfOc6jb
+	W/WYzi6S980hxd8HOWphJX45FRrOCBVnh05uZKDSIgmLiY1+WcfB5CGuj3hqauLM7u3oBNUIp3u
+	ni2hSgq6ss1eVMTh15or+aOaXWEch2Q1ewjlHd3Sgqskh95jezdaGSQh7WHMD7GkJ+hLIXsA23s
+	fvnKQAZ7Z40o2t8Jor2m7yFMPE5M+Jvnaob5ATWBBVdCCuhXD+AC3vjVQWwYtVzXMtzbv8hXfp8
+	sziSk8opzPLYPhhK1jlXbyED/F4nf4vLOJh3ktFuMOqdCRBmM=
+X-Google-Smtp-Source: AGHT+IFs9W8O44jy0to+HH8P36ANszj/+KkeaTelvysxmEQV/qsf42k3TLW8rGxbLiSoMryUWBJ0BQ==
+X-Received: by 2002:a05:6402:26d1:b0:638:3f72:1266 with SMTP id 4fb4d7f45d1cf-64076fa052amr16212580a12.16.1762268308065;
+        Tue, 04 Nov 2025 06:58:28 -0800 (PST)
+Received: from tablet.my.domain (83.21.17.47.ipv4.supernova.orange.pl. [83.21.17.47])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-640e6a7fcd7sm2288874a12.37.2025.11.04.06.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Nov 2025 06:58:27 -0800 (PST)
+From: Artur Weber <aweber.kernel@gmail.com>
+Date: Tue, 04 Nov 2025 15:58:20 +0100
+Subject: [PATCH RESEND v7 2/7] dt-bindings: clock: brcm,kona-ccu: Drop
+ CLOCK_COUNT defines from DT headers
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d359ef1-2754-4f58-5a7f-08de1ba0021d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2025 12:45:17.7342
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m0fDfhr/+OV2N/xIqcYTtxLw50+/f785gX5ewU76Msk17aZAk15cTHqBTagCDzKpwFre19iwzsasYRt6mziBsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6790
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251104-kona-bus-clock-v7-2-071002062659@gmail.com>
+References: <20251104-kona-bus-clock-v7-0-071002062659@gmail.com>
+In-Reply-To: <20251104-kona-bus-clock-v7-0-071002062659@gmail.com>
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Alex Elder <elder@kernel.org>, 
+ Stanislav Jakubek <stano.jakubek@gmail.com>, linux-clk@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ ~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org, 
+ phone-devel@vger.kernel.org, Artur Weber <aweber.kernel@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2725;
+ i=aweber.kernel@gmail.com; h=from:subject:message-id;
+ bh=W9g+YJ6BtshhuZpzIE3hQJ772deNaUpm9Z9F4iVdSVk=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBpChSNyhoRHcTk8Z6URFMUuRgH1NYbfHNCN3nuz
+ TT5s4TYN/mJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCaQoUjQAKCRCzu/ihE6BR
+ aBZ8D/9GVrJnnbshf40Fq7EmWfKlSWadlwmZGigXl4snbvnPs6gFtD53934e9ydLgHRjv8u2HF6
+ v3RetY0M1wonst8EpeN0+FuNakSthGOt128Yc+TgylDcybfRojzqe5x5QgzXnKnd17rLN4PRzZk
+ b0uo3WfdvbegZCL6sTFjVIRc0186+231PoH/YXcwJEM32ltp/EKPAB3j26sIfQ6Fx7NJLkHbFhm
+ F0YXJrGbjLkV8KYRV3xHTdDNTqZ7w/HZ2VZh69brnZptYURDhXlRehZR6/iZq5Qjt9dc1sKvh7o
+ zTjZNyJy0LOeaxee4dnnGR5EqhiFycYqxrz1mXeb511qqn5qqrY6iq2ZAtSoF0gdcnkpkTpR6F1
+ UzEJ3AVHAD8zoRwTv6u/EZ/pVyedM5nW0h2xCEx0tBZsGBjyRdPBrrZs4FHx03p8Glbo/dE+X/Q
+ Islzg5UV4NnsdWM1pfAzZNzp1+frZq7Yz1BGpKUos9oGDmN+7qeiLqf7zQfmOsUa+EQLvevVbc/
+ epSm5KUSSDLiBoNrTzmlXBjIwLFppBBuKazNuQTwja4J4ic23JMayyaGURMTtslUOr5+V8J0gkE
+ DRJCYzq9mp2tk/wJmUWZ7jYqJfO+y3+JvxR7ZGYT5mLfLscGKy1XEiRu7tcjejTqLhGeskURnWB
+ dpxZ04FL3Fn47qg==
+X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
+ fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-> Subject: [PATCH v4 3/8] clk: imx: add driver for imx8ulp's sim lpav
->=20
-> From: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
->=20
-> The i.MX8ULP System Integration Module (SIM) LPAV module is a
-> block control module found inside the LPAV subsystem, which offers
-> some clock gating options and reset line assertion/de-assertion
-> capabilities.
->=20
-> Therefore, the clock gate management is supported by registering the
-> module's driver as a clock provider, while the reset capabilities are
-> managed via the auxiliary device API to allow the DT node to act as a
-> reset and clock provider.
->=20
-> Signed-off-by: Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
+The CLOCK_COUNT defines are not used by device trees, only by the clock
+driver. Keeping them in the DT binding header is frowned upon.
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Since they're being moved to the clock driver directly, drop these defines
+from the dt-bindings header and only keep clock IDs.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+---
+Changes in v3:
+- Add this commit
+---
+ include/dt-bindings/clock/bcm21664.h | 4 ----
+ include/dt-bindings/clock/bcm281xx.h | 5 -----
+ 2 files changed, 9 deletions(-)
+
+diff --git a/include/dt-bindings/clock/bcm21664.h b/include/dt-bindings/clock/bcm21664.h
+index 7c7492742f3d..7a380a51848c 100644
+--- a/include/dt-bindings/clock/bcm21664.h
++++ b/include/dt-bindings/clock/bcm21664.h
+@@ -21,12 +21,10 @@
+ /* root CCU clock ids */
+ 
+ #define BCM21664_ROOT_CCU_FRAC_1M		0
+-#define BCM21664_ROOT_CCU_CLOCK_COUNT		1
+ 
+ /* aon CCU clock ids */
+ 
+ #define BCM21664_AON_CCU_HUB_TIMER		0
+-#define BCM21664_AON_CCU_CLOCK_COUNT		1
+ 
+ /* master CCU clock ids */
+ 
+@@ -38,7 +36,6 @@
+ #define BCM21664_MASTER_CCU_SDIO2_SLEEP		5
+ #define BCM21664_MASTER_CCU_SDIO3_SLEEP		6
+ #define BCM21664_MASTER_CCU_SDIO4_SLEEP		7
+-#define BCM21664_MASTER_CCU_CLOCK_COUNT		8
+ 
+ /* slave CCU clock ids */
+ 
+@@ -49,6 +46,5 @@
+ #define BCM21664_SLAVE_CCU_BSC2			4
+ #define BCM21664_SLAVE_CCU_BSC3			5
+ #define BCM21664_SLAVE_CCU_BSC4			6
+-#define BCM21664_SLAVE_CCU_CLOCK_COUNT		7
+ 
+ #endif /* _CLOCK_BCM21664_H */
+diff --git a/include/dt-bindings/clock/bcm281xx.h b/include/dt-bindings/clock/bcm281xx.h
+index d74ca42112e7..0c7a7e10cb42 100644
+--- a/include/dt-bindings/clock/bcm281xx.h
++++ b/include/dt-bindings/clock/bcm281xx.h
+@@ -27,19 +27,16 @@
+ /* root CCU clock ids */
+ 
+ #define BCM281XX_ROOT_CCU_FRAC_1M		0
+-#define BCM281XX_ROOT_CCU_CLOCK_COUNT		1
+ 
+ /* aon CCU clock ids */
+ 
+ #define BCM281XX_AON_CCU_HUB_TIMER		0
+ #define BCM281XX_AON_CCU_PMU_BSC		1
+ #define BCM281XX_AON_CCU_PMU_BSC_VAR		2
+-#define BCM281XX_AON_CCU_CLOCK_COUNT		3
+ 
+ /* hub CCU clock ids */
+ 
+ #define BCM281XX_HUB_CCU_TMON_1M		0
+-#define BCM281XX_HUB_CCU_CLOCK_COUNT		1
+ 
+ /* master CCU clock ids */
+ 
+@@ -50,7 +47,6 @@
+ #define BCM281XX_MASTER_CCU_USB_IC		4
+ #define BCM281XX_MASTER_CCU_HSIC2_48M		5
+ #define BCM281XX_MASTER_CCU_HSIC2_12M		6
+-#define BCM281XX_MASTER_CCU_CLOCK_COUNT		7
+ 
+ /* slave CCU clock ids */
+ 
+@@ -64,6 +60,5 @@
+ #define BCM281XX_SLAVE_CCU_BSC2			7
+ #define BCM281XX_SLAVE_CCU_BSC3			8
+ #define BCM281XX_SLAVE_CCU_PWM			9
+-#define BCM281XX_SLAVE_CCU_CLOCK_COUNT		10
+ 
+ #endif /* _CLOCK_BCM281XX_H */
+
+-- 
+2.51.1
+
 
