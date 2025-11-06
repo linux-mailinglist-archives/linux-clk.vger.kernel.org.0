@@ -1,150 +1,113 @@
-Return-Path: <linux-clk+bounces-30435-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30409-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83365C3B724
-	for <lists+linux-clk@lfdr.de>; Thu, 06 Nov 2025 14:51:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA38CC3B535
+	for <lists+linux-clk@lfdr.de>; Thu, 06 Nov 2025 14:42:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E6726504C91
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Nov 2025 13:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A5F5560C95
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Nov 2025 13:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A3A348895;
-	Thu,  6 Nov 2025 13:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C433C330D35;
+	Thu,  6 Nov 2025 13:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llznu7vx"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7313370F5;
-	Thu,  6 Nov 2025 13:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837FB330326;
+	Thu,  6 Nov 2025 13:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436342; cv=none; b=T+HzJRWRP05YxWdGixF8WM+Y1c3YJ0eZPchpar/NTv6ygcrGCESRB4UTq+RZxfS7cu05BJBgd7Z+MxNVj7eeNIqVl0oH/283gTIqHDZeyQeowe0MjOqkcMyhmztsJdcsZmpyExk1rGhFjODIq3nDCXgxia07YkvbSHmidTVSslw=
+	t=1762436079; cv=none; b=Yivu7YZAWgQCINGE2Z39l1pAQYsCl9uE9gJdcwpxvi/JIofCC7rM+EJz5a3BDOanjH8l2JrR4CXdvU16o5KDyYARSoqzsncvxJ1JtM2U2zEI6UtIgXPPWT4TMybIDkIYHTYd6ZvHvaz2a28JTYoFS6ML0gGHv9oluqd0zEJLvI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436342; c=relaxed/simple;
-	bh=WYHa35/WSbF7l7X/7zby0sd49RpvAMPpddrSd2lq3dI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BzNntgnc82R8Vd2YIlNkvOFBfpckunkOhYjLoqOir9S6F42khi9qXRwBQJ1+Es59jx3mIaKGiTN1TcCN1J+ZPR/jgBZWJOR9GOBzEDpFly2BKsAlv+GG4opsH7cYfZBWVSbx6aSPZs43DVr2AaTWJNKBG1sovXKqw2KRtNyTkxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7F0C19422;
-	Thu,  6 Nov 2025 13:38:51 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Yury Norov <yury.norov@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	qat-linux@intel.com,
-	linux-gpio@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v6 26/26] soc: renesas: Use bitfield helpers
-Date: Thu,  6 Nov 2025 14:34:14 +0100
-Message-ID: <4316b09f7e7a4fa2ac0c5d05c3dbb25547969833.1762435376.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1762435376.git.geert+renesas@glider.be>
-References: <cover.1762435376.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1762436079; c=relaxed/simple;
+	bh=UxsA7mpBbTvyv+g/LrSCFPsTpp7DeoIh9dJ/dkCgAxY=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=JJldS6UEMbX0Tu25rGi/tFofkreOxFWVxd85ZqBSfvU3J7V+I+ClQBBoRBZVthzPB4eUpH+8b5xR2XD5WBDz3IlOw5oadTWSan1I1CzE/ImflH1flk1yESAKjx+4mzuQKOZeY5gh0/cPxqzH2hHSYQQnAr/y23EQLSN92BRHIuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llznu7vx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4C6C116C6;
+	Thu,  6 Nov 2025 13:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762436078;
+	bh=UxsA7mpBbTvyv+g/LrSCFPsTpp7DeoIh9dJ/dkCgAxY=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=llznu7vxVvCdwnCl/IdM4fTDwJiq1ztqiQ6zJ2Ed1+c3HAjvpQk1TkOwDcnTxNJRZ
+	 wWff58/kXcPtX0BGe7JdTaR4eGFQSAUwCj2ySVW6AYwbPeVsN463BW05DfIpCWw/hl
+	 Jj06IfZCO6KqhJ0grsxnLXj72NGc6eQw5N1vyoBG8o7dBfKxaUqBZ/Bg5VwJpot8/O
+	 CvuRqY0Q0zTKdoKJinZos92gB/UOC/NIbZwxyhbXL+BeTpjbnSQOo7CUBr7c+L9Zc6
+	 P4WKltBa+np+i9Frx4hv7oveioFV9m0sYcgu5mhVs4L50JnJ7xN3RgtvTtIp0le4rg
+	 jmxcZgsRfxNtg==
+Date: Thu, 06 Nov 2025 07:34:37 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, sirius.wang@mediatek.com, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, 
+ linux-clk@vger.kernel.org, netdev@vger.kernel.org, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+ Richard Cochran <richardcochran@gmail.com>, jh.hsu@mediatek.com, 
+ devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ Qiqi Wang <qiqi.wang@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Michael Turquette <mturquette@baylibre.com>, vince-wl.liu@mediatek.com, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>
+In-Reply-To: <20251106124330.1145600-3-irving-ch.lin@mediatek.com>
+References: <20251106124330.1145600-1-irving-ch.lin@mediatek.com>
+ <20251106124330.1145600-3-irving-ch.lin@mediatek.com>
+Message-Id: <176243607706.3652517.3944575874711134298.robh@kernel.org>
+Subject: Re: [PATCH v3 02/21] dt-bindings: power: mediatek: Add MT8189
+ power domain definitions
 
-Use the field_get() helper, instead of open-coding the same operation.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v6:
-  - No changes,
+On Thu, 06 Nov 2025 20:41:47 +0800, irving.ch.lin wrote:
+> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
+> 
+> Add device tree bindings for the power domains of MediaTek MT8189 SoC.
+> 
+> Signed-off-by: Irving-CH Lin <irving-ch.lin@mediatek.com>
+> ---
+>  .../power/mediatek,power-controller.yaml      |  1 +
+>  .../dt-bindings/power/mediatek,mt8189-power.h | 38 +++++++++++++++++++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 include/dt-bindings/power/mediatek,mt8189-power.h
+> 
 
-v5:
-  - No changes,
+My bot found errors running 'make dt_binding_check' on your patch:
 
-v4:
-  - No changes,
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/clock/mediatek,mt8189-clock.yaml:25:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
-v3:
-  - No changes,
+dtschema/dtc warnings/errors:
 
-v2:
-  - Drop RFC, as a dependency was applied.
----
- drivers/soc/renesas/renesas-soc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+doc reference errors (make refcheckdocs):
 
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 1eb52356b996bdd7..ee4f17bb4db45db7 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2014-2016 Glider bvba
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-@@ -524,8 +525,7 @@ static int __init renesas_soc_init(void)
- 							   eshi, eslo);
- 		}
- 
--		if (soc->id &&
--		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
-+		if (soc->id && field_get(id->mask, product) != soc->id) {
- 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
- 			ret = -ENODEV;
- 			goto free_soc_dev_attr;
--- 
-2.43.0
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251106124330.1145600-3-irving-ch.lin@mediatek.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
