@@ -1,152 +1,185 @@
-Return-Path: <linux-clk+bounces-30383-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30385-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDEFAC3A570
-	for <lists+linux-clk@lfdr.de>; Thu, 06 Nov 2025 11:47:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173C6C3A68F
+	for <lists+linux-clk@lfdr.de>; Thu, 06 Nov 2025 11:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FBFC424D3C
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Nov 2025 10:42:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6EF84501E04
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Nov 2025 10:52:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE812DAFDB;
-	Thu,  6 Nov 2025 10:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="jCHGcS/5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="finW6O2T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4BF30C629;
+	Thu,  6 Nov 2025 10:51:54 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0456A1E0DE8;
-	Thu,  6 Nov 2025 10:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4595302CC1
+	for <linux-clk@vger.kernel.org>; Thu,  6 Nov 2025 10:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762425734; cv=none; b=f49wQ+YdcGTjz2DPAGAdw/gtmkM4E4nIjbVuF3YvaldIZEyL3qyOTJhTyWhPSdG4q4F9PJBTPwsoiEKzXAwufuMfVAc4xzi6waWWFG0T1tqACZJBGbZ+7PNRxjyzPTKGAcceiDLMsNp8Q6CTl6rFNyBk4BRFaJ+7Rk1JRgNXdMg=
+	t=1762426314; cv=none; b=f4OF0HtLK0Sn+RXUkijCXgTK9JLHIrbcqr70ePt9Fctyq+gUTJvvsrcjSr/WHN68jYDLkbnwCkWm18WsIw0uvxN5uQ8ao2WD2b1S+co4PG64a4jLhBHQClVKYArxOajIu+rYm8gkjFUZbLpgScocmftKiUU5EiNMUXZQPfG2qB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762425734; c=relaxed/simple;
-	bh=f44J5FGKhIdobVdRKmbTNfbjWtEjuOmkJnlxikhyrbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nBKokR5BGiYEESff4UAg0UU1yZIg0ymManv082xrgxKAIj1m2noERFfaqD9tJ82kBr6+1ENMXF4J0AvIOKlLapT0mu1SWcCWsh8BExuTAJIEw+jZD3ZAiIfvJ1RHrs9GbHSJz20EDtJ/Ug1QRIxrDccgrFLuoBfrOemSeEts0qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=jCHGcS/5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=finW6O2T; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 2B56E14000C2;
-	Thu,  6 Nov 2025 05:42:11 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Thu, 06 Nov 2025 05:42:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762425731;
-	 x=1762512131; bh=y9YGmVVr0g5A4cHb/AAzOC+6ym7F2BmC2FJTgejFzpo=; b=
-	jCHGcS/5/SmHwC5PXkIJpjtFvvpCGuwDh5gPuzD8jQL8WBtt0gDbDIZ/dNKVsXJD
-	+GW/jehswmgUETmJ/KIHHznY6uzF5zo1fHY5jTtp+8Tn8TgvlQqFmr/SJENP7c58
-	hpcSVtwmQQ/xcXT3RzkxVnn2kOuYlrzu3R+5YT/+9YwebXCgO0kcvCzzc08vosH8
-	Wovmhj+cemYxWJbTjkMcsmVhS4RiwQSMRbTyI47Iux0sx7A5Puayi+HeCVc95fgw
-	7M6lNsTOsXAFX3VEkzP0HHni5zgXfDG9LMCcaIetyy/WwgLukIdBfoMTuf4GXk3c
-	7VCEsbzcFZfq86Cec+ZIQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762425731; x=
-	1762512131; bh=y9YGmVVr0g5A4cHb/AAzOC+6ym7F2BmC2FJTgejFzpo=; b=f
-	inW6O2T4Sinc/6Op5+6bPUJDSeysddPuHpNUUsUjcE+MXI+tcADAqjFKyyhEB7fw
-	UDUdfmz0nUFLN0TZlq6ZWuDl2cXmc+Aj6s+XAGsEj9LQW6Vyqtk0lOTRrVtkfkQD
-	JkrQeMBC4D88RjdZms91faQOKoNT9xIWcVkehQwP68TpLA9I0aDBKWF9kwsIFxAb
-	a4rjGn3t6Cj309EM/XaZbvCAP7ykAE22pXi1o456TfrZUEWgFDcnK0LYYgIFuA98
-	V6ryVlHJhWfA6+aILgyrqZcXV2FFoevVhkdRAJIZQBluGI2PpmbxB34qE7FU5Isp
-	EH1oYkW1tip6GWfRSmQCg==
-X-ME-Sender: <xms:gnsMaRlRoTfLXXrF7DFB7KGFlCVRHBpHZKCXj2fh-sqXz4HgWXu_8w>
-    <xme:gnsMaS11muja1HAK2WrfGvrS5_0NbHwcAz9ANEWWx8KZrCyUqq9E-tWjCnoFx3caJ
-    ITRrEAt1Q-U84cLjQHUJagcdceuKnFCBYmzvLagmzg58gyNMB5udxQ>
-X-ME-Received: <xmr:gnsMaSe7Rm4878Woo-bDOVGCmS9-rqDsKLxT6zQBPELEMIJj7N1t0i0ynMSpGhBjbn_QgzAHAQrhmCTOO6tuvmn9UmK2B58>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeeiheejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhklhgr
-    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
-    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeefhfellefhffej
-    gfefudfggeejlefhveehieekhfeulefgtdefueehffdtvdelieenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
-    uhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhope
-    dutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehgvggvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpd
-    hrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomhdprhgtphht
-    thhopehssghohigusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtoheplhhinhhugidqtghlkhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:gnsMaUbKqJxdJhiQtzbSSnd9dsccGCwE-h2RqsaK5daNyIlZ9KziLA>
-    <xmx:gnsMafHFmw9XqKQO9J04WmqWAofHenzHE45wR_zy2lOdeVPaAUbp3Q>
-    <xmx:gnsMaalTznO8aXSdexe0eTEdydxqioDOlOHIUv760eAPnv6898ZEtw>
-    <xmx:gnsMaae4HVNXCF0a_H9H6h-0zNDKoIBTghj2OR9jShq06hgEHBKfNw>
-    <xmx:g3sMafrEo14cPgriH1shnuRfaUetc-twW8xvmkq-HjaxjSB2V_BQtXrB>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Nov 2025 05:42:10 -0500 (EST)
-Date: Thu, 6 Nov 2025 11:42:08 +0100
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] clk: renesas: r8a779a0: Add clocks needed for GPU
-Message-ID: <20251106104208.GE3684509@ragnatech.se>
-References: <20251105231815.1927239-1-niklas.soderlund+renesas@ragnatech.se>
- <20251106-nocturnal-uptight-kagu-87bce8@kuoka>
+	s=arc-20240116; t=1762426314; c=relaxed/simple;
+	bh=itQfKCyAMWt8v5ABjQ4YIGdNfHovzQUz4scVas16PAM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WE6S3XVizf/lW62DWaaJVOfBiNJjtE2pssgtsInoMKp+oQp7Db5Vts8S0xPCTjz3mp8NgSg3qkcJvGpClCmXXUriHDMFHqRJgOd7EtYzdM1Y6DvlAzFTcL/w6JyWf7O+qmZFLEINCC4B/FZAg2gswwfGAoHY5cG2oRbMjwm0fp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vGxaR-00027U-O1; Thu, 06 Nov 2025 11:51:27 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vGxaR-007LZi-0X;
+	Thu, 06 Nov 2025 11:51:27 +0100
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vGxaR-000000004PL-0HZk;
+	Thu, 06 Nov 2025 11:51:27 +0100
+Message-ID: <56a49462312d89fd0de6da273f698c0f89e73ada.camel@pengutronix.de>
+Subject: Re: [PATCH v2 0/7] Add generic PHY driver used by MACB/GEM on EyeQ5
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Vladimir
+ Kondratiev <vladimir.kondratiev@mobileye.com>, =?ISO-8859-1?Q?Gr=E9gory?=
+ Clement	 <gregory.clement@bootlin.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,  Kishon Vijay Abraham
+ I	 <kishon@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd	 <sboyd@kernel.org>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-clk@vger.kernel.org, =?ISO-8859-1?Q?Beno=EEt?= Monin	
+ <benoit.monin@bootlin.com>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>,  Tawfik Bayouk
+ <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Conor Dooley	 <conor.dooley@microchip.com>,
+ Jerome Brunet <jbrunet@baylibre.com>, Andrew Lunn	 <andrew@lunn.ch>
+Date: Thu, 06 Nov 2025 11:51:26 +0100
+In-Reply-To: <20251101-macb-phy-v2-0-c1519eef16d3@bootlin.com>
+References: <20251101-macb-phy-v2-0-c1519eef16d3@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251106-nocturnal-uptight-kagu-87bce8@kuoka>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Hello Krzysztof,
+On Sa, 2025-11-01 at 09:53 +0100, Th=C3=A9o Lebrun wrote:
+> EyeQ5 SoCs integrate two GEM instances. A system-controller register
+> region named "OLB" has some control over the Ethernet PHY integration.
+>=20
+> Past iterations [0] touched those syscon registers directly from MACB.
+> It was a bad idea. Extend the current OLB ecosystem with a new generic
+> PHY driver.
+>  - OLB is carried by one main platform driver: clk-eyeq.
+>  - It instantiates auxiliary devices: reset-eyeq & pinctrl-eyeq5.
+>  - We add a new one: phy-eyeq5-eth.
+>=20
+> Here is a DT overview:
+>=20
+>    olb: system-controller@e00000 {
+>            compatible =3D "mobileye,eyeq5-olb", "syscon";
+>            reg =3D <0 0xe00000 0x0 0x400>;
+>            // ...
+>            #reset-cells =3D <2>;
+>            #clock-cells =3D <1>;
+>            #phy-cells =3D <1>; // <=3D this is new
+>    };
+>=20
+>    macb0: ethernet@2a00000 {
+>            compatible =3D "mobileye,eyeq5-gem";
+>            phys =3D <&olb 0>; // <=3D GEM device consumes the PHY
+>            // ...
+>    };
+>=20
+>    macb1: ethernet@2b00000 {
+>            compatible =3D "mobileye,eyeq5-gem";
+>            phys =3D <&olb 1>; // <=3D same thing for the second instance
+>            // ...
+>    };
+>=20
+> The Linux MACB driver already consumes a generic PHY for some other
+> compatibles, this is nothing new. The MACB series [1] has been merged
+> into net-next/main.
+>=20
+> --
+>=20
+> One topic to talk about: the whole "we must assign child->of_node
+> manually". Auxiliary driver core does not do it automatically, so
+> either the parent (clk-eyeq) or the children must do it.
+>=20
+> In OLB land, until now, children were doing it with a
+> device_set_of_node_from_dev(dev, dev->parent) call in probe.
+>=20
+> Recently, Jerome Brunet added devm_auxiliary_device_create():
+> eaa0d30216c1 ("driver core: auxiliary bus: add device creation
+> helpers"). Using that cleans up clk-eyeq but means we must remove
+> device_set_of_node_from_dev() from reset-eyeq in the same patch series,
+> as the helpers do the dev->of_node assignement from the parent driver.
+>=20
+> That explains why the ideal patch:
+> [PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PH=
+Ys
+> Turned into those three:
+> [PATCH 3/7] clk: eyeq: use the auxiliary device creation helper
+> [PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PH=
+Ys
+> [PATCH 5/7] reset: eyeq: drop device_set_of_node_from_dev() done by paren=
+t
+>=20
+> --
+>=20
+> About merging, it'll probably be complex. I see no build dependencies,
+> but the board will be in an odd state if only some patches are applied.
+> Some dev_warn() at boot and dev->of_node refcounting issues at unload.
+>=20
+>  - [PATCH 1/7] dt-bindings: soc: mobileye: OLB is an Ethernet PHY provide=
+r on EyeQ5
+>    We touch dt-bindings because OLB becomes a PHY provider.
+>    =3D> linux-mips (?)
+>=20
+>  - [PATCH 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+>    We add the generic PHY driver in drivers/phy/phy-eyeq5-eth.c with the
+>    usual Kconfig, Makefile and MAINTAINERS changes.
+>    =3D> linux-phy (?)
+>=20
+>  - [PATCH 6/7] MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet contro=
+llers
+>    [PATCH 7/7] MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PH=
+Ys
+>    DTS patches to add both the #phy-cells of OLB and the MACB instances.
+>    =3D> linux-mips
+>=20
+>  - [PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic=
+ PHYs
+>    We must update clk-eyeq because it instantiates a new auxdev.
+>    =3D> linux-clk
+>=20
+>  - [PATCH 3/7] clk: eyeq: use the auxiliary device creation helper
+>    [PATCH 5/7] reset: eyeq: drop device_set_of_node_from_dev() done by pa=
+rent
+>    With the dev->of_node assignement, we must also correct reset-eyeq.
+>    =3D> separate them into linux-clk and linux-reset?
 
-Thanks for your feedback.
+Since 3 and 4 should go via clk, and 5 has a dependency on 3, I would
+suggest merging them all together.
 
-On 2025-11-06 10:10:51 +0100, Krzysztof Kozlowski wrote:
-> On Thu, Nov 06, 2025 at 12:18:13AM +0100, Niklas Söderlund wrote:
-> > Hi Geert,
-> > 
-> > This small series adds the clocks needed to use the GPU on V3U. The 
-> > first is by far the most complex as the whole tree branch needed to be 
-> > described.
-> > 
-> > With this and soon to be posted DT patches the GPU on V3U.
-> 
-> You have checkpatch warning which is important, because would block from
-> merging DTS if it uses the binding header constant.
-> 
-> DTS cannot depend or even be based on driver patches.
-
-Indeed, my bad. I saw the warning and check how this was handled in the 
-past. I found other commits doing what I did here, but I have now been 
-educated that the ones I looked at where a special case and the correct 
-thing is to split this.
-
-Will fix, and thank you for your time letting me know!
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+regards
+Philipp
 
