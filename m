@@ -1,83 +1,210 @@
-Return-Path: <linux-clk+bounces-30504-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30506-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD4AC3ECF8
-	for <lists+linux-clk@lfdr.de>; Fri, 07 Nov 2025 08:47:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA822C3EDAC
+	for <lists+linux-clk@lfdr.de>; Fri, 07 Nov 2025 09:01:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0A73188DE9B
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Nov 2025 07:47:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 194A13AEBF8
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Nov 2025 08:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FB41E1A17;
-	Fri,  7 Nov 2025 07:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E5730FC18;
+	Fri,  7 Nov 2025 08:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k+bClqF4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmyoA+YH"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800252571C5
-	for <linux-clk@vger.kernel.org>; Fri,  7 Nov 2025 07:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B43030F92C
+	for <linux-clk@vger.kernel.org>; Fri,  7 Nov 2025 08:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762501621; cv=none; b=Xi7a3bHn4UrfIaMC4/RFW2WltUxUAabvo/qNJ3P5hF+6c2dJNfcePIK78pTb5uHgIgXhDBrkf93rf3xRr3cNSrgkum5K017Y/l8YCwV/6OHG3lNrhn68PuIWDxzsiqi3sSpuKvS/8ZoDdFvq5OAzZL5rIokRxuT9hVRSK0cnZHU=
+	t=1762502437; cv=none; b=NY5mUTWwidXWu+ZBKab/puYZjGP9WqL+nvyPNcwKqLlAnw24H4YRcgjjKdLs4zrwoMYx208r7Q7umpUpKRlO8xCUvJ1C5JLejwMyOnUWg3PYzHxv0jrS5YkAcCP8ajeHphkSb9gyaom/TseYZ/UZPIKay9GL2zOBD0z3ZXr9BLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762501621; c=relaxed/simple;
-	bh=up3WN4y2iaAHVkgmKOuF19xMqSjPj8hRQ0/2Guibtpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RLFl+0gIRvXUkNTdVXVdWUzaqBnni/qWGkcszGktXSSN5HZvokGJrjnpczlBqnkNxHJNyP0SR+2E0o8cY8HYIIZX0T5simpKDd169IfkQhFXfVWFCQJj5VYK1erGaeJ539ng83UyMBbOrUclofxUcZ/izCUVjEzGJXu+hCHqsAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k+bClqF4; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Fri, 7 Nov 2025 15:46:40 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762501607;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bWV3OFRTCNAKsBedYT67BomPXMjaLCiUco2GhaTf0fw=;
-	b=k+bClqF4XA4GZLSsMVcC4JpBztPM6DaIwF+4+MhuR0v+m0IO2O9SigAjsrr2iZzzDfgEtI
-	4/4nozJFfpBwrLrYCWO/kTQe007F3NCPNYKHGUMFN8tKGpHg3HFVdcftKPD6uUxYkTZm0u
-	qklEY0aV3aO/4Z1KU5PuZoGxTlcsStQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Troy Mitchell <troy.mitchell@linux.dev>
-To: dongxuyang@eswincomputing.com, mturquette@baylibre.com,
-	sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	huangyifeng@eswincomputing.com, pinkesh.vaghela@einfochips.com,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Troy Mitchell <troy.mitchell@linux.dev>
-Subject: Re: [PATCH v7 1/2] dt-bindings: clock: eswin: Documentation for
- eic7700 SoC
-Message-ID: <aQ2j4PtWm5vFBoAZ@kernel.org>
-References: <20251023071658.455-1-dongxuyang@eswincomputing.com>
- <20251023071748.513-1-dongxuyang@eswincomputing.com>
+	s=arc-20240116; t=1762502437; c=relaxed/simple;
+	bh=gTrtMTVdIq8o2Lv2gAG8UVNbAa67NI0LZcaPzCP9uxA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g8OmJGqF922PXGdRrxWpdQmzURDWfYS3364TQpiYN5VK5SOWkWKHuSiIkJQtRMA+AjTLKs6rnhm6YWTEnkean98O2vQksOdeHTfulKyzwcLmY9TdGu5YnmFb0B7jFD7/GaJ+Q8Hd3u3Is/rL4TCrTp+C7GuySGa1rUakVF4khGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmyoA+YH; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-64034284521so727368a12.1
+        for <linux-clk@vger.kernel.org>; Fri, 07 Nov 2025 00:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762502433; x=1763107233; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L4L8nwY5tA46qS9RhjMiBvwIJ3m3PvlUWeeZDUBNYNE=;
+        b=AmyoA+YHQZgstGRmD8U6Uc5Qp3lHeC8gVhIBg5c7IDTiz9uxO1MKh5pvTLMYZ1uWXu
+         ZOiCh/0sWFaopk+f5KfR3BcFOL9zYZNgwM+yWnrs/cvXnteu3aoXVLpBmW9Pfhsbf51W
+         laGx54OYB+zhf/9On7oJS1XjUSQyqr2R4q7FPf5IKZPIZLj6jE2u+xaaRonDpdo8cYNo
+         sT26cX0LyiU9BpU1+93/AVTPh27969l83AWVEOF9a/s1OW3QFogNfFxrcAkv9htYErpE
+         eVO+m5sjBQ7LePaEsHPnv1juoEuTT3WWZG2NexOODGf77B/buQoApHYTaAQa3EaoqGXO
+         dy/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762502433; x=1763107233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=L4L8nwY5tA46qS9RhjMiBvwIJ3m3PvlUWeeZDUBNYNE=;
+        b=wrMt5mYY731zfihETKooZN1VAyajWwO7qQyWYP6akuhFxBR4kbg12Fo1MtOCABMg7L
+         av8nt9MvZhyvbcDQboZ19Sp06EAdGQCo36K/cZKzdT7XntbaumUBTHO0WdzHuz6Mc/3u
+         DHfhcU2QD2A6ZpJfIqCdqtK/YBOyk17VoRMI5pjr/DHijnu7y7h8ItgH/4o++QEEJaVS
+         ll3OtcsduVtbWHvxslt2eEbM21HwqfzCZHBGq6F9QsPgnbQL3pnroSZbaIWWHODEbzKi
+         HhYvq0EqQL0APg80HAE+74K4534dJthTBnj+U9aHLiScXoAsqpEWbBsG4XUqmZK0X/qT
+         4PYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXIbQeYaiTqJjCozDOofjiys98YUSIi2+ut7GQaCRWoOi73GA2eetOcxBjHMce3zp5x8GmZQ5RRFWM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVkWWF3qpZ570vWTUp4tEaTy5JVS/AtO+Z1bmLowS/R+Pp/4AU
+	L5mPTrLXg1ACMlFcKOI0L3EckH9cu55kjiCsJIzw+PGGdqInFkZ6js5jSntJu6QFuvpfhjNgRcp
+	5xLtMJaYP/KiUMLCfNQklt/Rkluf5wyk=
+X-Gm-Gg: ASbGncuDFLnM1xFv3Yb4SRvCTK61k0VmVc9dvdkr5isgWzIM0K/9iTv4JLdA7axgpSi
+	+7y5+R+zlVHe0jiKBPkVjT2vf4yFsdwdFj/hq7+johP9nbs4olhwksHjtqV3bnEiPreAJwk8r4Y
+	z6qKdGCz1sqlYbfK79rQu86zuamRoIqtlvhAqcAuIdARnG4duCRiUzjEbxy+dcIap93RrtRtCBw
+	LAwdq0kVQ13FbghtzGnv/7Ofmnqa5WSiyrzfv+bQaQp7DS/thiXPlrDBM9d+0746CNIjfN3
+X-Google-Smtp-Source: AGHT+IF1uok4S2/ZJxGVMG6j0RZBxmZiPcUtNqCXKtotlWPr6F8OAXOZaMRmuRE8uDgHau7bT5W5RrHY3dcLjEjQckY=
+X-Received: by 2002:a17:907:3cd6:b0:b70:6f46:d401 with SMTP id
+ a640c23a62f3a-b72c093317amr195124066b.11.1762502433125; Fri, 07 Nov 2025
+ 00:00:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251023071748.513-1-dongxuyang@eswincomputing.com>
-X-Migadu-Flow: FLOW_OUT
+References: <cover.1762435376.git.geert+renesas@glider.be> <cfc32f8530d5c0d4a7fb33c482a4bf549f26ec24.1762435376.git.geert+renesas@glider.be>
+ <aQy0T2vUINze_6_q@smile.fi.intel.com> <CAMuHMdXVUJq36GvNUQE8FnHsX+=1jG4GOJ_034r=fgr_Rw4Djg@mail.gmail.com>
+ <aQzIIqNnTY41giH_@smile.fi.intel.com> <CAMuHMdW8ndAdGnSHopYFMWvw7wk7wKz_7+N91M1jRHoqK1KBrg@mail.gmail.com>
+ <c62eb5a727f149fb9d8b4a4c8d77418a@realtek.com>
+In-Reply-To: <c62eb5a727f149fb9d8b4a4c8d77418a@realtek.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 7 Nov 2025 09:59:56 +0200
+X-Gm-Features: AWmQ_bndsm6ikZxAsR6MbqZ_7CJczSuokLGcsZHpDoyZxbjksOeSkgDr0jWR8fA
+Message-ID: <CAHp75VeMqvywS20603yDSo-C3KCu+i+8vvDNuz3h9e8Ma9BOCw@mail.gmail.com>
+Subject: Re: [PATCH v6 12/26] bitfield: Add less-checking __FIELD_{GET,PREP}()
+To: Ping-Ke Shih <pkshih@realtek.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
+	Yury Norov <yury.norov@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Kim Seer Paller <kimseer.paller@analog.com>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Richard Genoud <richard.genoud@bootlin.com>, 
+	Cosmin Tanislav <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Jianping Shen <Jianping.Shen@de.bosch.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>, 
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, "qat-linux@intel.com" <qat-linux@intel.com>, 
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, 
+	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>, 
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>, 
+	"linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>, 
+	"linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	linux-wireless <linux-wireless@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 03:17:48PM +0800, dongxuyang@eswincomputing.com wrote:
-> From: Xuyang Dong <dongxuyang@eswincomputing.com>
-> 
-> Add device tree binding documentation for the ESWIN eic7700
-> clock controller module.
-> 
-> Signed-off-by: Yifeng Huang <huangyifeng@eswincomputing.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Xuyang Dong <dongxuyang@eswincomputing.com>
-LGTM. But as Krzysztof mentioned, it might not be on the
-priority review list.
+On Fri, Nov 7, 2025 at 3:16=E2=80=AFAM Ping-Ke Shih <pkshih@realtek.com> wr=
+ote:
+>
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, 6 Nov 2025 at 17:09, Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> > > On Thu, Nov 06, 2025 at 03:49:03PM +0100, Geert Uytterhoeven wrote:
+> > > > On Thu, 6 Nov 2025 at 15:44, Andy Shevchenko
+> > > > <andriy.shevchenko@intel.com> wrote:
+> > > > > On Thu, Nov 06, 2025 at 02:34:00PM +0100, Geert Uytterhoeven wrot=
+e:
+> > > > > > The BUILD_BUG_ON_MSG() check against "~0ull" works only with "u=
+nsigned
+> > > > > > (long) long" _mask types.  For constant masks, that condition i=
+s usually
+> > > > > > met, as GENMASK() yields an UL value.  The few places where the
+> > > > > > constant mask is stored in an intermediate variable were fixed =
+by
+> > > > > > changing the variable type to u64 (see e.g. [1] and [2]).
+> > > > > >
+> > > > > > However, for non-constant masks, smaller unsigned types should =
+be valid,
+> > > > > > too, but currently lead to "result of comparison of constant
+> > > > > > 18446744073709551615 with expression of type ... is always
+> > > > > > false"-warnings with clang and W=3D1.
+> > > > > >
+> > > > > > Hence refactor the __BF_FIELD_CHECK() helper, and factor out
+> > > > > > __FIELD_{GET,PREP}().  The later lack the single problematic ch=
+eck, but
+> > > > > > are otherwise identical to FIELD_{GET,PREP}(), and are intended=
+ to be
+> > > > > > used in the fully non-const variants later.
+> >
+> > > > > > +     BUILD_BUG_ON_MSG(__bf_cast_unsigned(mask, mask) >        =
+       \
+> > > > > > +                      __bf_cast_unsigned(reg, ~0ull),         =
+       \
+> > > > > > +                      pfx "type of reg too small for mask")
+> > > > >
+> > > > > Perhaps we may convert this (and others?) to static_assert():s at=
+ some point?
+> > > >
+> > > > Nick tried that before, without success:
+> > > > https://lore.kernel.org/all/CAKwvOdm_prtk1UQNJQGidZm44Lk582S3p=3Dof=
+0y46+rVjnSgXJg@mail.gmail.com
+> > >
+> > > Ah, this is unfortunate.
+> >
+> > Of course, it might be an actual bug in the i915 driver...
+> >
+> > The extra checking in field_prep() in case the compiler can
+> > determine that the mask is a constant already found a possible bug
+> > in drivers/net/wireless/realtek/rtw89/core.c:rtw89_roc_end():
+> >
+> >     rtw89_write32_mask(rtwdev, reg, B_AX_RX_FLTR_CFG_MASK, rtwdev->hal.=
+rx_fltr);
+> >
+> > drivers/net/wireless/realtek/rtw89/reg.h:
+> >
+> >     #define B_AX_RX_MPDU_MAX_LEN_MASK GENMASK(21, 16)
+> >     #define B_AX_RX_FLTR_CFG_MASK ((u32)~B_AX_RX_MPDU_MAX_LEN_MASK)
+> >
+> > so it looks like B_AX_RX_FLTR_CFG_MASK is not the proper mask for
+> > this operation...
+>
+> The purpose of the statements is to update values excluding bits of
+> B_AX_RX_MPDU_MAX_LEN_MASK. The use of B_AX_RX_FLTR_CFG_MASK is tricky, bu=
+t
+> the operation is correct because bit 0 is set, so __ffs(mask) returns 0 i=
+n
+> rtw89_write32_mask(). Then, operation looks like
+>
+>    orig =3D read(reg);
+>    new =3D (orig & ~mask) | (data & mask);
+>    write(new);
+>
+> Since we don't use FIELD_{GET,PREP} macros with B_AX_RX_FLTR_CFG_MASK, ho=
+w
+> can you find the problem? Please guide us. Thanks.
 
-Acked-by: Troy Mitchell <troy.mitchell@linux.dev>
+Isn't FIELD_MODIFY() what you want to use?
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
