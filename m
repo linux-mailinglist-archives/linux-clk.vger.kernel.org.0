@@ -1,184 +1,161 @@
-Return-Path: <linux-clk+bounces-30574-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30576-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C493C4542C
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Nov 2025 08:53:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 070FAC45832
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Nov 2025 10:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5CCC54E85CF
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Nov 2025 07:53:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A65B81890144
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Nov 2025 09:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A19279787;
-	Mon, 10 Nov 2025 07:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB95A2FE075;
+	Mon, 10 Nov 2025 09:05:33 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53F828C5B1
-	for <linux-clk@vger.kernel.org>; Mon, 10 Nov 2025 07:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC9B2FD66A
+	for <linux-clk@vger.kernel.org>; Mon, 10 Nov 2025 09:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762761234; cv=none; b=EHGUbnF1jioGcAmhLcvwTWN1vXiZS55j7G9qk1GHJvx6tH+ngW14ZU4kd4wgcg/UphF8YSL8WBUtA5ghyDGJBSno/lj7foA5ikmRszTAPycmIBQFgottSjMqMyS6/UOj/oelxL6nm7KuEumHZx7o4hdGEKlgl7T/zk3xc8kOKgc=
+	t=1762765533; cv=none; b=Z2dyAe4C1hG5gUo14zFr93J+gYqqkw41eXzkMU/7BU6Pkok1Cag0Z4fgWC+Wur9hf7uZZv1FQIAj3hOw9hUTwV6L1UMHJA1neKTePG9suVvtGykTQmUZ73GBRtL9y4LCFiuVhPHVr8XNILgLgv9cJw0ZzvxnOtwz128Ax9YGDDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762761234; c=relaxed/simple;
-	bh=wCMkYccJ40kQEpeS0gRyNupi2YzXSTU2Ywzj2Ab9tnc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Oa+iBPzE11WeJblpAQwf1BNWvL0sT/M6bYAb/ZHJHkSW+bra8A48KJR+/iz2FXNzoZhinWQsgqBpdkLw1y5hF917YQ0KemgmnkXl+Ey5PxOnJYS+12+yJKbYtT3KtTwXj9FLLRPxif/lmN39kfplOGXxaLjjJdAoTXlrp9EdEhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vIMiZ-0001jm-0O; Mon, 10 Nov 2025 08:53:39 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vIMiX-007z4n-0e;
-	Mon, 10 Nov 2025 08:53:37 +0100
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vIMiX-000000002gp-0Uik;
-	Mon, 10 Nov 2025 08:53:37 +0100
-Message-ID: <90e735aa4d0121c4ec6cf9772b80823b570d5a43.camel@pengutronix.de>
-Subject: Re: [PATCH RESEND v3 2/3] clk: en7523: Add reset-controller support
- for EN7523 SoC
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>, Michael Turquette	
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring	
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Felix
- Fietkau <nbd@nbd.name>, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
-Date: Mon, 10 Nov 2025 08:53:37 +0100
-In-Reply-To: <20251110035645.892431-3-mikhail.kshevetskiy@iopsys.eu>
-References: <20251110035645.892431-1-mikhail.kshevetskiy@iopsys.eu>
-	 <20251110035645.892431-3-mikhail.kshevetskiy@iopsys.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+deb13u1 
+	s=arc-20240116; t=1762765533; c=relaxed/simple;
+	bh=JRmjklDdMnXYPa/YzcCMj4xR0iBgS1Ed7pmHd076aaU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bN8UdSzboNJM9mdDyGYYEyZjGkNUWNdkQJRGbLIOVnn/Oiqv2a5m3Hiq4f/oFY0tz+bEv0fWoeVgJigETnhSz6MCip29IeiFPEdV25+nBEcT3LBSWWYNCnU8aT8syVhOea3gJXhiziO01gLuMNwsBhjeDIH14XUBJsClkYomUek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7a59ec9bef4so3099002b3a.2
+        for <linux-clk@vger.kernel.org>; Mon, 10 Nov 2025 01:05:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762765531; x=1763370331;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zuaR1c68u39/qbD5w07qCJ9IxeheIz5/8CL8hB/l6OE=;
+        b=DXCZtkT/YhPbewHK3Aerx44FGLnJpI3sdSR5gTwY3RZ8ZJ0HzYgTIOzI1Opp6zRoM1
+         0ydW7gTq/LRX42t7AZ4qvSA2yrEClhyugJa4YGAnnpDR8P8eZaJbTh+RD6LNmUK0KsGS
+         hTpWGXMXUlZreN5hxozExs3sAasWoFuEBVOLkTJgJqga2xwH+cDQBhP1Cxkq4RHzZjgb
+         WEFF6Mw3AkTZJLYkgg45o4B0m4KO6kW6BTnBY/aHYeqIJBW2wYYrP9/1KOjMCU61FQXh
+         o8XnAgU2RxXiRg5SNhFLCjdy4FwS+YmKSuBMa48rKJLXGIrUm/+37BIAdNvYYnjNBjzl
+         HF8A==
+X-Forwarded-Encrypted: i=1; AJvYcCXG4kXnbETn9Cut4oLCvrX7im6mrmf8wftmkD5p4gg3oHIUZAO+VfdKZEHPx3R2SIMI7jp3DY9tO0g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKridGOpdCewDFPLp1gVO3Ig208DZKB4cX7zb5eUzNl3qjD2yL
+	PGalDjz4B08qG4heoBjic8ZPjn6dbMK7tJvzpUpE5630afpYN2erwltbQ0hI2C7Y
+X-Gm-Gg: ASbGncscmz7sWjwrGO2kTTEr5z1pcETD/bW6VJyi5CIVejXO5kDYjTs9xh2CY/5CxLU
+	DRiju7mSppZkB8lpnzpizwMrS17ocC0SQ2LTQGuVrvQjbWo8x7kKSf1kDFAEhIP6nHD88MmIhhr
+	yZYe/Vd0Be0PawhW+ai9lJC5aFLx0PWe8jcsWJ3EomBGWm2PRLI2QUcs7q0hLHa0JnOVPWgKX/f
+	PEEaVrUsO9Xy3WrDnpFxuXF72mbEwxtops/4tUzniByKySSn0v6w76PzYT9KHBPO0k3w2W/9xSA
+	dq7BpBrOCF7aMnIGwWtQSOckWdGZYX/5NdkCT8UQKA/MekNEP8vjYVFrZlWXExHxnyyE2hGZMmH
+	4xPmeoqx4jZx8gvTqcw5EjRfrkzKmgx1bXTaFIY862sjxkn6sMhHEDFwyJNeqHMoadTILZjFxlj
+	tkqPCg9lymX73WVU12NCIPO7OgBsl6KsKJr55ObdRIoA==
+X-Google-Smtp-Source: AGHT+IE6erN1+xc2GviIpuXUchazJf66dhgGJ/l3PfoXwLx9zobJWs3AJxUzIRoBYZ8ikbT9GaHw9g==
+X-Received: by 2002:a05:6a20:3d86:b0:343:3d3c:4685 with SMTP id adf61e73a8af0-353a1de1402mr9464595637.18.1762765531137;
+        Mon, 10 Nov 2025 01:05:31 -0800 (PST)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com. [209.85.216.42])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0c953e2a4sm11319704b3a.6.2025.11.10.01.05.30
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 01:05:30 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3436d6bdce8so2011345a91.3
+        for <linux-clk@vger.kernel.org>; Mon, 10 Nov 2025 01:05:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVO7g9Qnh9Dt34dJMuJ7gC5SR0Eb6FNvatQl21nFTFh3Z5pDmaRfIPeKTvCrgxFQuxhHU6bLTO1Iro=@vger.kernel.org
+X-Received: by 2002:a05:6102:950:b0:5db:fb4c:3a89 with SMTP id
+ ada2fe7eead31-5ddc471358fmr2304047137.19.1762765185596; Mon, 10 Nov 2025
+ 00:59:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+References: <cover.1761588465.git.geert+renesas@glider.be> <97549838f28a1bb7861cfb42ee687f832942b13a.1761588465.git.geert+renesas@glider.be>
+ <20251102104326.0f1db96a@jic23-huawei> <CAMuHMdUkm2hxSW1yeKn8kZkSrosr8V-QTrHKSMkY2CPJ8UH_BQ@mail.gmail.com>
+ <20251109125956.106c9a1a@jic23-huawei>
+In-Reply-To: <20251109125956.106c9a1a@jic23-huawei>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 10 Nov 2025 09:59:34 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX8c1VkBuPDpJ5mpCcRH+zEX4F1bQKFf_V8N9ZZtCYqxA@mail.gmail.com>
+X-Gm-Features: AWmQ_bmD7LCstBufqr7pTwqKUhf3WnheTdaFZy-l1C13xKAmQ3xomq2Nqy5MxZo
+Message-ID: <CAMuHMdX8c1VkBuPDpJ5mpCcRH+zEX4F1bQKFf_V8N9ZZtCYqxA@mail.gmail.com>
+Subject: Re: [PATCH -next v5 10/23] iio: imu: smi330: #undef
+ field_{get,prep}() before definition
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Kim Seer Paller <kimseer.paller@analog.com>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Richard Genoud <richard.genoud@bootlin.com>, 
+	Cosmin Tanislav <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Jianping Shen <Jianping.Shen@de.bosch.com>, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org, qat-linux@intel.com, 
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mo, 2025-11-10 at 06:56 +0300, Mikhail Kshevetskiy wrote:
-> Introduce reset API support to EN7523 clock driver. EN7523 uses the
-> same reset logic as EN7581, so just reuse existing code.
->=20
-> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
+Hi Jonathan,
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+On Sun, 9 Nov 2025 at 14:01, Jonathan Cameron <jic23@kernel.org> wrote:
+> On Mon, 3 Nov 2025 11:09:36 +0100
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Sun, 2 Nov 2025 at 11:43, Jonathan Cameron <jic23@kernel.org> wrote:
+> > > On Mon, 27 Oct 2025 19:41:44 +0100
+> > > Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+> > >
+> > > > Prepare for the advent of globally available common field_get() and
+> > > > field_prep() macros by undefining the symbols before defining local
+> > > > variants.  This prevents redefinition warnings from the C preprocessor
+> > > > when introducing the common macros later.
+> > > >
+> > > > Suggested-by: Yury Norov <yury.norov@gmail.com>
+> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > >
+> > > So this is going to make a mess of merging your series given this is
+> > > queued up for next merge window.
+> > >
+> > > I can pick this one up perhaps and we loop back to the replacement of
+> > > these in a future patch?  Or perhaps go instead with a rename
+> > > of these two which is probably nicer in the intermediate state than
+> > > undefs.
+> >
+> > Renaming would mean a lot of churn.
+> > Just picking up the #undef patch should be simple and safe? The
+> > removal of the underf and redef can be done in the next cycle.
+> > Thanks!
+>
+> Only 1 call of each of these in the driver, so churn is small either way.
+>
+> To avoid a bisection problem if your tree merges first I need to modify
+> this stuff in the original patch or leave it for Linus to deal with as
+> a merge conflict resolution which is mess I'd rather do without.
 
-> ---
->  drivers/clk/clk-en7523.c | 64 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 59 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
-> index 15bbdeb60b8e..08cc8e5acf43 100644
-> --- a/drivers/clk/clk-en7523.c
-> +++ b/drivers/clk/clk-en7523.c
-> @@ -9,6 +9,7 @@
->  #include <linux/regmap.h>
->  #include <linux/reset-controller.h>
->  #include <dt-bindings/clock/en7523-clk.h>
-> +#include <dt-bindings/reset/airoha,en7523-reset.h>
->  #include <dt-bindings/reset/airoha,en7581-reset.h>
-> =20
->  #define RST_NR_PER_BANK			32
-> @@ -299,6 +300,53 @@ static const u16 en7581_rst_ofs[] =3D {
->  	REG_RST_CTRL1,
->  };
-> =20
-> +static const u16 en7523_rst_map[] =3D {
-> +	/* RST_CTRL2 */
-> +	[EN7523_XPON_PHY_RST]		=3D 0,
-> +	[EN7523_XSI_MAC_RST]		=3D 7,
-> +	[EN7523_XSI_PHY_RST]		=3D 8,
-> +	[EN7523_NPU_RST]		=3D 9,
-> +	[EN7523_I2S_RST]		=3D 10,
-> +	[EN7523_TRNG_RST]		=3D 11,
-> +	[EN7523_TRNG_MSTART_RST]	=3D 12,
-> +	[EN7523_DUAL_HSI0_RST]		=3D 13,
-> +	[EN7523_DUAL_HSI1_RST]		=3D 14,
-> +	[EN7523_HSI_RST]		=3D 15,
-> +	[EN7523_DUAL_HSI0_MAC_RST]	=3D 16,
-> +	[EN7523_DUAL_HSI1_MAC_RST]	=3D 17,
-> +	[EN7523_HSI_MAC_RST]		=3D 18,
-> +	[EN7523_WDMA_RST]		=3D 19,
-> +	[EN7523_WOE0_RST]		=3D 20,
-> +	[EN7523_WOE1_RST]		=3D 21,
-> +	[EN7523_HSDMA_RST]		=3D 22,
-> +	[EN7523_I2C2RBUS_RST]		=3D 23,
-> +	[EN7523_TDMA_RST]		=3D 24,
-> +	/* RST_CTRL1 */
-> +	[EN7523_PCM1_ZSI_ISI_RST]	=3D RST_NR_PER_BANK + 0,
-> +	[EN7523_FE_PDMA_RST]		=3D RST_NR_PER_BANK + 1,
-> +	[EN7523_FE_QDMA_RST]		=3D RST_NR_PER_BANK + 2,
-> +	[EN7523_PCM_SPIWP_RST]		=3D RST_NR_PER_BANK + 4,
-> +	[EN7523_CRYPTO_RST]		=3D RST_NR_PER_BANK + 6,
-> +	[EN7523_TIMER_RST]		=3D RST_NR_PER_BANK + 8,
-> +	[EN7523_PCM1_RST]		=3D RST_NR_PER_BANK + 11,
-> +	[EN7523_UART_RST]		=3D RST_NR_PER_BANK + 12,
-> +	[EN7523_GPIO_RST]		=3D RST_NR_PER_BANK + 13,
-> +	[EN7523_GDMA_RST]		=3D RST_NR_PER_BANK + 14,
-> +	[EN7523_I2C_MASTER_RST]		=3D RST_NR_PER_BANK + 16,
-> +	[EN7523_PCM2_ZSI_ISI_RST]	=3D RST_NR_PER_BANK + 17,
-> +	[EN7523_SFC_RST]		=3D RST_NR_PER_BANK + 18,
-> +	[EN7523_UART2_RST]		=3D RST_NR_PER_BANK + 19,
-> +	[EN7523_GDMP_RST]		=3D RST_NR_PER_BANK + 20,
-> +	[EN7523_FE_RST]			=3D RST_NR_PER_BANK + 21,
-> +	[EN7523_USB_HOST_P0_RST]	=3D RST_NR_PER_BANK + 22,
-> +	[EN7523_GSW_RST]		=3D RST_NR_PER_BANK + 23,
-> +	[EN7523_SFC2_PCM_RST]		=3D RST_NR_PER_BANK + 25,
-> +	[EN7523_PCIE0_RST]		=3D RST_NR_PER_BANK + 26,
-> +	[EN7523_PCIE1_RST]		=3D RST_NR_PER_BANK + 27,
-> +	[EN7523_PCIE_HB_RST]		=3D RST_NR_PER_BANK + 29,
-> +	[EN7523_XPON_MAC_RST]		=3D RST_NR_PER_BANK + 31,
-> +};
-> +
->  static const u16 en7581_rst_map[] =3D {
->  	/* RST_CTRL2 */
->  	[EN7581_XPON_PHY_RST]		=3D 0,
-> @@ -357,6 +405,9 @@ static const u16 en7581_rst_map[] =3D {
->  	[EN7581_XPON_MAC_RST]		=3D RST_NR_PER_BANK + 31,
->  };
-> =20
-> +static int en7581_reset_register(struct device *dev, void __iomem *base,
-> +				 const u16 *rst_map, int nr_resets);
-> +
->  static u32 en7523_get_base_rate(const struct en_clk_desc *desc, u32 val)
->  {
->  	if (!desc->base_bits)
-> @@ -552,7 +603,8 @@ static int en7523_clk_hw_init(struct platform_device =
-*pdev,
-> =20
->  	en7523_register_clocks(&pdev->dev, clk_data, base, np_base);
-> =20
-> -	return 0;
-> +	return en7581_reset_register(&pdev->dev, np_base, en7523_rst_map,
-> +				     ARRAY_SIZE(en7523_rst_map));
+If you add the #undef, there won't be any bisection problem?
 
-I wonder if this wouldn't be better moved out of hw_init(), with
-rst_map and the corresponding ARRAY_SIZE() stored in struct
-en_clk_soc_data. Registering a reset controller is not hardware
-initialization, after all. But that's not an issue with this patch.
+Gr{oetje,eeting}s,
 
-regards
-Philipp
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
