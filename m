@@ -1,46 +1,46 @@
-Return-Path: <linux-clk+bounces-30613-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30615-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B2DC4A3C8
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Nov 2025 02:08:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 709F4C4A896
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Nov 2025 02:31:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9A914F2C09
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Nov 2025 01:03:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8B3518947FC
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Nov 2025 01:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7AC263F28;
-	Tue, 11 Nov 2025 01:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B82346795;
+	Tue, 11 Nov 2025 01:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEO6YDwC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L1p/GbjX"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F27E261573;
-	Tue, 11 Nov 2025 01:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F7C2DBF5E;
+	Tue, 11 Nov 2025 01:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762822989; cv=none; b=H4Pw/UZ7ijD/GIYUT0lbYa8H7bbsNxLv9aeoQo2cZes/pzF+3FdhONLUADl4tUEA0cvhJ0hrlDN/JOIvzR1d1qJfQrhpN3CrnLTG7v3zFwGeGzhDdBrl7U9pRk2F+3IorN6t72SF8lGtWpF9oYJf7gLUY4W8P7D3LwZrDEkDhG4=
+	t=1762823645; cv=none; b=eYUtuoQEP0Y2c540ysiC/+HmvwO9/Y7UTJoT5POZuSQHq1uNji89Kc1ZaSXIvOprap573G3fp4tHrKKpdb29UJmJsfnMXFPhc34pGaVuDeHKHTmtPW6VqQtGvx+vhUFrbyY+EWTk1DsV6NuSwOSejMsQhbZC9Oh1WuDWwhVv7Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762822989; c=relaxed/simple;
-	bh=cKFBVOjE2TEHcfLrrrA/EssHwJW0Jxy9jfUxHSkNHWY=;
+	s=arc-20240116; t=1762823645; c=relaxed/simple;
+	bh=hLfKK5/Ndh+eKDHap1Bdk56Fe5GhqYZjeqm9QLFmsHE=;
 	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=sM/W1xOOTWhkfMMTN0BoIy1LsAy5i3+iW+Y5ACi3Z3vdGxUR2Ol+RzeWhFg+D0DPaAwbSMkt4qaDgRpS5qZOTeATQi+y7FJaLbhUy9U3UBQQvGWspoW9U6rRopU6EOYXJJYZPHEx7h/ygEddYYmItckj5yj+iqhQAHpi/YG0vCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEO6YDwC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB07C113D0;
-	Tue, 11 Nov 2025 01:03:09 +0000 (UTC)
+	 To:Date:Message-ID; b=Gl4pvQD5x9CxtJXzb+IPk3DCnVITWqYtdEr5nLKJLMzXz6gHmkze6LX6+wa898FVbIJ6nAWvWlZa2L0ryWq5NRRqnUd9KQAE1Oox/m96hV/+rGVRbY2LuCMCVAKHdYU/56ODZSiFsIZyNXnje4j8wV7lx/nf7TstlPAP43pbCPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L1p/GbjX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA3EC4CEF5;
+	Tue, 11 Nov 2025 01:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762822989;
-	bh=cKFBVOjE2TEHcfLrrrA/EssHwJW0Jxy9jfUxHSkNHWY=;
+	s=k20201202; t=1762823644;
+	bh=hLfKK5/Ndh+eKDHap1Bdk56Fe5GhqYZjeqm9QLFmsHE=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=BEO6YDwCL97Lq3hH324+aXN242l9nqQN9PpxhlBXN+Lj09QkjIDPAOHP9JczkK4n6
-	 C62TsALTLQtmCvi5eWbNrP2e96gpKbOwZEipIr7slNfZC6nLdYCBTN+8zZnQyh18hB
-	 oPy9tU4ElZi6uParvyLnrfsiIEX+kYjb3WmNf4NnJrMcrjJU5qbTNf9dmUoeKzaNTG
-	 h6mLRFBHb0qXNmM4DLZ+TfHASEUkc0/d8gf8FtvezHynukUnate5x8Knld5ka6K85O
-	 vp94X8U22BkskFWwn5u+9wqJ7r9QzkHksWEutPvOREwNVYhtt4c8+l9dbP1zQVLz8T
-	 kykKmKA8xHITw==
+	b=L1p/GbjXK46kKAXlv5v0GUaRYzGkUomhPVi7UP1Ty6+MPvQ97I7Ujpw1f/vsCaW3J
+	 b6TLQKlSnYX8DmaElmGL0Hn+5lR5Y8gJ13D+d5e1ta724iQCEMApJXcVWARaMeOOKN
+	 g4SolZKtnhgYNi3ttqRo/IBtc14o4CgZTG9xeOH46LhLIUhcwt30nII+T11N3Gmg0v
+	 xIauajruBBuh95tAqwxQX1kAv9LDmmgmujlx2Hil3O26b7h7HU9u/S0ZK68mA8tXBe
+	 jNV1BlxAmbc9ZD5nxkNdw1O5ww9KwPVE3BOX2RG1v7kasBWCVzRJVDHPoamBr70dkX
+	 7yK+HO/QpcRMw==
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -49,23 +49,35 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251106170607.445196-2-krzysztof.kozlowski@linaro.org>
-References: <20251106170607.445196-2-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] clk: sprd: sc9860: Simplify with of_device_get_match_data()
+In-Reply-To: <cover.1761906750.git.geert+renesas@glider.be>
+References: <cover.1761906750.git.geert+renesas@glider.be>
+Subject: Re: [GIT PULL] clk: renesas: Updates for v6.19
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Orson Zhai <orsonzhai@gmail.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 10 Nov 2025 17:03:07 -0800
-Message-ID: <176282298712.11952.3198486969488880182@lazor>
+Cc: linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>
+Date: Mon, 10 Nov 2025 17:14:02 -0800
+Message-ID: <176282364254.11952.2867679653974215283@lazor>
 User-Agent: alot/0.11
 
-Quoting Krzysztof Kozlowski (2025-11-06 09:06:08)
-> Driver's probe function matches against driver's of_device_id table,
-> where each entry has non-NULL match data, so of_match_node() can be
-> simplified with of_device_get_match_data().
+Quoting Geert Uytterhoeven (2025-10-31 03:43:56)
+>         Hi Mike, Stephen,
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df567=
+87:
+>=20
+>   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git=
+ tags/renesas-clk-for-v6.19-tag1
+>=20
+> for you to fetch changes up to 07525a693a5ff6592668a0fd647153e4b4933cae:
+>=20
+>   clk: renesas: r9a09g056: Add clock and reset entries for ISP (2025-10-2=
+7 12:15:00 +0100)
+>=20
+> ----------------------------------------------------------------
 
-Applied to clk-next
+Thanks. Pulled into clk-next
 
