@@ -1,45 +1,45 @@
-Return-Path: <linux-clk+bounces-30720-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30722-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E28C567C2
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 10:08:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 333ACC567EC
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 10:09:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 564114F0B43
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 09:00:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DE4743554F0
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 09:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EADA3385A3;
-	Thu, 13 Nov 2025 08:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB74C33ADA5;
+	Thu, 13 Nov 2025 08:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RPQz09cX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i6HACEtl"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C60334689
-	for <linux-clk@vger.kernel.org>; Thu, 13 Nov 2025 08:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15D03396F1;
+	Thu, 13 Nov 2025 08:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763024153; cv=none; b=b68SLhdMEAHMMJyni7/dmYu+kMSJTg/TQtbKvx+3kOLLuwthdT4B2Hk+gP2w6eoR+tq1pPNh4yHLfk+ytlbt47ZiBnKQKSiul4xXJkFw3PIzhvZWXBrtEzseUI3Bg8LUm4n+qWzQwugwKBuJNmBWn7Jql/Np9YxWu49/kbQZh8I=
+	t=1763024184; cv=none; b=CEJzmg0k4HGouyHv4+PbvsVq9V2ih93pfdJM3yDQOTuPzfGa/u2CcCGu0lrTaJJAuSLYoeW1FfZDoF/yjMgOKQcn4xcXYqjMX5dWQ1GfcTEPGH0HtcQF/iVRUf/kJJe8H0/RbpQpuLYqJXtF0PsDLlxppbvp8v2FAURjIPqsaQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763024153; c=relaxed/simple;
-	bh=C3ZMvDuioasZjRoAf0b9QlbXtu4KjheQxquE+z//3Lc=;
+	s=arc-20240116; t=1763024184; c=relaxed/simple;
+	bh=zp6SlYcPA6p/E0ySGHx+QoEp05+2+wht8ejef48Qeh8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N94rep4rf0NOfMzd/w1ZR6nNewZZLLxpnw9pSXRCYdwmm4XUT9OeTLsMOXgltmdDvOcz6dylwtd9293cMkEkgG9Mxlt1XD2KXhCr8vkIDhET7X4oQHt8M47zEwXNabHm02EiYOKU7aThrSBi69ejV2h+BuPB4x9Xk/rZcMQ8GEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RPQz09cX; arc=none smtp.client-ip=95.215.58.186
+	 Content-Type:Content-Disposition:In-Reply-To; b=lEQMIF1yKg+8Un3p2HqPfsgsX2UgG35eM10BThDAWdcHofHl1YmCJDfkl2hdgDZtbd3nUDhWh2BHIG9qPBIUCh9zvbMBySGqJDGtEfVdM0J0zgxjHpljPMTzrrar9CbEQKf2x7bPGFl4KqIZ+QmUe5Ky+UsBpSPDWi04kIBoqcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i6HACEtl; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 13 Nov 2025 10:55:39 +0200
+Date: Thu, 13 Nov 2025 10:56:10 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763024148; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1763024180; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=Z3c64nus2gBDbjXy+NF6FQnzWtEuBgRuvDiEA2DnSws=;
-	b=RPQz09cXWLNFyDIeftlUUnFKbHRoWTZ3H5vHit12U8KPbOwjYievJL+5BpKGPkW67Te7bx
-	NCvBRqMOckoCa0P77bXi3E7oqSJ9ibSFOGGWH1uPUz6Uqm6DvkBwXtWeM8Cp7kf4Ghyya8
-	Sdt5ImzIDNdlorpetfBjrZk0V3di31E=
+	bh=nWP3To9chHe8h02n9M1ldMghujzaU64BefpJAj3Yhlc=;
+	b=i6HACEtlEZRTsOq0Aw420IWJzeqnYlQlHrCGC44aRMpphV+QM19Nkd3SWxR/8Rh+VPI1Wx
+	YGN+xA5JY7HUIRIu9XqP51yViYUBKG2vuOAvUwSFyWUYnIzCJwJ3Kut3n0/z4NiKcvFHsa
+	ajjEH3CAha+UqO/Fa252aB6HqDN6iyw=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,9 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v4 14/16] power: supply: bd71828: Support wider register
- addresses
-Message-ID: <6248200397d3582fe926938736da66d6bbf9535d.1763022807.git.mazziesaccount@gmail.com>
+Subject: [PATCH v4 16/16] MAINTAINERS: Add ROHM BD72720 PMIC
+Message-ID: <3aa7088ba93e0faac1010897e5da2f0541022d9f.1763022807.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1763022807.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -73,111 +72,69 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eSUgsUv+8rMNn0JY"
+	protocol="application/pgp-signature"; boundary="a9hT/oob02Yt7ImX"
 Content-Disposition: inline
 In-Reply-To: <cover.1763022807.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---eSUgsUv+8rMNn0JY
+--a9hT/oob02Yt7ImX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The BD71828 power-supply driver assumes register addresses to be 8-bit.
-The new BD72720 will use stacked register maps to hide paging which is
-done using secondary I2C slave address. This requires use of 9-bit
-register addresses in the power-supply driver (added offset 0x100 to
-the 8-bit hardware register addresses).
-
-The cost is slightly used memory consumption as the members in the
-struct pwr_regs will be changed from u8 to unsigned int, which means 3
-byte increase / member / instance.
-This is currently 14 members (expected to possibly be increased when
-adding new variants / new functionality which may introduce new
-registers, but not expected to grow much) and 2 instances (will be 3
-instances when BD72720 gets added).
-
-So, even if the number of registers grew to 50 it'd be 150 bytes /
-instance. Assuming we eventually supported 5 variants, it'd be
-5 * 150 bytes, which stays very reasonable considering systems we are
-dealing with.
-
-As a side note, we can reduce the "wasted space / member / instance" from
-3 bytes to 1 byte, by using u16 instead of the unsigned int if needed. I
-rather use unsigned int to be initially prepared for devices with 32 bit
-registers if there is no need to count bytes.
+Add the ROHM BD72720 PMIC driver files to be maintained by undersigned.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 ---
 Revision history:
- v2 =3D> :
+ RFCv1 =3D>:
  - No changes
-
- RFCv1 =3D> v2:
- - New patch
 ---
- drivers/power/supply/bd71828-power.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/power/supply/bd71828-power.c b/drivers/power/supply/bd=
-71828-power.c
-index f667baedeb77..ce73c0f48397 100644
---- a/drivers/power/supply/bd71828-power.c
-+++ b/drivers/power/supply/bd71828-power.c
-@@ -44,19 +44,19 @@
- #define VBAT_LOW_TH			0x00D4
-=20
- struct pwr_regs {
--	u8 vbat_avg;
--	u8 ibat;
--	u8 ibat_avg;
--	u8 btemp_vth;
--	u8 chg_state;
--	u8 bat_temp;
--	u8 dcin_stat;
--	u8 dcin_collapse_limit;
--	u8 chg_set1;
--	u8 chg_en;
--	u8 vbat_alm_limit_u;
--	u8 conf;
--	u8 vdcin;
-+	unsigned int vbat_avg;
-+	unsigned int ibat;
-+	unsigned int ibat_avg;
-+	unsigned int btemp_vth;
-+	unsigned int chg_state;
-+	unsigned int bat_temp;
-+	unsigned int dcin_stat;
-+	unsigned int dcin_collapse_limit;
-+	unsigned int chg_set1;
-+	unsigned int chg_en;
-+	unsigned int vbat_alm_limit_u;
-+	unsigned int conf;
-+	unsigned int vdcin;
- };
-=20
- static const struct pwr_regs pwr_regs_bd71828 =3D {
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe01aa31c58b..7e3c1eac7cda 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22353,6 +22353,7 @@ S:	Supported
+ F:	drivers/clk/clk-bd718x7.c
+ F:	drivers/gpio/gpio-bd71815.c
+ F:	drivers/gpio/gpio-bd71828.c
++F:	drivers/gpio/gpio-bd72720.c
+ F:	drivers/mfd/rohm-bd71828.c
+ F:	drivers/mfd/rohm-bd718x7.c
+ F:	drivers/mfd/rohm-bd9576.c
+@@ -22369,6 +22370,7 @@ F:	drivers/watchdog/bd96801_wdt.c
+ F:	include/linux/mfd/rohm-bd71815.h
+ F:	include/linux/mfd/rohm-bd71828.h
+ F:	include/linux/mfd/rohm-bd718x7.h
++F:	include/linux/mfd/rohm-bd72720.h
+ F:	include/linux/mfd/rohm-bd957x.h
+ F:	include/linux/mfd/rohm-bd96801.h
+ F:	include/linux/mfd/rohm-bd96802.h
 --=20
 2.51.1
 
 
---eSUgsUv+8rMNn0JY
+--a9hT/oob02Yt7ImX
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkVnQsACgkQeFA3/03a
-ocVymgf9HuAKJbRXkn9pYwpQhTQZUTVZfclJ/tu5Iel6ae+3k6H8OdUxfS0ZeOGc
-S8uUNuPg5CVsyI5pBofeL/PtZeKuI+sNbwIaGlQG9otFoPs4zdlU4mlOkpLWCdKM
-Q9xNIoaP8CoKm93e2pqv+2TMknkd5FOKPcA4tI/aRHHIS8ySOx/+YmrtViSI0c2t
-M0e12+ETvMm6yWsvV/yyk/HnOgUw1wRGzLg/z9ENUrzbJUnfHYLJ/jwqlCoWj28K
-8uKSbFOqlC/ALQtF0CgJhmifKWwLvn/5KKGXwzTP4W6ZFfa8jgklQzcEAiGn9kjK
-yTZv2nsS9R9fctQWNcnDiwTFlqABGQ==
-=y79L
+iQEyBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkVnSoACgkQeFA3/03a
+ocUZKQf3RnWEJD5XEsjYHiqpfGbSkxCyq2y+9UDyXdp8Wuq1kAvLxy1AgMgYRhSQ
+Kgsi/BaCI4HQt1RS6SxDioeYjAslQzVgcDRCRi3Uzw9wp8VUHx7F1QtZ7UY1oEur
+jE+IMZO4jPa0DF5EZAaxwaIPXmls2Lk/O3GYxMkeOdE7FR1vrFnY1EgiRv50W7QV
+Ai0RXIpR56RHaFZUPcdAse7o5xlRmNfttvhTEiKQ5jPjz1TmkOKJeoRNCSPwutS8
+t1i5GYgJ2MpQtdnmIEomcGfUA+Ul0xZCDGXuX2luQeTy1ncCy2Bsc2qVg7UL1iYN
+xGOLD658Bmn8KrOss590oC5IroDe
+=n6lR
 -----END PGP SIGNATURE-----
 
---eSUgsUv+8rMNn0JY--
+--a9hT/oob02Yt7ImX--
 
