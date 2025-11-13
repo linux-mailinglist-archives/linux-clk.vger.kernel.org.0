@@ -1,45 +1,45 @@
-Return-Path: <linux-clk+bounces-30718-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30721-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B38C56712
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 10:02:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB169C5671A
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 10:02:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 554433A0381
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 08:59:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CA2E3A2DE4
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Nov 2025 09:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535BC340D9D;
-	Thu, 13 Nov 2025 08:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C9A3396EE;
+	Thu, 13 Nov 2025 08:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="So2O3v+L"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NtjW5dhB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3723233436D
-	for <linux-clk@vger.kernel.org>; Thu, 13 Nov 2025 08:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9709C3346B0
+	for <linux-clk@vger.kernel.org>; Thu, 13 Nov 2025 08:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763024126; cv=none; b=j/RjudH/HkbWzKnd7mjoUfGIfbEGiN6CM7ss3BQbK/qzxhhKrhdOF+TvkoC2I1qrl+iGnF05HqbhamNw1Dnv/hP+pfKxiWJcawdRKr1MUBUBSjRX8NtubwYMZ4xQ/gV6Nvh45wARiY6qYQM2kA5+FbPWqIeKpumTlRgrhBcgdMY=
+	t=1763024167; cv=none; b=phVJPNq/c1u4ZKhO3BCj82i4EI+5h4mSD8lyRIbjHNZNcwyYwV4VovBR38sZE3/JsciqiUQXj82Rs9Yss+LttGvQnwqyc/vg9x5bL7qLD8Hnp9BcPXCz83jlDXRr9OnaBixzxZJqRtQt9Z72YdOOgGb5IfD52DV6F/NNo33gzs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763024126; c=relaxed/simple;
-	bh=aYAFBOmIDFUMQV6gG3t1EytSgPZy68GCCSwjeK6BuKU=;
+	s=arc-20240116; t=1763024167; c=relaxed/simple;
+	bh=kCoYiDIEJXTWnJJ91GW2oTmv8V4l5uFRK1MDrMzowAI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KtXL4BoIq4iDpglXv/KRkYi71vhIR3+OxWCp547EoduXqiytw00+3+L95BHqaVtvc+c/qWproG++UTB+u6+zVeXC06CoZWc2QgKlGjw3mi+tQeL0KDw7SXUWhHeexWCUmxq5Iy+0fvjemxyZFt7KRj065XD8hzRHY7HzlO21l+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=So2O3v+L; arc=none smtp.client-ip=91.218.175.188
+	 Content-Type:Content-Disposition:In-Reply-To; b=X2JBX0W4DzGEBiisTQSqHMH6Ty5sTMm9wst3WbYMb/z33rZaxGKOTxEbVxmVqJSLh9TZoeXMurMCV/ltdeOCfQGW3wbjJMXfVb2wExmEpjuyEhRUctVkCFPYX8MNSF7Bk/Hvu/GtI8HXKZ/wTHAeRA1mGsbSFT4oKKAo/IEvkrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NtjW5dhB; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 13 Nov 2025 10:55:05 +0200
+Date: Thu, 13 Nov 2025 10:55:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763024112; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1763024162; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=p9urlC6OYIR48/xBlBNJmUBEIXy9CGBQiYwyq3/Edqo=;
-	b=So2O3v+LVwFK2S64xBJiUtIme4zYkKv9HwajY0uINWOLndzvvhXgmd5jcUA2hSgMPXgRIL
-	DLOjLJ314sosEuxAl8XJg76FufAJrhTX8Ro8sypWmk7hq+fhmNh5JgEkQVRp4x95nV4h1u
-	KOGxjt0jhE5VuVZB+SMiTv0Worn8tyU=
+	bh=p369BFLcTOxfBLF5WSAZbvmk0j4GSSLyZhaVjj9+fw4=;
+	b=NtjW5dhBE+QtShoFsEa6nwg/IHnuO+cvqddx2rjbz8yj6qs08nD0XPJRu2C6AcviL7FKf0
+	ugCDTE9TSFQqEdKd4hAhe4YshhfaC6+d57RrFnmnhLQS01Z/EO+RRFWaKzVyrAIb2sPtci
+	P/03tWdAWK7kb73MzxqdWHmk33OemR0=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,8 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v4 12/16] clk: clk-bd718x7: Support BD72720 clk gate
-Message-ID: <16c92cc14da67ec6354ee0ac4e1faef4af4d0994.1763022807.git.mazziesaccount@gmail.com>
+Subject: [PATCH v4 15/16] power: supply: bd71828-power: Support ROHM BD72720
+Message-ID: <4c83dd363ad493446bdb2c0a6e8add05bd62a0cb.1763022807.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1763022807.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -72,110 +72,344 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eEHz2p03zw8+XRiI"
+	protocol="application/pgp-signature"; boundary="c2fj4v70nTXxzG3/"
 Content-Disposition: inline
 In-Reply-To: <cover.1763022807.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---eEHz2p03zw8+XRiI
+--c2fj4v70nTXxzG3/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The BD72720 has similar simple clk gate as a few other ROHM PMICs.
+The ROHM BD72720 is a power management IC with a charger and coulomb
+counter block which is closely related to the charger / coulomb counter
+found from the BD71815, BD71828, BD71879 which are all supported by the
+bd71828-power driver. Due to the similarities it makes sense to support
+also the BD72720 with the same driver.
 
-Add support for BD72720 clk gate.
+Add basic support for the charger logic on ROHM BD72720.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 ---
 Revision history:
- RFCv1 =3D>:
+ v2 =3D> :
  - No changes
----
- drivers/clk/Kconfig       |  4 ++--
- drivers/clk/clk-bd718x7.c | 10 ++++++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3a1611008e48..619bd63a3c77 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -475,8 +475,8 @@ config COMMON_CLK_BD718XX
- 	tristate "Clock driver for 32K clk gates on ROHM PMICs"
- 	depends on MFD_ROHM_BD718XX || MFD_ROHM_BD71828
- 	help
--	  This driver supports ROHM BD71837, BD71847, BD71850, BD71815
--	  and BD71828 PMICs clock gates.
-+	  This driver supports ROHM BD71837, BD71847, BD71850, BD71815,
-+	  BD71828, and BD72720 PMICs clock gates.
+ RFCv1 =3D> v2:
+ - Support using 9-bit register addresses (offset of 0x100) with the
+   BD72720
+ - Simplify probe and IC data as we don't need two regmaps
+ - Drop two BD72720 specific functions as we no longer need different
+   regmap for it.
+
+Note: This patch depends on the series: "power: supply: add charger for
+BD71828" by Andreas:
+https://lore.kernel.org/all/20250918-bd71828-charger-v5-0-851164839c28@kemn=
+ade.info/
+
+NOTE: Fuel-gauging is not supported. You can find an unmaintained
+downstream reference-driver with a fuel-gauge example from:
+https://github.com/RohmSemiconductor/Linux-Kernel-PMIC-Drivers/releases/tag=
+/bd72720-reference-driver-v1
+---
+ drivers/power/supply/bd71828-power.c | 134 +++++++++++++++++++++++----
+ 1 file changed, 116 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/power/supply/bd71828-power.c b/drivers/power/supply/bd=
+71828-power.c
+index ce73c0f48397..438e220a9cb7 100644
+--- a/drivers/power/supply/bd71828-power.c
++++ b/drivers/power/supply/bd71828-power.c
+@@ -5,6 +5,7 @@
+ #include <linux/kernel.h>
+ #include <linux/mfd/rohm-bd71815.h>
+ #include <linux/mfd/rohm-bd71828.h>
++#include <linux/mfd/rohm-bd72720.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+@@ -51,12 +52,14 @@ struct pwr_regs {
+ 	unsigned int chg_state;
+ 	unsigned int bat_temp;
+ 	unsigned int dcin_stat;
++	unsigned int dcin_online_mask;
+ 	unsigned int dcin_collapse_limit;
+ 	unsigned int chg_set1;
+ 	unsigned int chg_en;
+ 	unsigned int vbat_alm_limit_u;
+ 	unsigned int conf;
+ 	unsigned int vdcin;
++	unsigned int vdcin_himask;
+ };
 =20
- config COMMON_CLK_FIXED_MMIO
- 	bool "Clock driver for Memory Mapped Fixed values"
-diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
-index ac40b669d60b..1cae974e6d1d 100644
---- a/drivers/clk/clk-bd718x7.c
-+++ b/drivers/clk/clk-bd718x7.c
-@@ -19,7 +19,8 @@
- #define BD71828_REG_OUT32K	0x4B
- /* BD71837 and BD71847 */
- #define BD718XX_REG_OUT32K	0x2E
--
-+/* BD72720 */
-+#define BD72720_REG_OUT32K	0x9a
- /*
-  * BD71837, BD71847, and BD71828 all use bit [0] to clk output control
-  */
-@@ -118,6 +119,10 @@ static int bd71837_clk_probe(struct platform_device *p=
-dev)
- 		c->reg =3D BD71815_REG_OUT32K;
- 		c->mask =3D CLK_OUT_EN_MASK;
+ static const struct pwr_regs pwr_regs_bd71828 =3D {
+@@ -67,12 +70,14 @@ static const struct pwr_regs pwr_regs_bd71828 =3D {
+ 	.chg_state =3D BD71828_REG_CHG_STATE,
+ 	.bat_temp =3D BD71828_REG_BAT_TEMP,
+ 	.dcin_stat =3D BD71828_REG_DCIN_STAT,
++	.dcin_online_mask =3D BD7182x_MASK_DCIN_DET,
+ 	.dcin_collapse_limit =3D BD71828_REG_DCIN_CLPS,
+ 	.chg_set1 =3D BD71828_REG_CHG_SET1,
+ 	.chg_en   =3D BD71828_REG_CHG_EN,
+ 	.vbat_alm_limit_u =3D BD71828_REG_ALM_VBAT_LIMIT_U,
+ 	.conf =3D BD71828_REG_CONF,
+ 	.vdcin =3D BD71828_REG_VDCIN_U,
++	.vdcin_himask =3D BD7182x_MASK_VDCIN_U,
+ };
+=20
+ static const struct pwr_regs pwr_regs_bd71815 =3D {
+@@ -85,6 +90,7 @@ static const struct pwr_regs pwr_regs_bd71815 =3D {
+ 	.chg_state =3D BD71815_REG_CHG_STATE,
+ 	.bat_temp =3D BD71815_REG_BAT_TEMP,
+ 	.dcin_stat =3D BD71815_REG_DCIN_STAT,
++	.dcin_online_mask =3D BD7182x_MASK_DCIN_DET,
+ 	.dcin_collapse_limit =3D BD71815_REG_DCIN_CLPS,
+ 	.chg_set1 =3D BD71815_REG_CHG_SET1,
+ 	.chg_en   =3D BD71815_REG_CHG_SET1,
+@@ -92,6 +98,31 @@ static const struct pwr_regs pwr_regs_bd71815 =3D {
+ 	.conf =3D BD71815_REG_CONF,
+=20
+ 	.vdcin =3D BD71815_REG_VM_DCIN_U,
++	.vdcin_himask =3D BD7182x_MASK_VDCIN_U,
++};
++
++static struct pwr_regs pwr_regs_bd72720 =3D {
++	.vbat_avg =3D BD72720_REG_VM_SA_VBAT_U,
++	.ibat =3D BD72720_REG_CC_CURCD_U,
++	.ibat_avg =3D BD72720_REG_CC_SA_CURCD_U,
++	.btemp_vth =3D BD72720_REG_VM_BTMP_U,
++	/*
++	 * Note, state 0x40 IMP_CHK. not documented
++	 * on other variants but was still handled in
++	 * existing code. No memory traces as to why.
++	 */
++	.chg_state =3D BD72720_REG_CHG_STATE,
++	.bat_temp =3D BD72720_REG_CHG_BAT_TEMP_STAT,
++	.dcin_stat =3D BD72720_REG_INT_VBUS_SRC,
++	.dcin_online_mask =3D BD72720_MASK_DCIN_DET,
++	.dcin_collapse_limit =3D -1, /* Automatic. Setting not supported */
++	.chg_set1 =3D BD72720_REG_CHG_SET_1,
++	.chg_en =3D BD72720_REG_CHG_EN,
++	/* 15mV note in data-sheet */
++	.vbat_alm_limit_u =3D BD72720_REG_ALM_VBAT_TH_U,
++	.conf =3D BD72720_REG_CONF, /* o XSTB, only PON. Seprate slave addr */
++	.vdcin =3D BD72720_REG_VM_VBUS_U, /* 10 bits not 11 as with other ICs */
++	.vdcin_himask =3D BD72720_MASK_VDCIN_U,
+ };
+=20
+ struct bd71828_power {
+@@ -298,7 +329,7 @@ static int get_chg_online(struct bd71828_power *pwr, in=
+t *chg_online)
+ 		dev_err(pwr->dev, "Failed to read DCIN status\n");
+ 		return ret;
+ 	}
+-	*chg_online =3D ((r & BD7182x_MASK_DCIN_DET) !=3D 0);
++	*chg_online =3D ((r & pwr->regs->dcin_online_mask) !=3D 0);
+=20
+ 	return 0;
+ }
+@@ -329,8 +360,8 @@ static int bd71828_bat_inserted(struct bd71828_power *p=
+wr)
+ 	ret =3D val & BD7182x_MASK_CONF_PON;
+=20
+ 	if (ret)
+-		regmap_update_bits(pwr->regmap, pwr->regs->conf,
+-				   BD7182x_MASK_CONF_PON, 0);
++		if (regmap_update_bits(pwr->regmap, pwr->regs->conf, BD7182x_MASK_CONF_P=
+ON, 0))
++			dev_err(pwr->dev, "Failed to write CONF register\n");
+=20
+ 	return ret;
+ }
+@@ -358,11 +389,13 @@ static int bd71828_init_hardware(struct bd71828_power=
+ *pwr)
+ 	int ret;
+=20
+ 	/* TODO: Collapse limit should come from device-tree ? */
+-	ret =3D regmap_write(pwr->regmap, pwr->regs->dcin_collapse_limit,
+-			   BD7182x_DCIN_COLLAPSE_DEFAULT);
+-	if (ret) {
+-		dev_err(pwr->dev, "Failed to write DCIN collapse limit\n");
+-		return ret;
++	if (pwr->regs->dcin_collapse_limit !=3D (unsigned int)-1) {
++		ret =3D regmap_write(pwr->regmap, pwr->regs->dcin_collapse_limit,
++				   BD7182x_DCIN_COLLAPSE_DEFAULT);
++		if (ret) {
++			dev_err(pwr->dev, "Failed to write DCIN collapse limit\n");
++			return ret;
++		}
+ 	}
+=20
+ 	ret =3D pwr->bat_inserted(pwr);
+@@ -419,7 +452,7 @@ static int bd71828_charger_get_property(struct power_su=
+pply *psy,
+ 		break;
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 		ret =3D bd7182x_read16_himask(pwr, pwr->regs->vdcin,
+-					    BD7182x_MASK_VDCIN_U, &tmp);
++					    pwr->regs->vdcin_himask, &tmp);
+ 		if (ret)
+ 			return ret;
+=20
+@@ -630,6 +663,9 @@ BD_ISR_AC(dcin_ovp_det, "DCIN OVER VOLTAGE", true)
+ BD_ISR_DUMMY(dcin_mon_det, "DCIN voltage below threshold")
+ BD_ISR_DUMMY(dcin_mon_res, "DCIN voltage above threshold")
+=20
++BD_ISR_DUMMY(vbus_curr_limit, "VBUS current limited")
++BD_ISR_DUMMY(vsys_ov_res, "VSYS over-voltage cleared")
++BD_ISR_DUMMY(vsys_ov_det, "VSYS over-voltage")
+ BD_ISR_DUMMY(vsys_uv_res, "VSYS under-voltage cleared")
+ BD_ISR_DUMMY(vsys_uv_det, "VSYS under-voltage")
+ BD_ISR_DUMMY(vsys_low_res, "'VSYS low' cleared")
+@@ -878,6 +914,51 @@ static int bd7182x_get_irqs(struct platform_device *pd=
+ev,
+ 		BDIRQ("bd71828-temp-125-over", bd71828_temp_vf125_det),
+ 		BDIRQ("bd71828-temp-125-under", bd71828_temp_vf125_res),
+ 	};
++	static const struct bd7182x_irq_res bd72720_irqs[] =3D {
++		BDIRQ("bd72720_int_vbus_rmv", BD_ISR_NAME(dcin_removed)),
++		BDIRQ("bd72720_int_vbus_det", bd7182x_dcin_detected),
++		BDIRQ("bd72720_int_vbus_mon_res", BD_ISR_NAME(dcin_mon_res)),
++		BDIRQ("bd72720_int_vbus_mon_det", BD_ISR_NAME(dcin_mon_det)),
++		BDIRQ("bd72720_int_vsys_mon_res", BD_ISR_NAME(vsys_mon_res)),
++		BDIRQ("bd72720_int_vsys_mon_det", BD_ISR_NAME(vsys_mon_det)),
++		BDIRQ("bd72720_int_vsys_uv_res", BD_ISR_NAME(vsys_uv_res)),
++		BDIRQ("bd72720_int_vsys_uv_det", BD_ISR_NAME(vsys_uv_det)),
++		BDIRQ("bd72720_int_vsys_lo_res", BD_ISR_NAME(vsys_low_res)),
++		BDIRQ("bd72720_int_vsys_lo_det", BD_ISR_NAME(vsys_low_det)),
++		BDIRQ("bd72720_int_vsys_ov_res", BD_ISR_NAME(vsys_ov_res)),
++		BDIRQ("bd72720_int_vsys_ov_det", BD_ISR_NAME(vsys_ov_det)),
++		BDIRQ("bd72720_int_bat_ilim", BD_ISR_NAME(vbus_curr_limit)),
++		BDIRQ("bd72720_int_chg_done", bd718x7_chg_done),
++		BDIRQ("bd72720_int_extemp_tout", BD_ISR_NAME(chg_wdg_temp)),
++		BDIRQ("bd72720_int_chg_wdt_exp", BD_ISR_NAME(chg_wdg)),
++		BDIRQ("bd72720_int_bat_mnt_out", BD_ISR_NAME(rechg_res)),
++		BDIRQ("bd72720_int_bat_mnt_in", BD_ISR_NAME(rechg_det)),
++		BDIRQ("bd72720_int_chg_trns", BD_ISR_NAME(chg_state_changed)),
++
++		BDIRQ("bd72720_int_vbat_mon_res", BD_ISR_NAME(bat_mon_res)),
++		BDIRQ("bd72720_int_vbat_mon_det", BD_ISR_NAME(bat_mon)),
++		BDIRQ("bd72720_int_vbat_sht_res", BD_ISR_NAME(bat_short_res)),
++		BDIRQ("bd72720_int_vbat_sht_det", BD_ISR_NAME(bat_short)),
++		BDIRQ("bd72720_int_vbat_lo_res", BD_ISR_NAME(bat_low_res)),
++		BDIRQ("bd72720_int_vbat_lo_det", BD_ISR_NAME(bat_low)),
++		BDIRQ("bd72720_int_vbat_ov_res", BD_ISR_NAME(bat_ov_res)),
++		BDIRQ("bd72720_int_vbat_ov_det", BD_ISR_NAME(bat_ov)),
++		BDIRQ("bd72720_int_bat_rmv", BD_ISR_NAME(bat_removed)),
++		BDIRQ("bd72720_int_bat_det", BD_ISR_NAME(bat_det)),
++		BDIRQ("bd72720_int_dbat_det", BD_ISR_NAME(bat_dead)),
++		BDIRQ("bd72720_int_bat_temp_trns", BD_ISR_NAME(temp_transit)),
++		BDIRQ("bd72720_int_lobtmp_res", BD_ISR_NAME(temp_bat_low_res)),
++		BDIRQ("bd72720_int_lobtmp_det", BD_ISR_NAME(temp_bat_low)),
++		BDIRQ("bd72720_int_ovbtmp_res", BD_ISR_NAME(temp_bat_hi_res)),
++		BDIRQ("bd72720_int_ovbtmp_det", BD_ISR_NAME(temp_bat_hi)),
++		BDIRQ("bd72720_int_ocur1_res", BD_ISR_NAME(bat_oc1_res)),
++		BDIRQ("bd72720_int_ocur1_det", BD_ISR_NAME(bat_oc1)),
++		BDIRQ("bd72720_int_ocur2_res", BD_ISR_NAME(bat_oc2_res)),
++		BDIRQ("bd72720_int_ocur2_det", BD_ISR_NAME(bat_oc2)),
++		BDIRQ("bd72720_int_ocur3_res", BD_ISR_NAME(bat_oc3_res)),
++		BDIRQ("bd72720_int_ocur3_det", BD_ISR_NAME(bat_oc3)),
++		BDIRQ("bd72720_int_cc_mon2_det", BD_ISR_NAME(bat_cc_mon)),
++	};
+ 	int num_irqs;
+ 	const struct bd7182x_irq_res *irqs;
+=20
+@@ -890,6 +971,10 @@ static int bd7182x_get_irqs(struct platform_device *pd=
+ev,
+ 		irqs =3D &bd71815_irqs[0];
+ 		num_irqs =3D ARRAY_SIZE(bd71815_irqs);
  		break;
 +	case ROHM_CHIP_TYPE_BD72720:
-+		c->reg =3D BD72720_REG_OUT32K;
-+		c->mask =3D CLK_OUT_EN_MASK;
++		irqs =3D &bd72720_irqs[0];
++		num_irqs =3D ARRAY_SIZE(bd72720_irqs);
 +		break;
  	default:
- 		dev_err(&pdev->dev, "Unknown clk chip\n");
  		return -EINVAL;
-@@ -146,6 +151,7 @@ static const struct platform_device_id bd718x7_clk_id[]=
- =3D {
- 	{ "bd71847-clk", ROHM_CHIP_TYPE_BD71847 },
- 	{ "bd71828-clk", ROHM_CHIP_TYPE_BD71828 },
- 	{ "bd71815-clk", ROHM_CHIP_TYPE_BD71815 },
-+	{ "bd72720-clk", ROHM_CHIP_TYPE_BD72720 },
+ 	}
+@@ -958,21 +1043,27 @@ static int bd71828_power_probe(struct platform_devic=
+e *pdev)
+ 	struct power_supply_config ac_cfg =3D {};
+ 	struct power_supply_config bat_cfg =3D {};
+ 	int ret;
+-	struct regmap *regmap;
+-
+-	regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+-	if (!regmap) {
+-		dev_err(&pdev->dev, "No parent regmap\n");
+-		return -EINVAL;
+-	}
+=20
+ 	pwr =3D devm_kzalloc(&pdev->dev, sizeof(*pwr), GFP_KERNEL);
+ 	if (!pwr)
+ 		return -ENOMEM;
+=20
+-	pwr->regmap =3D regmap;
+-	pwr->dev =3D &pdev->dev;
++	/*
++	 * The BD72720 MFD device registers two regmaps. Power-supply driver
++	 * uses the "wrap-map", which provides access to both of the I2C slave
++	 * addresses used by the BD72720
++	 */
+ 	pwr->chip_type =3D platform_get_device_id(pdev)->driver_data;
++	if (pwr->chip_type !=3D ROHM_CHIP_TYPE_BD72720)
++		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
++	else
++		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, "wrap-map");
++	if (!pwr->regmap) {
++		dev_err(&pdev->dev, "No parent regmap\n");
++		return -EINVAL;
++	}
++
++	pwr->dev =3D &pdev->dev;
+=20
+ 	switch (pwr->chip_type) {
+ 	case ROHM_CHIP_TYPE_BD71828:
+@@ -985,6 +1076,12 @@ static int bd71828_power_probe(struct platform_device=
+ *pdev)
+ 		pwr->get_temp =3D bd71815_get_temp;
+ 		pwr->regs =3D &pwr_regs_bd71815;
+ 		break;
++	case ROHM_CHIP_TYPE_BD72720:
++		pwr->bat_inserted =3D bd71828_bat_inserted;
++		pwr->regs =3D &pwr_regs_bd72720;
++		pwr->get_temp =3D bd71828_get_temp;
++		dev_dbg(pwr->dev, "Found ROHM BD72720\n");
++		break;
+ 	default:
+ 		dev_err(pwr->dev, "Unknown PMIC\n");
+ 		return -EINVAL;
+@@ -1030,6 +1127,7 @@ static int bd71828_power_probe(struct platform_device=
+ *pdev)
+ static const struct platform_device_id bd71828_charger_id[] =3D {
+ 	{ "bd71815-power", ROHM_CHIP_TYPE_BD71815 },
+ 	{ "bd71828-power", ROHM_CHIP_TYPE_BD71828 },
++	{ "bd72720-power", ROHM_CHIP_TYPE_BD72720 },
  	{ },
  };
- MODULE_DEVICE_TABLE(platform, bd718x7_clk_id);
-@@ -161,6 +167,6 @@ static struct platform_driver bd71837_clk =3D {
- module_platform_driver(bd71837_clk);
-=20
- MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
--MODULE_DESCRIPTION("BD718(15/18/28/37/47/50) and chip clk driver");
-+MODULE_DESCRIPTION("BD718(15/18/28/37/47/50) and BD72720 chip clk driver");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:bd718xx-clk");
+ MODULE_DEVICE_TABLE(platform, bd71828_charger_id);
 --=20
 2.51.1
 
 
---eEHz2p03zw8+XRiI
+--c2fj4v70nTXxzG3/
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkVnOkACgkQeFA3/03a
-ocXIFAf/dTWebPRaTV3vBZaxLueuxBYLcF0xQHPRMDwXJHLta80As4drk1FI7DLm
-rvrHJmBiO5Bo4wqweiPnvetGUYOUj3qHK22oFs+VLaAmwESHd1AWYKDwYyJsgUCU
-RnL6d5OrrCI+wpcg+/E3rq95ObjRHE8p4ioEPgaxfzFyypgTRZ/lcxWnNXVucNK3
-690umWyZS90F9IsGcg1qEbT1KfXHt4aXVvdq7+/R5Kx4FolUZAJRtESfNvwkN7SZ
-pNkmdVd3ofCLQUxDAu2vea0UKc8aleMUIsyc5dy3X/85y/zoz9zxCIA+NWvxPRme
-d2a8ndI059XouOBozwmEqhRMvP9zcg==
-=g766
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkVnRsACgkQeFA3/03a
+ocW+cAf+O9clxhkaaHMPxeclC9tdvVlH/U3sbTghLqGGCHLwlP/FH2KAqVcNnjde
+ciye21jnFoYliw4mKW7Ymw+Kr9hEI8p8gPqJYtICfDnwGPl0gFoDkj/8sVjlvryX
+QCbsjIVjWXxecFHYvOz3mAAI3nZ4m+H2lBLCWsmhwB1kyGWVW3B18R9PjVeGeCGN
+QO638P/WnxLR4ac9DnMFVkl1VBV7oAahtQYZ0XqewBIFempWplYgD1aoOQujh7oJ
+IaIct92rJVZTO4P9cYSUchOTiR7SA2owK5ab+5LjSOVXWbe9DQjod0pY6FFqjpAW
+P0A8k6kzyy0pOnd4TR24fxn+/xO0Jg==
+=QhAN
 -----END PGP SIGNATURE-----
 
---eEHz2p03zw8+XRiI--
+--c2fj4v70nTXxzG3/--
 
