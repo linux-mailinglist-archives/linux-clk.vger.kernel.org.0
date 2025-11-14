@@ -1,204 +1,253 @@
-Return-Path: <linux-clk+bounces-30757-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30761-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E50C5BCA9
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 08:31:31 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 897CEC5C111
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 09:46:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1719F342BD4
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 07:31:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6D01D34B1AE
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 08:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F6F2F6566;
-	Fri, 14 Nov 2025 07:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BFA2FFDDF;
+	Fri, 14 Nov 2025 08:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ihh3mPg2"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ptHOZBfG";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="OydssMI6"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D46D2C15AA;
-	Fri, 14 Nov 2025 07:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2B02FE078
+	for <linux-clk@vger.kernel.org>; Fri, 14 Nov 2025 08:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763105480; cv=none; b=f3KyiA1YXz/njNaPtD8G1FqUuu0QfMGFY5cVBrJvkE5HP6ycEDHI7t8mHS3IXBDS5GSQSKYQp/WLzHywN/J7bfOJOfSgDJg7olG0p6bPfoPKRsihfZGBCz9QmZILlkXEHc+dl23XWFkN6CZJAjXPHTVa+COF9hMs6mrGjQms/qM=
+	t=1763109842; cv=none; b=R0qagQU+ng2F8rnWeW2PtJ4IyZvfAoMulRdwD98AEDilqP+QRc7twPTc+WdMPDoiXBd1I+YfLF1pLSGa2pwLvrQRU/y3Tq7wGlbLufn7EIHG57DI0CNqUEURkMDzJ/ps7d2gZ60Oq52aHPZrhDeuYIsgCPDvrQ8ymKFdHyWAY/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763105480; c=relaxed/simple;
-	bh=IxF8X1vfgVSVMfT8B2eub1WyPsdDbytWvtHeqhTmLhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bHcQIEK6/4AM+zIqvhoF1bnKY240npXMQZDDvhWLUTwEi7327xIZL4e09xOsbeVs024VgXKlFQ8CrhjYirP4oaVbGcW2ORim9u7vvYtMyMPTGCXDUSt+IzZhuwuTEWVQPhjKZK2BLzXkzVacnN43/HHMDaFR1NKcRgYg3JKKFgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ihh3mPg2; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id C03E9C10F5B;
-	Fri, 14 Nov 2025 07:30:54 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6DB946060E;
-	Fri, 14 Nov 2025 07:31:16 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 91780102F24BE;
-	Fri, 14 Nov 2025 08:30:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1763105473; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=I/md1yzfYHmg4zf6NhSCwlxOr7WiJ5xSExfYcNRcf0c=;
-	b=Ihh3mPg240Inv5tK6a0y2bc6iUFXi846hUKdidOylUDZuvveWMMENdHQaSkRED6RzFOXBq
-	s3tYQSOkev+hYVQeHR4xdj9gsjCBZE4xoVzfSAK/1g2MipCnnjRB9Bkk5GjuXG3Cx7DOFw
-	kYgFKBggTQm+b9pCxa+CSSQ/ZTWCwURcGhX3PYd9ux7EBGyx/9AHjyRmK+4KGnJIGUEThM
-	qzUZSLvpXFlxbq5qUbppYDVR3bLAksRf/LYtY1SMB9VNJh0223ScvrKjeOG9M97dF0T3LW
-	uvqxAXMSPLBRG2VoFl3r/PtCN/OynUaIXjcWuLff+sSzDc+2UloAc/8A3W9eSw==
-Date: Fri, 14 Nov 2025 08:30:56 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-Message-ID: <20251114083056.31553866@bootlin.com>
-In-Reply-To: <CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-6-herve.codina@bootlin.com>
-	<20251030141448.GA3853761-robh@kernel.org>
-	<20251031162004.180d5e3f@bootlin.com>
-	<20251112142632.GA1610836-robh@kernel.org>
-	<CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1763109842; c=relaxed/simple;
+	bh=4W3PW+/8rvDXVUcpg4gcxwbdAJsW2vURL8IYXfhgkeg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SPWbv02Zlol+yPWB7qP2OShbUGqnnZXbfW4gAf0UleYGhSyhQUzgoOHS0l77AztcpJod6biQWyQmTr7WcrhFFn037LSfvYkRo19VaZoITg+rGx6hNoeyiHIV5nU8RgyD0eHXIL1xi6QKfj1pZXNCB9cPKXgHTXpFwDzyiyQSU7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ptHOZBfG; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OydssMI6; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AE83HwA1582950
+	for <linux-clk@vger.kernel.org>; Fri, 14 Nov 2025 08:43:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4KysJawHwaaBhDk0PHT1s/DETKrJ3/17/2/MQdw+4wI=; b=ptHOZBfGV/Dbveh5
+	YnEY2eL2HfYXeK9TCPcZwKemkuPGkXyrEfXfhgBUcD02kn5HSr1/RWk4b4CwB4WF
+	nvwZAfDuhlP+KPo2RT6qPoNa3jROy3mw7xILUCAYIxveMnsV+gT3L/dNjYY3VMQg
+	qo1CeMTwwhwRBcOu8OYxE23yGkwRA2hliUGk3Cp9JX8C4TCsRaN8Je/iB4zF8wae
+	6GQ0fo4fwxtvD6/INwYuxFSdneRw8wtHI/CZBO0KsCf5o6VvY5yyMGJUctCAfkHq
+	poY/5jsphB/xxtM04saLlaxJPjw9d97AEFFE0cBP/BIWfufhMOnpnHd4HAonjKdy
+	6N3iOw==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4adr9fsg1c-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Fri, 14 Nov 2025 08:43:58 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-34377900dbcso2639221a91.2
+        for <linux-clk@vger.kernel.org>; Fri, 14 Nov 2025 00:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1763109837; x=1763714637; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4KysJawHwaaBhDk0PHT1s/DETKrJ3/17/2/MQdw+4wI=;
+        b=OydssMI6wTQd4kqi/DlNJ1NAA+LANkf5Vqhuq1zOtb+dh5MExcnmFvHrvXJMzVEkRJ
+         sSYqAnvdFi+wKy9PqQ+M1nFdYISHciEeLP1GOcLbKqzv+NLGRE2SHAgiPinqYVedkSKR
+         OrcNE5Gv2VKPpQueA8gDCCLUMYK7JbuYgOf1xYAK32ZsUjOxMODQ10sHjf22CyfCBHmA
+         QKTJp8+OKQwUmyAAQk9avif8kcP/xniBgfjVAw3nJbiV0wZ3GpYkyxp0tWsIeLb4/yVw
+         LV1v86uzrWV3eVSJZWfT76g6mzkBH+p/03fTN5K51X9zIcMhh8G4d52tGwt8/+8fdHqX
+         +g2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763109837; x=1763714637;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4KysJawHwaaBhDk0PHT1s/DETKrJ3/17/2/MQdw+4wI=;
+        b=evqrCwd68AhipX8jK4VNjpRQx0l9XfRwzZzW07h3dIZl1qQF/EdsX9otNw3IPNwAb3
+         qG8kG+dARCA41icjkY+fsNaKOb+mUZMnxxU2TLS40f3Iyjz2OVC0kEyHj7b4CDkrbeyY
+         6u+2jZg+tD5rvmFSsHBjcH4JSiWpUSBPSRUDeAir/9hRdQMvVI6DUw2SKJV6hdmBZSRo
+         oVPbivBsOWg4EZMLNDos0Eff4j8I+RmOpqqWdJdRzJMXID9fWa8b6BxUqW0AGq/yT09+
+         tjBiMPY5BMOY+UlZZM4QlfEl+UwjrojIoG4n5AdA7PW+nsNZAj9CBRH4Pi1YVg/DZFPJ
+         DmSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7wZwMq77BjQTohc33pEbNEsZOg3r9s8HL0/Mx9Rcbs30vKsqwPSJNbYxzDjO0YZ/DJZDA6JQI7k0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfzL+wUw05eBIiVGPIcaTk05vSUzu+KSLnIjXgrwiSjmxcHb3G
+	ohAE4REn+4pK1QMtoDaYfdQ+ivN3Cr/rn/I0vcIDRpwm7XD3fhBP/3k+hPd2A2AXesmXq9nkSsZ
+	DztIHPpguR+ilH3MqlNfdc+goc0+dXI8H1oeKOvMx4OvdWTwxoY/EA9+LCt4KVDs=
+X-Gm-Gg: ASbGncuLJvECwpyMQBFPuW3QT12KJCOICIC9i5zZlvbX9+J/R7seBuujIAr9Jl8k4Jn
+	QSLm2eZRhicScn58l8HPOP9D4Zp2QGB8i52kQZIXNt5k22U+HrSk1viXAyR6e7VR2hFJNJGGaGu
+	K+chjgSEEo30wQDGwnMjAlFlsLWztSiPBJ8PhQe6ZzxAoISrQHpnXz8CXwXQ/OcjM7ATAX6W+sZ
+	l5k6eVorqhrEvMXgCuGMOuYoD7NedUwrzGx3SsDGyYBsj40nNaU66x+VlsezYoKkwIZuSp3uZUm
+	ecqIj00HGSRkzoDQ95zDNgvkfuQEmSM5zMEtnXeZ29f9NqdzWZJo3E17UGHi96LlMrakSPMJaEY
+	4IayQk1HjkbD6CZaXb0sIME/57A==
+X-Received: by 2002:a05:6a20:4329:b0:358:dc7d:a2d0 with SMTP id adf61e73a8af0-35b9fc781cdmr3586485637.7.1763109837183;
+        Fri, 14 Nov 2025 00:43:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEicXfiNpeEOekwoI5ToqdCDNv9WTuMtdcrC45s6cp7XCiKNqqnedzAju2s/J/GR6ByWsB/sg==
+X-Received: by 2002:a05:6a20:4329:b0:358:dc7d:a2d0 with SMTP id adf61e73a8af0-35b9fc781cdmr3586455637.7.1763109836655;
+        Fri, 14 Nov 2025 00:43:56 -0800 (PST)
+Received: from [10.218.35.249] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc37517864asm4121968a12.17.2025.11.14.00.43.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Nov 2025 00:43:56 -0800 (PST)
+Message-ID: <380aa79f-f334-44db-9527-85247f9735af@oss.qualcomm.com>
+Date: Fri, 14 Nov 2025 14:13:49 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/6] clk: qcom: rpmh: Add support for Kaanapali rpmh
+ clocks
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, jingyi.wang@oss.qualcomm.com,
+        aiqun.yu@oss.qualcomm.com, Ajit Pandey <ajit.pandey@oss.qualcomm.com>,
+        Imran Shaik <imran.shaik@oss.qualcomm.com>,
+        Jagadeesh Kona <jagadeesh.kona@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251030-gcc_kaanapali-v2-v2-0-a774a587af6f@oss.qualcomm.com>
+ <20251030-gcc_kaanapali-v2-v2-4-a774a587af6f@oss.qualcomm.com>
+ <swma6lyjfmyhl5ookdzvpjn5qresgsze5wptg45jfgj7ub6a4t@bdgfstw6gzoq>
+Content-Language: en-US
+From: Taniya Das <taniya.das@oss.qualcomm.com>
+In-Reply-To: <swma6lyjfmyhl5ookdzvpjn5qresgsze5wptg45jfgj7ub6a4t@bdgfstw6gzoq>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-Authority-Analysis: v=2.4 cv=SdD6t/Ru c=1 sm=1 tr=0 ts=6916ebce cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=HYvDxcvnGcN7GFw1JaQA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-GUID: Gz_vSinOZL-5-VXYwLDk49NE2S2s62ML
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE0MDA2OCBTYWx0ZWRfXxLJgYkIQT8D2
+ cauBa7HvUrB/2BhJL2Yjq7wCn9EGjyjm9RZJa9LDig3DeLZrJWLVEdjTueQv+lGGVZ1UWhnWytl
+ HqfCy6SU4/hdvWT1xx4zNO8ESDZrlDvJEoZlF8ZkGh2V/7x4lOhsyxtmLF2oPEgjlWfHF7Fm/xq
+ Wu5EFX49mY3p5uoozSmFrv2T6zMne4Gon5hUX96r1FyUSb49qXUsgC5gcAxZaPp6bnXlkua0wSW
+ C2d1NZeRB8FAf4Bxjqh4AuJgnQEhH9juliEnhv+HrXrTLKUvmEt6CfI/FQ9/X1xYjRo1luC4756
+ YvkVmpza9KY2g1zTpwEBe3Ghhus26mfGMzBWIgJGl3dvxR64c8Cka7IF//TTpVb5ehi18keIGvH
+ Ng19u9GwLbamVT1qzYru474trJ0TAw==
+X-Proofpoint-ORIG-GUID: Gz_vSinOZL-5-VXYwLDk49NE2S2s62ML
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-14_02,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511140068
 
-Hi Rob,
 
-On Wed, 12 Nov 2025 13:29:09 -0600
-Rob Herring <robh@kernel.org> wrote:
 
-> On Wed, Nov 12, 2025 at 8:26 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Fri, Oct 31, 2025 at 04:20:04PM +0100, Herve Codina wrote:  
-> > > Hi Rob,
-> > >
-> > > On Thu, 30 Oct 2025 09:14:48 -0500
-> > > Rob Herring <robh@kernel.org> wrote:
-> > >  
-> > > > On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:  
-> > > > > A Simple Platform Bus is a transparent bus that doesn't need a specific
-> > > > > driver to perform operations at bus level.
-> > > > >
-> > > > > Similar to simple-bus, a Simple Platform Bus allows to automatically
-> > > > > instantiate devices connected to this bus.
-> > > > >
-> > > > > Those devices are instantiated only by the Simple Platform Bus probe
-> > > > > function itself.  
-> > > >
-> > > > Don't let Greg see this... :)
-> > > >
-> > > > I can't say I'm a fan either. "Platform bus" is a kernel thing, and the
-> > > > distinction here between the 2 compatibles is certainly a kernel thing.
-> > > >
-> > > > I think this needs to be solved within the kernel.  
-> > >
-> > > I fully agree with that.
-> > >  
-> > > >
-> > > > What I previously said is define a list of compatibles to not
-> > > > instantiate the child devices. This would essentially be any case having
-> > > > a specific compatible and having its own driver. So if someone has
-> > > > 'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if
-> > > > they add a driver for "vendor,not-so-simple-bus", then they have to add
-> > > > the compatible to the list in the simple-pm-bus driver. I wouldn't
-> > > > expect this to be a large list. There's only a handful of cases where
-> > > > "simple-bus" has a more specific compatible. And only a few of those
-> > > > have a driver. A more general and complicated solution would be making
-> > > > linux handle 2 (or more) drivers matching a node and picking the driver
-> > > > with most specific match. That gets complicated with built-in vs.
-> > > > modules. I'm not sure we really need to solve that problem.  
-> > >
-> > > Right. Let discard the "more general and complicated solution" and focus
-> > > on the list of compatible to avoid child devices instantiation.
-> > >
-> > > Do you mean that, for "simple-bus" compatible we should:
-> > >  - Remove the recursive device instantiation from of_platform_populate().  
-> >
-> > That may be a problem I hadn't considered. While we've solved most probe
-> > ordering issues, I think some may remain. Even when of_platform_populate()
-> > is called affects this. For example, I tried removing various arm32
-> > of_platform_.*populate() calls which run earlier than the default call,
-> > but that broke some platforms. (Looking at the list of remaining ones, I
-> > fixed the at91 pinctrl/gpio drivers, but never tried to remove the
-> > calls again.)
-> >
-> > Maybe this can be restricted to cases which are not recursively created
-> > from the root node. Not sure how we detect that. Perhaps no OF_POPULATED
-> > flag on the parent node? Or we could just enable this for OF_DYNAMIC
-> > nodes? That should be sufficient for your usecase.  
+On 11/11/2025 4:16 PM, Dmitry Baryshkov wrote:
+> On Thu, Oct 30, 2025 at 04:39:07PM +0530, Taniya Das wrote:
+>> Add the RPMH clocks present in Kaanapali SoC.
+>>
+>> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+>> Signed-off-by: Taniya Das <taniya.das@oss.qualcomm.com>
+>> ---
+>>  drivers/clk/qcom/clk-rpmh.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 42 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index 1a98b3a0c528c24b600326e6b951b2edb6dcadd7..fd0fe312a7f2830a27e6effc0c0bd905d9d5ebed 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -395,6 +395,19 @@ DEFINE_CLK_RPMH_VRM(clk4, _a, "C4A_E0", 1);
+>>  DEFINE_CLK_RPMH_VRM(clk5, _a, "C5A_E0", 1);
+>>  DEFINE_CLK_RPMH_VRM(clk8, _a, "C8A_E0", 1);
+>>  
+>> +DEFINE_CLK_RPMH_VRM(ln_bb_clk1, _a2_e0, "C6A_E0", 2);
+>> +DEFINE_CLK_RPMH_VRM(ln_bb_clk2, _a2_e0, "C7A_E0", 2);
+>> +DEFINE_CLK_RPMH_VRM(ln_bb_clk3, _a2_e0, "C8A_E0", 2);
+>> +
+>> +DEFINE_CLK_RPMH_VRM(rf_clk1, _a_e0, "C1A_E0", 1);
+>> +DEFINE_CLK_RPMH_VRM(rf_clk2, _a_e0, "C2A_E0", 1);
 > 
-> Thinking a bit more about this, I think you don't have to do anything.
-> If child nodes already got populated, calling of_platform_populate() a
-> second time is essentially a nop. And for cases you care about, that
-> wouldn't have happened. Of course, I'd still rather there only be 1
-> path that devices could have been instantiated.
+> What is the difference between these clocks and clk[3458] defined few
+> lines above? Why are they named differently? If the other name is
+> incorrect, please fix it.
 > 
 
-Hum, if my understanding is correct, this looks like what I did in the v3
-iteration [1].
+Dmitry, my intention was to make a clear distinction between the ‘rf’
+clocks and the ‘ln’ clocks. Since there could be overlap in the
+numbering, I added prefixes for clarity. I should have applied the same
+approach to clk[3458] as well. I will add the fix-up for the same.
 
-The idea was:
-  1) Do not change anything in of_platform_.*populate()
-  2) Update the simple-bus driver to populate children if there is only one
-     compatible string and this string matches the compatible string handled
-     by the driver.
+>> +
+>> +DEFINE_CLK_RPMH_VRM(rf_clk3, _a2_e0, "C3A_E0", 2);
+>> +DEFINE_CLK_RPMH_VRM(rf_clk4, _a2_e0, "C4A_E0", 2);
+>> +DEFINE_CLK_RPMH_VRM(rf_clk5, _a2_e0, "C5A_E0", 2);
+>> +
+>> +DEFINE_CLK_RPMH_VRM(div_clk1, _a4_e0, "C11A_E0", 4);
+>> +
+>>  DEFINE_CLK_RPMH_BCM(ce, "CE0");
+>>  DEFINE_CLK_RPMH_BCM(hwkm, "HK0");
+>>  DEFINE_CLK_RPMH_BCM(ipa, "IP0");
+>> @@ -901,6 +914,34 @@ static const struct clk_rpmh_desc clk_rpmh_glymur = {
+>>  	.num_clks = ARRAY_SIZE(glymur_rpmh_clocks),
+>>  };
+>>  
+>> +static struct clk_hw *kaanapali_rpmh_clocks[] = {
+>> +	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
+>> +	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
+>> +	[RPMH_DIV_CLK1]		= &clk_rpmh_div_clk1_a4_e0.hw,
+>> +	[RPMH_LN_BB_CLK1]	= &clk_rpmh_ln_bb_clk1_a2_e0.hw,
+>> +	[RPMH_LN_BB_CLK1_A]	= &clk_rpmh_ln_bb_clk1_a2_e0_ao.hw,
+>> +	[RPMH_LN_BB_CLK2]	= &clk_rpmh_ln_bb_clk2_a2_e0.hw,
+>> +	[RPMH_LN_BB_CLK2_A]	= &clk_rpmh_ln_bb_clk2_a2_e0_ao.hw,
+>> +	[RPMH_LN_BB_CLK3]	= &clk_rpmh_ln_bb_clk3_a2_e0.hw,
+>> +	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_ln_bb_clk3_a2_e0_ao.hw,
+>> +	[RPMH_RF_CLK1]		= &clk_rpmh_rf_clk1_a_e0.hw,
+>> +	[RPMH_RF_CLK1_A]	= &clk_rpmh_rf_clk1_a_e0_ao.hw,
+>> +	[RPMH_RF_CLK2]		= &clk_rpmh_rf_clk2_a_e0.hw,
+>> +	[RPMH_RF_CLK2_A]	= &clk_rpmh_rf_clk2_a_e0_ao.hw,
+>> +	[RPMH_RF_CLK3]		= &clk_rpmh_rf_clk3_a2_e0.hw,
+>> +	[RPMH_RF_CLK3_A]	= &clk_rpmh_rf_clk3_a2_e0_ao.hw,
+>> +	[RPMH_RF_CLK4]		= &clk_rpmh_rf_clk4_a2_e0.hw,
+>> +	[RPMH_RF_CLK4]		= &clk_rpmh_rf_clk4_a2_e0_ao.hw,
+>> +	[RPMH_RF_CLK5_A]	= &clk_rpmh_rf_clk5_a2_e0.hw,
+>> +	[RPMH_RF_CLK5_A]	= &clk_rpmh_rf_clk5_a2_e0_ao.hw,
+>> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>> +};
+>> +
+>> +static const struct clk_rpmh_desc clk_rpmh_kaanapali = {
+>> +	.clks = kaanapali_rpmh_clocks,
+>> +	.num_clks = ARRAY_SIZE(kaanapali_rpmh_clocks),
+>> +};
+>> +
+>>  static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
+>>  					 void *data)
+>>  {
+>> @@ -991,6 +1032,7 @@ static int clk_rpmh_probe(struct platform_device *pdev)
+>>  
+>>  static const struct of_device_id clk_rpmh_match_table[] = {
+>>  	{ .compatible = "qcom,glymur-rpmh-clk", .data = &clk_rpmh_glymur},
+>> +	{ .compatible = "qcom,kaanapali-rpmh-clk", .data = &clk_rpmh_kaanapali},
+>>  	{ .compatible = "qcom,milos-rpmh-clk", .data = &clk_rpmh_milos},
+>>  	{ .compatible = "qcom,qcs615-rpmh-clk", .data = &clk_rpmh_qcs615},
+>>  	{ .compatible = "qcom,qdu1000-rpmh-clk", .data = &clk_rpmh_qdu1000},
+>>
+>> -- 
+>> 2.34.1
+>>
+> 
 
-We can be more restrictive for 2) and only populate children if the only one
-compatible string is "simple-bus". This will keep current behavior for
-"simple-mfd", "isa" and "arm,amba-bus".
+-- 
+Thanks,
+Taniya Das
 
-If you think this could be the right direction, I will bring those modification
-in the next iteration.
-
-Also, do you think we should be more restrictive and populate children in the
-simple-bus driver only for "simple-bus" compatible?
-
-[1] https://lore.kernel.org/lkml/20250613134817.681832-6-herve.codina@bootlin.com/
-
-Best regards,
-Hervé
 
