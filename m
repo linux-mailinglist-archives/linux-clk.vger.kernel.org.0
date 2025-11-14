@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-30760-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30758-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1BFDC5BFFD
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 09:33:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8390CC5BF67
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 09:19:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E53D54E450B
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 08:31:41 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F2AEC354FFF
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Nov 2025 08:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3586E2F6587;
-	Fri, 14 Nov 2025 08:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68FA32D8391;
+	Fri, 14 Nov 2025 08:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="eJ9iISBN"
+	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="hMveXRFo"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1801.securemx.jp [210.130.202.160])
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1120.securemx.jp [210.130.202.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750E429CE1;
-	Fri, 14 Nov 2025 08:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989D527A904;
+	Fri, 14 Nov 2025 08:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763109097; cv=none; b=LetR3ur/o+4yrBCv0l49cczn8M9C7a8f9xc3UpHSNoMDJLVlrke/YiC9tf7saHor4+nSTB5c09clZkiGBQP9brCad3CRETwrpxER7h94JdCRtvci8HTZAjF0I9xkPkEU/UU0xlaq8i/1NNDts0vpq7ZrQgtS9x4cPh6CpiLEnHw=
+	t=1763108319; cv=none; b=VVvv8FDjek3oW6gq7xKNE1F/CtnCIGIYT/idJ7BimqyQIaYtwiwzAI1kTglMBHmMzstFStDhJ+gHxnkw+4DoSjr8RASGY/1L3BRVQlM7MbER8CCl9lQFDP+trsyfwO876d9phjjBxYTvEBXmkM/m6AwR/FQlQyuwAQ/RLlR/PZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763109097; c=relaxed/simple;
-	bh=YaJyIx3BTM6PJFfw7uMgpOvCW7UERP6aBJv3zzwB6Uw=;
+	s=arc-20240116; t=1763108319; c=relaxed/simple;
+	bh=z5BT7iIb8HXMJQST0R7kR132Jpyv/xSzSV01+ipM/E8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OyQo9FxPC4kdM9JCyypKT2jAWMnOtgJwKUhpIC9O78L88dha/MogGyHjjMM8yj9Cfr6hUKFnJ85eKPHJVDZWRUxvL92VAt2OlIRkDX/Y+3aaFKC28ucFd+QogkK7Xyj8kVhRKB2SMsrfyjgSwD1GpSM/1R3JBb8zZRAaU1XLJbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=eJ9iISBN; arc=none smtp.client-ip=210.130.202.160
+	 MIME-Version; b=NTTs88cTinErBBsjEOVFTLXksRTCfgnF70960ZJ8pE1DIusexVnnVyKoBml083nT+ghW8amSkpR0UBXUxXBLVwmYMRa8d7NqmICzBvLivegM0LgrRDs5h42Y/xgO53YTA4GzyhJqf7XZk1EwRKM3y5OSLoG8GCFvcOZoTFdM+z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=hMveXRFo; arc=none smtp.client-ip=210.130.202.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1801) id 5AE6xk8s1219614; Fri, 14 Nov 2025 15:59:47 +0900
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1120) id 5AE6xkQS090837; Fri, 14 Nov 2025 15:59:47 +0900
 DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
 	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
 	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key1.smx;t=
-	1763103550;x=1764313150;bh=YaJyIx3BTM6PJFfw7uMgpOvCW7UERP6aBJv3zzwB6Uw=;b=eJ9
-	iISBNfHn9waddM58TVg7uBYBAmVKb/OVA5E7Z16f34ZaOFSHAoAupaCmqRsv4zgaMNme6RyBnv7rK
-	/D1HrbYK3us6n0Ipy57F4yaIzXEPyE+VngyM/w3jyBFROdEOC3XH0QbX46Vsf5LloxgV0ZNRwqZ7j
-	QAzmjdEl7qtdBtGGLGHQDERk/fTAu6ATtMXScx/vCZUQLc6UtZT6SDaS7MHien4r1RSS0M6gePRuL
-	eicOgfkgxr7ymYspke5V5v7WannW4C3SdER1JSUgtEOvVc1Pw6NpVgWeGYa1nQ0euHTwNqReLXHms
-	u8ONiwDE8wPUaV+CodET6gGBeX7BUDg==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1802) id 5AE6x9N12206956; Fri, 14 Nov 2025 15:59:09 +0900
-X-Iguazu-Qid: 2yAakGMojjjxMf6t5U
-X-Iguazu-QSIG: v=2; s=0; t=1763103548; q=2yAakGMojjjxMf6t5U; m=G8E2yk525ojmYKyw2eN9CDf8Cr/CmjUVM/YdQ20WOvk=
+	1763103549;x=1764313149;bh=z5BT7iIb8HXMJQST0R7kR132Jpyv/xSzSV01+ipM/E8=;b=hMv
+	eXRFord7LWrKJaWpflg51wHxSXWVf1AjvLAnwU8z8Y2rlNm74zSaTEND5r7rsngOZVYDn2qxPTLtt
+	Yuurldmu8pkMUFbyQdiuq65w4LCI2xrEownb+7XLf9NJzQV2RE2okMHEclhkxVf2GVvL753Ilb1uM
+	PNk4XHHSKQVrZKSIiu2lrTDKLukTK48+ho3zimRIPtG5II5fl4WWZU3hJq7KOPezmUtfNH3ZOzGk7
+	lTDuml6TSOz+yiJetliFe+As+qY1J5oYtuosekezSRISyNz8Y3AUCHdQ8CGh3/6bxmpRnHf76UoY8
+	zQXbNhj37NyEG7qQ882TYTQZl0lBawg==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1121) id 5AE6x96r3826728; Fri, 14 Nov 2025 15:59:09 +0900
+X-Iguazu-Qid: 2rWgP4I4zWg0QagHnu
+X-Iguazu-QSIG: v=2; s=0; t=1763103548; q=2rWgP4I4zWg0QagHnu; m=prYwrmW4qxhPFlh8iTyihJo96G3t7nIZABj+fSIVS/M=
 Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	 id 4d77KR4My0zyPZ; Fri, 14 Nov 2025 15:59:07 +0900 (JST)
-X-SA-MID: 54822484
+	 id 4d77KR61f6z1xnZ; Fri, 14 Nov 2025 15:59:07 +0900 (JST)
+X-SA-MID: 54822487
 From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To: Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -61,10 +61,10 @@ To: Michael Turquette <mturquette@baylibre.com>,
 Cc: linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Subject: [PATCH 1/2] clk: visconti: Do not define number of clocks in bindings
-Date: Fri, 14 Nov 2025 15:53:57 +0900
+Subject: [PATCH 2/2] dt-bindings: clock: tmpv770x: Remove definition of number of clocks
+Date: Fri, 14 Nov 2025 15:53:58 +0900
 X-TSB-HOP2: ON
-Message-Id: <20251114065358.854817-2-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20251114065358.854817-3-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251114065358.854817-1-yuji2.ishikawa@toshiba.co.jp>
 References: <20251114065358.854817-1-yuji2.ishikawa@toshiba.co.jp>
@@ -76,70 +76,56 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove use of TMPV770X_NR_CLK.
-Instead, define number of clocks inside the driver directory.
+Remove the definitions of number of clocks from bindings because they
+prevent adding new clocks. Since the previous patch removed all refereces
+within the driver, they can now be deleted.
 
-The same for TMPV770X_NR_RESET and TMPV770X_NR_PLL.
+The same for resets and plls.
 
 Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 ---
- drivers/clk/visconti/clkc-tmpv770x.c | 8 ++++++--
- drivers/clk/visconti/pll-tmpv770x.c  | 5 ++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ include/dt-bindings/clock/toshiba,tmpv770x.h | 3 ---
+ include/dt-bindings/reset/toshiba,tmpv770x.h | 1 -
+ 2 files changed, 4 deletions(-)
 
-diff --git a/drivers/clk/visconti/clkc-tmpv770x.c b/drivers/clk/visconti/clkc-tmpv770x.c
-index 6c753b2cb..94a736da6 100644
---- a/drivers/clk/visconti/clkc-tmpv770x.c
-+++ b/drivers/clk/visconti/clkc-tmpv770x.c
-@@ -17,6 +17,10 @@
- #include "clkc.h"
- #include "reset.h"
+diff --git a/include/dt-bindings/clock/toshiba,tmpv770x.h b/include/dt-bindings/clock/toshiba,tmpv770x.h
+index 5fce71300..89189c4f6 100644
+--- a/include/dt-bindings/clock/toshiba,tmpv770x.h
++++ b/include/dt-bindings/clock/toshiba,tmpv770x.h
+@@ -11,7 +11,6 @@
+ #define TMPV770X_PLL_PIDDRCPLL		4
+ #define TMPV770X_PLL_PIVOIFPLL		5
+ #define TMPV770X_PLL_PIIMGERPLL		6
+-#define TMPV770X_NR_PLL		7
  
-+/* Must be equal to the last clock/reset ID increased by one */
-+#define CLKS_NR	(TMPV770X_CLK_BUSLCK + 1)
-+#define RESETS_NR	(TMPV770X_RESET_SBUSCLK + 1)
-+
- static DEFINE_SPINLOCK(tmpv770x_clk_lock);
- static DEFINE_SPINLOCK(tmpv770x_rst_lock);
+ /* Clocks */
+ #define TMPV770X_CLK_PIPLL1_DIV1	0
+@@ -141,7 +140,6 @@
+ #define TMPV770X_CLK_PIREFCLK		124
+ #define TMPV770X_CLK_SBUS		125
+ #define TMPV770X_CLK_BUSLCK		126
+-#define TMPV770X_NR_CLK			127
  
-@@ -234,12 +238,12 @@ static int visconti_clk_probe(struct platform_device *pdev)
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
+ /* Reset */
+ #define TMPV770X_RESET_PIETHER_2P5M	0
+@@ -176,6 +174,5 @@
+ #define TMPV770X_RESET_PIPCMIF		29
+ #define TMPV770X_RESET_PICKMON		30
+ #define TMPV770X_RESET_SBUSCLK		31
+-#define TMPV770X_NR_RESET		32
  
--	ctx = visconti_init_clk(dev, regmap, TMPV770X_NR_CLK);
-+	ctx = visconti_init_clk(dev, regmap, CLKS_NR);
- 	if (IS_ERR(ctx))
- 		return PTR_ERR(ctx);
+ #endif /*_DT_BINDINGS_CLOCK_TOSHIBA_TMPV770X_H_ */
+diff --git a/include/dt-bindings/reset/toshiba,tmpv770x.h b/include/dt-bindings/reset/toshiba,tmpv770x.h
+index c1007acb1..bedfe253f 100644
+--- a/include/dt-bindings/reset/toshiba,tmpv770x.h
++++ b/include/dt-bindings/reset/toshiba,tmpv770x.h
+@@ -36,6 +36,5 @@
+ #define TMPV770X_RESET_PIPCMIF		29
+ #define TMPV770X_RESET_PICKMON		30
+ #define TMPV770X_RESET_SBUSCLK		31
+-#define TMPV770X_NR_RESET		32
  
- 	ret = visconti_register_reset_controller(dev, regmap, clk_reset_data,
--						 TMPV770X_NR_RESET,
-+						 RESETS_NR,
- 						 &visconti_reset_ops,
- 						 &tmpv770x_rst_lock);
- 	if (ret) {
-diff --git a/drivers/clk/visconti/pll-tmpv770x.c b/drivers/clk/visconti/pll-tmpv770x.c
-index 8360ccf88..a2208c5fc 100644
---- a/drivers/clk/visconti/pll-tmpv770x.c
-+++ b/drivers/clk/visconti/pll-tmpv770x.c
-@@ -16,6 +16,9 @@
- 
- #include "pll.h"
- 
-+/* Must be equal to the last pll ID increased by one */
-+#define PLLS_NR	(TMPV770X_PLL_PIIMGERPLL + 1)
-+
- static DEFINE_SPINLOCK(tmpv770x_pll_lock);
- 
- static const struct visconti_pll_rate_table pipll0_rates[] __initconst = {
-@@ -66,7 +69,7 @@ static void __init tmpv770x_setup_plls(struct device_node *np)
- 	if (!reg_base)
- 		return;
- 
--	ctx = visconti_init_pll(np, reg_base, TMPV770X_NR_PLL);
-+	ctx = visconti_init_pll(np, reg_base, PLLS_NR);
- 	if (IS_ERR(ctx)) {
- 		iounmap(reg_base);
- 		return;
+ #endif /*_DT_BINDINGS_RESET_TOSHIBA_TMPV770X_H_ */
 -- 
 2.34.1
 
