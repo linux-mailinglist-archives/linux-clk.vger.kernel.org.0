@@ -1,132 +1,113 @@
-Return-Path: <linux-clk+bounces-30858-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-30861-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34AEC65318
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Nov 2025 17:39:22 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A439C6551F
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Nov 2025 18:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC2F74E6933
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Nov 2025 16:37:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D7465384673
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Nov 2025 16:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABB62D0636;
-	Mon, 17 Nov 2025 16:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F021130170E;
+	Mon, 17 Nov 2025 16:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="h7vTUI+Z"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="eodfuszi";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Pj3NN/kj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C2B2D3A93
-	for <linux-clk@vger.kernel.org>; Mon, 17 Nov 2025 16:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5925F29B79B;
+	Mon, 17 Nov 2025 16:57:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763397472; cv=none; b=PBN3IujrG48YRMBM6JjfzsPKinELCQMrWVWkyJmqQFU1/vIeCyC2hx4NQnwX1mTyJAwS6GCLlbOhfIFNcw26qDGiqGi6j1oszlEHWD1n3vWZK+sEOgfNxwdBeo2xc7EnmeMpbcCzIvmiTIqsxuf+UGzIBBW/MWA/g/mSqWBi4XA=
+	t=1763398666; cv=none; b=YDGk0FLG4vGMf6wrjlSuS3Hh/Rn2pI/a3g6ToLuEWZjwBHeZwZI2CJmf4sPSjX5ADWW00ZmxTeZgpLVXAmK/7BZaOOxsDzZEcZX5B8IQgSuJkGTpbfCFxXYVRFDLUT26nfoTvgJwelbDW4F5ycnVvYa0OkYy1uQ3P9LX6U+ghBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763397472; c=relaxed/simple;
-	bh=HlIiShYxhkLdpsar3rOL/ISs2/CV01wtKw99jYyG6Ts=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F+vtYl/g1gDLnID503XMqdkJVewE1wM4stApIg7dSsLAt58tf5B5Qoye1S336odfYSJAmUqJkCFkPXacYD4nfrQ9d6XZi4NQmc3fqALR8IcibWWCVJBm7Nx1i8isE7b2pX3Hz3/+bnkJP3sh47moFeJ8tHDpDAHLKftLw3mgo14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=h7vTUI+Z; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42b32a3e78bso3682511f8f.0
-        for <linux-clk@vger.kernel.org>; Mon, 17 Nov 2025 08:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1763397469; x=1764002269; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPBIXyGju7mBGzRaiW27P8dbL8q5t+cpUgoonxWQamI=;
-        b=h7vTUI+Zd7yv2nT5HfZ67IUBERcx9fGxW/wo+EEcBpjcj1PVR90KOJTQy5fsRroGfV
-         nORt9WcZFwjWcLk+mfY9K4T5i6pgRVYbrj4G7zs3cUdurkFLiEgGbGhu1Fh6PZsQkVK2
-         PVmxpGdHKJm8nEppRvgd2mJFLpvhhV1Q9NIg/vup001O61d14631iI8+/0GeqiTIY3SK
-         hjQ/Lhyjm0d2EX+nEcQ00FtQauvMpCuIVBIGk3G0rlUBUoJmi/wpf1bST2Qj4DQZiF8m
-         +l1tCggbG/GMBZSKUqwps+IY50/2vJk+CP2rDiyyIiVVeJ9ZmMzemXpN7x5z99E0rABs
-         SDuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763397469; x=1764002269;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PPBIXyGju7mBGzRaiW27P8dbL8q5t+cpUgoonxWQamI=;
-        b=Y1scz6LJCLDAjff07x+p7ESuLz4ucgs0Qt/AzA+0QBmWeWWX4WazutrlBJjmr+ouku
-         PBATjaAlm9KqJfzKIRpJCRzHwNAE9BJXexXUkM9PJIUX3DgfZ6dmlwPBmRH9Vgt+bAGh
-         SNMiysDeso+OL0a+UfkpLLQ67ou2KJr8ukLFNp4qnhMxEk1l+0b64DzOEO4xJoUCyfF7
-         QnnydgBF1r8HCXEuX1JanRGlWfhXMh8dKLSg88C6sOAke+OQO5nxp2162cZPG1+v0+Ej
-         SpRVwIXLjx4dwsooZLx8e2DrWlCqYEx7oQLfl2I7VeFQYfNNgdFRBWwuc3t54bmRx/wj
-         t4YA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxCOoX5SXXAgpZoqlWRPLcf/t52AVa5NoeX4hpjVom7D4cUjgBMn4TWAWGg1Cmg/DXAdvh5XKw230=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCyyjRlaudgBgs9LNEq74nLxqsygy9gRhbixwpjHTYoQv8oNUJ
-	zEfQ/ykbCUDs29wlDTYjxOwbYbrCJNADO8bY4hPTe8b4H7rirsCyOS4ttCOW7LtuW7U=
-X-Gm-Gg: ASbGncsAzWRciE2kswhGBx1Fu2nYJUVM2nR9TNKTs6C9fYzlxNHc4N92PHb1nfztETT
-	GhGN5SxkQfvabrJYhXLomkF6aJzlW6mXutKu92HGgPI5tL5tF9Xc6eTttTHiZFD7Y8tKD3FCzx4
-	Aj74/+sgroGsk7TgUBXvUebMLi+JiGr1asysXDxmW5mgHykCd6g/u02QBk9jWr1IJvikjzPf4sB
-	vfJXqVi2gi8Rtvko/BrFB2uJ/cdnnvt9y7rYvUTYi9VCUCFGyX9f84Ha8nzj8uFunGTowoCD2v1
-	RKx+Srg9wzDpeksJs8Tvmt2xOEqXLvRQbeuCW7MfPoJRP6eCrvmwHS5PsfYBkLMIt4V14oMjmXC
-	ZA5DIjN9bm8E5Z+qnySiE6z2LWEHdSFu1mRWgmh++TkaznLYYXgq59/xA05MU2nHOWURUE7wkfh
-	d1mLNhmGmENxSw6PSrmQg=
-X-Google-Smtp-Source: AGHT+IGjX8UeXo2kn+Rq/dpoeLzNhIaCwbw4kTdvV8tWs6WEA1Z8hJqnk/qL5zQx1UTgmBk1S06rOQ==
-X-Received: by 2002:a05:6000:2210:b0:42b:2e65:655f with SMTP id ffacd0b85a97d-42b593499c8mr12766106f8f.19.1763397469362;
-        Mon, 17 Nov 2025 08:37:49 -0800 (PST)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f0b894sm27655158f8f.26.2025.11.17.08.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 08:37:48 -0800 (PST)
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-To: sboyd@kernel.org,
-	mturquette@baylibre.com,
-	linux-clk@vger.kernel.org
-Cc: nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	conor.dooley@microchip.com
-Subject: [GIT PULL] Microchip clock updates for v6.19
-Date: Mon, 17 Nov 2025 18:37:47 +0200
-Message-ID: <20251117163747.211922-1-claudiu.beznea@tuxon.dev>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1763398666; c=relaxed/simple;
+	bh=n6nEWW9pPjq0AqMeiO3sg2ecm+iuixF76Y7HSJX3Q/k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TWP8bQOlq+rz7n7iEQ3CAhGqwDgvhVz3ds9WtR2/m/ywke/GaW9jNJqA0KHjGRY4qeMtDg58sS8I/4bqd6dRCDWBN+nbQj5GeLzKhF4AmeXLKuQ/mdNgJPHIlQD+V7i3SXH8/bXSMSPvljYGKn+rsaouVoMeCoWYQEeSxIrZJuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=eodfuszi; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Pj3NN/kj; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1763398640; bh=GMUQV1/e5EFHr3C4saiGqYK
+	hD3EuyO2MN44wM92o0JI=; b=eodfusziAk+fHH61U5AddG9vYbS5wxYsy0uKBL2Dr7dHN7mfrl
+	eNgjrEQyhdBrp8r29DZlYjltpkafYDxHHSkzrN+WXxW+l4pBGMUjc+LJQXShs1UVcAIorDaMD+S
+	I4JfT+QDS1/nSheUlmsdBoIAznNPw3mVJFrhZGPy1fa/ncKOjgq+H6P7nzpXVE7mVQtIOgsQkpt
+	WieQgvLoXwIPeoiSemqE0LYd9oUnOvhirLt1YEfh620b5XMbrx6VqBIdlFHa4nzLIrgvfpBXeX5
+	wPZ3Gngu68j9sV+qSomF3OQOak8fdjZKzhI5cO91D+J1iIM9gjnAwMq65NvQmZp3Few==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1763398640; bh=GMUQV1/e5EFHr3C4saiGqYK
+	hD3EuyO2MN44wM92o0JI=; b=Pj3NN/kjkRXbChd/CK21rouNXX59rx8pAXCmartI6PJuU7iJ6U
+	DFRm0kzEfeBeqS6GSTiOax3xoDbrOHDsbyBg==;
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v2 0/4] Add Global Clock Controller for MSM8940 and SDM439
+Date: Mon, 17 Nov 2025 17:57:05 +0100
+Message-Id: <20251117-gcc-msm8940-sdm439-v2-0-4af57c8bc7eb@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOJTG2kC/32NQQ7CIBBFr9LM2jFAKxZX3sN0UQekkwg0YBpN0
+ 7uLPYDL95L//grFZXYFLs0K2S1cOMUK6tAATWP0DtlWBiXUSUqp0RNhKKE3ncBiQ9ca7FptrNV
+ 0J6mhDufsHvzeo7eh8sTllfJn/1jkz/7NLRIFnklY6g0ZpegaRo5Pjhz9MWUPw7ZtX5d6XRa5A
+ AAA
+X-Change-ID: 20251116-gcc-msm8940-sdm439-4369dd6cbc16
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Adam Skladowski <a_skl39@protonmail.com>, 
+ Sireesh Kodali <sireeshkodali@protonmail.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, Daniil Titov <daniilt971@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763398640; l=1193;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=n6nEWW9pPjq0AqMeiO3sg2ecm+iuixF76Y7HSJX3Q/k=;
+ b=bW/rdDauTH6Xwfon1PVs4luqZ+rH6MhVCOJHIaPsutMxy95kMaYdFf+ViL7neONVgbDdeikTv
+ /nzY5T7DOkwAxVOPbLMnaZGLfhGFkOJ8WVTWnqrHht9DfFK5biaC4Hs
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+Add GCC support for MSM8940 and SDM439.
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v2:
+- gcc-sdm439: Remove unnecessary comments. 
+- Correct author names in commits and Signed-off-by-s.
+- Link to v1: https://lore.kernel.org/r/20251116-gcc-msm8940-sdm439-v1-0-7c0dc89c922c@mainlining.org
 
-are available in the Git repository at:
+---
+Barnabás Czémán (2):
+      dt-bindings: clock: qcom: Add MSM8940 Global Clock Controller
+      dt-bindings: clock: qcom: Add SDM439 Global Clock Controller
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-6.19
+Daniil Titov (2):
+      clk: qcom: gcc: Add support for Global Clock controller found on MSM8940
+      clk: qcom: gcc: Add support for Global Clock controller found on SDM439
 
-for you to fetch changes up to 781f60e45bdfe351aad692ac0fa89e36f8bf4a36:
+ .../bindings/clock/qcom,gcc-msm8953.yaml           |   6 +-
+ drivers/clk/qcom/Kconfig                           |   6 +-
+ drivers/clk/qcom/gcc-msm8917.c                     | 280 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-msm8917.h       |   1 +
+ 4 files changed, 288 insertions(+), 5 deletions(-)
+---
+base-commit: cad72a2aa582a0ca182ef1977dc45ff2a0bfb71e
+change-id: 20251116-gcc-msm8940-sdm439-4369dd6cbc16
 
-  reset: mpfs: add non-auxiliary bus probing (2025-11-11 16:47:24 +0000)
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
-----------------------------------------------------------------
-Microchip clock updates for v6.19
-
-This update includes:
-- convert Microchip Polarfire clock controller driver into a MFD driver;
-  with it, the reset control driver was included as it now depends on the
-  regmap registered by the clock controller driver
-- a cleanup patch for the LAN966X driver
-
-----------------------------------------------------------------
-Conor Dooley (3):
-      dt-bindings: clk: microchip: mpfs: remove first reg region
-      clk: microchip: mpfs: use regmap for clocks
-      reset: mpfs: add non-auxiliary bus probing
-
-Robert Marko (1):
-      clk: lan966x: remove unused dt-bindings include
-
- .../bindings/clock/microchip,mpfs-clkcfg.yaml      |  36 ++--
- drivers/clk/clk-lan966x.c                          |   2 -
- drivers/clk/microchip/Kconfig                      |   2 +
- drivers/clk/microchip/clk-mpfs.c                   | 227 +++++++++++++++++----
- drivers/reset/Kconfig                              |   1 +
- drivers/reset/reset-mpfs.c                         |  91 +++++----
- include/soc/microchip/mpfs.h                       |   3 +-
- 7 files changed, 266 insertions(+), 96 deletions(-)
 
