@@ -1,80 +1,152 @@
-Return-Path: <linux-clk+bounces-31020-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31027-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC63C77568
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 06:20:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE40C77B13
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 08:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id A2AF529BDC
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 05:20:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 7065E2C91A
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 07:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBCA239567;
-	Fri, 21 Nov 2025 05:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC6532FA2B;
+	Fri, 21 Nov 2025 07:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNydD+7w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8CQ9wsF"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C75312C544;
-	Fri, 21 Nov 2025 05:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8071E22D7B6;
+	Fri, 21 Nov 2025 07:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763702445; cv=none; b=jaaDJqvVJ6/ADc60GFyNMYVch0siv0EIr/2uqzg6JZ7NQVWnBoY045EPnndvLQs2qA69uOHm2KO1+Lvsqc7oQq6tZ8KRjZ546KoOlspr+JYeAewWLrWzplFW7DCmekLvf28K6FJK2dIfrGdy2eSKGT2X0H0GRhwnDgdCXYQ/JGk=
+	t=1763709970; cv=none; b=AVyAjq/FrQYbdfEfFrNeD5NrspuYtztsJkak22dT7QjVUIF3vAASVbCKwQGQTwi/BR27EM5y19ha/xZAcuiZyJ0hn98tD8luJdCKIGTxbb96wxcVcx4wKWC2kIbf1D0yPQYFCAaxZFOivLJrmd3us4Txq7QfsyNlGXrQJsnU8PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763702445; c=relaxed/simple;
-	bh=vRXivfFtcgsET3yxtAX2r5O203EM43gMUoVVBMg/jBg=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=CvCaPJlGjYLiiVSD9GWDw4Xr6cRCq0IgiTX+3K5vSJwiNYD3IKHaipn2d+RMPp7pwjql9Pmua6xPIqokHbrqk1nDWp/fJZW/AEJPLeZmNLw4yY5r6o+5nwMvaj/G/ti1/UdCO0jrT6NHmFIS/NxAiRCc1xzkL3I+K/EAc27a3N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rNydD+7w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75EBC4CEF1;
-	Fri, 21 Nov 2025 05:20:44 +0000 (UTC)
+	s=arc-20240116; t=1763709970; c=relaxed/simple;
+	bh=zoTP0H6LCrDf44J80jKYYIbxqWfXSddsSjSQgVFRNfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eO0C7eGOFnpHD7mJgJLso01zWgch3Gg8GxTJs+B/WsJaARqPSXiRs1n6exT0yTuzKtrjImBRSf2oJCkA3udVUqyU1nO8MKLOSE1ZyMa8E1ABsKh6ECPedfcjTbYNWXArltBxbLYFY3hRoyIhVDMfrynQbW+XZ6W76D76wt4p8iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8CQ9wsF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826C4C4CEF1;
+	Fri, 21 Nov 2025 07:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763702444;
-	bh=vRXivfFtcgsET3yxtAX2r5O203EM43gMUoVVBMg/jBg=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=rNydD+7wfd7XEahi4kY1mzEMlCru/n3o07kgESMQ8X5GfBk3RVVwxgmCKEAN4ZKG2
-	 5+NnNAFG561a/Eya/V3twIf70pUO8vhyU7km73g5kRbr4ILopN7LHSMa9kVSTSP1gA
-	 ykanQtP9m5wWCjcX1pgK+utqEJ67NHoMGdnIWgOOdZp98I7ccYxqkUct3xc67q/S/M
-	 jffs327olhX4d29JS1UeGX1z02nIasKCuFVHyOGzni8T1dp5ayMrwartCwa7jmhWCT
-	 Hj0e8QxH5xCDRp2Cl4yOpfaKPTHUdZnxc8DVrPMkGvW226ZlOXx0b+ySk6imUNNVEw
-	 5bGGgNrW4cpvQ==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1763709970;
+	bh=zoTP0H6LCrDf44J80jKYYIbxqWfXSddsSjSQgVFRNfU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L8CQ9wsFqMOEctmbhfeXOzYXupALekL3vnuD1Y7rFavM7Ye6aM9XIu49fnSyMVvD5
+	 oZt/mKvzeMd7qpubTvXUhCKx1ZrmbtClmMg3lyMa/A8fFTl7xvjv0COubOw9SQ4pam
+	 /hbucJ5shkJ/Eye/XId6Y/myqwJSjCHRiASna+zbiTyJTm0/V1O2BZiDzaR1hPvzhP
+	 OLIpYfSGr14tRiYUzjNASGbSPGdpqPYafDTMAq9hzSE1EZRk9JLH6MwlXpha3izQW0
+	 QKBEbvqHVif4zyYp9alSuBPJVkMrsuOq++wlIw8JTaSNBDRL/CfeHhMJHtKnQaZbO/
+	 L6y3XBJucNLwQ==
+Date: Fri, 21 Nov 2025 08:26:07 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Elaine Zhang <zhangqing@rock-chips.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, heiko@sntech.de, 
+	robh@kernel.org, p.zabel@pengutronix.de, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, finley.xiao@rock-chips.com
+Subject: Re: [PATCH v8 1/2] dt-bindings: clock: rockchip: Add RK3506 clock
+ and reset unit
+Message-ID: <20251121-tunneling-quaint-copperhead-18328e@kuoka>
+References: <20251121024645.360615-1-zhangqing@rock-chips.com>
+ <20251121024645.360615-2-zhangqing@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251114135842.1473203-1-abel.vesa@linaro.org>
-References: <20251114135842.1473203-1-abel.vesa@linaro.org>
-Subject: Re: [GIT PULL] clk: imx: Updates for v6.19
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: imx@lists.linux.dev, NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>, Mike Turquette <mturquette@baylibre.com>
-Date: Thu, 20 Nov 2025 21:20:42 -0800
-Message-ID: <176370244286.11952.16611312022435316192@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251121024645.360615-2-zhangqing@rock-chips.com>
 
-Quoting Abel Vesa (2025-11-14 05:58:42)
-> The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df567=
-87:
->=20
->   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
-clk-imx-6.19
->=20
-> for you to fetch changes up to fdc1dc7dd53b95805d3943ed36785c1ec812915e:
->=20
->   clk: imx: add driver for imx8ulp's sim lpav (2025-11-11 18:01:25 +0200)
->=20
-> ----------------------------------------------------------------
+On Fri, Nov 21, 2025 at 10:46:44AM +0800, Elaine Zhang wrote:
+> From: Finley Xiao <finley.xiao@rock-chips.com>
+> 
+> Add device tree bindings for clock and reset unit on RK3506 SoC.
+> Add clock and reset IDs for RK3506 SoC.
+> 
+> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> ---
+>  .../bindings/clock/rockchip,rk3506-cru.yaml   |  54 ++++
+>  .../dt-bindings/clock/rockchip,rk3506-cru.h   | 285 ++++++++++++++++++
+>  .../dt-bindings/reset/rockchip,rk3506-cru.h   | 211 +++++++++++++
+>  3 files changed, 550 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3506-cru.yaml
+>  create mode 100644 include/dt-bindings/clock/rockchip,rk3506-cru.h
+>  create mode 100644 include/dt-bindings/reset/rockchip,rk3506-cru.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3506-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3506-cru.yaml
+> new file mode 100644
+> index 000000000000..fee49700113e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3506-cru.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/rockchip,rk3506-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip RK3506 Clock and Reset Unit (CRU)
+> +
+> +maintainers:
+> +  - Finley Xiao <finley.xiao@rock-chips.com>
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +description:
+> +  The RK3506 CRU generates the clock and also implements reset for SoC
+> +  peripherals.
+> +
+> +properties:
+> +  compatible:
+> +    const: rockchip,rk3506-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description:
+> +      Reference clock input. This is optional when the clock source
+> +      has already been configured and enabled by the bootloader/firmware.
 
-Thanks. Pulled into clk-next
+So your description confirms - this is not an optional clock. It must be
+enabled/configure and it is always in the hardware. You could have
+avoided one more version of patchset if you only bothered to respond to
+review.
+
+Drop description and make it required.
+
+> +
+> +  clock-names:
+> +    const: xin24m
+
+Nothing improved. Conor made comments some revisions ago and reminded
+you about them. And you just ignored them?
+
+That's just xin pin, isn't it?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +  - "#reset-cells"
+
+clocks and clock-names.
+
+Best regards,
+Krzysztof
+
 
