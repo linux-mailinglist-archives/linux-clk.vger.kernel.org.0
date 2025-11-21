@@ -1,105 +1,191 @@
-Return-Path: <linux-clk+bounces-31045-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31048-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258A8C7AE69
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 17:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 831F7C7B164
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 18:36:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 785E04EE45B
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 16:40:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 65AF64E3B56
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Nov 2025 17:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83042EDD69;
-	Fri, 21 Nov 2025 16:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E2B2EBDEB;
+	Fri, 21 Nov 2025 17:36:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6xYXr6C"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="je+Sv7Ti"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F8F25A341;
-	Fri, 21 Nov 2025 16:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6A2749D2;
+	Fri, 21 Nov 2025 17:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763743216; cv=none; b=VZIdyjYF70AfrwETInSAZHZznmtdevJUy49s7jNGc674KjJ6xTllQXIsK7CKoTFeY0euVJS1WmB7Hz6AchUkoT1N2/7QzFkyIv1m5QpCJWvsIBZcDjMeauwFxHgpcR2T4K7aKut06y+Xs4O7c2Sb7M/BHbjka6JKcyqmpFe7XGE=
+	t=1763746569; cv=none; b=mRRQT/1dtVlNIC1w5WhLAshAr4wzIqX/bY+GytsGyPiJt/dVYZ0t6Nf5ItQwYuYI4Eb5nRsspNEMcRwsZJsDMQnPuvF4VpqvmfH3ELDx6XVT4cr7q/9RafYtlZu7cUZBAIBICKckFB7bzBo7mqFYPWE+K0BFXU9DvfefKf22fk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763743216; c=relaxed/simple;
-	bh=rK8BZaRZsq2leGFmU0XZp412oi8cBImVGfOfJVuiS/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i0n/9rBuJgTwj66znT2ToPef6HUh+y0Xu04PRfnS2ycxkt4/McUvCRJjMqnPBpSofG34Tu7FZzU0nxSDqi6/JYbdneOUA8kgszDd4zl9edr78FO9iNwkVxy4tJgAJF6rBQpVpmTE9VVuB3VAUrgfQYg5A1cyMCPsL5a4ChgjpD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6xYXr6C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E6AC4CEF1;
-	Fri, 21 Nov 2025 16:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763743216;
-	bh=rK8BZaRZsq2leGFmU0XZp412oi8cBImVGfOfJVuiS/I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=s6xYXr6CLM7zdOsD9G+p5iwk19J47YNPRTZVO37HBo52cVYu50kYXgG8hUbffsD8a
-	 PScJ0TnloQTbYD6a4+N5vOQQ8ETLONqymdDkZKXgskENhUWiPZucQ1oipSYtiCspm5
-	 6kuuO00aCK4g6gyADpmOAdMEJtCm3dpm/Oe1xnPF8n/UlQFmSWoAKKChAvLKWo0J/3
-	 hgXz4F4kSvMPY+/whXvDNnEoC7VwOnWhSdWOU0VXBoAd42+DAmMI5ucvczUO+dM6q9
-	 2TeQlbriikxUzEqniOlM6iLxOxLnrI3s16jQnA9xlaMApD5rJ2zoIvLLoKGUSMNL34
-	 S/b6Wn68UYjEA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vMUBF-000000003Oj-006R;
-	Fri, 21 Nov 2025 17:40:17 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Peter De Schrijver <pdeschrijver@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Miaoqian Lin <linmq006@gmail.com>,
-	linux-clk@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] clk: tegra: tegra124-emc: fix device leak on set_rate()
-Date: Fri, 21 Nov 2025 17:40:03 +0100
-Message-ID: <20251121164003.13047-1-johan@kernel.org>
-X-Mailer: git-send-email 2.51.2
+	s=arc-20240116; t=1763746569; c=relaxed/simple;
+	bh=eUAP1Oaq48E7P0bj+xhylvpo9LLSTyoF4AuQpzSCXvM=;
+	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
+	 Content-Type:Subject; b=KMN8AsNGDqIebtxGrgZFdPLOrSLpmAzj8KoSvLdXXOzdXeMAKjyqAUCfkXDhnAHlj+XHQlN1A201xK9SDHC7ti48YlX08mAJ0TIe0TSl0eB04zh7dY9cHzuBu3gIGmMJA4TePYDHVKrADZRHHCSGXRerryoiH5iEcK3WXhkBdhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=je+Sv7Ti; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=oj6j8yoSghWyT13M0LSjHIg7myaVztNp8X5nJ/reww8=; b=je+Sv7TipNF0JwWCy5aq3oj6I3
+	yAlqX4XAbIVil4WnW8O5qrBjkTzcpL46LBJEiwxhjJ4eAOBdThNiyo99wNfo5otuLx1jZNydRMWMK
+	JJMRnHNmsOAEjd33adb3hzhnFv5LuZaCRMAl91rB07VCAFpkrnITnS9JS7pXraQfOEi4=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:44288 helo=debian-lenovo)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1vMUVt-0005U0-SC; Fri, 21 Nov 2025 12:01:38 -0500
+Date: Fri, 21 Nov 2025 12:01:37 -0500
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Chris Brandt <Chris.Brandt@renesas.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Biju Das
+ <biju.das.jz@bp.renesas.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Hien Huynh <hien.huynh.px@renesas.com>,
+ Nghia Vo <nghia.vo.zn@renesas.com>, "linux-renesas-soc@vger.kernel.org"
+ <linux-renesas-soc@vger.kernel.org>, "linux-clk@vger.kernel.org"
+ <linux-clk@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
+ <dri-devel@lists.freedesktop.org>
+Message-Id: <20251121120137.e6ad0e6d98daa15d2a1d3963@hugovil.com>
+In-Reply-To: <CAMuHMdWvKSDp3EVThcgU0UiUjXKAu16VtiWER1Xv4cEUdcCUZw@mail.gmail.com>
+References: <20251119022744.1599235-1-chris.brandt@renesas.com>
+	<20251119022744.1599235-2-chris.brandt@renesas.com>
+	<20251119001030.bf900d1fcad4db5b63055e2e@hugovil.com>
+	<20251119132235.795b633eedbb91f8544262db@hugovil.com>
+	<OS3PR01MB8319EE3FB4460584BD8C62B68AD5A@OS3PR01MB8319.jpnprd01.prod.outlook.com>
+	<CAMuHMdWvKSDp3EVThcgU0UiUjXKAu16VtiWER1Xv4cEUdcCUZw@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -2.7 NICE_REPLY_A Looks like a legit reply (A)
+Subject: Re: [PATCH v5 1/2] clk: renesas: rzg2l: Remove DSI clock rate
+ restrictions
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-Make sure to drop the reference taken when looking up the EMC device and
-its driver data on first set_rate().
+Hi Chris and Geert
 
-Note that holding a reference to a device does not prevent its driver
-data from going away so there is no point in keeping the reference.
+On Fri, 21 Nov 2025 09:59:05 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
-Fixes: 6d6ef58c2470 ("clk: tegra: tegra124-emc: Fix missing put_device() call in emc_ensure_emc_driver")
-Cc: stable@vger.kernel.org	# 4.2: 6d6ef58c2470
-Cc: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/clk/tegra/clk-tegra124-emc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Chris,
+> 
+> On Fri, 21 Nov 2025 at 05:04, Chris Brandt <Chris.Brandt@renesas.com> wrote:
+> > On Wed, Nov 19, 2025 1:23 PM, Hugo Villeneuve wrote:
+> > > > +                           params->pl5_fracin = div_u64((u64)
+> > > > +                                                ((foutvco_rate * params->pl5_refdiv) %
+> > > > +                                                (EXTAL_FREQ_IN_MEGA_HZ * MEGA)) << 24,
+> > > > +                                                EXTAL_FREQ_IN_MEGA_HZ * MEGA);
+> > > >
+> > > >
+> > > > Also:
+> > > >   foutvco_rate (max) = 3000000000 (3GHz)
+> > > >   pl5_refdiv (max) = 2
+> > > >
+> > > > so the result of (foutvco_rate * params->pl5_refdiv) could become
+> > > > 6GHz, which is greater than unsigned long on 32-bit platform and overflow?
+> > >
+> > > I confirm that when testing with "COMPILE_TEST" as Geert suggested on a 32-bit platform, the results are not
+> > >  valid for this combination (but they are valid on 64-bit platforms).
+> > >
+> > > I think that the kernel robot could potentially issue a build warning for 32-bit platforms (if they also build with
+> > > COMPILE_TEST enabled, which I'm not sure about). Maybe Geert could comment on this?
+> >
+> > I've got no comment here.
+> >
+> > I can't image when someone would ever want to compile this code for a 32-bit system.
+> >
+> > So I'll leave it as it is now unless Geert wants me to change it to something else.
+> 
+> Pieces of code are reused all the time. So I think it is better to make
+> sure it doesn't overflow on 32-bit.
 
-diff --git a/drivers/clk/tegra/clk-tegra124-emc.c b/drivers/clk/tegra/clk-tegra124-emc.c
-index 2a6db0434281..2777e70da8b9 100644
---- a/drivers/clk/tegra/clk-tegra124-emc.c
-+++ b/drivers/clk/tegra/clk-tegra124-emc.c
-@@ -197,8 +197,8 @@ static struct tegra_emc *emc_ensure_emc_driver(struct tegra_clk_emc *tegra)
- 	tegra->emc_node = NULL;
+Here is a potential idea for implementing it so that it doesn't overflow.
+I tested it (compile and run) on a 32-bit platform, and also with my RZG2L board.
+Note that I defined an intermediate variable to improve readability (extal_hz):
+
+--- a/drivers/clk/renesas/rzg2l-cpg.c
++++ b/drivers/clk/renesas/rzg2l-cpg.c
+@@ -22,6 +22,7 @@
+ #include <linux/device.h>
+ #include <linux/init.h>
+ #include <linux/iopoll.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -583,10 +584,12 @@ rzg2l_cpg_get_foutpostdiv_rate(struct rzg2l_cpg_priv *priv,
+                               struct rzg2l_pll5_param *params,
+                               unsigned long rate)
+ {
+-       unsigned long foutpostdiv_rate, foutvco_rate;
++       unsigned long foutpostdiv_rate;
++       u64 foutvco_rate;
+        unsigned long hsclk;
+        unsigned int a, b, odd;
+        unsigned int dsi_div_ab_calc;
++       const u32 extal_hz = EXTAL_FREQ_IN_MEGA_HZ * MEGA;
  
- 	tegra->emc = platform_get_drvdata(pdev);
-+	put_device(&pdev->dev);
- 	if (!tegra->emc) {
--		put_device(&pdev->dev);
- 		pr_err("%s: cannot find EMC driver\n", __func__);
- 		return NULL;
- 	}
--- 
-2.51.2
+        if (dsi_div_target == PLL5_TARGET_DSI) {
+                /*
+@@ -662,16 +665,16 @@ rzg2l_cpg_get_foutpostdiv_rate(struct rzg2l_cpg_priv *priv,
+                        for (params->pl5_refdiv = PLL5_REFDIV_MIN;
+                             params->pl5_refdiv <= PLL5_REFDIV_MAX;
+                             params->pl5_refdiv++) {
+-                               params->pl5_intin = (foutvco_rate * params->pl5_refdiv) /
+-                                                   (EXTAL_FREQ_IN_MEGA_HZ * MEGA);
++                               u32 rem;
++
++                               params->pl5_intin = div_u64_rem(foutvco_rate * params->pl5_refdiv, extal_hz, &rem);
++
+                                if (params->pl5_intin < PLL5_INTIN_MIN ||
+                                    params->pl5_intin > PLL5_INTIN_MAX)
+                                        continue;
+ 
+-                               params->pl5_fracin = div_u64(((u64)
+-                                                    (foutvco_rate * params->pl5_refdiv) %
+-                                                    (EXTAL_FREQ_IN_MEGA_HZ * MEGA)) << 24,
+-                                                    EXTAL_FREQ_IN_MEGA_HZ * MEGA);
++                               params->pl5_fracin = div_u64((u64)rem << 24, extal_hz);
+                                goto clk_valid;
 
+
+
+Hugo
+
+
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
+
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
 
