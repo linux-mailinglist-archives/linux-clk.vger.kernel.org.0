@@ -1,262 +1,117 @@
-Return-Path: <linux-clk+bounces-31096-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31093-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FA32C81A80
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Nov 2025 17:47:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9510C815C5
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Nov 2025 16:33:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C3CF3A2495
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Nov 2025 16:45:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 92547349905
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Nov 2025 15:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0962EA159;
-	Mon, 24 Nov 2025 16:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AVgm/Gr7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B53F314A64;
+	Mon, 24 Nov 2025 15:27:39 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D691429E110
-	for <linux-clk@vger.kernel.org>; Mon, 24 Nov 2025 16:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA9F314A60
+	for <linux-clk@vger.kernel.org>; Mon, 24 Nov 2025 15:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764002751; cv=none; b=d1SSiqPTjGMoTCUSGblsQxg5511roS+iHnn3dqI9WevQ/byjo+2opWHqKRJt1iv5d67sQ4Z++jYz8ewmkYfX7eURk388riYmXalg+7jLh6wvqs43JlcErDg6RvUkusgdzIDHwkQDW5BP4/yWKQtpAAUciB5z872QQ+OThiGyE/c=
+	t=1763998059; cv=none; b=Pacm5qWpx+4+NyQAqI7iL6WJcW9Z65nZMBPW0AFTX5F8hSiIMQ4n/LHYdo6qQiPbaWnoDQdi7ReYScDdl9dizBBwO4KRYGawzfRJPKWS2apgqE2hWczCF1xUVGsm4ljk9NQnGej5EiSuLpTak7SKKRy81kiY/yJ1iQD4Rmyz/oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764002751; c=relaxed/simple;
-	bh=U6A+dJ20pXp86qjZBRsjEm03OXYUbqKULhGIn2BanqU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=psD1hlW8TjpqIRdmYnGp0WnhbSMUU8EgaykTUNlgagV63yCgRjj+1k0BhYiklsdRODIXCogJESayd/+Bym5X7mgrEOYQEYz8iWPeGVW4Ku6eyM0YLcQ2pYXL2zYEuH0xDp2JByln0rDa/jhyqP6UrttERNO2WAdJoK8qiSuZTBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AVgm/Gr7; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1763998059; c=relaxed/simple;
+	bh=rOS1aByy753LS5mnApvPktfoG7CiPZT4h5wnRkutiXY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n9ps0IyEIllX/DBxcmLUPjGjGWnZIooOL7z4MWDALN6Tq1K0/da14ynQO9Wn91q8bM4Eb4RivQgRkdGPCm7tKkPuVEzIFCAATd6VTNRVSy5r+t8mwF1kKUqqdlUSiiwhib+XnlGLiBwm1WnQqGqAkcsv5czOJ5yBx4G3WdKuekw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b737c6c13e1so276305266b.3
-        for <linux-clk@vger.kernel.org>; Mon, 24 Nov 2025 08:45:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764002748; x=1764607548; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gMEOFKOu3v4GJbo9FdKNZBfHGx8q7d1+trMyWhqy/A8=;
-        b=AVgm/Gr748TcjxIPSEW/BZRVDQoKzEQWTfqbyyHbI+u1IAP+yjz8WzKH1LrS01WkT6
-         vtUG6USVjyknJKSQy8X1e20gvJjwk4bpqgusJ0H8K12W8jHDE4Zj7JS1SIYarslldHRQ
-         MMpvLhayvcZJaigoSc0w8NxZoJWSSD6/uIWoTlvAHniLwLMlxVWeClTW/TAMkFC2OiK4
-         NTpHkSNYFV0FgyD3beQelsA8Kti/TB/yM5X8puf3L7AZHRPEKYApajnkHmizic1ajmDa
-         zmmXMFbhDRmrjHdcs987OuDVmhbVI5Fa/+3Sc93be5V5OupYWQ0FTM0OvOu+gYbRoaB0
-         Hgog==
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-93c6d160fbcso2044359241.1
+        for <linux-clk@vger.kernel.org>; Mon, 24 Nov 2025 07:27:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764002748; x=1764607548;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gMEOFKOu3v4GJbo9FdKNZBfHGx8q7d1+trMyWhqy/A8=;
-        b=eZ0sRTQeT96smDcd0u4JFCZj3MQVNKTw7OJONjKj8DYDCEauNcgPqrzfMfmAfydcBA
-         1NTyxwJkI8POZaECKLQfnQUj01CiUhDKIDDvlFRtdh8iP5HTHB6AW5Gvm5vku+CS06H7
-         m9xg5TLAghG7PqVdNPv4Tfz9brQOIL6f12hTUu6aJrg84pDr7xwhMLVRKpWGUUkCa6tj
-         oevd4QfkhxWGPlZ+7uY2lFszGwyj4hUB30wSDtWmsWYpQhHDcV9b2YWnQluDPiay8wR+
-         zhbgPX/diqHbfmRL2EY4NaW+17V+Z/aN1wByHUkp7oHyI8G1C/j1xWlBkqMUNoyGaEPh
-         +g9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWvctaZnNN3GOByIKIYXqUw8YnkvzfcggWSAWeCUqF2EnEYbV+Xl3uZQpn/URlOFj3TedZprA9LH58=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLnk9pLdELsUWfTfpJesbzE5m0EMS2lG39FCkF2YpFaAGypkNf
-	MLFSLDYm3bmf6RzVRf7nL3otPjFw/XiahWjCxF+LJDFhXE8OgtXDqnP5s/NzkE39
-X-Gm-Gg: ASbGncujGlxQNuXoAvqqaj161/E8IAJSEM26/RsYa9YT//E7OaMTCp24aD0fGUVaZQy
-	YERR2GhajK6jz2iJq8IYPUxRiKfYBhdCpsMR5wdQImLzBke5O295y8tlDS4dndHO47BiLgpsQOX
-	T5C1PFW9lZqHpGvfGIKxbLYmwPvoKVk7p6BBYHFOSikLcCCEnYIpeIBfejYbakD4o+3h2mRnvUa
-	DsE9+/tweq9kSGdmdXERfV9ZTfHnsEssqVKLRDmDV/X1ixXSWJnSrkbqn4HIXoVXtQEhPU179m0
-	yxKa805aQwsmGHyifgPPiMr1T2absEkc3m1h4/+4vxn2opH3gYT8NFu2NSvU07VOhncMBjFFuDr
-	bOuMA9D7IVd9K6xfvY/f7KRt3yJWXIaFN9XpQd6BhMEDnPdl7lGBMdDzkLONYKZC6KvmQEkaLN6
-	4PQ8l3HXR2Q/qThon1wFFbIia07pWaa68FmcI755RVrI4Z3Q++mMS0Tc2EeDhJFnI=
-X-Google-Smtp-Source: AGHT+IG13tPufOeCe62IkziqEjMKy77jRIw/n2p1+sO/PACFs+P5/tLtartbx+qzXMxnMkmQoCTh7g==
-X-Received: by 2002:a05:6512:39d5:b0:595:9152:b921 with SMTP id 2adb3069b0e04-596a3ea79camr4199632e87.7.1763996851410;
-        Mon, 24 Nov 2025 07:07:31 -0800 (PST)
-Received: from ?IPV6:2001:14ba:437:c00::190? (2001-14ba-437-c00--190.rev.dnainternet.fi. [2001:14ba:437:c00::190])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596a0d1493bsm3863273e87.73.2025.11.24.07.07.29
+        d=1e100.net; s=20230601; t=1763998056; x=1764602856;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eC4cvDO3IT4rDSa55t0HSPzkeqi2UUzrqewWPhJHnY8=;
+        b=MkfWftw/2RAeZDwkKA72NNeJvN4JYxVurA/ylbd2IngJP6SE9jiHS5YXP5qPJGQDQv
+         AqCEr8xHYyhIZ15Y4CN9Hz3MmqTz3rtTO61L9faTMPjAY8175g9M+ONwnQIAgrB0pvsh
+         UN070rcrKCoEtpduYmMX3hlsQ5p9D2jHrCtFxiZ+MIBTWyuD/kTXb/I95sW2BEF4y0D8
+         Lf3Yj6eOvXt+OhP5E5kUas3kBdaCqq0U+0o8MYN+iCN5jlZcXcFbVie9ibnTv7NlEROi
+         y8mtXAcxQi3e4NsDVZ/xE0kQw/blpnbeE30yOj8/4jbKgvGoPB5KjwsnfNudAf9x2rWY
+         oQxw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWAbTswjbELgG6AwzR08GIMse3VH2AZDihxrdSwT0mMjkkJ+NqvlZumXALSeBCPBP1pwMQ3tkavlA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeX3UpZbW2GdchECCwNRMunDqOi0vfmN+6wc4x0G4zHLMoyG3M
+	6b59E7vK1KjFVzjxkrBYqsPRCzveWoskcfT/l1oYq0MJRUT0Vgd9SOlG7tGMft0Eviw=
+X-Gm-Gg: ASbGncuRbzeasRKlRQ6127m0ZmzKzOFkqFN9SPemT+i6JOoIn/s7pmzXn/wLZC9kywP
+	Dndb31bz85xcF73sLQanjcwccSDyXrTh7ojybXnj6SP3E/JhNP1BEW4pN7/V3P1iK3ZgFyRcY7V
+	U+bZ8oaNQwNpKg6Aoq0SvwF9t8ImMAT+arzzR1bX+1idjX40KfQOaamyNFgGfj5dhpTeJuIhpHV
+	F5R8zX6pfJeVVA+l+kMlNM4wFRln5mIE47u6vF+Ify6HMsI7/Ew5XTz8l4JPwHG+GG0MqUIE0uY
+	yBAYVsTarFs7Ii5UcTiw9eGboqYD0A66sHYzkeVbcF5GeMJDmBTeUyFl0AmPkconBfdP806s0pQ
+	cJujO5uAkyT/5d9nVax5z30R/+jmJ2gnhdaUUvghv36Pv/ia9lGOkgFCE/tg/sj2NRghIPb0rMx
+	71Cof9rnN+xOBpwfM09x8auVjUcv33GKlMLkUnMO3O0BegyMv2
+X-Google-Smtp-Source: AGHT+IHsKm7pH3V9VUgkfa2CFa6u3KS5I8/jtEsmZV+zNo8Dj/LNOJVMcbtYxUXd0PbfWuZIAFz5HA==
+X-Received: by 2002:a05:6102:3f14:b0:5db:cc25:dd7a with SMTP id ada2fe7eead31-5e1de48274amr3927409137.28.1763998054417;
+        Mon, 24 Nov 2025 07:27:34 -0800 (PST)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93c561c50c6sm5546732241.1.2025.11.24.07.27.33
+        for <linux-clk@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 07:07:30 -0800 (PST)
-Message-ID: <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-Date: Mon, 24 Nov 2025 17:07:28 +0200
+        Mon, 24 Nov 2025 07:27:33 -0800 (PST)
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-93c6d160fbcso2044309241.1
+        for <linux-clk@vger.kernel.org>; Mon, 24 Nov 2025 07:27:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX9gHGhTXWXFlzUUSi49LpgrY3BcSlBEB69AXqpeFlMsVn0WGHosvs2W/q+7jh5h+pA3eL8Z36auqY=@vger.kernel.org
+X-Received: by 2002:a05:6102:1610:b0:5dd:896e:7b48 with SMTP id
+ ada2fe7eead31-5e1de290b39mr3496222137.14.1763998053400; Mon, 24 Nov 2025
+ 07:27:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-To: Rob Herring <robh@kernel.org>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- David Rhodes <david.rhodes@cirrus.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
- Allan Nielsen <allan.nielsen@microchip.com>,
- Horatiu Vultur <horatiu.vultur@microchip.com>,
- Steen Hegelund <steen.hegelund@microchip.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, mazziesaccount@gmail.com
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-Content-Language: en-US
-From: Kalle Niemi <kaleposti@gmail.com>
-In-Reply-To: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251114194529.3304361-1-chris.brandt@renesas.com>
+In-Reply-To: <20251114194529.3304361-1-chris.brandt@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 24 Nov 2025 16:27:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWmS5hi4NK1+TN1C1cyQyuJFV3K2CUnCkSw9U-JF1H8yw@mail.gmail.com>
+X-Gm-Features: AWmQ_bnWEMaqDzgASqk2zI5T_pySa34CnCYdVyU_jzrAfY9eM-OMGJiM586_jxw
+Message-ID: <CAMuHMdWmS5hi4NK1+TN1C1cyQyuJFV3K2CUnCkSw9U-JF1H8yw@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: rzg2l: Select correct div round macro
+To: Chris Brandt <chris.brandt@renesas.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Hien Huynh <hien.huynh.px@renesas.com>, 
+	Nghia Vo <nghia.vo.zn@renesas.com>, Hugo Villeneuve <hugo@hugovil.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-
-On 11/24/25 16:53, Rob Herring wrote:
-> On Mon, Nov 24, 2025 at 8:48 AM Kalle Niemi <kaleposti@gmail.com> wrote:
->> On 10/15/25 10:13, Herve Codina wrote:
->>> From: Saravana Kannan <saravanak@google.com>
->>>
->>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
->>>
->>> While the commit fixed fw_devlink overlay handling for one case, it
->>> broke it for another case. So revert it and redo the fix in a separate
->>> patch.
->>>
->>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
->>> Reported-by: Herve Codina <herve.codina@bootlin.com>
->>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
->>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
->>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
->>> Signed-off-by: Saravana Kannan <saravanak@google.com>
->>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
->>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>> Acked-by: Mark Brown <broonie@kernel.org>
->>> ---
->>>    drivers/bus/imx-weim.c    | 6 ------
->>>    drivers/i2c/i2c-core-of.c | 5 -----
->>>    drivers/of/dynamic.c      | 1 -
->>>    drivers/of/platform.c     | 5 -----
->>>    drivers/spi/spi.c         | 5 -----
->>>    5 files changed, 22 deletions(-)
->>>
->>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
->>> index 83d623d97f5f..87070155b057 100644
->>> --- a/drivers/bus/imx-weim.c
->>> +++ b/drivers/bus/imx-weim.c
->>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
->>>                                 "Failed to setup timing for '%pOF'\n", rd->dn);
->>>
->>>                if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
->>> -                     /*
->>> -                      * Clear the flag before adding the device so that
->>> -                      * fw_devlink doesn't skip adding consumers to this
->>> -                      * device.
->>> -                      */
->>> -                     rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                        if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
->>>                                dev_err(&pdev->dev,
->>>                                        "Failed to create child device '%pOF'\n",
->>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
->>> index eb7fb202355f..30b48a428c0b 100644
->>> --- a/drivers/i2c/i2c-core-of.c
->>> +++ b/drivers/i2c/i2c-core-of.c
->>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
->>>                        return NOTIFY_OK;
->>>                }
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                client = of_i2c_register_device(adap, rd->dn);
->>>                if (IS_ERR(client)) {
->>>                        dev_err(&adap->dev, "failed to create client for '%pOF'\n",
->>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
->>> index 2eaaddcb0ec4..b5be7484fb36 100644
->>> --- a/drivers/of/dynamic.c
->>> +++ b/drivers/of/dynamic.c
->>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
->>>        np->sibling = np->parent->child;
->>>        np->parent->child = np;
->>>        of_node_clear_flag(np, OF_DETACHED);
->>> -     np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
->>>
->>>        raw_spin_unlock_irqrestore(&devtree_lock, flags);
->>>
->>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->>> index f77cb19973a5..ef9445ba168b 100644
->>> --- a/drivers/of/platform.c
->>> +++ b/drivers/of/platform.c
->>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
->>>                if (of_node_check_flag(rd->dn, OF_POPULATED))
->>>                        return NOTIFY_OK;
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                /* pdev_parent may be NULL when no bus platform device */
->>>                pdev_parent = of_find_device_by_node(parent);
->>>                pdev = of_platform_device_create(rd->dn, NULL,
->>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
->>> index 2e0647a06890..b22944a207c9 100644
->>> --- a/drivers/spi/spi.c
->>> +++ b/drivers/spi/spi.c
->>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
->>>                        return NOTIFY_OK;
->>>                }
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                spi = of_register_spi_device(ctlr, rd->dn);
->>>                put_device(&ctlr->dev);
->>>
->> Sorry, some of you will receive this message now for second time. First
->> message was sent to older series of patches.
->> -
->>
->> Hello,
->>
->> Test system testing drivers for ROHM ICs bisected this commit to cause
->> BD71847 drivers probe to not be called.
-> This driver (and overlay support) is in linux-next or something out of
-> tree on top of linux-next?
+On Fri, 14 Nov 2025 at 20:46, Chris Brandt <chris.brandt@renesas.com> wrote:
+> Variable foutvco_rate is an unsigned long, not an unsigned long long.
 >
-> Rob
+> Cc: stable@kernel.org
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
+Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Closes: https://lore.kernel.org/CAMuHMdVf7dSeqAhtyxDCFuCheQRzwS-8996Rr2Ntui21uiBgdA@mail.gmail.com
 
-Kalle
+> Fixes: dabf72b85f29 ("clk: renesas: rzg2l: Fix FOUTPOSTDIV clk")
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.20.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
