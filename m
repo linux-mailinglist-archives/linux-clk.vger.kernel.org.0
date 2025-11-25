@@ -1,106 +1,93 @@
-Return-Path: <linux-clk+bounces-31130-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31132-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECDB6C84EAA
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Nov 2025 13:09:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D4E7C85D48
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Nov 2025 16:48:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 886D3351260
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Nov 2025 12:09:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 336E44E1294
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Nov 2025 15:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC8C3246F9;
-	Tue, 25 Nov 2025 12:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838531D8DFB;
+	Tue, 25 Nov 2025 15:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RGLz//ba"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="D1ftxBU7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7583242AD
-	for <linux-clk@vger.kernel.org>; Tue, 25 Nov 2025 12:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB9819EEC2;
+	Tue, 25 Nov 2025 15:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764072398; cv=none; b=bcOo8SBhvjxRHaHzRnd31vYwrla6CfsIXudxP/F6ZUb34AEjo8d9GOnKQjVIW9Q4WBI39XMEx8NFULx9+DqNAOlQuWxE9Z7e+vF5tJqjdhNSbKVBJ5nxg0OT+iNn3sNCX2W4maBU93CFIzmUZTgva69VjMlwYHDYeGOK8GJaNdA=
+	t=1764085732; cv=none; b=sfdUXsoYDuIFQGdtOmdtNVy2Q/1yLJWoZEH2+WwRenWxUh5BbZ7v6TppwSwvQ4oe2NLTBqYAdbrQMBy2Y2P3kHpIi9IB0jhQqEKirgA/FMbeaLUkt4CfpBK5xYigiGwZI3gLoGxC5z7uPnB20/nUKu9+gsK0dogLKXJ/Rjg0OUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764072398; c=relaxed/simple;
-	bh=YadarWm8iXVMTc3kvOXTZJwKC0IolLXgB3hQl9V7qZ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XocVkdROMapXn/DSpNU1773AaIbgbFAksmx63oMGT5zCDq2Wv82ADH0axvIcTGaR9ASQnfGRxpJ8zvxHgWccJzweWQnlBaicJesoZhmeK8GAsICz7o8SJfzakhVIV23DO41eAMVKeIY70H5QpZskrgwTI/P/vIEWWRoHhoVlD7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RGLz//ba; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59581e32163so6362300e87.1
-        for <linux-clk@vger.kernel.org>; Tue, 25 Nov 2025 04:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764072394; x=1764677194; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yQWD0QKdZ0TkCEqYFYnGsqgX6XSV5QR52vBKePlFe20=;
-        b=RGLz//baihWAjD5nCVgsMTRIlPsz7FlyFz1LidxQXKjMnKJ4XLI7nZblQO4b+W83xl
-         B7VVFQy5IMHRgrPkf7qAoP0/Rk/piTDtoOmA07h9Dtk5rQ+ReS6ipC0aWTMY/42jVn3p
-         JF8T1Qdi3ED9C5ofQ2ktByJFLjWnStELGOtwZ+8B/6sXVYRy7Opc7XBhyzTmg5iVsz9m
-         CD4kQQ2qqhvk1AI1iX759I8SeGp9dSh1S0WYR0WJCVVBIdAsVmLRFVVCfelVubtsz+Ij
-         3zDXDNrVa9rDvJGvM/ROWPm9MSkUESuU/w4wO+z13R9MO5EFpDDy8IqZ2hShiiQDct6R
-         1sqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764072394; x=1764677194;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yQWD0QKdZ0TkCEqYFYnGsqgX6XSV5QR52vBKePlFe20=;
-        b=DZxjzDGcrAtC3TvMhSjXQKb16WQ66NarDkeDRiJX01Fi4dE6n5GsGVso/oUmE+NhoC
-         zt8Syx90WkZ3Y+Mpp9m9v7EO4WVhU8PYflqhehOpuG3RRGVMb19oekvpxi+pkhMXgKiZ
-         Xq5elzC83cypODhMvtccUJ1t3PxkBKvWFpcTFHoaGpyHwE5OAa1PIP37Y8PMXD8i8qQo
-         91Ml1E89taCONRE2s+fFcTOq4F3AtN982UzD7NTGgOHUeq4x/e2EXLkjZsaR303pEsrJ
-         3wIGD6HKQvWvq6MJAzUhMbOBPYImj59kYQYYSTUft0MUA046rtWVKJcsHfCOKG0d6oOh
-         D+hA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxVbSI+RyqMWoazqWwc3g3D+QBwMWwQoTXoEXp0wuCmtFAxKG+T/t6zPpFbXTbqAA5N6aPWwR3s8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfkqIdgVD/lrEnzF1AcZ1Y/9kahLnw3Xtq0U9TB1NhdcHQcopp
-	zrISk2kOO8f6FJ0B0PYlXUjRIy0RHoLoLG2YmtXA5sjtBZXU9BD6WHJ0
-X-Gm-Gg: ASbGnctFgS2AMUIn99OEbDsifrQjwuQoodTHK2fJFKNSPyPOxXNSFNdwT8iz0SFUjSx
-	UKLdrTYzbTp+yQtr5wq7+gVO/39wwQZLYNwJtdJGD3Nn2A5XswmGz4l9Uc/tFnTN9m4fh0W0lrB
-	3l+lP9rnLFKrrmoDVYxSvfuRBLLZPUDEJjZo8VDc9OBlFuDUHgPzfypETzOARStB5uUnYLOH8Qe
-	j08ymf6BThsUE99SQWmKrJyQvOWIpL8zVE6Gu3/ZJWqOI+Th4hjzl3ZjEeyPJAb6lLsyFYQsIBl
-	W9+GZG1n/jKPfk67oFq6Z9Dsgh9IE92Z9m38f4PBIsuAyUln8GuXvefcHo+kgJ0orK9eWJ5LnOc
-	0aSIOlrsJcFuEWYPZOM1y9YscwLlvlC8fEITqdVXAsCehPoCTq0OvgwJ+hP0WMjuKAI8LsnUuSC
-	I=
-X-Google-Smtp-Source: AGHT+IFhS9KE1wuZQzl8w9HsDmWL1weqKWL9f1LhqVtawTbvw8WoVOvtMYz13PNxZKJZHBsKo2LqMw==
-X-Received: by 2002:a05:6512:118a:b0:595:82ed:ff28 with SMTP id 2adb3069b0e04-596b5062a6cmr1017970e87.32.1764072394159;
-        Tue, 25 Nov 2025 04:06:34 -0800 (PST)
-Received: from xeon ([188.163.112.74])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbbecb9sm5150993e87.58.2025.11.25.04.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 04:06:33 -0800 (PST)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <treding@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v4 12/12] ARM: tegra: add DC interconnections for Tegra114
-Date: Tue, 25 Nov 2025 14:05:59 +0200
-Message-ID: <20251125120559.158860-13-clamor95@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251125120559.158860-1-clamor95@gmail.com>
-References: <20251125120559.158860-1-clamor95@gmail.com>
+	s=arc-20240116; t=1764085732; c=relaxed/simple;
+	bh=2teMj3cExIXsm9hsdukC9nhaUQVP2+3nDr8+6xIGeaY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QMAC30B5nFhNdNXjnQOqVa2n2bdTCj199zSiqqbVXtlADiXCi5g9Jwv6IwDF6QF3DZTIffXZofIrU4gpO031V1XJeQ0lx4+vOeuUawwZu1Ktnb6kFj7re0uIP1coqKdl9GPoAzDY2hbZf9YW/QtlH5XCER2hJmysQsCf6Q3wy38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=D1ftxBU7; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5APCRTPO044275;
+	Tue, 25 Nov 2025 10:48:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=+5scGOfH4VdfvjtRMp+VExSIh9M
+	yBhIa21tCApXEYD0=; b=D1ftxBU7bTI6fvy1EeRR5ZxfK2/aFrWxrDC+FSOPIP4
+	fR/mYGz2bAhuR2fEn8AL2IKQbkvTg0UrDOIhs4d+eOM/70OAkBW9jpsFtn7Bbb14
+	MVPQMN0bW4OPO1DJNClTITzIgZudpT+yGIA6BNnAPc8qDYkfJsnuH0L4qbR5z9+w
+	UaGUNt/08i8h7qQRYB4YaKZlGiRhSUt2h7spCOQwue5sQndsaIM8eA5CM5h0np5I
+	7g1Vt2YY1gc/smv1Hrm5nt7TTcJRK6ax2pSZOAvk99/0VHKj+hrIerIuVphpCRLo
+	FMjTvAmUYWK0l51GAguABj4I1WyiP7rarV4AVQiD8nQ==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4amv1gnj1u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Nov 2025 10:48:22 -0500 (EST)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 5APFmLau016014
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 25 Nov 2025 10:48:21 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 25 Nov 2025 10:48:21 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 25 Nov 2025 10:48:21 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Tue, 25 Nov 2025 10:48:21 -0500
+Received: from HYB-b1tGeUj4GP1.ad.analog.com (HYB-b1tGeUj4GP1.ad.analog.com [10.48.65.177])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 5APFmAEF021473;
+	Tue, 25 Nov 2025 10:48:12 -0500
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Lars-Peter Clausen
+	<lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        "Jonathan Cameron" <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko
+	<andy@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dragos Bogdan
+	<dragos.bogdan@analog.com>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: [PATCH v3 0/2] This series adds clock provider functionality to the ADF4377 frequency
+Date: Tue, 25 Nov 2025 17:47:34 +0200
+Message-ID: <20251125154738.55869-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -108,56 +95,53 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI1MDEzMSBTYWx0ZWRfX5rDsDe/VRGJZ
+ qNiY379MULWD9iQh39Y6feAc2meeI8DFUkx2M7Bb/FqNKAQU/5FXh990HkA4dWr230Y0wkq0xJZ
+ ilN4Jz/01N/JTDx8odZk3LQ32vOPFMqPCXzLJtcV29fWu14Br8wQXaGXwOxyDXsQF00NKZH2rOX
+ WAzAMfC2S9ZEnMFhqirnb/ldKsV55sNrobJezmDSronPhoTbMFh6HPrISfvKmj2p1eSudCwDxJW
+ oP8SovKmqDIjB7qAM0YzRii0wMCcxFase3PXTCfmbkYYZ+P263OwZsJSb2tbTcmURGFehac5m1w
+ 7IR/9tdyO1chDCmjJc2lnVmmB5NnmHcOt17jV+7uKtn/QU41IEJt0FiiMe9GCwhZ/aNCqoMUjab
+ v2kV/H5yoOOjMAA6rn7eDXoQS86epA==
+X-Authority-Analysis: v=2.4 cv=D9hK6/Rj c=1 sm=1 tr=0 ts=6925cfc6 cx=c_pps
+ a=PpDZqlmH/M8setHirZLBMw==:117 a=PpDZqlmH/M8setHirZLBMw==:17
+ a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=TbiDcMNEsNnl46sf-WwA:9
+X-Proofpoint-ORIG-GUID: 9UZe-ybXCoaxH7Xulbt7-PSujpSUBrM7
+X-Proofpoint-GUID: 9UZe-ybXCoaxH7Xulbt7-PSujpSUBrM7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511250131
 
-Add DC interconnections to Tegra114 device tree to reflect connections
-between MC, EMC and DC.
+While implemented as an IIO driver, the ADF4377 is commonly used as a
+clock source. This patch series enables it to function as either:
+- A traditional IIO device (when #clock-cells is not specified)
+- A clock provider (when #clock-cells is present in device tree)
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- arch/arm/boot/dts/nvidia/tegra114.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+The implementation provides standard clock framework integration with
+rate control, enable/disable support, and maintains backward
+compatibility with existing IIO configurations.
 
-diff --git a/arch/arm/boot/dts/nvidia/tegra114.dtsi b/arch/arm/boot/dts/nvidia/tegra114.dtsi
-index 6221423b81d1..732f8b5b4eed 100644
---- a/arch/arm/boot/dts/nvidia/tegra114.dtsi
-+++ b/arch/arm/boot/dts/nvidia/tegra114.dtsi
-@@ -125,6 +125,17 @@ dc@54200000 {
- 
- 			nvidia,head = <0>;
- 
-+			interconnects = <&mc TEGRA114_MC_DISPLAY0A &emc>,
-+					<&mc TEGRA114_MC_DISPLAY0B &emc>,
-+					<&mc TEGRA114_MC_DISPLAY1B &emc>,
-+					<&mc TEGRA114_MC_DISPLAY0C &emc>,
-+					<&mc TEGRA114_MC_DISPLAYHC &emc>;
-+			interconnect-names = "wina",
-+					     "winb",
-+					     "winb-vfilter",
-+					     "winc",
-+					     "cursor";
-+
- 			rgb {
- 				status = "disabled";
- 			};
-@@ -144,6 +155,17 @@ dc@54240000 {
- 
- 			nvidia,head = <1>;
- 
-+			interconnects = <&mc TEGRA114_MC_DISPLAY0AB &emc>,
-+					<&mc TEGRA114_MC_DISPLAY0BB &emc>,
-+					<&mc TEGRA114_MC_DISPLAY1BB &emc>,
-+					<&mc TEGRA114_MC_DISPLAY0CB &emc>,
-+					<&mc TEGRA114_MC_DISPLAYHCB &emc>;
-+			interconnect-names = "wina",
-+					     "winb",
-+					     "winb-vfilter",
-+					     "winc",
-+					     "cursor";
-+
- 			rgb {
- 				status = "disabled";
- 			};
+The current approach follows the recently accepted version of adding
+clock provider for adf4350 device:
+https://github.com/torvalds/linux/commit/a1a09713b40dfc1c0b7d1f9233a7698c93a9af05
+
+Antoniu Miclaus (2):
+  dt-bindings: iio: frequency: adf4377: add clk provider
+  iio: frequency: adf4377: add clk provider support
+
+ .../bindings/iio/frequency/adi,adf4377.yaml   |   8 ++
+ drivers/iio/frequency/adf4377.c               | 119 +++++++++++++++++-
+ 2 files changed, 125 insertions(+), 2 deletions(-)
+
 -- 
-2.51.0
+2.43.0
 
 
