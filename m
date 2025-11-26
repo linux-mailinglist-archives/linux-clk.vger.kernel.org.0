@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-31231-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31232-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D71EC8ABA0
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Nov 2025 16:47:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35D2C8ABD6
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Nov 2025 16:48:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9A89D357B29
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Nov 2025 15:47:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A62534E73C3
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Nov 2025 15:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070A433ADB4;
-	Wed, 26 Nov 2025 15:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F2833BBD5;
+	Wed, 26 Nov 2025 15:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cvhk6bj+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJee7PBP"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC9B1FC7C5;
-	Wed, 26 Nov 2025 15:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0A533A6E5;
+	Wed, 26 Nov 2025 15:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764172023; cv=none; b=o1MD8ap+6XfqVlywQVr4sNh24WcezLt1tN3wUi0wBPqBkvY2nRlpKZqYUKsOLIhypEAV0yYivjfeHRjy+dMlMNPkUQ3ukbutIAOloCKdrihNH7O7+icjbDPL1s6frQHRNBUjJ6sRuiT941OaE3u9Qz3TJNJgm0eVJ/vgnXNI8X0=
+	t=1764172071; cv=none; b=ESYxkkm48Pp9twxIH2iSy9kJoCYkxa4HkqFBCrwCTLQE8mbHwYKgBX4KZswv7rdPCtUrWi0NoxEPSqQY68JbgnHQW/x1Ly71Kkbk+Q6y/rpJw/0z3CQ3JIyIwfw/lDvYvaz2MbBB1VUgYF+ZEm7KGnRGofTw3dt0SW6WKB48AY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764172023; c=relaxed/simple;
-	bh=l+5MsesiWzmet9GRAET1gD8eIgf+wj+88gEkEndlf5A=;
+	s=arc-20240116; t=1764172071; c=relaxed/simple;
+	bh=Lb752BiCA/EqAjW2BAoQTm961QUYQ0BrJ9YL9ZNR8Mc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IEQiw6lyCxSyPtM5HZNhpSLsomcyvrve9QahqQ0+KY5LD0xvJ7tGnLLTSb3O2l+jHbV91uMusYrdk7kOXX9GgqV1HUC+3jFkh/Zva8sicbblqGAs+w4ICOkaevp15dCm0ivSP7fRpKetPTQvj3lMjoO6LludAvmc199FZF18AWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cvhk6bj+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B84C113D0;
-	Wed, 26 Nov 2025 15:46:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bgsx00DSw+gnkX167Rsn86QGzU5S7HVIGD7oOllfinBGMsaDDglBDRvuygLiFAgru4Hp/3x/IhkNmCiDhuY2eS8hy8ldDuIzzZ1m/fl0wwUzAoA6SLnp5iNC8weTL2oAwH4LN9nrV51ANwxD/wujUUyNITJXREM75/DUeowlAEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJee7PBP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A8D2C4CEF8;
+	Wed, 26 Nov 2025 15:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764172023;
-	bh=l+5MsesiWzmet9GRAET1gD8eIgf+wj+88gEkEndlf5A=;
+	s=k20201202; t=1764172070;
+	bh=Lb752BiCA/EqAjW2BAoQTm961QUYQ0BrJ9YL9ZNR8Mc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cvhk6bj+MDcR6W/eD8WfO2WDZ8NYTQz5dCm0AFofoQa+fCNbpdiR9JdS+hOTbclCS
-	 4oKv5Bvgk763y90ExsiNqDprFCYXJAeZL2B/69gixaYKptMXgKxd2MI5MxTFcoxmvL
-	 E+v/UsFEDtxl5eRYWVQqUyie8k0DmOWFwpA3BdKVrXxgE3ss7K5x2iX+2NLjZWaPdv
-	 fSvu1nToYH7GDsZ4FaSQShw5CSDgdSC1cIDTlzLPORzI189J7BvXhKqUUCYIpSNH8P
-	 AfDSMUHCMW2b9qZb+wOtpeSj5h3pkhvugqnKv5cbGlEpV43G+MNGMHW1mAEfMD8gH3
-	 4ttT7ju9BE2JQ==
-Date: Wed, 26 Nov 2025 09:46:58 -0600
+	b=CJee7PBP36gfGimlAHsY6NQW2RlbUzjd4oQ/pOnUNu78WzRVkW75bZK+EEhoCp2cM
+	 SJ1i6EI4+LJZeqcJXcOb3hfZAEjBP6q7jtEcSgvDExB0xnf8B1SjvymuAcpZaF/ksX
+	 GM88PgxyCfkAl24G/O9MUSuQkP+ZYTKwLCgpslW4lRK3KJF04UlkXqNKGFDL9oS6IM
+	 p7Lu6Ck/lJ/lCu/eBHsOgUmJ5Wxl4NHsHi6MDIvU7UkFlRoTu6NK9LaWQ/OoOuPZBT
+	 Xwli7k8T3Olrf/HEQnOvipuKEE4tQri7rcMOKu/YwYnaZ0QDWN/ZWKweyP1TvSBchA
+	 i2+cvLnrckLYg==
+Date: Wed, 26 Nov 2025 09:47:44 -0600
 From: Drew Fustini <fustini@kernel.org>
 To: Yao Zi <ziyao@disroot.org>
 Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
@@ -55,10 +55,11 @@ Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
 	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
 	Han Gao <rabenda.cn@gmail.com>, Han Gao <gaohan@iscas.ac.cn>
-Subject: Re: [PATCH 4/7] clk: thead: th1520-ap: Support setting PLL rates
-Message-ID: <aScg8oH3I8wJvFHs@gen8>
+Subject: Re: [PATCH 5/7] clk: thead: th1520-ap: Add macro to define
+ multiplexers with flags
+Message-ID: <aSchIJ7hp1hBuahM@gen8>
 References: <20251120131416.26236-1-ziyao@disroot.org>
- <20251120131416.26236-5-ziyao@disroot.org>
+ <20251120131416.26236-6-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -67,20 +68,16 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251120131416.26236-5-ziyao@disroot.org>
+In-Reply-To: <20251120131416.26236-6-ziyao@disroot.org>
 
-On Thu, Nov 20, 2025 at 01:14:13PM +0000, Yao Zi wrote:
-> TH1520 ships several PLLs that could operate in either integer or
-> fractional mode. However, the TRM only lists a few configuration whose
-> stability is considered guaranteed.
-> 
-> Add a table-lookup rate determination logic to support PLL rate setting,
-> and fill up frequency-configuration tables for AP-subsystem PLLs.
+On Thu, Nov 20, 2025 at 01:14:14PM +0000, Yao Zi wrote:
+> The new macro, TH_CCU_MUX_FLAGS, extends TH_CCU_MUX macro by adding two
+> parameters to specify clock flags and multiplexer flags.
 > 
 > Signed-off-by: Yao Zi <ziyao@disroot.org>
 > ---
->  drivers/clk/thead/clk-th1520-ap.c | 142 ++++++++++++++++++++++++++++++
->  1 file changed, 142 insertions(+)
+>  drivers/clk/thead/clk-th1520-ap.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
 Reviewed-by: Drew Fustini <fustini@kernel.org>
 
