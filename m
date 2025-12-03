@@ -1,82 +1,102 @@
-Return-Path: <linux-clk+bounces-31412-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31414-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35CEEC9EA72
-	for <lists+linux-clk@lfdr.de>; Wed, 03 Dec 2025 11:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 805FDC9EC53
+	for <lists+linux-clk@lfdr.de>; Wed, 03 Dec 2025 11:52:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C30023A1FFF
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Dec 2025 10:11:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE90C3A342B
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Dec 2025 10:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2011D2E7BD2;
-	Wed,  3 Dec 2025 10:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B2E2EFD9C;
+	Wed,  3 Dec 2025 10:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGQ3qm8f"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="peNi5Vc5";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DyQhdCIz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C1C2E762E
-	for <linux-clk@vger.kernel.org>; Wed,  3 Dec 2025 10:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41DE2E8B8C
+	for <linux-clk@vger.kernel.org>; Wed,  3 Dec 2025 10:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764756712; cv=none; b=m3Toj9UrP522t4jrNfnwoguMQddlych5etTIyPO71buls8mKfL1/JNDbdiAQo9Mbyf+HwSHUv+uUE1SnZBsx2ks0ZFMR0vL+QXdb/hpdvmD51/OtITAeggEC48hgqj8Z94T1SV/olROwS33mw6GjNDm+jbWLnxGVFYSoYrWpEeI=
+	t=1764759144; cv=none; b=tk0/wpAgHB87VlQZVSsixKPgXKZ1jNTVJaE/Scb6lgv9jX1qgER/WVBLwgGVi46qjWAcLlHW4ZxJEOleeeDrXvtIBkAlTybavd5yeQAYBNsyWw2fpp/7gb+bg8lXuL+55Kz4JVkzc/B9Txyr7x8L+60akT6lnktjG+QGYDOkALk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764756712; c=relaxed/simple;
-	bh=yy2j4Gr2kBYId3840eqEXHigGss3DzYkeqaEM7aYlHA=;
+	s=arc-20240116; t=1764759144; c=relaxed/simple;
+	bh=ztTdAKd1Kpr5YomVO8DRG2y5O30QjhJMIPeeeKWJX+I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pex50wnX+DHpgJyC2QXacX7hEsYWsDLa51URpjHc0tLpSrjEvTdKMjJe49fURNSEK6FnMGCFFCmkbNrex2myydgbYUN/zIniH4IpLt5xdZmyq+BspcPhCWjdF/4sTQBO/M+50e4xRWoIVXgkk2VUwMcCAYjIcMVnQ8kESgFrYSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CGQ3qm8f; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59581e32163so6627608e87.1
-        for <linux-clk@vger.kernel.org>; Wed, 03 Dec 2025 02:11:49 -0800 (PST)
+	 In-Reply-To:Content-Type; b=cL5gy/XyFKdRfAoSis3bqKTm2yo2Wr31bwy54fctTHu3HppUwPnuxA+mCmgNoEVDwK41bzJ9qzqUe5zMF7iTnJuOlqZb1yAkrHjz2t+eUl1C/a4sgPa9frELTTY2G5zM3k3UvjgZHzSqlC3h92RX0Pt+zobA405n7AnvVyLZdgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=peNi5Vc5; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DyQhdCIz; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B39rkWK1929087
+	for <linux-clk@vger.kernel.org>; Wed, 3 Dec 2025 10:52:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5vZ1VnRCXWcgnHJPtqVaYUCxuUng/cpM+q7cKSjAg/c=; b=peNi5Vc5bggo6gKA
+	DfST/T/TqhUlTAs+tCcAEOr7UIjv+nKXP8d3roSYVB6yfJzpJqSnZuvTA1VV5QFS
+	oqfUU0SEduGvZPP1ysSLTp249x02Y7gRwYF3zKwso3uBT/SAoTFrJgaFtEgHakEK
+	Sa0d6LCW//Ua3Yqlt8nPSJudi4NoCY+MqLjB88JDi7hgy6KwVg5wDcXqGOQZi4Qm
+	EXYXykqBYLY8RPI1sDffV6pioCaZCwh5ZPWSQT/50LxfVYoeaRgTwd6rUxGH/cbK
+	xboiRYqJZXiE0pZwm/nuXPiMgs3u4bfUEje03EK9b3dulvp5657JQByPkF0LUaFg
+	ICEUAw==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4atjyqg5qs-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Wed, 03 Dec 2025 10:52:21 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8b1be0fdfe1so199242885a.2
+        for <linux-clk@vger.kernel.org>; Wed, 03 Dec 2025 02:52:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764756707; x=1765361507; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1764759141; x=1765363941; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7hkzMjIodS1pI1goTlzUE28NNMhc2FNCH6n3nOuMBQE=;
-        b=CGQ3qm8f+FnQjwU2B6pdhx/AwemgYV6WVz3Dj7xUo4cV3I4MJgz1nWnTG6r2YQPOjf
-         fP8b+31wR1gNKe6nGF9q9e+RncRGjSWqm3UGUrUsUmPAxzh+gkAJ7quVLcI9rMrMg7vB
-         Uq0TC/2dS4oGg0gFqFJdmhF5vXYCsU+okjdR6We64fb16qwZPbwsgj6AxYG9IZAgrwah
-         tARdWVM8K9aVO6PuvFeMcAZk9zmPV6pfQJxh1anrbDS95rvuNVWG8Lrc27VSlQ9/IY0L
-         55DMxgyxALBxlRdganrQNQwaut8ICacgWsjCQgecIbz6bI07RlBRM+UX0VQC2wwTLQW+
-         owHg==
+        bh=5vZ1VnRCXWcgnHJPtqVaYUCxuUng/cpM+q7cKSjAg/c=;
+        b=DyQhdCIzt/jL6g/UtzxdDLHRgTAIdZhT/FvvnhPdYRZUWMtYG9l5Z+WLtP77q9C9Ir
+         p8z8uDeUTAWwTYhD2lf7lBWJbIraK/5x0Dj2lmy2fBWNthqPKCqHf3GmzIVoSiR9D3aZ
+         RelAcFPXpB/UL5AAP9DrPhzsPpsVBOl96Oad9ALpbpKcn/jIzoqSKsdYl7KSI3dvwPkq
+         DXJFM2uY0LqPpKDwvVCEamP41Sk0LjfO9NzVsotumDZJ2o96kSp9H49jg2Ts1RR8gFYj
+         qgiX1R8sovgkH2KglE0AjZK90TnlvelhdzpfH4Crq1F4WZd3mFNk7ngcf0mUA7LJajj7
+         rR0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764756707; x=1765361507;
+        d=1e100.net; s=20230601; t=1764759141; x=1765363941;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7hkzMjIodS1pI1goTlzUE28NNMhc2FNCH6n3nOuMBQE=;
-        b=OA8xrrh7Nz1sEIuW10U0+WR+MgdzmGO7Zfc+T0KQnZ3/jQZEAQk3AmD4Lu3S9SUjhj
-         DxSyuj4tZQWTNxA/k8B3XczIMzOMoWfCQpqZonX4M5l3hGIrP3VxXtl60KQQeVyinKat
-         +7L6zClowly9Rm6G9DY8cS40HBjPVbFQ/uUfnnouS94fhaxqPhxuxygOX1UQHyG/f6sU
-         WBkh+cHKi84xu2zQJBX3BNGe6el+MMrMcxudD3PI5BuZeD7DH2dBnRpNgWhHy/QReBcr
-         0xJaaDGjXCy8B2xBIoU9TcM99VQknqdgWrDJDwC4xQp/4fDeJAOEGR8k+4PJ/vCNIfWA
-         45Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCV9X93svcDQEfkAzZ5l0gpUx/BaxkRozWpsmyQ6dTunk0UqfrQ7pcX15CEJbe5lEvVRwUii4Zx5IZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJXAJKGjDYdlD23rP556Qgn0WS/BIIyb+KIofDZqpNx1WPT4Bk
-	TBLoBFGTL+qpoh90xGaWTnua88aCOzDBB9MSZxkixLtOP+7DGb64Xi/h
-X-Gm-Gg: ASbGncuR8AhNdexMaWhD+DNVv8q+aVMaBEWp1K6T9rpNJvykOuSUWwb7nI83ERYdYAH
-	U7RHgxHH47iPUoVZwYSVDe3QiUwLGPQu5Wc13ttfLiTlPh/1Yvtvtbk1y1IO1Y5ChTTdNZJWJGx
-	3cdakK6XEj7cf/sJKegNlb8zoeoFDlb+7emdpJsShYOi+4Gl9A915lf8T/tIY9X6uLUQqeXm6c5
-	p8wuPwtzWq4UXuR5O8W16BfsjJ8L4ElNjczNkWOC6ChEwUGk3cqC1IoSdSbWykwx8QDMlo0jUEN
-	5DDM2jZXy7IIAZnPGPw6bBoILDl4nse74cNgz4PYw25/u2rNjoAxoTwhqg7wfjWxWMSZGZMm5PO
-	cmI8mbxNg/mfPxYr3DkE3PirYwqWN1eDI9Zw9k3BGNT5TfoHD5c83DFNABjqphqSKHSCwmLz48b
-	7OLrrhM+9S4ea6Vg==
-X-Google-Smtp-Source: AGHT+IGClRjrRzHtx62krt4asIMCvQHnP6xr/r5CpGOAwQrXHtwf7m7w8S9UGWZzoda9nXqVUQIx4Q==
-X-Received: by 2002:a05:6512:12c4:b0:595:7d86:f654 with SMTP id 2adb3069b0e04-597d3fb539emr853943e87.26.1764756707102;
-        Wed, 03 Dec 2025 02:11:47 -0800 (PST)
-Received: from [10.38.18.76] ([213.255.186.37])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bf8a7b2asm5560144e87.12.2025.12.03.02.11.45
+        bh=5vZ1VnRCXWcgnHJPtqVaYUCxuUng/cpM+q7cKSjAg/c=;
+        b=MFfZv6OIQZ7AlqMllC2y3EVl1FRlWi1D5GcdZ2E4natmE55rstx0+M8rNY4W7y7UX3
+         ylzAS8o/J/jfhwwHR1d7xmtdiA7lqnBaG7NjWDuNlNjYvcmorLsiVZTKKtZHnVaI82+C
+         LqbjEilve+pt+T9E8Olp4/vsdzLiaIeBZmXJyDy3ygObvawbJClYoOvZunKcfUm/M82Z
+         bfgN6LJ6vwEMo5cTWEu1jbPcxZ/5BlDlxXVbc6qSgJHuiV3UVMqu3kqevdZU8rr3Ebz5
+         o5+SoJcEsQDzSTxVSm9dTwz/Yr9E+KwfLGar2q7KMKpLlm6wHiwWqF+xcTNtPsDA3DqV
+         G3yw==
+X-Forwarded-Encrypted: i=1; AJvYcCV0qlkxo1wfJU3A5M5O/xBmbnuHtHAvQeA98Q1atg3h4WgRVGnBidJVVbOrVrO1q8u6cWF7saApdGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxzZEXrO+LOOgZlKTvsG4lRWlovtbvmg8RNmicPA88BWQkqyhb
+	1/no2FGT0guFmEILkT/zUEphQ95UsicNeb8dnL8F/iedvhOEttT238sCIIPgb6wvNNZHv10NEJj
+	4LJVYh4nfkDAqGWa1MVwFWoNyaaaPH2jHAfoQiwsxRhA3+ZHx9+owEROrFSShE5w=
+X-Gm-Gg: ASbGnctBzGjD3icbOBmy4sL7ocaKVIzaPGHons/ertoqfe2Kf84HnrgRsmDW93ZOrY4
+	L2QYOPpeauvTxxNL15HI7reXIUfls7Ta9dYks6ZHxzyDKvsL50xKDqHU3EKupDt3wgipE9wYlmb
+	u145YjuNfZDLfSVAZ4gtFpgD961UxHDJl3UkRXzvGHIwU8FpQfTWj/Mhw39WZjkdPlIKUfMEyCH
+	1qRToSTfyPxrYTj9+gnEGaZzLfDePgXndnkeLFOBvTciTowXCyyOipoNm9DI5WkgPyPs1OTDcOK
+	LwXDRx1QgEfqPL512rWWCMlaNMMiLRhRa0bRfkFbOGaBdASpSR43hBUU46ltu44eFU6gE8vEcPN
+	UGZyCX6oNCTLN3YMjrgMZcru8C3WcWd41uYGGiSSipPPcOmQfacpfyobermb9E5UdDA==
+X-Received: by 2002:ac8:5aca:0:b0:4ed:6862:cdd0 with SMTP id d75a77b69052e-4f01b3c6537mr7755951cf.10.1764759140847;
+        Wed, 03 Dec 2025 02:52:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEdWUGIoNIL31WiMD6DpVjL8veFOOnMngyL++n2fVxw+jql4LOvHqu1/kBYwXN7VlvemkiO8g==
+X-Received: by 2002:ac8:5aca:0:b0:4ed:6862:cdd0 with SMTP id d75a77b69052e-4f01b3c6537mr7755661cf.10.1764759140401;
+        Wed, 03 Dec 2025 02:52:20 -0800 (PST)
+Received: from [192.168.119.72] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f59e8612sm1706205766b.52.2025.12.03.02.52.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Dec 2025 02:11:46 -0800 (PST)
-Message-ID: <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-Date: Wed, 3 Dec 2025 12:11:45 +0200
+        Wed, 03 Dec 2025 02:52:19 -0800 (PST)
+Message-ID: <8d769fb3-cd2a-492c-8aa3-064ebbc5eee4@oss.qualcomm.com>
+Date: Wed, 3 Dec 2025 11:52:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -84,188 +104,85 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-To: Herve Codina <herve.codina@bootlin.com>, Rob Herring <robh@kernel.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- David Rhodes <david.rhodes@cirrus.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
- Allan Nielsen <allan.nielsen@microchip.com>,
- Horatiu Vultur <horatiu.vultur@microchip.com>,
- Steen Hegelund <steen.hegelund@microchip.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
- <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
- <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
- <20251202102619.5cd971cc@bootlin.com>
- <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
- <20251202175836.747593c0@bootlin.com>
+Subject: Re: [PATCH] Revert "clk: qcom: cpu-8996: simplify the
+ cpu_clk_notifier_cb"
+To: Christopher Obbard <christopher.obbard@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Dmitry Baryshkov <lumag@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+References: <20251202-wip-obbardc-qcom-msm8096-clk-cpu-fix-downclock-v1-1-90208427e6b1@linaro.org>
 Content-Language: en-US
-From: Kalle Niemi <kaleposti@gmail.com>
-In-Reply-To: <20251202175836.747593c0@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251202-wip-obbardc-qcom-msm8096-clk-cpu-fix-downclock-v1-1-90208427e6b1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=fpnRpV4f c=1 sm=1 tr=0 ts=69301665 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=sfOm8-O8AAAA:8 a=WelLum9FaPyErNbxTGEA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22 a=cvBusfyB2V15izCimMoJ:22 a=TvTJqdcANYtsRzA46cdi:22
+X-Proofpoint-GUID: G5oq5kmh8e0O0cSFt5bBrpEnuGLTTXmn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAzMDA4NiBTYWx0ZWRfX88d0MEb+hADq
+ j9hT0YtNeNGV8jgqGoQ+Lwq1o2TlNJeRE7n0Yjf5tIKX3JgcLFtwWuZOf7JBrB5gr6OKSmp5tUY
+ Hy18GsQUMx2ywum7wUvoLqTTm3MGZDOqdWHNR6VgMK8yLc4uxHn4Me0O+LuYuVoOauPpGLkwTOX
+ JqtDj6iqmzeo2XvMBALBkFTHdXE/D+WjU7LfqBKuuEi+lNCeJIZBrm8/GXl8TpnJKl41JsWD9LT
+ vY5wgjRAUZIuUV76+RaT10EIjN0rAd3+tyWR770tLUPbi80vvNFLiWOFhYVFFpi7SHW2hLQr3NW
+ kZXzUKaHpG09rg78eSo194DBBQ3DFgDipckcPPU0xRoM1igMNsG7Qfw1Ob1VaVZBeS9g4cVrbDL
+ JCrzWOsRyVCqcF6HrMfUv5B6GrlXBw==
+X-Proofpoint-ORIG-GUID: G5oq5kmh8e0O0cSFt5bBrpEnuGLTTXmn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-02_01,2025-11-27_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512030086
 
-On 12/2/25 18:58, Herve Codina wrote:
-> Hi Kalle, Matti,
+On 12/2/25 10:24 PM, Christopher Obbard wrote:
+> This reverts commit b3b274bc9d3d7307308aeaf75f70731765ac999a.
 > 
-> On Tue, 2 Dec 2025 13:21:16 +0200
-> Kalle Niemi <kaleposti@gmail.com> wrote:
+> On the DragonBoard 820c (which uses APQ8096/MSM8996) this change causes
+> the CPUs to downclock to roughly half speed under sustained load. The
+> regression is visible both during boot and when running CPU stress
+> workloads such as stress-ng: the CPUs initially ramp up to the expected
+> frequency, then drop to a lower OPP even though the system is clearly
+> CPU-bound.
 > 
->> On 12/2/25 11:26, Herve Codina wrote:
->>> Hi Kalle,
->>>
->>> On Fri, 28 Nov 2025 10:34:57 +0200
->>> Kalle Niemi <kaleposti@gmail.com> wrote:
->>>
->>> ...
->>>>>>>>>>
->>>>>>>>>> Hello,
->>>>>>>>>>
->>>>>>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
->>>>>>>>>> BD71847 drivers probe to not be called.
->>>>>>>>> This driver (and overlay support) is in linux-next or something out of
->>>>>>>>> tree on top of linux-next?
->>>>>>>>>
->>>>>>>>> Rob
->>>>>>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
->>>>>>> I don't see any support to apply overlays in that driver.
->>>>>> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
->>>>>> proper consideration. 100% my bad.
->>>>>>
->>>>>> While the bd718x7 drive indeed is mainline (and tested), the actual
->>>>>> 'glue-code' doing the overlay is part of the downstream test
->>>>>> infrastructure. So yes, this is not a bug in upstream kernel - this
->>>>>> falls in the category of an upstream change causing downstream things to
->>>>>> break. So, feel free to say: "Go fix your code" :)
->>>>>>
->>>>>> Now that this is sorted, if someone is still interested in helping us to
->>>>>> get our upstream drivers tested - the downstream piece is just taking
->>>>>> the compiled device-tree overlay at runtime (via bin-attribute file),
->>>>>> and applying it using the of_overlay_fdt_apply(). The approach is
->>>>>> working for our testing purposes when the device is added to I2C/SPI
->>>>>> node which is already enabled. However, in case where we have the I2C
->>>>>> disabled, and enable it in the same overlay where we add the new device
->>>>>> - then the new device does not get probed.
->>>>>>
->>>>>> I would be really grateful if someone had a pointer for us.
->>>>> Seems to be fw_devlink related. I suppose if you turn it off it works?
->>>>> There's info about the dependencies in sysfs or maybe debugfs. I don't
->>>>> remember the details, but that should help to tell you why things
->>>>> aren't probing.
->>>
->>> Rob reverted patches but I plan to continue my work on it.
->>> On my side, I need the reverted patches but I fully understand that, on
->>> your side, you need a working system.
->>>
->>> In order to move forward and find a solution for my next iteration, can you
->>> send your overlay (dtso) used in your working and non working cases?
->>>
->>> Best regards,
->>> Hervé
->>
->> Hello Hervé,
->>
->> I have attached the overlay source file: bd71847_overlay.dts
+> Bisecting points to this commit and reverting it restores the expected
+> behaviour on the DragonBoard 820c - the CPUs track the cpufreq policy
+> and run at full performance under load.
 > 
-> Thanks a lot for your overlay.
+> The exact interaction with the ACD is not yet fully understood and we
+> would like to keep ACD in use to avoid possible SoC reliability issues.
+> Until we have a better fix that preserves ACD while avoiding this
+> performance regression, revert the bisected patch to restore the
+> previous behaviour.
 > 
-> I did an update of the reverted patches and I didn't detect any regression
-> with the update applied on my use case but I don't have the needed code to
-> perform tests similar to your use case. Indeed, you apply the overlay using
-> an out of tree code.
-> 
-> May I ask you to perform a test of this update on your side?
-> 
-> First you can use the last linux-next kernel where reverted patches are present.
-> The next-20251127 tag is a good candidate. Indeed both patches are present:
->    - 76841259ac092 ("of: dynamic: Fix overlayed devices not probing because of fw_devlink")
->    - 7d67ddc5f0148 ("Revert "treewide: Fix probing of devices in DT overlays"")
-> 
-> Of course, be sure to have the issue using this kernel with your overlays.
-> 
-> Then can you add the following modification on your faulty kernel:
-> ---- 8< ----
-> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-> index 1528d8ad9f26..aea7bb26d9c4 100644
-> --- a/drivers/of/overlay.c
-> +++ b/drivers/of/overlay.c
-> @@ -190,6 +190,20 @@ static void overlay_fw_devlink_refresh(struct overlay_changeset *ovcs)
->          for (int i = 0; i < ovcs->count; i++) {
->                  struct device_node *np = ovcs->fragments[i].target;
->   
-> +               /*
-> +                * The device related to target node itself could have been
-> +                * removed and re-added. This happens when the 'status' property
-> +                * in the target node has been changed by the overlay.
-> +                *
-> +                * In that case the parent node needs to be fixed.
-> +                *
-> +                * Before fixing the target node itself, fix its parent. To keep
-> +                * things simple, fix the parent in any case. If nothing needs
-> +                * to be fixed, fw_devlink_refresh_fwnode() acts as a no-op.
-> +                */
-> +               if (np->parent)
-> +                       fw_devlink_refresh_fwnode(of_fwnode_handle(np->parent));
-> +
->                  fw_devlink_refresh_fwnode(of_fwnode_handle(np));
->          }
->   }
-> ---- 8< ----
-> 
-> My hope is that this modification will fix your issue.
-> If so, I will add it in my next iteration.
-> 
-> If you cannot perform the test on your side, can you provide me the out of
-> tree code you use to apply the overlay?
-> 
-> Best regards,
-> Hervé
-Hello Hervé,
+> Fixes: b3b274bc9d3d ("clk: qcom: cpu-8996: simplify the cpu_clk_notifier_cb")
+> Cc: stable@vger.kernel.org # v6.3+
+> Link: https://lore.kernel.org/linux-arm-msm/20230113120544.59320-8-dmitry.baryshkov@linaro.org/
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Signed-off-by: Christopher Obbard <christopher.obbard@linaro.org>
+> ---
 
-I tried this patch on next-20251127 by manually adding the added lines 
-to /drivers/of/overlay.c, and it did not solve the issue. I will 
-continue to test this.
+It may be that your board really has a MSM/APQ8x96*SG* which is another
+name for the PRO SKU, which happens to have a 2 times wider divider, try
 
-BR
-Kalle
+`cat /sys/bus/soc/devices/soc0/soc_id`
+
+see:
+
+https://lore.kernel.org/linux-arm-msm/20251111-db820c-pro-v1-0-6eece16c5c23@oss.qualcomm.com/
+
+https://lore.kernel.org/linux-arm-msm/kXrAkKv7RZct22X0wivLWqOAiLKpFuDCAY1KY_KSx649kn7BNmJ2IFFMrsYPAyDlcxIjbQCQ1PHb5KaNFawm9IGIXUbch-DI9OI_l73BAaM=@protonmail.com/
+
+Konrad
 
