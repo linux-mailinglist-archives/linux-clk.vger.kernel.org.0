@@ -1,136 +1,134 @@
-Return-Path: <linux-clk+bounces-31425-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31429-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19874CA161B
-	for <lists+linux-clk@lfdr.de>; Wed, 03 Dec 2025 20:28:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4E01CA26EC
+	for <lists+linux-clk@lfdr.de>; Thu, 04 Dec 2025 06:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9A4D4300A378
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Dec 2025 19:28:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B787A3043F52
+	for <lists+linux-clk@lfdr.de>; Thu,  4 Dec 2025 05:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A31334C2B;
-	Wed,  3 Dec 2025 19:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z0SgB89e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45172FD7A8;
+	Thu,  4 Dec 2025 05:51:51 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-sh.amlogic.com (unknown [114.94.151.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B81308F1A;
-	Wed,  3 Dec 2025 19:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3122F90C4;
+	Thu,  4 Dec 2025 05:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.94.151.114
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764789761; cv=none; b=UKc0qcaVPG4ahLAxNy7fo4TxScNSdZLC9KBPTIAHWP9rxoe6AOIyaU1N0cDFiFxbMUb3pUTzathNCOj0pT/8C/BxM6+NsB24T1c21IpcsG/ME5LhvR7DCplT9xX+YCl5hfP+h9e8Gmw7TdAJexLwXZDILcuSwJxk9V4Mepc9Fbs=
+	t=1764827511; cv=none; b=L4EeLfGSx236L02YR0XLYZE0vYf5iYtpapRntJ4DAA/eqRSqKt4oEirxhKv+Idy1uyMlVh8LR8MjKpCSl5zsgSOF/mSPZr/m5oiqrW9BAPXD4a/QaIRfo0Q6O1i5oQwLsti9YXHNosUxl8xVVC7jwLg14c8k/cNLGtIOi3yz96M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764789761; c=relaxed/simple;
-	bh=WkqCGLI3whoa9doVwjsZqIAqwqaUeZG5Ox8nsycbuMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gbmO8qOJ1vqcYcP/lHdmMDKcsDRkS1t4NhYGZ5mJ7oLCVlZDmseQNWjY25uTeukKQqKKXD/BpZ9ofPymTu2clPVZFKwN0ZsFuhJNBVKcI5QDQrOJ1Qj0iNwgwzShgO6vKrHy6Bmg3oyYpVBSn903TIaKpdUO35McUbqkeEyyMJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z0SgB89e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4B1C4CEF5;
-	Wed,  3 Dec 2025 19:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764789761;
-	bh=WkqCGLI3whoa9doVwjsZqIAqwqaUeZG5Ox8nsycbuMs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z0SgB89euj89qgZhucbSoprGcTBlzjyQjzEq+e5HaU4B4ow/8pqfkziM5CBkQCysy
-	 SsEvFYJPS8JKNtP80C2jkFTsSi0WnEtpCiywGrI12PsrUGEy0bfc1pCgEl/rPfpTJD
-	 qNsMImVo2MsiHQgAMu5nJC7qVqrkOh8ph52sDQU3GdjidI79cDcZsqvNKHyjIs2Wba
-	 0WGFrYhc7vO7LlevbyFV0M1TP5LmnQSEZaXjO0MapA/NDihpJm3s674FH9Qrg2waQi
-	 HZUVJ0zsgjFLiL5bxTbRwrrlY6BGbdQAV5N4OR9ukYchqg6VCR83RCJX063sznVgb4
-	 B+hDFHjMxvYrA==
-Date: Wed, 3 Dec 2025 19:22:35 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-	claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org,
-	richardcochran@gmail.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-	luka.perkov@sartura.hr
-Subject: Re: [PATCH 3/4] include: dt-bindings: add LAN969x clock bindings
-Message-ID: <20251203-flatten-spotty-69f16d3460f0@spud>
-References: <20251203122313.1287950-1-robert.marko@sartura.hr>
- <20251203122313.1287950-3-robert.marko@sartura.hr>
+	s=arc-20240116; t=1764827511; c=relaxed/simple;
+	bh=4XN0ItgoIF4/eYCB1faddU4KVIUQ+3L2LV1OpiKMtv8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kd+UvEqWeV74YaTzGp2mF/GY3ZTPoU+9iLvDQBmN7Z1p3yIZ7Yc9FbEKv9tuN7EL4atRy40a/fZCkkqdwV4fE36z80mt9pSp16Y9oiaZT/QHSfSO4X8xqt0yz1FYbEJLeDYHbAy5KRaOx5TVpg/iAp+4oOrk2MUzSB0NA/Lrs4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; arc=none smtp.client-ip=114.94.151.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
+Received: from rd03-sz.software.amlogic (10.28.11.121) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.61; Thu, 4 Dec 2025
+ 13:36:37 +0800
+From: Jian Hu <jian.hu@amlogic.com>
+To: Jerome Brunet <jbrunet@baylibre.com>, Xianwei Zhao
+	<xianwei.zhao@amlogic.com>, Chuan Liu <chuan.liu@amlogic.com>, Neil Armstrong
+	<neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+	robh+dt <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+CC: Jian Hu <jian.hu@amlogic.com>, devicetree <devicetree@vger.kernel.org>,
+	linux-clk <linux-clk@vger.kernel.org>, linux-amlogic
+	<linux-amlogic@lists.infradead.org>, linux-kernel
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v6 0/5] add support for T7 family clock controller
+Date: Thu, 4 Dec 2025 13:36:29 +0800
+Message-ID: <20251204053635.1234150-1-jian.hu@amlogic.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kdqp/vLO78ga2zHb"
-Content-Disposition: inline
-In-Reply-To: <20251203122313.1287950-3-robert.marko@sartura.hr>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+It introduces three clock controllers:
+- SCMI clock controller: these clocks are managed by the SCP and handled through SCMI.
+- PLL clock controller.
+- peripheral clock controller.
 
---kdqp/vLO78ga2zHb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes v6 since v5 at [5]:
+- add a blank line after each PLL register region
+- update GP1 PLL note
+- update PLL and peripherals help message
+- add parentheses around the _iflags member in MESON_COMP_GATE
+- drop CLK_SET_RATE_PARENT and the 4th parent for rtc
+- move sd_emmc_c after sd_emmc_b
 
-On Wed, Dec 03, 2025 at 01:21:31PM +0100, Robert Marko wrote:
-> Add the required LAN969x clock bindings.
->=20
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  include/dt-bindings/clock/microchip,lan969x.h | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 include/dt-bindings/clock/microchip,lan969x.h
+Changes v5 since v4 at [4]:
+- rename rtc and cec dualdiv clocks
+- rename dsp clocks
+- rename anakin clocks
+- rename fdiv2_divn to 25m and fix its parent
+- add flag for T7_COMP_GATE
+- use T7_COMP_SEL/DIV/GATE to define glitch clocks
+- add CLK_SET_RATE_NO_REPARENT for t7_eth_rmii_sel and rtc
+- move module_platform_driver after clock driver
 
-Same thing here, this should be specific. Probably 9691, because that's
-what you're using the compatible of in your dts.
+Changes v4 since v3 at [3]:
+- drop amlogic_t7_pll_probe, use meson_clkc_mmio_probe instead
+- add CLK_DIVIDER_MAX_AT_ZERO for pcie_pll_od clk
+- add frac for hifi_dco_pll_dco
+- add l_detect for mclk_pll_dco
+- drop v3 5/6 patch, and use MESON_PCLK
+- drop SPI_PWM_CLK_XX macro and use MESON_COMP_XX
+- drop the register's prefix
 
-pw-bot: changes-requested
+Changes v3 since v2 at [2]:
+- update T7 PLL YAML
+- add 't7_' prefix for t7 clock name and variable in t7-pll.c and t7-peripherals.c
+- correct v1 patch link
+- add new macro MESON_PCLK_V2
+- update the driver,header,yaml file license
 
->=20
-> diff --git a/include/dt-bindings/clock/microchip,lan969x.h b/include/dt-b=
-indings/clock/microchip,lan969x.h
-> new file mode 100644
-> index 000000000000..5a9c8bf7824a
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/microchip,lan969x.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +
-> +#ifndef _DT_BINDINGS_CLK_LAN969X_H
-> +#define _DT_BINDINGS_CLK_LAN969X_H
-> +
-> +#define GCK_ID_QSPI0		0
-> +#define GCK_ID_QSPI2		1
-> +#define GCK_ID_SDMMC0		2
-> +#define GCK_ID_SDMMC1		3
-> +#define GCK_ID_MCAN0		4
-> +#define GCK_ID_MCAN1		5
-> +#define GCK_ID_FLEXCOM0		6
-> +#define GCK_ID_FLEXCOM1		7
-> +#define GCK_ID_FLEXCOM2		8
-> +#define GCK_ID_FLEXCOM3		9
-> +#define GCK_ID_TIMER		10
-> +#define GCK_ID_USB_REFCLK	11
-> +
-> +/* Gate clocks */
-> +#define GCK_GATE_USB_DRD	12
-> +#define GCK_GATE_MCRAMC		13
-> +#define GCK_GATE_HMATRIX	14
-> +
-> +#endif
-> --=20
-> 2.52.0
->=20
+Changes v2 since v1 at [1]:
+- add CLK_MESON import
+- add const for clkc_regmap_config in PLL driver
+- fix eth_rmii_sel parent
+- update T7 PLL YAML file
 
---kdqp/vLO78ga2zHb
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]: https://lore.kernel.org/all/20241231060047.2298871-1-jian.hu@amlogic.com
+[2]: https://lore.kernel.org/all/20250108094025.2664201-1-jian.hu@amlogic.com
+[3]: https://lore.kernel.org/all/20250509074825.1933254-1-jian.hu@amlogic.com
+[4]: https://lore.kernel.org/all/20251030094345.2571222-1-jian.hu@amlogic.com
+[5]: https://lore.kernel.org/all/20251121105934.1759745-1-jian.hu@amlogic.com
+Jian Hu (5):
+  dt-bindings: clock: add Amlogic T7 PLL clock controller
+  dt-bindings: clock: add Amlogic T7 SCMI clock controller
+  dt-bindings: clock: add Amlogic T7 peripherals clock controller
+  clk: meson: t7: add support for the T7 SoC PLL clock
+  clk: meson: t7: add t7 clock peripherals controller driver
 
------BEGIN PGP SIGNATURE-----
+ .../clock/amlogic,t7-peripherals-clkc.yaml    |  116 ++
+ .../bindings/clock/amlogic,t7-pll-clkc.yaml   |  114 ++
+ drivers/clk/meson/Kconfig                     |   27 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/t7-peripherals.c            | 1271 +++++++++++++++++
+ drivers/clk/meson/t7-pll.c                    | 1074 ++++++++++++++
+ .../clock/amlogic,t7-peripherals-clkc.h       |  228 +++
+ .../dt-bindings/clock/amlogic,t7-pll-clkc.h   |   56 +
+ include/dt-bindings/clock/amlogic,t7-scmi.h   |   47 +
+ 9 files changed, 2935 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-peripherals-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/t7-peripherals.c
+ create mode 100644 drivers/clk/meson/t7-pll.c
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-peripherals-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-pll-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-scmi.h
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaTCN+wAKCRB4tDGHoIJi
-0o53AQCDZtek8NKV0Xw9fXMT0+zQW1HLixWl5IaUrtwLtVkOmgEA8CT3i0Rp/7MV
-1UDq9stZ0CrzfrbDdsDdOOPWU/2PUQg=
-=9aIN
------END PGP SIGNATURE-----
+-- 
+2.47.1
 
---kdqp/vLO78ga2zHb--
 
