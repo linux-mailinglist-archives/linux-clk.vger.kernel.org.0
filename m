@@ -1,106 +1,138 @@
-Return-Path: <linux-clk+bounces-31474-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31476-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CD15CAA002
-	for <lists+linux-clk@lfdr.de>; Sat, 06 Dec 2025 05:00:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78D7ACAA4DB
+	for <lists+linux-clk@lfdr.de>; Sat, 06 Dec 2025 12:12:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E17323015125
-	for <lists+linux-clk@lfdr.de>; Sat,  6 Dec 2025 03:59:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F1865305E216
+	for <lists+linux-clk@lfdr.de>; Sat,  6 Dec 2025 11:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F96D2BCF6C;
-	Sat,  6 Dec 2025 03:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E36662E03F1;
+	Sat,  6 Dec 2025 11:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukkmd+3K"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="QEpcormi"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFBF296BD6;
-	Sat,  6 Dec 2025 03:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B08C222585
+	for <linux-clk@vger.kernel.org>; Sat,  6 Dec 2025 11:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764993594; cv=none; b=kBv9wpHN46kn+/av/kwGBJahJARe2B+yaTnCSrPOLuOIN40e0fPv3nocDsZ18jttREJrWXy2Mwn5Dy9+ZYLHJf6w3aA4+bTQ1NkiZkMK52C3+tdbpQxELfJMZrRYEyNcmmnc3I/XNw1sKYQZeRzDwzYkG2PR3a2flcSSiC4B38Y=
+	t=1765019511; cv=none; b=E2s77BkvW7r3D/tU9osffyufAIOB+5p/ikqyzKK8VVYTuaAsESZbCRgGe3ES7N1sS41cvZAHVmL5D65tqFFll9ABswJ7PzkddtRUTPT4qPVKkQ1wCaK4gKz3MkDKbyHgigjH0jvBAAKKgJQRC3HX+veLO8m9bLW8hbdWD2jyapA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764993594; c=relaxed/simple;
-	bh=+uq+QxkkNnADYHAyHPkaa9Tz9K/l+B6LhYrUK7N/CSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QNeeckcHz6NlqzRzeQ1Hx65NrT75ASIH1eyfMyFkM6wJWvzWIlWZPNPqQAJE29UF3knuTu03sAjkFrI4DXg0L6dBk1uTuKhjas/j5nosZEv64Atwm0dvtYpzeTBwA0MziPXwOQzqIOzlCKcBPrV666Jrx96ItI0rJr/hIklktF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukkmd+3K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC387C113D0;
-	Sat,  6 Dec 2025 03:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764993593;
-	bh=+uq+QxkkNnADYHAyHPkaa9Tz9K/l+B6LhYrUK7N/CSc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ukkmd+3KFD0GknD7DU0nnmaVMl5vA/1pjIf4ITt3AxrjzQvamGGUenDMTFd6dZS8H
-	 X/hYbcySzN9mR0faVianX9ww9CJl1zQjtRwgPAwQ8Cazvzutqbbg71Ov07myp2nCxg
-	 zRSD9wJeJp9dbixVPbctOGPAp7OwSzhANknogSd445Xov/4SYTeYJ/TOrpxwOjAZmV
-	 Ft6CIAyV1TpjvQg9ajTsVTI7WY60rnS55ROo3qgWAIOSsizAIr9BXzy2N4H2VhIimE
-	 cGHGvZLka0mPDUGWUgTX5IhUkxAb55e8W1NZw07+ZZ27nAQVMqq/lnPBVOotV4vHAK
-	 Xvni98nUwm8Gw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 0/3] Define VDD_MXC for SC8280XP
-Date: Fri,  5 Dec 2025 22:06:06 -0600
-Message-ID: <176499396490.224243.15580177530806530343.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251202-topic-8280_mxc-v2-0-46cdf47a829e@oss.qualcomm.com>
-References: <20251202-topic-8280_mxc-v2-0-46cdf47a829e@oss.qualcomm.com>
+	s=arc-20240116; t=1765019511; c=relaxed/simple;
+	bh=i6DFH1owewNhW67SaCjr52SMT9liSY8pPxcicJCPwkg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k4E7P7c23nTOoGa/ho9wuVeZfTDZX9gnGBJhg5xIJD/MbPvVUxFd2eVG36R7hGu/Gnv7WUqws7SXTHskLN39H3YVhyPGrlaSY68UTXCHxMr1mv5W9t2nTQ/qUdD9KKXR4coZZneLQwzjFYo7Y2uvq40xovZtC9EHMnusVgij1bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=QEpcormi; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso25090065e9.3
+        for <linux-clk@vger.kernel.org>; Sat, 06 Dec 2025 03:11:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1765019508; x=1765624308; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kA4dYuB49zNcflG5vvLKKvtHOONzwthyiF/LnUsNAAo=;
+        b=QEpcormiRUQoWpOAd9BKXD8tVp1JKrmxelxLLiHPMmoMhrXelQfwXGLFzjkyb6L8JM
+         E7+AHRcMxNk9TCR9wE1usq5zOtI/zY+laCb5i1711Bq3nFSMht6PInpXVH2zu0/qX7Je
+         ADreAEEJBMv6n3sJtb2y19MAD4OHufDYP4jS+PXmmwk6Vytm9hVQoQf1/mk1dcA2GIBy
+         1wVoshSzXVFqE/S9TQ6uepyaRjcFZOotLPa2Ku/T7VRRwcFbSk2ZjGMRi9WeaJ8Bjf2m
+         f1VosxKI1ZlrwarYeaaXai3flwCv6QJLpgznhSvac/WvqQYD24xStPpTQ7ECG+y6BmRj
+         oW/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765019508; x=1765624308;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kA4dYuB49zNcflG5vvLKKvtHOONzwthyiF/LnUsNAAo=;
+        b=QLDC5Gx4lAQ8EUis3DDFsVukr5S3IVYTpCplnVZn3M49zZjbXuFmTBv75P2K+zEE5e
+         ypqRLpJX5qNBOxEEHJI+MG6ZnBEQqkSNbYhXTONCM9ldRE/stwjZSf2IIPtYANimg3Qk
+         SiUWS6lZ0BaWuDLd92+vbpQ3AlGxlC+tFu2q0GfDEVweaDrVF7vJudXTujqUEIa9eJpr
+         /NQqwIhZYU8OsMNmJLRIjzg9fngAqJdJslLsGuiofljhllj2oYtstceKs38uxuwU5IJX
+         EDu3/ucKO7o4uGLVFHV8PteTxYmNejc4obW9OVwQaAioFHNdyUOgluyZfz206uqNHqHi
+         udkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzrLHqn6mPHJr67oA90NyzxpO6+ELN3WmaVG21jVNT3F7p8qSLd2ESyz/vXSaKBY8pt9ViDiq7eDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmxfkXlNJxFkz9g0VzfOnl9UYLPo64xjIyoqPav2fGQhXW6qvX
+	EKMw8+bxSpVpcd0aloSNXH1uVppKT+oAFnMeVh+9sjOsx1KckYbmauKnLpJy3e02uqA=
+X-Gm-Gg: ASbGncsKoHytkXKyCwGsLw5UGvJ60sNCg3oAh7loiroA6ORtEsmOzSTDwzjBRnCFLet
+	Al97Oq/cNGFi5+FHLpS7kG3uCiK55cDZ92ycsbcB6ENoy6vk+pmH7kb56HtYxGYO5v7MW4BbIYm
+	3WxIF46q90hy5QnJ1u+AHBDZkTEo38q3tCuila3fiDdqqNhgW8DfJySvPXmlLKHMXvNFSZOg0TD
+	QX0DMW9JAMCiPxARpMHxphHjgKoMJTScigRCMH5XuhmM4jr1+9Q6e0DuF3mRtSvzyG64bASk7iq
+	9ar1N2oX1Y36ntDP87xoql+mu5q9vABcDaxy/u6V9g7kMkYAmT/2mWQZFbU0p/tvXjTk3gxCkuh
+	ZFKoj1o1BSJQBodPZp61ZLCYhpmLTc/uOpusWfvdMzl5CjtAPHi4Z2BoVmZ86uSnoeNqBdEClvW
+	dJ0HCb6zlqjB/uUlVcUbo=
+X-Google-Smtp-Source: AGHT+IEXAY0hNz2eOSoL0Hv03FAjM8+tLdCbApP/CpVTsWfXGDNXQB9mZEeEHfi46Teq/N/IO2sImA==
+X-Received: by 2002:a05:600c:621b:b0:477:55c9:c3ea with SMTP id 5b1f17b1804b1-47939e50ce2mr25774055e9.35.1765019508463;
+        Sat, 06 Dec 2025 03:11:48 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.134])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479311fbaf4sm124579745e9.15.2025.12.06.03.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Dec 2025 03:11:47 -0800 (PST)
+Message-ID: <ae7dd616-f09f-4729-a15c-411d964461d6@tuxon.dev>
+Date: Sat, 6 Dec 2025 13:11:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] clk: microchip: drop POLARFIRE from
+ ARCH_MICROCHIP_POLARFIRE
+To: Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+ Daire McNamara <daire.mcnamara@microchip.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+References: <20251117-shadow-police-56aba5d855a3@spud>
+ <20251117-bulgur-wildfire-a8c5a2b417dc@spud>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <20251117-bulgur-wildfire-a8c5a2b417dc@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi, Conor,
 
-On Tue, 02 Dec 2025 18:36:19 +0100, Konrad Dybcio wrote:
-> This has somehow been omitted, leading to potentially stale votes.
-> On the flip side, the domain will now be powered off, which will
-> uncover any omissions we've made in the DTs so far.
+On 11/17/25 17:35, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Reasonably tested on an x13s without pd_ignore_unused (camera still
-> works).
+> This driver is used by non-polarfire devices now, and the ARCH_MICROCHIP
+> symbol has been defined for some time on RISCV so drop it without any
+> functional change.
 > 
-> [...]
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  drivers/clk/microchip/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/microchip/Kconfig b/drivers/clk/microchip/Kconfig
+> index cab9a909893b..a0ef14310417 100644
+> --- a/drivers/clk/microchip/Kconfig
+> +++ b/drivers/clk/microchip/Kconfig
+> @@ -5,8 +5,8 @@ config COMMON_CLK_PIC32
+>  
+>  config MCHP_CLK_MPFS
+>  	bool "Clk driver for PolarFire SoC"
+> -	depends on ARCH_MICROCHIP_POLARFIRE || COMPILE_TEST
+> -	default ARCH_MICROCHIP_POLARFIRE
+> +	depends on ARCH_MICROCHIP || COMPILE_TEST
+> +	default y
+>  	depends on MFD_SYSCON
+>  	select AUXILIARY_BUS
+>  	select COMMON_CLK_DIVIDER_REGMAP
 
-Applied, thanks!
+This doesn't apply on top of the current at91-next. Maybe rebase it once
+6.19-rc1 is out.
 
-[1/3] dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
-      commit: 01e17231b051b9392f93d1c7a7adfec5a7d4d72d
-[2/3] pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
-      commit: 2dac255225ece85cf38c9557a413ac324e3a6651
-[3/3] arm64: dts: qcom: sc8280xp: Add missing VDD_MXC links
-      commit: 3e12e2ec598b90e8f6af8b455ceeba8cd58123ad
+Thank you,
+Claudiu
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
 
