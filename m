@@ -1,227 +1,119 @@
-Return-Path: <linux-clk+bounces-31497-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31500-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CD83CAC868
-	for <lists+linux-clk@lfdr.de>; Mon, 08 Dec 2025 09:41:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C756ECACD45
+	for <lists+linux-clk@lfdr.de>; Mon, 08 Dec 2025 11:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E9E613038F63
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Dec 2025 08:41:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 02F373005A89
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Dec 2025 10:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6C62DCF43;
-	Mon,  8 Dec 2025 08:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4B4248896;
+	Mon,  8 Dec 2025 10:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="BhQwDyTq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abb7oYgU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023127.outbound.protection.outlook.com [40.107.44.127])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766862C3259;
-	Mon,  8 Dec 2025 08:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.127
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765183264; cv=fail; b=rTXiCbINrP3jQ6TptbqD9iv5jtnJwutppWqUIoP6w/brLQfy/ypvbCUWybUqRY9JJLvPFLhop3JMcmGsbfvNomMM7MaP10LGUWzGdjvUg5yuzNOm1D9VLSBcdQ48h7vy2/6hyx4hZmtbYYs2Q9whxNF2G4wbsR9eQeSHt0F5ZjE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765183264; c=relaxed/simple;
-	bh=jpVCYtT0SN2uCsQd3ZVsUkt9KgkfyhpzMNugsgHgtDc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sOOOydMug/FtrqgTud511uRp6cAzn1ZrMNs8vif7cawxwPhOzMfWXDTu4Srtv536+PtVZZDJYJeeutBreJrdA/5wDtrhmUmZgNJ68GV1PRDEJuE/z/Xq+sfEcjOx+JHDEl9gn7iExnE3R9fD5NR8wL7jW6PS20VbCzwAtGjOSCw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=BhQwDyTq; arc=fail smtp.client-ip=40.107.44.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UEGDP02NkI8FZx+2cojgK3KhnLmA+JUFKmwRUQ9qSWaJMg2eE2ynkPYEuKZtMjwM8xim5CbAkuXZOJ2CJQgzGxbuEZLGYEckg8rkhvzZdP+2bUrBsu2Ef796AdyTcgqOmf7yLslC+8+U0W7LXrqyEv30eaCVp9uGZE4d7L1gzT7DsulaxwmtbNeOo5ET+yeVejQ50Sd4Fbd+WFaBiVkPpnvZ6ZLJaWYMGgaSqxt9fSKXiZJYru6rp6M3kQW9/xN1BXMbIB+Icx0LJPJL/wFzQpQglGZagMp18eAtwKvMk3LP3SmtkvdavzvC6XDCuYi7jg/mmzZKBlDLetaQ1/nJaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=25gliexFIPw1xaXaA4p1vXERtNcjYDKdlRD07e+H4mA=;
- b=lUzuGNiZwNTMpkz0hgZKm6WGPMXs5GFmQRjJyYNjmli+SXACtHAVjCVKdIM0mw1/NwQKjQcefr7sl9wZMFyhJrr0FCF4Dgg3QPZO+JqNG6cdIcPx7HdqB2EKNULdNEG/A1KTBxyJxqOFoDMnvLj/JFsqv9apF79pUG9RVS/S7Qgjdzx195yNNLCItDi4/oALl+njV6SWULskMk6JhYGdJMdCjubbxeQEj51WOVokUK36LqciNUtKLdqGry+Qsbb7fsAnB+EWY+Ffq1t3q9XOAedeBr++f2zESPlvRMSIoFFu8U8vWu6Piu0RYyCCVZ9Ye0ClnCCboeQ3XDXsURfULg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=25gliexFIPw1xaXaA4p1vXERtNcjYDKdlRD07e+H4mA=;
- b=BhQwDyTqW0PnN9UmnEPsTAbwdEWmvj469ri2IGHBgKt+ZgxOVhRGDYBLIiG6gAw7zRjRYtPggOLWqObJbdD/zKBuvEb31PB05SBxqDFcdyYQLEkCIm8DW0jnEpTCzN10/HlvdOOnLLyYEuFOkyXD6J/zjUZz21wN+mtdLWgxFjYQiBwBihwvDxfxR6cbgu2IjN2x9QbQFwyB0/agwqvIQXRjCKDUqQNWVlMv9H9lR30+ejGSPeAQtF3ZAqMmJux6mWfudNYD1E+DLR4kqwwREK1ioN4IvOW0P/Q2y3g8/eQTtreowt0f4EvwSSTNfI9DEg3AmVzl5qAiLfmPVqkEMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from KL1PR03MB7149.apcprd03.prod.outlook.com (2603:1096:820:ca::7)
- by SEZPR03MB6569.apcprd03.prod.outlook.com (2603:1096:101:74::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.14; Mon, 8 Dec
- 2025 08:40:59 +0000
-Received: from KL1PR03MB7149.apcprd03.prod.outlook.com
- ([fe80::a311:33f6:519d:73bf]) by KL1PR03MB7149.apcprd03.prod.outlook.com
- ([fe80::a311:33f6:519d:73bf%6]) with mapi id 15.20.9388.011; Mon, 8 Dec 2025
- 08:40:59 +0000
-Message-ID: <dd90b445-bafb-46d4-8cec-e0877cf425b3@amlogic.com>
-Date: Mon, 8 Dec 2025 16:40:57 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/5] dt-bindings: clock: add Amlogic T7 SCMI clock
- controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>,
- Xianwei Zhao <xianwei.zhao@amlogic.com>, Chuan Liu <chuan.liu@amlogic.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, robh+dt <robh+dt@kernel.org>,
- Rob Herring <robh@kernel.org>, devicetree <devicetree@vger.kernel.org>,
- linux-clk <linux-clk@vger.kernel.org>,
- linux-amlogic <linux-amlogic@lists.infradead.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <20251204053635.1234150-1-jian.hu@amlogic.com>
- <20251204053635.1234150-3-jian.hu@amlogic.com>
- <20251208-independent-warping-macaw-74a169@quoll>
-From: Jian Hu <jian.hu@amlogic.com>
-In-Reply-To: <20251208-independent-warping-macaw-74a169@quoll>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI1PR02CA0011.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::19) To KL1PR03MB7149.apcprd03.prod.outlook.com
- (2603:1096:820:ca::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ADF2FF64D
+	for <linux-clk@vger.kernel.org>; Mon,  8 Dec 2025 10:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765188846; cv=none; b=Zt6R/zHcWDlFCrxt9r/hEBiGOtjcj0f49FdSnVVSrzlFJ+F4vNwTq4q+X8abWr2ZaMqQeWYEF6ds8OsOxw1z5U7QBSjfEOoDc5tGhAOjqVLnu760+hOTH4eOxkgmjSjhjt7MfEU7aTEP+qL+IEXAdCxbrcsE1rWKpeBWw8k7hQQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765188846; c=relaxed/simple;
+	bh=OGUGoktCxv+0k4ONqo1t/yzLSpibAYrMGksQDCiuiag=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WGamZKeSNifXf6T2AVFFIzb+Sk7lQ29rkjyz3F0P94rkFJRfcC0rMFjPyUGE1jWN65Qptl8Xo0SeSJYMZXkeRdSLLzCo4KMGDFcNgfHl07YOLm1N+m8Ugsnsf3lIoD6VqEdMrrumnu9RUyLdG0Lak41dMrWLpaNVXpWrfD+Nw2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abb7oYgU; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-64951939e1eso390194a12.1
+        for <linux-clk@vger.kernel.org>; Mon, 08 Dec 2025 02:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765188839; x=1765793639; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jrsDhKmOIR7ug90SqQaxVq0POQHtj2Sf0DAiQ8VB8DI=;
+        b=abb7oYgUM3gjNdwDphwx0AO0zVm3y4GnghQkL5QgC38usakCoqVvqGcr6PyG3rmm/q
+         L51uiKUQnizzYdJR7upjrP49FbGT4MDqZ9Nd+fByKNpHr161UjsNNBjOfQRZDj5mQVNs
+         LK2jltdDxUjK1tyxXH6+AZnwclCCfhjjj7TkMS2TLVX9imWt/dxtfDR551L8SwGWciQX
+         00RO/1V9Z154Kx5ZO6TB8f0IUEjuCDbXpYRq98cqG2IjxfoFQC+fDWVM6lu9JciZdoHA
+         B5rFtDLgF525AfYN5RiqsPgAbk4ruPr7qKryDxBD0MJI73ybjUGZg4EEkXEIGcR0Jmo7
+         NMYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765188839; x=1765793639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jrsDhKmOIR7ug90SqQaxVq0POQHtj2Sf0DAiQ8VB8DI=;
+        b=j8loarLvZQxZGfpLnNcgeSoqFhIcNFnB2lK33c+xiEBWcQYSZyM3naCIk1iiK2iQPl
+         wanzCXUpybb1mMijuYRbxNIqvmneieEqHO8BmMGCr2rR/6S98S/RlcIm+g+cCPX/nJmV
+         JCkNZgPe3S2XU8/KQfeXFkIrzbZJplBnbsrHD18ueCzUmPNF4SsVdKZ4ZzhGBku3EIcM
+         2MBvVOfps19Et+lW8daykMI3N525KG/YRnN5JginIs85HD/iHozGtXI/tABKVLqUq64U
+         H149c9GeRLU8Po/DmTmAYoyNqEmC3XdMa0Umns1/85nP0CdqrBwh2YLlH4ec/ALDegdv
+         etmg==
+X-Forwarded-Encrypted: i=1; AJvYcCU57HrhoJYhqxA+7JmkYf7CUv2SQWniD1uDyYMg7Cl7uDvMKnyh2BJ7gOg8O06CtRT8awng7aoFhoM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqCjQaXO1S8l4134E3+9VCCvmmFZDfPy//J50DFGzZnRHGsFZF
+	1dx60bVdEbiBCyJQtWaMJyW1K6wOp40cgGoOPsQHz1+r2QeVCjs/8ABg
+X-Gm-Gg: ASbGncvympVKKoOXvzf65r/829ip1ImGO2isz84igd7DgOZrI6pNZyVqBc897G4Cdtn
+	UQa9OOAV12etziBNFA3U1nZodp/KmGTAPDPZx7ZnmoZdnSFEK88XdoSIpahR0LSIWHFi43N7Kw/
+	sW35bmDYyca8SjDB7PvBuKLEODu4VM0ErAfmGepvYySkfm9CO0f3vMAcpAF5dL3BLByXbY25pCu
+	ZxzL/BH++wc2dh/+guBzaEhR04r98GrDrgZpQfQL80fj18Ij1vCRiVepVU/BzCvxfW3DNODwESH
+	7TgPvhlGSxOKICATy0IHr5pjIwJu42ClKbVR+tHeYVReYOX6yxkX4x7V+As60HSr/oe0cXXbIEC
+	kCstWX3oLlI+s46Sm2uJBbhfXNVeT72kYAfOH/1I9NMYFhMJIeU6VmN0OXbIyqiilj3PhiYhRPz
+	jVnTrLSz6Vsut9PZ9ASkXxWH5CmYHLFF5lBbG5CRPL63qdLjC79iKeN9rrw8hGsZ6Mp19XR6/Gn
+	W0OVnMOUeZQGLpdjjQU0e/+AM8=
+X-Google-Smtp-Source: AGHT+IH2rD/pn61Su/h9KiPu4oiF4zA/ByyzaA9JgtRUgkihMJUMRcUEh402amntg+HsE8+/LFj8fg==
+X-Received: by 2002:a05:6402:4403:b0:647:8538:fcf4 with SMTP id 4fb4d7f45d1cf-64919c10408mr6355625a12.10.1765188839288;
+        Mon, 08 Dec 2025 02:13:59 -0800 (PST)
+Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-647b413b590sm10547083a12.35.2025.12.08.02.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Dec 2025 02:13:59 -0800 (PST)
+From: Biju <biju.das.au@gmail.com>
+X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH 0/2] clk: renesas: rz{g2l,v2h}: Deassert reset on assert timeout
+Date: Mon,  8 Dec 2025 10:13:32 +0000
+Message-ID: <20251208101356.101379-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR03MB7149:EE_|SEZPR03MB6569:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3506ffbf-ffe6-4298-b2e1-08de363582d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?OVd3Q2VxQ0xiL3NaQk1kbEk5QVU4aEM2aWtPM3MzaU5SaEFrbi9QSVZTckIy?=
- =?utf-8?B?SmxJcEhTQll5Tkl4RmJ3LzFzWWZEUFdobEd2OWRLaXZ0MTZkQTVTNzNqbmFT?=
- =?utf-8?B?SkNYa0RnQ0NQR3UzaHpOZzczdTBJNzBxenZFL2U0N0ZxTVJ6VmRrSHp3OWdZ?=
- =?utf-8?B?dVlURTY2byswN1krWXRLb1NrQmI4RnZMOVdBNTh3K29BVDh0eVdrcVdZUVcx?=
- =?utf-8?B?MVQySDBnUE5LNkg1ekN6ejRSSVR5cEt6bG9DeFByRFN2aGlTQWRQdzExL2Ja?=
- =?utf-8?B?UCszZnlsYUVGcXY1Ukw5Rk5Ec3lCZWk4VnhmRVpBbGFWaXc1YjROV1FjMzkv?=
- =?utf-8?B?UkYvY2JGOGxRQnEzU2h1dmFKcGI2d2FvR2dzVk83TUtMSjVXbDNPZW5qWWhQ?=
- =?utf-8?B?ZzEvTVpKNXlzOWRTeHF3UmlVSlRDbmxTMjU5RFl6Vnp5Z1dSdHZLMkNOTkhK?=
- =?utf-8?B?S3BNVldSUlJoYVpZWm5KOFNMRldSMnNlMTdmdklZbVArL1VXb0Jvd2RSb0s0?=
- =?utf-8?B?Zit3V1M4K3B2c2hMazBUbmFtc3g1eE9MSmRHWjdUeERmWENBM3VzSitxR3lh?=
- =?utf-8?B?VmhqUXpIRVBodktMbVlOWjgvN3hsTFRzckJLeFRwN3lrcU80WEc2YmJCcG1i?=
- =?utf-8?B?U3NlQUNPN2d1TWxxNjVPckNaYjRwTk4wODJjNXdwYnF2TjZxUFBrYkhGQnFw?=
- =?utf-8?B?cE1GOVE0RVNjd3hIVER3L0xHSTZsSmZsQ1RhVng0TTI2WGo4MS8yMmU2Z1BF?=
- =?utf-8?B?eWRVYXc4UzNYODg2SHBpbDhwVDFwVm9oMDVTVmx3eG5nOU41VmpFZHJDREwv?=
- =?utf-8?B?dTlEaXpiMk5KQkdKZ29SMG9sWXZkVThTT1JvMTBkQWxQVFozZVlsSkVwbHZu?=
- =?utf-8?B?WnVxSk1XdWs0ZWZ3aVRzNlRzZlppQ3pDZlV2SFhjbkVOR1JSMmFYL2QrVDA2?=
- =?utf-8?B?Vkh2KzFMeTBHTVFPSFVwQVR4c3NPTU1rY3U1R3hkMy9kdTJxbU9Oa2Z2TzVr?=
- =?utf-8?B?SWxkY3JpaWdBN0RZd3dxOEpQYjFLU01IQW5xdVpyaWZIalhnMjhuRjgrT25W?=
- =?utf-8?B?Mm04Q1FZbzBJOVlHWStPSGFHbGRBUjA1azZncXlQR2lPT2tCazhncjRkZ0Zn?=
- =?utf-8?B?WDlvbSttaDFhU08xc2NDMjRsc0paL2VCZWpVdHBzV3hsUGFCNDVBYlhFbkY2?=
- =?utf-8?B?Rk1xWHZUMURMc1RQOUlkdzN1VEZsQ0lpUmg3cytLU1lVUlNtV2NhY1ByMEFv?=
- =?utf-8?B?K0RpMkcyQVVJV3NzcWN1Umtzc1IySSs0RUM4VjF1Z3RnRGwwRERybUpGaWN6?=
- =?utf-8?B?R3dudG5rNzFCbk00VXZadXlpY3JWTWY3ZENJOVQ5V2tpQVBwZFE0WVV5RFJ0?=
- =?utf-8?B?QmhHK3RPNjZqVHNFOWV4ZXJYaEVEZWQ5a0VTdG5oNmZPcEpQRDdiTjQzZm9s?=
- =?utf-8?B?NkMvenF2M2hUNGhLLzNEZldxaFJpU1NndUp6RWM3S0NDL2FYNGNybVZWaUdt?=
- =?utf-8?B?TWZacUhNTjZNdjY4czhwRDltYjdWMXU3RSt0S3JHTHNpcjlPdllvWUIyL3ZR?=
- =?utf-8?B?QlRXTG9FWEI4WkNPeGk2dzFESUFLTlhUbWRJNjd0MEJKemozSmpoeEUrTlJl?=
- =?utf-8?B?NlhsWVhWMjBUSlZWRXRycTVxd09QMVVnQlJ0M0gvMDlzTlpzZGZ6emJaS3lU?=
- =?utf-8?B?WEVMU21FMmVoMG43T0w0MXcwNGNMdkdxNXlNd2hBV1hUYzJBcVIxQklqRkNR?=
- =?utf-8?B?aVdjT2dZSWFjNnhHbDZMc2J4K3p3SkwvbU03dmtUMjQrVFU1ZWVEemxmUEtk?=
- =?utf-8?B?RFFlVWp6cmE2K1VMVUFuR0VyT3FIRUw0K2t1c1VRR3QzRUtDR0pZY3lWTWFD?=
- =?utf-8?B?eEJPUGN6VGlCamg2YVJ1M3QwUTViTElPQjMzLzMvQzl6TG0vTm9YTVoyeGNP?=
- =?utf-8?Q?rcSdwUkxZQReyqrB8Clw+YHIgtqq44/L?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB7149.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZlpPQzNLVnlpemV5N0xnbCt1S1pRUGgwTTArcUJCdCtTbDJDT0c3ZFpPOS9J?=
- =?utf-8?B?V3BmQ3dBUnk1dFJWNVRnY2dHdFFHZWI2V2hoSk9mSWlUL1JYRDR6bzdSRjJ4?=
- =?utf-8?B?ZVdQc1ZyN1RvMjQ3UGpFUHR0N25mdnlXYk8xZVlhblJzb3pjQ3hWZ0VybzdU?=
- =?utf-8?B?SUxQSjJsc3pzSmRrbTdLc0d3MVdvWUVQdlFNakpXbWZCdHRwSWo2cEVsNU9W?=
- =?utf-8?B?U2MvNkNZd2c0Q0ZwZWNxSWxsd2dMc0c4SHZXdWJkZlEva2JaOWwxK1J4T2NY?=
- =?utf-8?B?WThOZ0Fuek1JQkQ4Z2FEWndLeU9xOFlRODVRK3dxOWxPdGxLejNBdlhBUFRC?=
- =?utf-8?B?U1B3Sjhsb0tCck9mUVZDeStBcjN6ZnBldm5nRTNkNnBjUTZRWWRXNGh1VEpq?=
- =?utf-8?B?cERGb0U1d1lUdUJleHUvUVJVZG1jTnZOemJUV1gwOEJycko5QStaUitsWWRl?=
- =?utf-8?B?U0dmZjE1Sng5R2dTSWFLb1pPRFpqMjNYRkswZ1hYaWFtU1VRSUd1MXhaM29P?=
- =?utf-8?B?UWhTcm9sN2lEcWxFVHBFOGx5Sm9sUnI5WWUvNVdiZ2ZpZEpGb1M1Z3lJdVNN?=
- =?utf-8?B?UkZ0SDQ4T01adi9OUmY1SDRnNnpteHNnQU01TzZRNW9sbVBjSmprckVlRThM?=
- =?utf-8?B?eUpmdVZaMWQrL2hBZUNTa3crTkxKL0N3L005d2xoMWlrUURiMXF1VkQwcjh1?=
- =?utf-8?B?TTZ5Z1d2MjFoY3RZY0k5U2VwWnpWNjQ4WVJhQ0hORDkzM1VKbVdId2kxRmho?=
- =?utf-8?B?ZzY4WlJkeU01UnR3eVdHNzhFZmNVdDUxTmZwM0laS2lGTEFxQWVqdmUwNTNS?=
- =?utf-8?B?MlMxMUZtcUtqRmJDYTFVMlNraEJyejN5N2VhQnQxSVI1djRkUHlrRXhzcSsw?=
- =?utf-8?B?VHVzK2JRZVlqdG11L0QyQ29CcFMrSi9yYUNIazM0UnoxN0xPZjE5a0FFTFRI?=
- =?utf-8?B?d3RRVFlZZ3VkTVdrSUd1eG1mWVFjcTNhblMwNW02eG1mYzZ1N3FhOE5OT3Fa?=
- =?utf-8?B?K2NaSlByWno4OVUyMU9vZ09ONDRpWUp3YTMwLzNiOHVWTy94L044YnZTcVkx?=
- =?utf-8?B?dk8yUm1DcGdNbWVsZkU4NjdGdVNCWmVINVdKNXVxVDg1ZWZEUDFkc1V0QlYv?=
- =?utf-8?B?eUw2QnNmdXhNNGZFY2UzMUQ4blpEa2xqZ0orTU5BeGl6VjZzRHB2anNWMWVZ?=
- =?utf-8?B?bW1wN25hZi9Ec0tld1hqS1o1ZzR0TnlVVEUxaGNoZWxmVk9NendCZVA5Q0Ni?=
- =?utf-8?B?WlNzSDVlVkFjLzBxakpzUkpBNWdoeStOc2VtN2xDQitmQUx4cE03cmU5Y0VR?=
- =?utf-8?B?TXJ6alU5cys3d3hCZmJnY2FHSUoxK2NVTU9rdjgyQTRMajFuaitsVjJoVU1l?=
- =?utf-8?B?WlhtbUsxOVgyU3puZ2NhSXVYVndDcEh3d3JuczBFMFdrbllXaEtkTWIrdEF0?=
- =?utf-8?B?dzYxVFZPaCtOMm5ucjNvVENZUCt6T3RhREJ1RHhvWEhodGRWdUc2VThCaDVP?=
- =?utf-8?B?TnovS2F2Wnd1Tk5NaTY4TGFJRENoSFEyR0lqSWM0UWEzd2dOSHBSam14NElh?=
- =?utf-8?B?WHVUOEZBbnd0SU02MDVVSk9FQmhPdUVHU2hTVjcvWGlSM2M1alZyakdPZXg0?=
- =?utf-8?B?dUlCL0o5ejRtMTZaUERjU1ZOaUZ6K0NkU1JvWkRZdGlCb0JGQlVYYUZ4WURw?=
- =?utf-8?B?WFVlMXByYzdWY1grU3lydG8vWWRRUmhvcmUvdnpyUlM5dXhpaUR5VjloTllZ?=
- =?utf-8?B?RVo2K0pnWHhSRmx6UEJCQ29IbE5qTkY5bzVYVEZLVUthdDk2Tlk2a3cvRmlX?=
- =?utf-8?B?Wno1eUl0d3VSN0I5NW5ldDQzcGpCUjVGSEg0MndaOGJ0dDhZOVRQek9kdG5P?=
- =?utf-8?B?UVhBN2ZMVU5xOS9JSDZRNy9OM3pVWHgvRHZYd0xhSDFyU1FwY3lmSXhXMkRE?=
- =?utf-8?B?ZEQ0clJQT1VxOXFtRjBMQ04wMTFmMUNCRy9tdnZFR1BZRjQ0QlY5aWJ2Qjhh?=
- =?utf-8?B?Q2dxVmw1QjdUZU1YbzVNekU0cmRpbXZCV1E1V1lMcElBS3huTjNjZTlJdmtw?=
- =?utf-8?B?OEJuczhPR3NqaUM2VkZCZ0xZc2lqNnVhbUVCMXFYektUVTUvK3NLelVyZldm?=
- =?utf-8?Q?62HyjyPjwChc1vAT2kAEy9d5N?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3506ffbf-ffe6-4298-b2e1-08de363582d0
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB7149.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2025 08:40:59.0557
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ln1+cA2wetbz/spxCUToa9Cnfd3f888aN9zMBES7pXTYIEQ/zH0IGPvgHWwoMqrqCrbGyXy1ycBGeENCHWMn+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB6569
+Content-Transfer-Encoding: 8bit
 
-Hi, Krzysztof
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
+If the assert() fails due to timeout error, set the reset register bit
+back to deasserted state. This change is needed especially for handling
+assert error in suspend() callback that expect the device to be in
+operational state in case of failure.
 
-Thans for your review.
+Ref:
+[1] https://lore.kernel.org/all/b417865397822176e83bca6b9d8094fe92ff2451.camel@pengutronix.de/
 
-On 12/8/2025 2:17 PM, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
->
-> On Thu, Dec 04, 2025 at 01:36:31PM +0800, Jian Hu wrote:
->> Add DT bindings for the SCMI clock controller of the Amlogic T7 SoC family.
->>
->> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
->> Acked-by: Rob Herring (Arm) <robh@kernel.org>
->> ---
->>   include/dt-bindings/clock/amlogic,t7-scmi.h | 47 +++++++++++++++++++++
->>   1 file changed, 47 insertions(+)
->>   create mode 100644 include/dt-bindings/clock/amlogic,t7-scmi.h
->>
-> Where is any binding doc for this? Why is this a separate patch?
+Biju Das (2):
+  clk: renesas: rzg2l: Deassert reset on assert timeout
+  clk: renesas: rzv2h: Deassert reset on assert timeout
 
+ drivers/clk/renesas/rzg2l-cpg.c | 5 ++++-
+ drivers/clk/renesas/rzv2h-cpg.c | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-The ARM SCMI device tree binding specification is located at 
-./Documentation/devicetree/bindings/firmware/arm,scmi.yaml.
+-- 
+2.43.0
 
-Certain secure clocks on the T7 rely on the ARM SCMI driver stack, which 
-is officially supported by ARM.
-
-The kernel-side SCMI client implementation resides in 
-./drivers/firmware/arm_scmi/.
-
-To enable ARM SCMI on T7, three components are needed:
-
-- Kernel-side definition of ARM SCMI clock indices (this patch addresses 
-this component);
-- SCMI server implementation in the ARM Trusted Firmware (ATF) running 
-at Exception Level 3 (EL3), which has been integrated into the bootloader;
-- Device Tree Source (DTS) configuration for ARM SCMI clock nodes (the 
-DTS changes will be submitted after the T7 clock driver patches are 
-merged upstream).
-
-
->
-> Best regards,
-> Krzysztof
->
 
