@@ -1,122 +1,181 @@
-Return-Path: <linux-clk+bounces-31650-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31652-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E00C0CBEED6
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Dec 2025 17:36:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7825CBEF72
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Dec 2025 17:44:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7895F300FF98
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Dec 2025 16:30:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 64339304FB8C
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Dec 2025 16:38:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F59232863D;
-	Mon, 15 Dec 2025 16:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E2B313E0A;
+	Mon, 15 Dec 2025 16:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b/2TsJQC"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="AIWJvlhh"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A0731B114
-	for <linux-clk@vger.kernel.org>; Mon, 15 Dec 2025 16:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E2B308F3B
+	for <linux-clk@vger.kernel.org>; Mon, 15 Dec 2025 16:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765816249; cv=none; b=kaq9K3XqG6j03XdZsFI6cd+W1CFJwGzV7qeArtOjt2MoaPGviYk7y7hQMexBGXk3BXvBJBnjQjoGjzcQuVZBcrDBGoY+nRzCOjsghDHoFHgQ+vbCOOZBk80cEVot13MEDyVKtWtKycPkf1LhH0GJlKtKMxLCU9O0E60KBQMVuBs=
+	t=1765816713; cv=none; b=K6GEt5FEGKiwyFbTXIAR7y8roy9R6b/+iRzpwdlq5sbSv+7WCPv7c/JEAWwDyKKV5AWxIS6WpBk3k+eH7IpbZ7cIsjaxkG1w32crAU5Y5P6SGVmez5JEgZbOOCmSOEr2Wnb6XvP6d7/3JQayQXhfF9wJTtZWyXnEe7tOzBw7asU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765816249; c=relaxed/simple;
-	bh=7VUjNg7fMgXMDTFrTqFIf9IV02ig+00RrRe5m1yyOlY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=YG3b8vEckO9GoB8tnOinue3WrGmduCTSvk4zVVCn6EZgMrZ9+gNAr0JbZ+qPAMtUOH6qXUoAjNgkT10LBU1oUDejZ4OvXgWaWsoNM+ZJ2ZAYLAdpHs0MuBcomhAf8K1NbRVelXrK5XsU0srvz9M7+3mmEwsw3IO1qtDtJNIYj/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b/2TsJQC; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 0896D4E41C11;
-	Mon, 15 Dec 2025 16:30:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CE22D60664;
-	Mon, 15 Dec 2025 16:30:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 64EAD119426BE;
-	Mon, 15 Dec 2025 17:30:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765816244; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=QF0a2d33ceWGEkE+JlJ9v7Vx9rNUh7hXKpLn5YyCvvc=;
-	b=b/2TsJQCxsrDCyqAit+mCBvkpYAvhFDHIWx/MS8yXW6MI6gytG1BbV0q2aipA/pULv8mq8
-	yXqpyd5/KmToROssOh1ypUWoVWuMVs/NhwnEbUcEvrVngLLjFZkEv6h3xqMUTHw8TEGKN5
-	MlyLBQdacKRzQkpshouWWv5WBTvTp90YJHQkfpbNjxpn+GIWTyUrAKKM0sHbSpkuE8dt6l
-	M6h2WhI901vGItG3UiwTTjOOuM6MhmwzuIw3Zg+tvlQ6ytiAcesHHeqQlU3CTrE5tp5bpQ
-	s6OAIunOjGUaNZukMcJVuEjlRPTS9eNDrAZiYe5MsLTQdkoFfYHcCAXUDIsyaw==
+	s=arc-20240116; t=1765816713; c=relaxed/simple;
+	bh=k/Yd1BmFzU0e9UFcJv9URIkTbmDEVBM0hOo+JTGIPAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZMccETcEl0Czv3Q8wUI9O2KYQLv6rc8hNe4YkndRKTZL4R2tpYnEe+o9RkaH5y7jS4l1fUEGV7c2LUCYixHUh4OK39oZ24C3IZYefh+rpnhoRtZ9mX36+RTJnIO21Ezvv5ixUgh8eR/mCJHGBxYtXbcY2KlMu+QfRcAQwq6KW7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=AIWJvlhh; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-477619f8ae5so28536165e9.3
+        for <linux-clk@vger.kernel.org>; Mon, 15 Dec 2025 08:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1765816709; x=1766421509; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cnKll+Mu3yr6wHuUg3E47hI29XfbMlTNI5VvcSPHEnI=;
+        b=AIWJvlhhcWl5hbSyydkjLe/GDVS3V4vTDb4qeNWdR80M81ODF67qfM5mpLQNIjN2zg
+         Cg0N+4vq4jQXHdnYY3svgMl/T49I5Zrp29STPCUNk6JrOin56BtaqbkiwBbaqR3OEZxD
+         49isbVf+h4T2y7jhcwZgxNVTn28fbsNDx6pSx03mQF/0PDPnwg/ClnbgMkoHgXwi33ES
+         l4rcR55YPGa4n54zK4ReHi/Fp9QkdZ9iXcPVs3V1UJHq0sTlTOTD31QjCOJN1tBd4HdH
+         ScnT8mVHvKhb7KcWLzK4aDi21gN7q6e+xh5Vf/QLRwsO8/PdYTmcByG2duRS9HvdtUPv
+         m4cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765816709; x=1766421509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cnKll+Mu3yr6wHuUg3E47hI29XfbMlTNI5VvcSPHEnI=;
+        b=IT/30r+C6n3+MdBYlA3T0om8eeo9AA+U2gPWxXHvvviYOpVtF1vx1uRRUBOVDavir3
+         C5GYLaaXMj/z7PXIzxirLxlS4neGFmVLzE49N6+iv9MBlVl800p739iDOIdyyzBTEdzn
+         1bCMZPXePFtxP2EDjD6owVtr1x/cH7cYJve3ex/4R1riJZl5LbTjVRAfIL/H4c3GoJ3L
+         //i1KCxJ4GXqXF+gfWf5FMlAPVgNj5yd5bkTYdvZ/0wbHCmkfyvxhtbogEbqnyARtPlT
+         6XMfv2/xdf3REQ5284SkOG7AsDMeMHnDABC5o7hiSoVzrq/nsVZBqglZzs4YLENqk4PE
+         4MZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVs8wR3JUZ0TFoNe7ezgyWeZhyQyFi16Q4gAuRnaH6TkwNw5t5wrnftmvalb0ToJqdMJDEuVisKyH8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEHPT9V6Mw/Qa88Ei16LPU2EFoxRGaOlZlqv3JpodPgtUyUXAb
+	8GQK38r+y+5UYDY+pYcEIeWaK0YQKSviqhkFADE7ElNt6QBdjcgQE2EEhk7rdkMxzvs=
+X-Gm-Gg: AY/fxX7LoBMqJMfAxoJEP2RIBnZiLRkpYz57Ycxh/Vz6CGjYAAj+OCXMQDJ45OOh9yv
+	nxALFKkM80cJsfCovXAMAQMp9sslAMxFuWD00erpF1+JpkrOhA8M/a7ouuorQloJ+5xKaZVSEZW
+	y7UN7fntnUdtItJWTZHa/zJrl5BqK0fcO2Ieev2i0ZI4yGtXKtN3z4Jk2QfgTOc0iKBx4z7+Kgn
+	CzUjPlHoUXxtC8e4LB5i8X9AJtuxfNl5QBiDwseZTOPLNQUYBupkNb1B51V2rXVYnpWwpxX4LQZ
+	bo8j9z7PHnGacdvtU737uQlnXTN06mq6t1resTkgV+9aNAitwE9tCM9F9uLiSe2LEFoArOE/4eb
+	7Soz5XX6CmOxmuJFK5IFJqn211QWGrd6x5AsC/9qIGmd5h3jhu6AT2pG3ErxBLMZ3jqZUQsY/eU
+	mP0/EExkzzD0f1IGaL+Y3DSrokXI83wekex5faREai4D/h
+X-Google-Smtp-Source: AGHT+IHqk87hRgFNW+4zdWPZBEuhhkRVJA1LnAloDmFeZHxaQu5P+L96TkAMIyaxKGjp4sqU43QQWQ==
+X-Received: by 2002:a05:600c:a086:b0:471:1774:3003 with SMTP id 5b1f17b1804b1-47a8f90fefamr116081975e9.29.1765816709336;
+        Mon, 15 Dec 2025 08:38:29 -0800 (PST)
+Received: from fedora (cpezg-94-253-146-254-cbl.xnet.hr. [94.253.146.254])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47a8f74b44csm192209725e9.3.2025.12.15.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Dec 2025 08:38:28 -0800 (PST)
+From: Robert Marko <robert.marko@sartura.hr>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev,
+	Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	vkoul@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linusw@kernel.org,
+	olivia@selenic.com,
+	radu_nicolae.pirea@upb.ro,
+	richard.genoud@bootlin.com,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	richardcochran@gmail.com,
+	wsa+renesas@sang-engineering.com,
+	romain.sioen@microchip.com,
+	Ryan.Wanner@microchip.com,
+	lars.povlsen@microchip.com,
+	tudor.ambarus@linaro.org,
+	charan.pedumuru@microchip.com,
+	kavyasree.kotagiri@microchip.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	mwalle@kernel.org
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock bindings
+Date: Mon, 15 Dec 2025 17:35:18 +0100
+Message-ID: <20251215163820.1584926-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Dec 2025 17:30:41 +0100
-Message-Id: <DEYXM6CGJULV.1KKA37ZLEIW1K@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v4 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
- <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
- <benoit.monin@bootlin.com>, "Maxime Chevallier"
- <maxime.chevallier@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>
-To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>,
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
- "Kishon Vijay Abraham I" <kishon@kernel.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251124-macb-phy-v4-0-955c625a81a7@bootlin.com>
- <20251124-macb-phy-v4-2-955c625a81a7@bootlin.com>
- <DEUNYYW0Y23E.2SA0SOCS99NA0@bootlin.com>
- <DEYVVCWBOZSH.2ZY41YCHLS8FU@bootlin.com>
- <DEYVXJI90AA7.KPDEQCNZOOXI@bootlin.com>
-In-Reply-To: <DEYVXJI90AA7.KPDEQCNZOOXI@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon Dec 15, 2025 at 4:11 PM CET, Luca Ceresoli wrote:
-> On Mon Dec 15, 2025 at 4:08 PM CET, Th=C3=A9o Lebrun wrote:
->> On Wed Dec 10, 2025 at 5:06 PM CET, Luca Ceresoli wrote:
->>> On Mon Nov 24, 2025 at 3:41 PM CET, Th=C3=A9o Lebrun wrote:
->>>> +	provider =3D devm_of_phy_provider_register(dev, eq5_phy_xlate);
->>>> +	if (IS_ERR(provider)) {
->>>> +		dev_err(dev, "registering provider failed\n");
->>>> +		return PTR_ERR(provider);
->>>> +	}
->>>
->>> As above, why not dev_err_probe()?
->>
->> Good idea once again.
->>
->>> Other than the above minor issues, LGTM. This driver looks cleanly
->>> implemented.
->>
->> Thanks for the review. Does that imply I can append your Rb trailer?
->
-> If you apply all the changes I have mention, yes, but in doubt you can
-> avoid it and I'll review your next version. Re-reviewing is much faster
-> than reviewing the first time (last famous words).
+Add the required LAN969x clock bindings.
 
-I've taken the Rb trailer, hoping everything is to your taste.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v2:
+* Rename file to microchip,lan9691.h
 
-https://lore.kernel.org/lkml/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.co=
-m/
+ include/dt-bindings/clock/microchip,lan9691.h | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 include/dt-bindings/clock/microchip,lan9691.h
 
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/include/dt-bindings/clock/microchip,lan9691.h b/include/dt-bindings/clock/microchip,lan9691.h
+new file mode 100644
+index 000000000000..260370c2b238
+--- /dev/null
++++ b/include/dt-bindings/clock/microchip,lan9691.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef _DT_BINDINGS_CLK_LAN9691_H
++#define _DT_BINDINGS_CLK_LAN9691_H
++
++#define GCK_ID_QSPI0		0
++#define GCK_ID_QSPI2		1
++#define GCK_ID_SDMMC0		2
++#define GCK_ID_SDMMC1		3
++#define GCK_ID_MCAN0		4
++#define GCK_ID_MCAN1		5
++#define GCK_ID_FLEXCOM0		6
++#define GCK_ID_FLEXCOM1		7
++#define GCK_ID_FLEXCOM2		8
++#define GCK_ID_FLEXCOM3		9
++#define GCK_ID_TIMER		10
++#define GCK_ID_USB_REFCLK	11
++
++/* Gate clocks */
++#define GCK_GATE_USB_DRD	12
++#define GCK_GATE_MCRAMC		13
++#define GCK_GATE_HMATRIX	14
++
++#endif
+-- 
+2.52.0
 
 
