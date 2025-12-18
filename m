@@ -1,110 +1,110 @@
-Return-Path: <linux-clk+bounces-31784-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31786-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E372CCC73E
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Dec 2025 16:26:40 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16EECCC87F
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Dec 2025 16:43:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5E4DD304CC06
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Dec 2025 15:26:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 82B3C305AE27
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Dec 2025 15:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64BF357719;
-	Thu, 18 Dec 2025 15:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0CE34CFD3;
+	Thu, 18 Dec 2025 15:35:49 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE53570BF
-	for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 15:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E7534CFB3
+	for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 15:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766071588; cv=none; b=m6mCm3vtX47gqNPfMJhJIhv1er3/yzQaGeUhP/fytara8F82m9f033/bW5xafjR3Xmzzjut0Cypoq2T4bP8+jiVnQasomG0wsH+WOg4zkqlgfn4pfHKXysxZ1edw61QqHjy/3S167hod4GXeAaI2s4D6kr7yI0mftmajls4jZRU=
+	t=1766072148; cv=none; b=XPtaGgFnskTNq/YZfcTny3Bi+/TIuGvh6hVr1SPxdbeFkYnpBxv7oSM0dtHS/d0+PyJ59grqofG7aBg9Lz520kiVwyd9XGTXalXYhSY17xAgr722z9BJ6RSIz4WvNWERfmmfI5AZqbZjbgSy5Hpd3aIUG2rIp2vYpZmrRFIxCh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766071588; c=relaxed/simple;
-	bh=MZFYNuXybRkvVzjEOIC4+EfAayF8myAFp7P6EDOSejQ=;
+	s=arc-20240116; t=1766072148; c=relaxed/simple;
+	bh=azzl09Wx7rt0wPbIl6zF794mRt/KoBI4Cg5cx5Yj+oY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FAIsibD0Y7cmk4M79xYfLPc2EGIEoACH1JGTBSqgjL+VmM3Ays18KUsJ5XujPAxXhSuPMzIrovG+Z+TvkGoHwSnJTn/+ZGKzX+tjCmySHWTgVTXrcR7TsMqT1CBAp86eD/LVqICqx0hTPYGM6rAs53dGnXI0fQAaAZnUkEflc9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
+	 To:Cc:Content-Type; b=O+GYavJxChQkmvxFlGK5NHoSdmdUQXD4HizYeyA3aaWr22/eBjIHiWyDEox0M4NTsGIpx1r22goo0f/Srz6e/p/6QL43GWxnNW2qOm7tfzeg5iDl/RGUUEkmexPG00BDk8o7/4Ro3P4SJ0HanwvSBwhh+FOW1KjrmpbHhHYkrXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-93f5905e60eso469792241.0
-        for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 07:26:24 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8b9f73728e8so78785085a.0
+        for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 07:35:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766071584; x=1766676384;
+        d=1e100.net; s=20230601; t=1766072146; x=1766676946;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0dY9hOfw+nsqpN2twCEfuG3WmlvEURTIXg7HZZOHeWk=;
-        b=cXsnl4ucLS2p8Px9/OEM+QfXfsQMvHl8ZE0jSkHkf2Spv2wZKGUjJaQPBtJJBpp52Z
-         onpZUwfiWPpl6JuqbjQcEv36ksw3uRfq1G5AP5MagkhHbUYkYCD5RrucjEGvjAtAKlnN
-         4fm13Jh43JZ6lPMjcNBYrbn5Fu1rk0e6fSNARYhnLpMSGNgJXzaCKW2AHoA1aeoJHPNk
-         vDrqpZ16vsarAJWksLTjxW8NQf+tYOXTNaGEog3+HUCKt50CXKxFMFu8zJWKy+DVrPgH
-         TuxC12uSAqpwNmQBd4L0gPXjO2AgFJQhRfHjA0cAa/UpSLiBrizJIBcFO2+6PRFLVuya
-         p+oA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4RroC649ss8a1ARtnXD/df8gpwJT3fX5KuF8ulXSLPrK8mRX2iJ39Kya3HB9K7vTSL9HazM9teME=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPQtGymI8VAdy3nprFPa6hwhtQ2ufwQ0Oo6+1NNkv7eZq3Yr+D
-	ZJFmWxJLbeQ6JgPHNuXayW2n6rz7D0jLVj/RWpPUTdCQ9yvPXXVDQDK7BuDIEarQ
-X-Gm-Gg: AY/fxX6762kAlb2Rvq5sVm4e5xFcPGIHEcAMRwDHOYlWZpbvDzDM8k2u/G7DEEtDno+
-	ylQ+DWTVflAr5OZOoTZXYA45M2yLDao3VAHUOt/FHG0AxY2gac+V+e+IuTV4y5KRkjYYdRHMkfK
-	FMlojCDbdqJA0wDXwBFEli8EMMQkIaT11dLtFwDCZY9RsN5DK/VlVwv9+/B1Bge6H5roEUch0+9
-	vrN8I+aatJMqyriktpJpSrSxw1MrMmjXcvUR11l8RucTtKr8M7pOUYP+UIpbxC9V3+IxnJtAcz3
-	PE0EVgoFPBc1etur+YRTCttJHyhTTtdYtSkRfuSF6NhBjRwOXVd51gqtUGWCxiL6OEc9mA6gr7a
-	MnaccyARWXnuBIb5J1e/WkHVhEK+0xUC3PWaARwidc/M2aE1Qkyo9Ci3zYta2in6D3cVF19YlCx
-	DGMc7fm+J3jedZRaWocdLtWhO2N9NAHIYbhKSLQDe3flDM6dFu
-X-Google-Smtp-Source: AGHT+IFyeASK9fbXg1NJfvDORR3UQ4FEMw+rqUw6N5hie/NmQ+PM9zxodGs4TrekH7+DCukcbdqpAw==
-X-Received: by 2002:a05:6102:5e86:b0:5df:aff3:c433 with SMTP id ada2fe7eead31-5e8276926f8mr8419092137.16.1766071583697;
-        Thu, 18 Dec 2025 07:26:23 -0800 (PST)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-943313c0b08sm983178241.11.2025.12.18.07.26.23
+        bh=mXHlTDVJTF5vvWPU3rkwyK6a19VuMS7dqDcJr9Xe7V4=;
+        b=HZXGemet2LeB5oJ6jjXNC1Lt3AZUf5AQAl6+/yrLj5psExH+qXNci3od98rT/Tup9F
+         Q0LN99VuGskKcMKRdE8Z9qQtB3318MlqF2lvZcZFjtj9oz6GGuC6sYnpe40jOxqoC/ab
+         yZzocIJjcLZl5wKn+vQ6maFf8TWMbOPFIVmsOMn/B977z5q2yIpDATkMdf2djOgaaoUm
+         eG2cOV2FjQfYFRR5WdLNDJ9PmG/dyrCOVhfeMsSm+kA9OoaAa3JtD0v8bFY3KSbw1Ppd
+         vqLGWrYsUrExAoAxdlwD5MX3huDGBJqwq5fjOspZJMGX1DH0p0DE4WsB89loM/ctsY0y
+         hMMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnc+bQ76c2oBdkHPuL5rk9/6/l5JLkokT/EI+Eb5kPIouc1HDDzRdkdU5GJywpLxG8E3XiEPkXtic=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDS1K9WFvkn0ZP28LZRKQgz5zdZGDcMzr6/3aZJtxFiFSBpy4H
+	n2D/Cecm0jo0ksZwsr5GIPJ3+td34zMlAKBswvWBK8LiylvWyqq545aHGkn4hrrX
+X-Gm-Gg: AY/fxX4e2IswdHKEVEjAPAL/w9Qk7vpH5PKPPC4vBi2x9qX+AKLeiC76YRDEXLalO/S
+	NcFqUa44UXYEsMHwDrHeKabVt3ZjRAWEpVJY7VwNT+ch95qjMb9RrEkFMQ3vBsfZN3Ecuxn2AOV
+	Kk7l5FV35kgBcWQ7AFtR6GOpKHHdH090dvLe5jj1L6mNOakU8ii4VmJhZQxsRaVe7jkHVkky/5R
+	m42MkzTjFW1uyM8S4LHkGBty4nmbk7Xw1PzKsuWKSJGbuOaNhXJUjPYSo02w20KceGxOQvw47mf
+	mP6atbmmaMP09T4LcfKjWxRotv9JAyTGAB1d88Gyha5d+bHEoSClbkCD6+rdNNghmfxHkTyv9V5
+	GM8yI8iV4zqXuW0GfPXf4cFSHNVBD9yD3aHd72apcfGfuW4GkmEyDg25FtE89kWXUJdaO8IvFQ9
+	zwCZbZ4qNKlXJ6y8AsGXOapN12HDExtdoIaj/y17CzxnFbzcOlQZgQ
+X-Google-Smtp-Source: AGHT+IE+bpUFdhYtvKuMno3lQwHGInl+TzWpFBi30pZQbX9kYYi5eP2x/xdRfNVU+nVb2UTYGZWJMw==
+X-Received: by 2002:a05:620a:1910:b0:8b2:f191:2b3a with SMTP id af79cd13be357-8c08faaf173mr3073685a.53.1766072146278;
+        Thu, 18 Dec 2025 07:35:46 -0800 (PST)
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com. [209.85.222.181])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8beebb4a1fcsm185095085a.55.2025.12.18.07.35.46
         for <linux-clk@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Dec 2025 07:26:23 -0800 (PST)
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5dfccb35b10so438743137.3
-        for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 07:26:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX2lPceMcucr4TxDAxQpSHhsK+HSPwHpJKDnrXfTAx5sPxUe74x5jRtQn7r35uWA3wr29WG4/LRdc4=@vger.kernel.org
-X-Received: by 2002:a05:6102:644a:b0:5db:f15a:539d with SMTP id
- ada2fe7eead31-5e827475423mr7568578137.7.1766071582885; Thu, 18 Dec 2025
- 07:26:22 -0800 (PST)
+        Thu, 18 Dec 2025 07:35:46 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8bb6a27d3edso70818685a.3
+        for <linux-clk@vger.kernel.org>; Thu, 18 Dec 2025 07:35:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWr/L8lc2nBHPKfeyNVDonwFRiM4n04ZJpWcflCcFFzuY55GQVeIh/B+CcfMYk7zuVZwW1dLXLtuSA=@vger.kernel.org
+X-Received: by 2002:a05:6102:14a1:b0:5df:af0f:308c with SMTP id
+ ada2fe7eead31-5e827854ca8mr8511390137.38.1766071730637; Thu, 18 Dec 2025
+ 07:28:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com> <20251218152058.1521806-2-alexander.stein@ew.tq-group.com>
-In-Reply-To: <20251218152058.1521806-2-alexander.stein@ew.tq-group.com>
+References: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 18 Dec 2025 16:26:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWEJ-eYwUTnotsTVEtKrujYVsEB4kFVjRYh3wXZvyjfGQ@mail.gmail.com>
-X-Gm-Features: AQt7F2orA3yT0lOZg8JX_FxOJmakbvS5h-4BSNrnlwxZlZ9eRsbqovvybB3Xhko
-Message-ID: <CAMuHMdWEJ-eYwUTnotsTVEtKrujYVsEB4kFVjRYh3wXZvyjfGQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: clk: rs9: add clock-output-names property
+Date: Thu, 18 Dec 2025 16:28:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUkghCNb96J38hbEZ8Jct6m2MPvnPumGp-y_dPfPW9eAg@mail.gmail.com>
+X-Gm-Features: AQt7F2qLc82Kbfmr6BXfh2mc72SoQ2IFZ770WV9-Gsf5ezj4RJc3ZYutw9_Yvk4
+Message-ID: <CAMuHMdUkghCNb96J38hbEZ8Jct6m2MPvnPumGp-y_dPfPW9eAg@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Support TQMa8QM
 To: Alexander Stein <alexander.stein@ew.tq-group.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
-	Roger Quadros <rogerq@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Magnus Damm <magnus.damm@gmail.com>, Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Peter Chen <peter.chen@kernel.org>, 
+	Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>, Marek Vasut <marex@denx.de>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, 
 	linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Alexander,
 
-On Thu, 18 Dec 2025 at 16:21, Alexander Stein
+On Thu, 18 Dec 2025 at 16:22, Alexander Stein
 <alexander.stein@ew.tq-group.com> wrote:
-> Add "clock-output-names" which is a standard property for clock
-> providers.
+> this series adds support for TQ's TQMa8QM. The first 3 patches are prepatory:
+> 1. Add support for clock-output-names for clk-renesas-pcie. This is necessary
+> as clk-imx8qxp-lpcg.c (driver for phyx1 phyx2 clock gating) reqiures that
+> property on the parent clock.
 
-Why? Isn't that property sort of deprecated?
-
-Will be replying to the cover letter next...
-
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Hmm, clock consumers should have no business with the names used by
+clock providers, even less so whether those names are specified in DT
+or not.
 
 Gr{oetje,eeting}s,
 
