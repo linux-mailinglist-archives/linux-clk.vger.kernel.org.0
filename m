@@ -1,153 +1,164 @@
-Return-Path: <linux-clk+bounces-31811-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31813-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB819CCEFD2
-	for <lists+linux-clk@lfdr.de>; Fri, 19 Dec 2025 09:33:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C30CCF0CA
+	for <lists+linux-clk@lfdr.de>; Fri, 19 Dec 2025 09:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 428523018303
-	for <lists+linux-clk@lfdr.de>; Fri, 19 Dec 2025 08:33:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4A23A3031CEB
+	for <lists+linux-clk@lfdr.de>; Fri, 19 Dec 2025 08:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD272E7622;
-	Fri, 19 Dec 2025 08:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329872EBBB7;
+	Fri, 19 Dec 2025 08:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="ebTc6WOg"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Bp1hCPuH"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mx-relay03-hz2.antispameurope.com (mx-relay03-hz2.antispameurope.com [83.246.65.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6010A230270;
-	Fri, 19 Dec 2025 08:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54BB2EA156
+	for <linux-clk@vger.kernel.org>; Fri, 19 Dec 2025 08:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=83.246.65.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766133183; cv=pass; b=iDZ4bdQlddHGuQe63iza7F3/GhDIZl4A+UmBjoQf3G90xnikpFuJ88Axezb90nd7ty0KegXHCFJIhf2Ohnc20DaGWmB1AX781ExKtSK6pL7uEWGry8UzF5u4fIjrgpsAFDjKZyWohGZNOpNzlZngNO3zR5AMk9Kvwy/Ew3ywVm4=
+	t=1766134447; cv=pass; b=Ry5Kfw7ZDZCnCVOFVHCdIlHV+1t4qkOIpGyFBD3r+n98WE+r84Qc+fd0AA9uug6NV9Ee986EH7jO0lX7mZzW/m0d+vX30h5kU8XZ+kBQNkHnDlW/QDTlmQtXtBmqfgMbIOYU8hrpBJyWBu2eYp6ttBtdRbJkkUwnEqGS5FRt8nk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766133183; c=relaxed/simple;
-	bh=Elt1/GiM/P0wr/SJI4JI/GxpLyBhoK4QryBrbUI31Ng=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=gU/kczRh8lWexcIesVTuJlVAxgN4Cufo3OhuByytdKkl+nbZu/eHoA/1u+PgR5ifWYqiT5WmAaDTQDPvi/tOkHRdsEX3jerdG8JJpqxdg/QvHpboBXxb8ZHJfGEQh6a2Cmtm7Ox/flJ/FBGOmXehhY10DVPUslvIjTkVZVuFdwc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=ebTc6WOg; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1766133150; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=mO3BsCtyHVBRwY0bLlTdjrDimIvWWXM50aUIsz5/QFfeYR0S5kj7KkZu9JThgegwbJNygsyX7MCN1Vv/V0Dnyf9bZ+h0/mHQVTygLzSzG4oe4BE6agn4Q0ZXgWMLFSeRuYuswP9blScoaX5hUdnTtW+M+toawMAs2TGlsFShnco=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1766133150; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=qD8jT2s+CQPUn8ahKa2Vl1fnycgNsJt25eb304sEF90=; 
-	b=MuTetyo/VX0yQ9sSHArt/8K88nHgXZLZxt0fxeyQOYW8FzRy3TC7dbLjlG/jjbIy8nauo/f1MrFkzlFY80DvR8Q9hEQuTwYN1Z9LNLQlbLx/Cv5AkLzB4BIQpLgdqvIyDC8WlfL/9LsOhL/EnzQfhaYS5WKu+hTzHhsg7AMesfQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766133150;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:Cc:Cc:Subject:Subject:From:From:To:To:References:In-Reply-To:Reply-To;
-	bh=qD8jT2s+CQPUn8ahKa2Vl1fnycgNsJt25eb304sEF90=;
-	b=ebTc6WOgLBeiZrhOn/NeZPSoafkCMInRijQ5XavpzJ7B+7Nvzy/36tNv1sBP/Sz6
-	S8/oCxFNa4mMAVCAWoET7ewzsxNhbjJhYD3aMBboBu0l0Qytz1HPbf8FOOhBkSHJOTQ
-	XeOMXbp0CJnvYSHylJNw7+Diq28o+UrwtVxES920=
-Received: by mx.zohomail.com with SMTPS id 1766133148865100.9592386002613;
-	Fri, 19 Dec 2025 00:32:28 -0800 (PST)
+	s=arc-20240116; t=1766134447; c=relaxed/simple;
+	bh=7lPH8ZuwqrR0EPFMmGW3KMxzeLFRv6JnjvXAyllK02A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fnWDfuUBTc4uojHoOFECcd2V55maOUFPqTejlcvsXtidASiTX2lMhEEGzyy+5qK1DTsJU9nUPNGcySRthq1NcdFv7I9wAumXg6TLgmW3DHFzugb+PXhde4tK8HgQSNEXjLNdlO0Alm0ZQfztuNSh7iECMqTGM/Sp2Gcz0iAx2UU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Bp1hCPuH; arc=pass smtp.client-ip=83.246.65.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+ARC-Authentication-Results: i=1; mx-gate03-hz2.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ smtp.mailfrom=ew.tq-group.com
+ smtp.helo=hmail-p-smtp01-out04-hz1.hornetsecurity.com; dmarc=pass
+ header.from=ew.tq-group.com orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=XlXr7igiWKsjjzIb+5AsG+BOhT+y2sXxD6hRFSbAez4=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
+ t=1766134354;
+ b=qe9kKf3z6ZygIMoIaFGy1oz7e6GdVMSG/0UWxdEGFpTCrAY8sOKQzANKBtJUODttgP0Z6eIh
+ Yol60UKTKowYgIMc+G//3rUWKPIl12sqktNn+SZ9/X+9UzLUK7YaxihimXzf9DhNd8Am6uwTIAd
+ b0phgI7FcwHbQETR2OtS3McJalmNiD5hae0DAlJaGrSCBA0UTnprt4XBTs0M5h1DCLodh8oO3B4
+ 52vhznOqTWc4D0ZrwbtqMjiZ31rGDv4Ek7i0bTt6+0BJILQwdfRlFrGGWceMG3hzEjSfbCWbgNY
+ REbJMIDGDJF0z1q50oQ0Btisz9DJkLpHQgB9RKkD/ZQCg==
+ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
+ t=1766134354;
+ b=SdDZSEGm1OekdIIYCm2Y52dfq8jL2nldnPSkzxNbQ+hOj5DvOFVB6vD4Nxua6rsT2xEuHZrp
+ hFidAljk0Jo6BWFkaS+zNvxGFNsOXPTzrr3tRcAnbuhvmnA1g2srUYKty231q3Z+Nmzw6HgNZlL
+ Cc3iWOHQfSVNyWy2UOqiEqHK3fw8e2J5MP811M7xmTL8k/JYvbYiirIDpnBQd/MP9ohoYKVNEPm
+ s4N43juuhx+CNEfmi3oBqt4EIrEeEs4FW2N8F6zdivFqR0+QIxLke8tBTC81MlvHAvAGT3VnEQH
+ GtIczc6usWD1gOHNoTr2kFWSfuGyjS7mbts22cNT/qNIA==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay03-hz2.antispameurope.com;
+ Fri, 19 Dec 2025 09:52:34 +0100
+Received: from steina-w.localnet (host-82-135-125-110.customer.m-online.net [82.135.125.110])
+	(Authenticated sender: alexander.stein@ew.tq-group.com)
+	by hmail-p-smtp01-out04-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 4751A220D57;
+	Fri, 19 Dec 2025 09:52:16 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Roger Quadros <rogerq@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>,
+ Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 0/6] Support TQMa8QM
+Date: Fri, 19 Dec 2025 09:52:15 +0100
+Message-ID: <24355727.EfDdHjke4D@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To:
+ <CAMuHMdUkghCNb96J38hbEZ8Jct6m2MPvnPumGp-y_dPfPW9eAg@mail.gmail.com>
+References:
+ <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
+ <CAMuHMdUkghCNb96J38hbEZ8Jct6m2MPvnPumGp-y_dPfPW9eAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Dec 2025 16:32:18 +0800
-Message-Id: <DF21Y2Y8FHSY.148HX8VXOFBHV@pigmoral.tech>
-Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Philipp Zabel"
- <p.zabel@pengutronix.de>, "Paul Walmsley" <pjw@kernel.org>, "Palmer
- Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Alexandre Ghiti" <alex@ghiti.fr>, <linux-clk@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 3/6] clk: anlogic: add cru support for Anlogic DR1V90
- SoC
-From: "Junhui Liu" <junhui.liu@pigmoral.tech>
-To: "Brian Masney" <bmasney@redhat.com>, "Junhui Liu"
- <junhui.liu@pigmoral.tech>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251216-dr1v90-cru-v3-0-52cc938d1db0@pigmoral.tech>
- <20251216-dr1v90-cru-v3-3-52cc938d1db0@pigmoral.tech>
- <aUSQLB1fmYgQe_Fg@redhat.com>
-In-Reply-To: <aUSQLB1fmYgQe_Fg@redhat.com>
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="iso-8859-1"
+X-cloud-security-sender:alexander.stein@ew.tq-group.com
+X-cloud-security-recipient:linux-clk@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay03-hz2.antispameurope.com with 4dXh9s3M9TzYd7D
+X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
+X-cloud-security-Digest:d9ceb68c40de01de860771274803b5bf
+X-cloud-security:scantime:2.014
+DKIM-Signature: a=rsa-sha256;
+ bh=XlXr7igiWKsjjzIb+5AsG+BOhT+y2sXxD6hRFSbAez4=; c=relaxed/relaxed;
+ d=ew.tq-group.com;
+ h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
+ t=1766134354; v=1;
+ b=Bp1hCPuHUSQ3NIoZRCtnD/ksyilJo4SPapuUPrkQffzOMsTaFpT49jBomSa7ohOyUAoiRsVn
+ ssD8sscqQk1KWSbPnvqgRMQ9QeERSTBHkKAzDKuPbO8dnnj582zC2VohtcJOjhIv8Yzvu/7W8yk
+ UQJF6ZB/ilLokL6mFKr4/+fsXDBSFXzyfk07jYlh2UwxDRGxqbXzeBA1B7wfzR/ccV8F3UbXvZE
+ pvNIzdZK0dBg1EVUS4BQ9JRoeq8b0KmjbEJf0fvSDek1IMg1Fmljy6P6dYLBIwByBmeVeHawVC7
+ tpogUtJG+xb18d5v8owimePsJsmpxbw5D5FPn6y2tH/uw==
 
-Hi Brian,
-Thanks for your review.
+Am Donnerstag, 18. Dezember 2025, 16:28:39 CET schrieb Geert Uytterhoeven:
+> Hi Alexander,
+>=20
+> On Thu, 18 Dec 2025 at 16:22, Alexander Stein
+> <alexander.stein@ew.tq-group.com> wrote:
+> > this series adds support for TQ's TQMa8QM. The first 3 patches are prep=
+atory:
+> > 1. Add support for clock-output-names for clk-renesas-pcie. This is nec=
+essary
+> > as clk-imx8qxp-lpcg.c (driver for phyx1 phyx2 clock gating) reqiures th=
+at
+> > property on the parent clock.
+>=20
+> Hmm, clock consumers should have no business with the names used by
+> clock providers, even less so whether those names are specified in DT
+> or not.
 
-On Fri Dec 19, 2025 at 7:37 AM CST, Brian Masney wrote:
-> Hi Junhui,
->
-> On Tue, Dec 16, 2025 at 11:39:43AM +0800, Junhui Liu wrote:
->> +static long cru_div_gate_round_rate(struct clk_hw *hw, unsigned long ra=
-te,
->> +				    unsigned long *prate)
->> +{
->> +	struct clk_divider *divider =3D to_clk_divider(hw);
->> +
->> +	return divider_round_rate(hw, rate, prate, divider->table,
->> +				  divider->width, divider->flags);
->> +}
->
-> The round_rate clk op is deprecated and I'm really close to being able
-> to remove this from the clk core. Please only use determine_rate()
-> below.
+Well drivers/clk/imx/clk-imx8qxp-lpcg.c does exactly this. AFAIK not just
+the ones references in DT, but also hard codes ones.
 
-Thanks! I will remove the round_rate() implementation and use
-determine_rate() only.
+The root cause is that clock-hsio-refa and clock-hsio-refb in
+arch/arm64/boot/dts/freescale/imx8-ss-hsio.dtsi are setting platform-specif=
+ic
+GPIOs in SoC .dtsi...
 
->
->> +static int cru_div_gate_determine_rate(struct clk_hw *hw,
->> +				       struct clk_rate_request *req)
->> +{
->> +	struct cru_div_gate *div_gate =3D hw_to_cru_div_gate(hw);
->> +	struct clk_divider *divider =3D &div_gate->divider;
->> +	unsigned long maxdiv, mindiv;
->> +	int div =3D 0;
->> +
->> +	maxdiv =3D clk_div_mask(divider->width) + 1;
->> +	mindiv =3D div_gate->min + 1;
->> +
->> +	div =3D DIV_ROUND_UP_ULL(req->best_parent_rate, req->rate);
->> +	div =3D div > maxdiv ? maxdiv : div;
->> +	div =3D div < mindiv ? mindiv : div;
->> +
->> +	req->rate =3D DIV_ROUND_UP_ULL(req->best_parent_rate, div);
->> +
->> +	return 0;
->> +}
->
-> [snip]
->
->> +const struct clk_ops dr1_cru_div_gate_ops =3D {
->> +	.enable =3D cru_div_gate_enable,
->> +	.disable =3D cru_div_gate_disable,
->> +	.is_enabled =3D cru_div_gate_is_enabled,
->> +	.recalc_rate =3D cru_div_gate_recalc_rate,
->> +	.round_rate =3D cru_div_gate_round_rate,
->> +	.determine_rate =3D cru_div_gate_determine_rate,
->
-> When round_rate() and determine_rate() are both defined in the provider,
-> only the determine_rate() will be used. Just drop your round_rate()
-> implementation.
+My current idea is to use fixed-factor-clock instead:
 
-You're right, it's redundant here. I'll remove it in the next version.
+> &hsio_refa_clk {
+> 	compatible =3D "fixed-factor-clock";
+> 	clocks =3D <&pcieclk 0>;
+> 	clock-div =3D <1>;
+> 	clock-mult =3D <1>;
+> 	/delete-property/ enable-gpios;
+> };
+>=20
+> &hsio_refb_clk {
+> 	compatible =3D "fixed-factor-clock";
+> 	clocks =3D <&pcieclk 0>;
+> 	clock-div =3D <1>;
+> 	clock-mult =3D <1>;
+> 	/delete-property/ enable-gpios;
+> };
 
->
-> I didn't look into anything else on this patch. This showed up on my
-> search for new implementations.
->
-> Brian
-
---=20
 Best regards,
-Junhui Liu
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
 
 
