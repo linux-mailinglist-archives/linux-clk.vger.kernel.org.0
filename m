@@ -1,57 +1,66 @@
-Return-Path: <linux-clk+bounces-31949-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-31951-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC9BCDB95B
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Dec 2025 08:30:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFEAECDB98E
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Dec 2025 08:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BEC9F3027A7D
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Dec 2025 07:30:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 32AA43076E07
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Dec 2025 07:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD6132D432;
-	Wed, 24 Dec 2025 07:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018E332D0E9;
+	Wed, 24 Dec 2025 07:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="o0StNlF6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hf1E8ILl"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065C726FDBF;
-	Wed, 24 Dec 2025 07:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5BC283FF5;
+	Wed, 24 Dec 2025 07:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766561433; cv=none; b=op0t9vE6Nhq3pJh/Qb5lRnuQIU6BL5kBKBsjUxSj+QBUtG5rDXWWe0RFrz+fOLxUwpIGxa2ueRLIpYSf2IpdaQ9+JsF6VFZjqJQNfGAwcNzCKlpQNNNQFtFkh5zO0ITKDT0UUiG7Y3j7ZF1U3GRMcMzsD7utH5UL42Qb4wHD1HA=
+	t=1766561569; cv=none; b=ha52RIY0GJ9rWNFbv1ll1X4cu71TLBBAjWaic7GZQ+Jg3omZXe2Vdjbr64+349UgPxwqHtLMD80sieinjlk1mQy/kkJ064JoEU3aynodJNqV6Mb2i6qVf2DmLkT+yq7c8MV/fNkmVfMi0+15+h1pM/x4LZu0yGwehtrkh7G7fWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766561433; c=relaxed/simple;
-	bh=eYu8Nq+w5A2A6v7D8iAIPR9NzDkFmS/GlSo/NzWVz0Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cnJGQ/ylssOSDjZBQulfz0IutHv/NnMYKoMsfO3wijNNGAOzFhcQxn66bmuwtOIEdnjMfs4UVq8acGGZavy7v6XLWJYwTkwKzJ2qEJW5U/8dWqafHFCBbYfn7sOhYCdLRRxaxv+YAb7xwyZgIMf4SaNXE8cRJExDg6mAKCrKWvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=o0StNlF6; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1766561429;
-	bh=eYu8Nq+w5A2A6v7D8iAIPR9NzDkFmS/GlSo/NzWVz0Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=o0StNlF6AT/Im/wgG6NhEi2JBngssBhzjkCacTC0TOmAuU/4x3vg88cz2kXd8yDBl
-	 fbyBBdPBljnfHOoh5OQwn+y9d7eiZRkaioh5PaV5EERmrQ+WZrVm8kbe3SPzc1EJMB
-	 trMS5oowhPYhp76N/W6fa0/Di0leSPniy1TwwrGKWA37t0zMaGQqqTLdwI1OCvk9Nc
-	 eiYkd9gyPpyHeJGNHeUdnETBzSy/HF33DIYt6jF+Y+myz7h3Dyg+fOmgALIGkHuifE
-	 p0RMBe7Qm5PYJ5ifqmg06d3ZH0n8/i76LbOq4Y++Ic7OQ3mEo7f/jstszLPoqJBLDj
-	 wJzwVpgBhU8zQ==
-Received: from beast.luon.net (simons.connected.by.freedominter.net [45.83.240.172])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sjoerd)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 23D0717E10F8;
-	Wed, 24 Dec 2025 08:30:29 +0100 (CET)
-Received: by beast.luon.net (Postfix, from userid 1000)
-	id CBF5D11A3A2DB; Wed, 24 Dec 2025 08:30:28 +0100 (CET)
-From: Sjoerd Simons <sjoerd@collabora.com>
-Date: Wed, 24 Dec 2025 08:30:13 +0100
-Subject: [PATCH 4/4] clk: mediatek: Declare MT7988 infra muxes as no-gate
- muxes
+	s=arc-20240116; t=1766561569; c=relaxed/simple;
+	bh=w5e9TnrVP5ABegEPA7dNb4tZYj1u9bTP/vBnZ/hS2tY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tknXRksOPjObH1SlTYZQEVl638G5zENOxKdYukLwEGp+WHeqseP9Af6umPPz/NGks6P3KRZiKizCPyrN/FcZE/rc6omwe5VI3DgGLKkkBMeLm25rquEACjoeAimODytNKcWhpSGS3dtdJSVZ3BugJ/26ikwn4C8TUtWmBSLx1Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hf1E8ILl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE239C4CEFB;
+	Wed, 24 Dec 2025 07:32:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766561569;
+	bh=w5e9TnrVP5ABegEPA7dNb4tZYj1u9bTP/vBnZ/hS2tY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hf1E8ILlRZDpG0ZPukbun9DVqpea0FkRG2ChgsNG6vJJBC/qZAY3i5nFfeheALSMK
+	 IDNhzn7UIoC5XgGSVEH7yG0Atxm8YwHRK/yI0HFaOKxrbe3JLB5p34lUm9hVaBOi3O
+	 ZBy0HMOjSekxO45JZlZRDyYMFDB3rkLlbLShcQJzeGOiTWtgUdgkz60UsKhnRLq0Gp
+	 dkcloG7u9WNzoPep08Fg9yyLTwED9YFtErdQcV1H/6QiTCsN2EbJ9rCEezAAS6xlpf
+	 l0ttNUllE7L4749pz57ZD8GkevkZPlkZEu/Tmo4OnwYFZ17FF3P/9PxIg+RY+rp4ba
+	 YaTgX2NXFfA3w==
+From: Vinod Koul <vkoul@kernel.org>
+To: Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Chunfeng Yun <chunfeng.yun@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Heiko Stuebner <heiko@sntech.de>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+ Maxime Ripard <mripard@kernel.org>, Brian Masney <bmasney@redhat.com>
+Cc: linux-clk@vger.kernel.org, linux-phy@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, 
+ Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <20251212-phy-clk-round-rate-v3-0-beae3962f767@redhat.com>
+References: <20251212-phy-clk-round-rate-v3-0-beae3962f767@redhat.com>
+Subject: Re: [PATCH v3 0/9] phy: convert from clk round_rate() to
+ determine_rate()
+Message-Id: <176656156358.817806.16966474957670370356.b4-ty@kernel.org>
+Date: Wed, 24 Dec 2025 13:02:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -60,131 +69,48 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251224-mtk-not-a-gate-v1-4-d4667e3b7856@collabora.com>
-References: <20251224-mtk-not-a-gate-v1-0-d4667e3b7856@collabora.com>
-In-Reply-To: <20251224-mtk-not-a-gate-v1-0-d4667e3b7856@collabora.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Jianhui Zhao <zhaojh329@gmail.com>, Daniel Golle <daniel@makrotopia.org>, 
- Sam Shih <sam.shih@mediatek.com>, Ryder Lee <ryder.lee@kernel.org>
-Cc: kernel@collabora.com, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, Sjoerd Simons <sjoerd@collabora.com>
-X-Mailer: b4 0.14.3
+X-Mailer: b4 0.13.0
 
-A MUX_GATE without a gate, is really just a MUX. Adjust the mux
-declarations to match that. This fixes out-of-bounds shifts due to no
-longer trying to enable/disable the gate with a shift of (u8)-1.
 
-Fixes: 4b4719437d85 ("clk: mediatek: add drivers for MT7988 SoC")
-Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
----
- drivers/clk/mediatek/clk-mt7988-infracfg.c | 88 ++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 42 deletions(-)
+On Fri, 12 Dec 2025 08:16:18 +0900, Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's go ahead and convert the
+> drivers in the phy subsystem using the Coccinelle semantic patch
+> posted below. I did a few minor cosmetic cleanups of the code in a
+> few cases.
+> 
+> Changes since v2:
+> - Patch 8 (phy-rockchip-samsung-hdptx): fixed merge conflict so this now
+>   applies against next-20251211. Cristian / Heiko: I kept your
+>   Reviewed-by since structurally the code is still the same as before.
+> - Link to v2: https://lore.kernel.org/r/20250810-phy-clk-round-rate-v2-0-9162470bb9f2@redhat.com
+> 
+> [...]
 
-diff --git a/drivers/clk/mediatek/clk-mt7988-infracfg.c b/drivers/clk/mediatek/clk-mt7988-infracfg.c
-index ef8267319d91..69e86fc29d73 100644
---- a/drivers/clk/mediatek/clk-mt7988-infracfg.c
-+++ b/drivers/clk/mediatek/clk-mt7988-infracfg.c
-@@ -56,49 +56,53 @@ static const char *const infra_pcie_gfmux_tl_ck_o_p3_parents[] __initconst = {
- 
- static const struct mtk_mux infra_muxes[] = {
- 	/* MODULE_CLK_SEL_0 */
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_UART0_SEL, "infra_mux_uart0_sel",
--			     infra_mux_uart0_parents, 0x0018, 0x0010, 0x0014, 0, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_UART1_SEL, "infra_mux_uart1_sel",
--			     infra_mux_uart1_parents, 0x0018, 0x0010, 0x0014, 1, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_UART2_SEL, "infra_mux_uart2_sel",
--			     infra_mux_uart2_parents, 0x0018, 0x0010, 0x0014, 2, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_SPI0_SEL, "infra_mux_spi0_sel", infra_mux_spi0_parents,
--			     0x0018, 0x0010, 0x0014, 4, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_SPI1_SEL, "infra_mux_spi1_sel", infra_mux_spi1_parents,
--			     0x0018, 0x0010, 0x0014, 5, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_MUX_SPI2_SEL, "infra_mux_spi2_sel", infra_mux_spi0_parents,
--			     0x0018, 0x0010, 0x0014, 6, 1, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_SEL, "infra_pwm_sel", infra_pwm_bck_parents, 0x0018,
--			     0x0010, 0x0014, 14, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK1_SEL, "infra_pwm_ck1_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 16, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK2_SEL, "infra_pwm_ck2_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 18, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK3_SEL, "infra_pwm_ck3_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 20, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK4_SEL, "infra_pwm_ck4_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 22, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK5_SEL, "infra_pwm_ck5_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 24, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK6_SEL, "infra_pwm_ck6_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 26, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK7_SEL, "infra_pwm_ck7_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 28, 2, -1, -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PWM_CK8_SEL, "infra_pwm_ck8_sel", infra_pwm_bck_parents,
--			     0x0018, 0x0010, 0x0014, 30, 2, -1, -1, -1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_UART0_SEL, "infra_mux_uart0_sel",
-+		    infra_mux_uart0_parents, 0x0018, 0x0010, 0x0014, 0, 1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_UART1_SEL, "infra_mux_uart1_sel",
-+		    infra_mux_uart1_parents, 0x0018, 0x0010, 0x0014, 1, 1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_UART2_SEL, "infra_mux_uart2_sel",
-+		    infra_mux_uart2_parents, 0x0018, 0x0010, 0x0014, 2, 1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_SPI0_SEL, "infra_mux_spi0_sel",
-+		    infra_mux_spi0_parents, 0x0018, 0x0010, 0x0014, 4, 1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_SPI1_SEL, "infra_mux_spi1_sel",
-+		    infra_mux_spi1_parents, 0x0018, 0x0010, 0x0014, 5, 1),
-+	MUX_CLR_SET(CLK_INFRA_MUX_SPI2_SEL, "infra_mux_spi2_sel",
-+		    infra_mux_spi0_parents, 0x0018, 0x0010, 0x0014, 6, 1),
-+	MUX_CLR_SET(CLK_INFRA_PWM_SEL, "infra_pwm_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 14, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK1_SEL, "infra_pwm_ck1_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 16, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK2_SEL, "infra_pwm_ck2_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 18, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK3_SEL, "infra_pwm_ck3_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 20, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK4_SEL, "infra_pwm_ck4_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 22, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK5_SEL, "infra_pwm_ck5_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 24, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK6_SEL, "infra_pwm_ck6_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 26, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK7_SEL, "infra_pwm_ck7_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 28, 2),
-+	MUX_CLR_SET(CLK_INFRA_PWM_CK8_SEL, "infra_pwm_ck8_sel",
-+		    infra_pwm_bck_parents, 0x0018, 0x0010, 0x0014, 30, 2),
- 	/* MODULE_CLK_SEL_1 */
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_GFMUX_TL_O_P0_SEL, "infra_pcie_gfmux_tl_o_p0_sel",
--			     infra_pcie_gfmux_tl_ck_o_p0_parents, 0x0028, 0x0020, 0x0024, 0, 2, -1,
--			     -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_GFMUX_TL_O_P1_SEL, "infra_pcie_gfmux_tl_o_p1_sel",
--			     infra_pcie_gfmux_tl_ck_o_p1_parents, 0x0028, 0x0020, 0x0024, 2, 2, -1,
--			     -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_GFMUX_TL_O_P2_SEL, "infra_pcie_gfmux_tl_o_p2_sel",
--			     infra_pcie_gfmux_tl_ck_o_p2_parents, 0x0028, 0x0020, 0x0024, 4, 2, -1,
--			     -1, -1),
--	MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_GFMUX_TL_O_P3_SEL, "infra_pcie_gfmux_tl_o_p3_sel",
--			     infra_pcie_gfmux_tl_ck_o_p3_parents, 0x0028, 0x0020, 0x0024, 6, 2, -1,
--			     -1, -1),
-+	MUX_CLR_SET(CLK_INFRA_PCIE_GFMUX_TL_O_P0_SEL,
-+		    "infra_pcie_gfmux_tl_o_p0_sel",
-+		    infra_pcie_gfmux_tl_ck_o_p0_parents,
-+		    0x0028, 0x0020, 0x0024, 0, 2),
-+	MUX_CLR_SET(CLK_INFRA_PCIE_GFMUX_TL_O_P1_SEL,
-+		    "infra_pcie_gfmux_tl_o_p1_sel",
-+		    infra_pcie_gfmux_tl_ck_o_p1_parents,
-+		    0x0028, 0x0020, 0x0024, 2, 2),
-+	MUX_CLR_SET(CLK_INFRA_PCIE_GFMUX_TL_O_P2_SEL,
-+		    "infra_pcie_gfmux_tl_o_p2_sel",
-+		    infra_pcie_gfmux_tl_ck_o_p2_parents,
-+		    0x0028, 0x0020, 0x0024, 4, 2),
-+	MUX_CLR_SET(CLK_INFRA_PCIE_GFMUX_TL_O_P3_SEL,
-+		    "infra_pcie_gfmux_tl_o_p3_sel",
-+		    infra_pcie_gfmux_tl_ck_o_p3_parents,
-+		    0x0028, 0x0020, 0x0024, 6, 2),
- };
- 
- static const struct mtk_gate_regs infra0_cg_regs = {
+Applied, thanks!
 
+[1/9] phy: freescale: phy-fsl-samsung-hdmi: convert from round_rate() to determine_rate()
+      commit: efc389fa00d1b93df8f95974c4f8c11da63671da
+[2/9] phy: mediatek: phy-mtk-hdmi-mt2701: convert from round_rate() to determine_rate()
+      commit: ebed08490d667141085ed873309aec5806dbb3a9
+[3/9] phy: mediatek: phy-mtk-hdmi-mt8173: convert from round_rate() to determine_rate()
+      commit: be4267241c196745e1f649afb7d232fe4440073a
+[4/9] phy: mediatek: phy-mtk-hdmi-mt8195: convert from round_rate() to determine_rate()
+      commit: 7a4ce5a9b674654ab04961a9ea03d15d71edb2a9
+[5/9] phy: mediatek: phy-mtk-mipi-dsi-mt8173: convert from round_rate() to determine_rate()
+      commit: 8e6bb53203d5c0a0cbc4f5cd90d8b2c6f20818ba
+[6/9] phy: mediatek: phy-mtk-mipi-dsi-mt8183: convert from round_rate() to determine_rate()
+      commit: 0484168a352f0f75a82d9917df4b23f5466726b7
+[7/9] phy: rockchip: phy-rockchip-inno-hdmi: convert from round_rate() to determine_rate()
+      commit: 2f7870297ae073b0fd6e1f875a9b84c5de0dea00
+[8/9] phy: rockchip: phy-rockchip-samsung-hdptx: convert from round_rate() to determine_rate()
+      commit: 3d4ffdfcf108e73b7c5bf07e0358d0fe8fac28d4
+[9/9] phy: ti: phy-j721e-wiz: convert from round_rate() to determine_rate()
+      commit: 27287e3b52b5954b73203d32ee76ffd5f53f5074
+
+Best regards,
 -- 
-2.51.0
+~Vinod
+
 
 
