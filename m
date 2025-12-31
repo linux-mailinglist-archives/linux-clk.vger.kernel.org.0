@@ -1,104 +1,168 @@
-Return-Path: <linux-clk+bounces-32068-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32071-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83D31CEB069
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Dec 2025 03:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A5A3CEB62D
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Dec 2025 07:44:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 419C930184C0
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Dec 2025 02:12:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4B4A30275FC
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Dec 2025 06:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA5E2E2852;
-	Wed, 31 Dec 2025 02:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EF23115B0;
+	Wed, 31 Dec 2025 06:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="lgLDZELa"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2AD1E492D;
-	Wed, 31 Dec 2025 02:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767147132; cv=none; b=qJavcez6Q+Qg14TxOfh11ELjniGOl8ZqslClvqMDN2PfYeNGq4bPW3BBt68xFE4iLVBg1GUiGX0J4Humx+6yP5j2i2nO9+YHl92Aa8BzdPRq76eKyJWnMU+2PAokCJPpmgKQ0mU/k30LDXJ6zFyg81sZQLRoZPKc7d5ZByDYV8A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767147132; c=relaxed/simple;
-	bh=QvmG+eFKv1JWtWQnjs/o6EkdNYKRf7Abk90+EMzqHUk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9znJhT0gxt6stCe9N1r4U90rSRHf1HwPUP3qCc6nT6YhV7QNTikbXjbCWM4PB+L4ESNlmLrF9Nau2li5zKbE5bTqDLbg7b9Wql9rVgkeZP16r2+G1PcVvE3YB7ZBAmIgAda8U6N3FK5PiVdWQ+To5x2oyq4RR+xG0Mb3GWFoGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [116.232.18.222])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 94570340D40;
-	Wed, 31 Dec 2025 02:12:09 +0000 (UTC)
-Date: Wed, 31 Dec 2025 10:12:05 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Yao Zi <me@ziyao.cc>
-Cc: Alex Elder <elder@riscstar.com>, Stephen Boyd <sboyd@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Guodong Xu <guodong@riscstar.com>,
-	Inochi Amaoto <inochiama@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] clk: spacemit: extract common ccu functions
-Message-ID: <20251231021205-GYB2019108@gentoo.org>
-References: <20251226-06-k1-clk-common-v2-0-28b59418b4df@gentoo.org>
- <20251226-06-k1-clk-common-v2-2-28b59418b4df@gentoo.org>
- <3ea5b28b-a0ed-49fb-a8a8-6f575a24820d@riscstar.com>
- <aVNOYuC0-lcymn-P@pie>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DF73101B0;
+	Wed, 31 Dec 2025 06:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767163436; cv=pass; b=OmvsjbWSKD50HBHM6ay4rGu9c2yjz/Bp/mHTzGfIQMdnFDWsiKb2PFwtZg4V3yCsIfvZ6TVPxt2NiVKGAj7mQovXNNdF08AdS2saLWAVYlmLuCNOaM01yuzvyTu+f+p1dIG0jZtPQBUFrueH4mX3SPcBdT5tPGCdqWFFmvDoDxo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767163436; c=relaxed/simple;
+	bh=ltE7Nxid9ZRZpr3XgkD0CgmMAQGqavxTEGqVL5UJvDU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t1qxVypPbmOg/k0yy7pv/rvedHhrKdDS+R7VWZB9Wph7ATolJ8ti1AekojKl6RC68B3Hh/552Toqb84XiPhEVg00qLKXQ6zTR3KpohzDpayjPzllQXNfu4jTFKAbHmM5F+Jt9/I29Bg32DLTT4zoi7aIrGNylF3wwifPbLUcwmc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=lgLDZELa; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
+ARC-Seal: i=1; a=rsa-sha256; t=1767163394; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=UD0SSaNqyxTIB8dboRduJpgQYio+KbXhgmQcCeYlyvHFgfosrWFrCFqgstDqr6b9wgDN4oHB0fWRaHrSLPoAENdN0L+HuYW6H0hER/6W6iqXVqTlbIwJxPiriYoJvrudB1sN5JKnwFK1L8wfhjygehNSktV4UX7/WQOhHV8TZvs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767163394; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=q9ypLDTMdw6YB/ZXsROHAJR2hTEvtbYVlYoJ86mENKk=; 
+	b=IwfjPWwqnJCvETo8D1T8H1DARNTMRQ6ryPsl90vLUxzAtcUgRWqUppmYMTiGYnpOAEWfkUXafFdybPuMID8vve6R+KOQDFwF8BK8ZbDKSq9i4OkCH5XXzMzFIosDHlD+D/6GuhHZv0DienauvpSKS181D2udk0igBJjNA0doFug=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=pigmoral.tech;
+	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
+	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767163394;
+	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=q9ypLDTMdw6YB/ZXsROHAJR2hTEvtbYVlYoJ86mENKk=;
+	b=lgLDZELa6JYw8p6hXLbC6aJQaW0i3FsaJkyGcE1ZDCqAhEQLkedNovaHKMGFQxmb
+	/xjyD5A8YgADNTUh4raRl7XAqdfUWdMGt9OrizNWM2VQbMXO7VBkpf+cejrZ+nh7DZM
+	XT9d3Rs/9Un4FG4B5bjKkzPy+oLRoeYgwzXR6sEU=
+Received: by mx.zohomail.com with SMTPS id 176716339210269.79354772892998;
+	Tue, 30 Dec 2025 22:43:12 -0800 (PST)
+From: Junhui Liu <junhui.liu@pigmoral.tech>
+Subject: [PATCH v4 0/6] clk/reset: anlogic: add support for DR1V90 SoC
+Date: Wed, 31 Dec 2025 14:40:04 +0800
+Message-Id: <20251231-dr1v90-cru-v4-0-1db8c877eb91@pigmoral.tech>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aVNOYuC0-lcymn-P@pie>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NQQ6CMBCF4auQrq1pp4WCK+9hXEBnhCYqWKDRG
+ O5uwUSjYfkm+f55sp68o57tkifzFFzv2mscepMw25TXmrjDuBkISEUBwNHLUAhu/ciNListrDm
+ BUSyCztPJ3ZfY4fjenm5jbA7fY+P6ofWP5WGQ83W1HSQXnFSh0KQ5kqZ95+pL68vzdiDbsDkV4
+ MOlgOyHQ+RaVZkpLWaIuMbVl4P85SryFKwtVI4SK/HPp2l6AQs1FqY7AQAA
+X-Change-ID: 20250922-dr1v90-cru-74ab40c7f273
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Junhui Liu <junhui.liu@pigmoral.tech>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+ Troy Mitchell <troy.mitchell@linux.spacemit.com>, 
+ Brian Masney <bmasney@redhat.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767163372; l=3705;
+ i=junhui.liu@pigmoral.tech; s=20251228; h=from:subject:message-id;
+ bh=ltE7Nxid9ZRZpr3XgkD0CgmMAQGqavxTEGqVL5UJvDU=;
+ b=WzR+JeiXhaXIqPJdMcNMbaQ3MufDdeWpxvGqt+s1R9kAFcnPP72AoFJgfA8JV4kQRf5L2O2q3
+ wzbA+xDl6JIDxWcns3z7SkNcjjl1DfXDpxrdWCId6U7mgdRX3TCh60R
+X-Developer-Key: i=junhui.liu@pigmoral.tech; a=ed25519;
+ pk=3vU0qIPJAH8blXmLyqBhKx+nLOjcLwwYhZXelEpw7h4=
+X-ZohoMailClient: External
 
-Hi Alex, Yao,
+Add Clock and Reset Unit (CRU) support for the Anlogic DR1V90 SoC, as
+well as corresponding dts bindings and dts integration.
 
-On 04:00 Tue 30 Dec     , Yao Zi wrote:
-> On Mon, Dec 29, 2025 at 06:50:14PM -0600, Alex Elder wrote:
-> > On 12/26/25 12:55 AM, Yixun Lan wrote:
-> > > Refactor the probe function of SpacemiT's clock, and extract a common ccu
-> > > file, so new clock driver added in the future can share the same code,
-> > > which would lower the burden of maintenance. Since this commit changes the
-> > > module name where the auxiliary device registered, the auxiliary device id
-> > > need to be adjusted. Idea of the patch is come from review of K3 clock
-> > > driver, please refer this disucssion [1].
-> > 
-> > I understand the point here, and it's just like the first patch:
-> > you're extracting generic code out of the K1-specific file so a
-> > new K3-specific source file can use it too.  This is really good.
-> > 
-> > However the end result should incorporate *only* generic code
-> > in the generic file, and have the SoC-specific source files
-> > contain everything else.
-> > 
-> > But as you have it now, the (new) generic probe function
-> > contains special handling for "spacemit,k1-pll", and that's
-> > not generic.
-> > 
-> > So I suggest you still implement k1_ccu_probe() (and k3_ccu_probe())
-> > separately, allowing each of them to do platform-specific things
-> > before (and/or after) calling the generic probe function.
-> 
-> I've raised similar concerns in the series for K3 clock tree[1].
-> 
-> Regards,
-> Yao Zi
-> 
-> [1]: https://lore.kernel.org/all/aU50DIe9qMneb0GT@pie/
-> 
+The CRU driver framework is built around the clock controller as the
+primary device, with the reset controller implemented as an auxiliary
+device. The clock part refers to the vendor's code [1] to determine the
+structure of the clock tree.
 
-Ok, since both of you raise this, I will do it in next version
-thanks
+The Anlogic DR1 series includes not only the DR1V90 (based on the Nuclei
+UX900 RISC-V core), but also the DR1M90 (based on the Cortex-A35 ARM64
+core). Most of the clock tree and CRU design can be shared between them.
+This series only adds CRU support for DR1V90. Nevertheless, the driver
+is structured to make future extension to other DR1 variants like
+DR1M90.
 
+Link: https://gitee.com/anlogic/linux/blob/anlogic-6.1.54/drivers/clk/anlogic/anl_dr1x90_crp.c [1]
+
+---
+Changes in v4:
+- Change common cru_dr1 code into a standalone module for future reuse
+- Remove redundant .round_rate() in the clock driver
+- Use devm_auxiliary_device_create() to simplify auxiliary device
+  registration
+- Pass register base from clk to reset via platform_data instead of
+  performing a second ioremap
+- Update clock Kconfig and Makefile licenses to GPL-2.0-only from
+  deprecated GPL-2.0
+- Add Kconfig dependency for the reset driver on the clock driver
+- Link to v3: https://lore.kernel.org/r/20251216-dr1v90-cru-v3-0-52cc938d1db0@pigmoral.tech
+
+Changes in v3:
+- Remove incorrect __free(kfree) usage for auxiliary_device in clock
+  driver
+- Replace __clk_get_enable_count with __clk_is_enabled in clock driver
+- Add a lock to protect register read-modify-write in reset driver
+- Rebase to v6.19-rc1
+- Link to v2: https://lore.kernel.org/r/20251026-dr1v90-cru-v2-0-43b67acd6ddd@pigmoral.tech
+
+Changes in v2:
+- Update copyright infomation
+- Add the original vendor author's infomation to the clock driver
+- Rebase on the v3 basic DT patch, which is based on v6.18-rc1
+- Link to v1: https://lore.kernel.org/r/20250922-dr1v90-cru-v1-0-e393d758de4e@pigmoral.tech
+
+---
+Junhui Liu (6):
+      clk: correct clk_div_mask() return value for width == 32
+      dt-bindings: clock: add Anlogic DR1V90 CRU
+      clk: anlogic: add cru support for Anlogic DR1V90 SoC
+      reset: anlogic: add support for Anlogic DR1V90 resets
+      riscv: dts: anlogic: add clocks and CRU for DR1V90
+      MAINTAINERS: Add entry for Anlogic DR1V90 SoC drivers
+
+ .../bindings/clock/anlogic,dr1v90-cru.yaml         |  60 ++++++
+ MAINTAINERS                                        |   7 +
+ arch/riscv/boot/dts/anlogic/dr1v90.dtsi            |  41 +++-
+ drivers/clk/Kconfig                                |   1 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/anlogic/Kconfig                        |  21 ++
+ drivers/clk/anlogic/Makefile                       |   7 +
+ drivers/clk/anlogic/cru-dr1v90.c                   | 192 +++++++++++++++++
+ drivers/clk/anlogic/cru_dr1.c                      | 226 +++++++++++++++++++++
+ drivers/clk/anlogic/cru_dr1.h                      | 117 +++++++++++
+ drivers/reset/Kconfig                              |  10 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-dr1v90.c                       | 141 +++++++++++++
+ include/dt-bindings/clock/anlogic,dr1v90-cru.h     |  46 +++++
+ include/dt-bindings/reset/anlogic,dr1v90-cru.h     |  41 ++++
+ include/linux/clk-provider.h                       |   2 +-
+ 16 files changed, 911 insertions(+), 3 deletions(-)
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20250922-dr1v90-cru-74ab40c7f273
+
+Best regards,
 -- 
-Yixun Lan (dlan)
+Junhui Liu <junhui.liu@pigmoral.tech>
+
 
