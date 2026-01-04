@@ -1,137 +1,138 @@
-Return-Path: <linux-clk+bounces-32154-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32157-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D97CF14C7
-	for <lists+linux-clk@lfdr.de>; Sun, 04 Jan 2026 21:56:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B63FCCF15A1
+	for <lists+linux-clk@lfdr.de>; Sun, 04 Jan 2026 22:40:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 95F383003FAA
-	for <lists+linux-clk@lfdr.de>; Sun,  4 Jan 2026 20:56:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7D4F93004438
+	for <lists+linux-clk@lfdr.de>; Sun,  4 Jan 2026 21:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4FE2D3731;
-	Sun,  4 Jan 2026 20:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CA82F12AF;
+	Sun,  4 Jan 2026 21:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="Bblw5nT+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jve/oBlE"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="Msu6Gk2u"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EA419A2A3;
-	Sun,  4 Jan 2026 20:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE51A231A23;
+	Sun,  4 Jan 2026 21:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767560171; cv=none; b=icwyoF/5ERKVl5R/Y7YL9/gEAZgq/H6NtXOJ32INywHuNkg7SQK1mRLrqn9iRGTu0BnKHJTsZ9VHbfd8ZIiC+OkRGAgeObDqGJquE+KG1Tw/RVwfa+R2BeLUA5Qo81XcEp7bH8qcueT7YvRdXaT/YwfERLzSY3XSngIqd3w2XhA=
+	t=1767562824; cv=none; b=kyRl9J5w+cu61aXHUe2viRvvttbnfs417WKK5KVQVnb98i6pUz/Ok3NeOEoFCnkHFf1ozDvBvl/zrBN7paC0rXEynvr8EX00Ugw7yMBFfc6tZJBYprUjwzHFLQqevT4lAgnpl8Tl1P3Rm+4G0eAK8ON0i2QY6E3M7soXTYzJOTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767560171; c=relaxed/simple;
-	bh=43XsIEvVY8IxIp1X8ePvKqA/sZQxe3whRcUqzFs4hQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GUXpFMKBwPq+/vFys3pxqnKxG809bwXeF8WC0UKPhD7tX4G45cNiI0YlqLLzrmwZCc0jY9jMdjzDhpSx7PRvjlGIU987PEHpYoIiIKosNyeH7Q9AfaN+gfZ3s0lhQHYMWnss94eyH7R7joC1Y0KWhuAtIBsu+ALx/Hxzh4wZqfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=Bblw5nT+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jve/oBlE; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 45DF51D000D2;
-	Sun,  4 Jan 2026 15:56:07 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Sun, 04 Jan 2026 15:56:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1767560167; x=1767646567; bh=P2
-	VkFqho94I+6wSqldw5zMGqgoysj5bINcPyRpedIK4=; b=Bblw5nT+WEyQ6XQJdE
-	YIT1Av8H+xZ2h2ELlNhkDsJkEtB5uzxnlH3nDMSWIS560PjpvzlGZJV3yDeUiBT5
-	v49TLmgOYM1WFNgLY/MEKStTZQkpaWj0bJfU7vrjOayjJaOtE92BcA0V76lRP2LG
-	UJ47PnL6XO+1RghBiN/kFFzRPJlfvZmH/A08uRF9JERIGG2Q/L/7OnKRXPtLUKOJ
-	b916hbyHRllZnhmIkIcIbTCQpilfkKnC4LvtJ2yyuRXGlA08mrIT1bTI9mbTyhPz
-	pgEyWKAMsTqI3QvfL0jvck4wDIGCNgpI4JyM+h16+XL/zYtM2ZufHZPuJqIh2OLx
-	BKgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1767560167; x=1767646567; bh=P2VkFqho94I+6wSqldw5zMGqgoys
-	j5bINcPyRpedIK4=; b=jve/oBlEyNz1XvUQomMKBQxzLEJ5G+liE7m5px50moNj
-	SnEIp7jcwT5u9QdQUjWqdwqQM4S5czBBanc16IJGQe8TlzMdZ2bUlTga/gZ6VtTI
-	iUebmAE3QPQf/LorYDkPA4jAQlsW0+W4OiULPCtOESZsdQVArBojxdmq0eUgJFvo
-	kzD8n5PFxfS9qB4RSdoiOQbAmJqeZ1vn2f5KKVzgbBs8eU6iq6JZFOXJYl5l/iCK
-	TOU3noaZnPZJAxRlZYimAhwYcSnXQHR40y74t4xHmO9dtE+Qiakec7bAvzQNP29h
-	YGgPr7pxxkUecNjW+Ws7Z3ftVDg33X8URvP8H0Zt7Q==
-X-ME-Sender: <xms:5tNaaWTeB-K8WJ3oYKLikPbQFFp8WYzja0Nk8Xbi_tV2Bfp_O3Fr7g>
-    <xme:5tNaaVH4RO8RN5DVk_MzNONKf6qknhsUvrYubCAIZiDuQDSNHQnDmNcTSo80y_mq5
-    sX3dY3ManDaVz60rPYvpwLZtMHhfzt6eUqfUt9kIje9cDxX4cesxg>
-X-ME-Received: <xmr:5tNaabFPmGb6ulZLF-OYL9_7fddOe7jIUmcVhCUc55Sro7ddQQ4jvYeiUWWsvPPrRwfDd7YqlmurEqxGwyfVu-Tm>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdelheeggecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomheppfhikhhlrghsucfu
-    npguvghrlhhunhguuceonhhikhhlrghsrdhsohguvghrlhhunhguodhrvghnvghsrghsse
-    hrrghgnhgrthgvtghhrdhsvgeqnecuggftrfgrthhtvghrnhepheduleetteekgffffedu
-    feeuvdejiedvkefhveeifeegffehledtvdevhfefteegnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepnhhikhhlrghsrdhsohguvghrlhhunhgu
-    sehrrghgnhgrthgvtghhrdhsvgdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtph
-    houhhtpdhrtghpthhtohepghgvvghrthdorhgvnhgvshgrshesghhlihguvghrrdgsvgdp
-    rhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhmpdhrtghpth
-    htohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgv
-    nhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhikhhl
-    rghsrdhsohguvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvg
-X-ME-Proxy: <xmx:5tNaaTQTzwqR_busw8Hcbo2efTR3yN-fkAtDs6rK2MTUIyUpie_Jxw>
-    <xmx:5tNaacJbZH90Mm899GO3caimDldT76_U8rtrKn1dQOEkNlIpP9OaRw>
-    <xmx:5tNaaeZh0TnqQ5-DuGdvnj97zP66WaFbtLH0Z3--i1thc2n7qnr5zg>
-    <xmx:5tNaae8uZ1svyEL0kFs4b1T_e57PllbaJmte9RY67pAltRvcUlSA3g>
-    <xmx:59NaaVqcIILjhBIapxsocub6N8X1sbhsO9QjvpQfFPFWwmE69B_SpSqf>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 4 Jan 2026 15:56:05 -0500 (EST)
-From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH] clk: renesas: r8a77995: Add ZG and 3DGE support
-Date: Sun,  4 Jan 2026 21:56:01 +0100
-Message-ID: <20260104205601.1587576-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1767562824; c=relaxed/simple;
+	bh=Gsnw34my1PvdRzpDMLFQBJTrOOnt4eNJvpKW7PiEFCA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HLGIqmlVEeVTNGNOjX9r4GzppF0SfbsdvhmGByh1zEhUPjfPoqDxi+vuggPyQ91NOfViAOeELAwpio+lWYS4Q5gDVw9IArzWQtT4oLMQNO43w8M1yxD0KhotS3g9G0NYox27QiOXKh5iL3aLcSDyGx4qGT0Vaotnm14ENVzoRpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=Msu6Gk2u; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4dkrSg0v8tz9ssn;
+	Sun,  4 Jan 2026 22:40:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1767562819;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gcJ4qySzjY0KVAwHFonFKf4MTj/0gwZsfwoy4TTth9c=;
+	b=Msu6Gk2uRTh5Wq0JBpm6P79Un8o0EIiWk7gZyzhdv1eu7gjtktlm0JfFbc5Mru1GIjkcfm
+	MSuBQ/6/odPVQ5sR9YsFCVD7dv+F5jq5STFexwJX3ae2hwQmh4J9bcEnJXf43Ak5KOuH5e
+	CoJ5u5JHO6Nju1m8shUA/9tD/0WskxcnsFyMzo7B71D83LSFLg+bUlKBB02HfQm8JnzCZy
+	sc7BoxXDNU806d5wxTCkSgWK6t4IQ5hEakURlxbah3WuTOzjSltSV26Z4zCeW9/2KABVUD
+	FklBU0Nhat3neYUY6xLBuqDIUop6f8E/q3PIxutPe30bgGl67nbHIut9AA9yyg==
+Message-ID: <e4504a0b-65af-4749-8702-7b51dc933059@mailbox.org>
+Date: Sun, 4 Jan 2026 22:09:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] drm/bridge: fsl-ldb: Parse register offsets from DT
+To: Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org
+Cc: Abel Vesa <abelvesa@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Lucas Stach <l.stach@pengutronix.de>, Peng Fan <peng.fan@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org
+References: <20251017154029.105099-1-marek.vasut@mailbox.org>
+ <dc4b1b65-542f-4bd2-bd91-af3fe4223b63@nxp.com>
+ <55d44163-4f37-462f-b860-c862cb5ada5a@mailbox.org>
+ <b65d9221-bdb3-4e69-beed-6b7646c5d5eb@nxp.com>
+ <3064e20f-92c8-4e3b-82bc-ef949f312826@mailbox.org>
+ <ac21053f-21d9-4844-9049-09deb3708a6d@nxp.com>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <ac21053f-21d9-4844-9049-09deb3708a6d@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 4ef6ba8cb8fdf258150
+X-MBO-RS-META: 376wawhc1tkcnnz9scobhr58t5iu3ewg
 
-Describe the ZG and 3DGE clocks needed to operate the PowerVR GPU.
+On 11/4/25 6:25 AM, Liu Ying wrote:
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/clk/renesas/r8a77995-cpg-mssr.c | 2 ++
- 1 file changed, 2 insertions(+)
+Hello Liu,
 
-diff --git a/drivers/clk/renesas/r8a77995-cpg-mssr.c b/drivers/clk/renesas/r8a77995-cpg-mssr.c
-index 162fa86c81ff..677c107d8f21 100644
---- a/drivers/clk/renesas/r8a77995-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a77995-cpg-mssr.c
-@@ -80,6 +80,7 @@ static const struct cpg_core_clk r8a77995_core_clks[] __initconst = {
- 	/* Core Clock Outputs */
- 	DEF_FIXED("za2",       R8A77995_CLK_ZA2,   CLK_PLL0D3,     2, 1),
- 	DEF_FIXED("z2",        R8A77995_CLK_Z2,    CLK_PLL0D3,     1, 1),
-+	DEF_FIXED("zg",        R8A77995_CLK_ZG,    CLK_PLL0D3,     5, 1),
- 	DEF_FIXED("ztr",       R8A77995_CLK_ZTR,   CLK_PLL1,       6, 1),
- 	DEF_FIXED("zt",        R8A77995_CLK_ZT,    CLK_PLL1,       4, 1),
- 	DEF_FIXED("zx",        R8A77995_CLK_ZX,    CLK_PLL1,       3, 1),
-@@ -119,6 +120,7 @@ static const struct cpg_core_clk r8a77995_core_clks[] __initconst = {
- };
- 
- static const struct mssr_mod_clk r8a77995_mod_clks[] __initconst = {
-+	DEF_MOD("3dge",			 112,	R8A77995_CLK_ZG),
- 	DEF_MOD("tmu4",			 121,	R8A77995_CLK_S1D4C),
- 	DEF_MOD("tmu3",			 122,	R8A77995_CLK_S3D2C),
- 	DEF_MOD("tmu2",			 123,	R8A77995_CLK_S3D2C),
--- 
-2.52.0
+sorry for my late reply.
 
+>>>>>> +++ b/drivers/gpu/drm/bridge/fsl-ldb.c
+>>>>>> @@ -61,24 +61,16 @@ enum fsl_ldb_devtype {
+>>>>>>     };
+>>>>>>       struct fsl_ldb_devdata {
+>>>>>> -    u32 ldb_ctrl;
+>>>>>> -    u32 lvds_ctrl;
+>>>>>>         bool lvds_en_bit;
+>>>>>>         bool single_ctrl_reg;
+>>>>>
+>>>>> single_ctrl_reg can be dropped then, as it can be expressed by failing to
+>>>>> get the second register.
+>>>>>
+>>>>> Furthermore, with this done, lvds_en_bit is the only member left and hence
+>>>>> struct fsl_ldb_devdata can also be dropped, as IIRC there is no need to
+>>>>> use a structure for device data with only a flag.
+>>>> I plan to add more bits into the driver match data when adding the MX95,
+>>>> so I would like to retain these instead of removing them and the adding
+>>>> them back.
+>>>
+>>> i.MX95 LDB supports two LVDS channels.  Two DRM bridges are needed in single
+>>> or separate LDB mode, while one DRM bridge is needed in split LDB mode.
+>>
+>> What do you refer to by "split LDB mode" , some interleaving or some such
+>> thing ?
+> 
+> I mean "Split Channel DI0" and "Split Channel DI1" use cases in the below
+> table in i.MX95 TRM.
+> 
+> +------------------------------------------------------------+
+> |Table: Channel Mapping                                      |
+> |------------------------------------------------------------|
+> |Use Case           |  LVDS Channel 0   |  LVDS Channel 1    |
+> |------------------------------------------------------------|
+> |Single Channel DI0 | DI0               | Disabled           |
+> |------------------------------------------------------------|
+> |Single Channel DI1 | Disabled          | DI1                |
+> |------------------------------------------------------------|
+> |Separate Channels  | DI0               | DI1                |
+> |------------------------------------------------------------|
+> |Dual Channels DI0  | DI0               | DI0                |
+> |------------------------------------------------------------|
+> |Dual Channels DI1  | DI1               | DI1                |
+> |------------------------------------------------------------|
+> |Split Channel DI0  | DI0 (first pixel) | DI0 (second pixel) |
+> |------------------------------------------------------------|
+> |Split Channel DI1  | DI1 (first pixel) | DI1 (second pixel) |
+> +------------------------------------------------------------+
+So yes, split mode is effectively interleaving. But that should only be 
+a matter of syscon configuration.
 
