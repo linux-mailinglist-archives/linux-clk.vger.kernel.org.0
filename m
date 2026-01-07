@@ -1,152 +1,112 @@
-Return-Path: <linux-clk+bounces-32296-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32298-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03D9BCFE7FA
-	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 16:12:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20746CFE9D7
+	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 16:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 86A04303986C
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 15:10:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AAC00311E34C
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 15:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162CA364E9F;
-	Wed,  7 Jan 2026 15:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ns//fbuH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51BC13D539;
+	Wed,  7 Jan 2026 15:21:58 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2944036403A;
-	Wed,  7 Jan 2026 15:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FFC328B7D
+	for <linux-clk@vger.kernel.org>; Wed,  7 Jan 2026 15:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767798617; cv=none; b=ngBuqc4R6NHFPiIMHJgNYeM6mwJ/VB8fy7jtk4lsKFQZJfmtMsDwZrrD2XdSuo9hPpoi+0RPyegLhnj3vNwqrPUzt08J94g0AYgz06fPr0qKFZ2NGNhaU3KdEIA0oPLZuuo9eZUC/L8aPnT2TXMeFNhHdg98EKZsIAcYdvu1uBQ=
+	t=1767799317; cv=none; b=XNzgpv1TJxIESLo3sCYdibgsBIGeiG9RAm2ZcoBLgZS61RSTOJebWqR3lCiGzFShqSl2ZZUFNXQEaPpPpXdGlXMTikTpbUDUS55yaE2RaLO+9i78cw1Et70Wdq8XYUgYZ1Pj629WKhp9tfAK7p63we5+cKhRRDfxDOqsWi9NsBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767798617; c=relaxed/simple;
-	bh=ruLJwy622onfjhp6xw4ADLI848biIUuAYSyoTpnglgk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EXZU1um8PsGdkyqdrILpaLcRPp3tqKVoBLLPBgBiqz8rynZICKJBWf+IULPFXTtFitF1KxMZYoWVg7O/20Dk7VvE4D5+zK3yBG8jRtKmJKR4QyPV3BQLp4VHwDgMETTU+QYTHiHR9nrprEemY6gTLpJIlBFk/HyzEeFtOI5TVBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ns//fbuH; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1767798613;
-	bh=ruLJwy622onfjhp6xw4ADLI848biIUuAYSyoTpnglgk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Ns//fbuHmUm/HgngBvDsWHryUZciMHDGToh4HmqboY21nv7PgA6YRLVzqwc/ussOs
-	 ZQP3qHnEY7LqDX37RDggfwg/Ml0FDGY0sMDUIiqk025dyeZ/kBFFdFq1l/kvUm0b5r
-	 WXGEzLK7OW0bpfwKe3UVLwAfAsO6VZFPBNuX15y7DalJk+OIispsFWxNJqFoIgCif8
-	 5BkFdTvV+ZVCAekmzuVxH/MuWSigA7mpmnDmERHcXxWk+noVZu12+Q28ujpxY4BxnW
-	 pfNz18biBjrIzEvESliCT7I1uNocZbY439hV4UveGeKp3PvIvaxLxcSIUtDiznvijR
-	 6j8wQDyLu0zfA==
-Received: from [192.168.0.79] (unknown [IPv6:2804:14d:72b4:81ae:67c:16ff:fe57:b5a3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dwlsalmeida)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2D03E17E1534;
-	Wed,  7 Jan 2026 16:10:09 +0100 (CET)
-From: Daniel Almeida <daniel.almeida@collabora.com>
-Date: Wed, 07 Jan 2026 12:09:54 -0300
-Subject: [PATCH v3 3/3] rust: clk: use 'kernel vertical style' for imports
+	s=arc-20240116; t=1767799317; c=relaxed/simple;
+	bh=xirnzd+sOTLBfOoqrKyZ5orvmCZslNDx5L/n4t/ve2s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H11BfFUg9Fc05nteCCH6/AqzMb70q74RPEKWuodce1dF3KgyumAFC236Nu9t7+jdZIJbJr77H1YZJwPH6mO+MN1Bd4/F2+A97dugXx6WDoqX/hpmMwkKDXJ+fVGA60Y2fD/FLDloCpvVoXbv5s2/CSTJyDa0HaURiF7GAcA67dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-55b22d3b2a6so715653e0c.1
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 07:21:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767799307; x=1768404107;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VGXfYeh3k2PdpEfY5u5umPkWwmBYjzfyvyHueENf/WA=;
+        b=Qk3GMQ2JU2zJSZfhXk2t7KT8yl1TUa+9YjxLzRPXgilIXUzjmOpWR1HsXcbmiZUDma
+         cHv7CYMAfBkiCbWOc9+nZ0PecwBurQ/m/30NNUsvMBVp5rfESHghif/DnAkBavgAY2Cy
+         +0kmGuXEagII1iqR8lXxgDEbOSXBWDioFxcFgyZOyFNat7voyuLmVTbo3RQRIZCCPz0y
+         paGU9CA2jmUYynkOOEqRZyFigbUJB0jKl+WAXnuyRY1nvEm5Ei9Snw9cA54LyHn6m3xz
+         DFt0S5kwYSP+QqCA2khRYZCRjrbOTWRR4CGq1yXsAD3OuRpWBv6CKcnkSbsfEfotZagm
+         KxNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXNoGNck2tvC96CCGGquuRXbaDjbzxK2yJHbVnEaSer4bi9ZZigEeevs3aOGTZpYxle90hxjn5kPg0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4sAieyDpaS1KHL+cZP1NskFw1g8B7vOQReorlfo2ny93bku4t
+	21N23lsuIDgGjYf2eJ4Xsd3HuRY/m0Ki73CQgbNQi9ktT9NYTJq0R+uYpriP48aJ
+X-Gm-Gg: AY/fxX6CEANwqdY6VaVCT/iT2rBtPiV5WIJ8EWiJ+J/WHYnmfelCUi5qyRMJZT2aHtG
+	BZuYSjojigVst9leKWmp/qd5TZl4/8nUS8dgtcujb7Bj41xCy01hAUJv4XlfN/puprlwEL2DQ8Y
+	kP0o9dWVntJx8k9GEUNCAxH6bzzb0xxLfSPVEgyOg5rpwHwZHcx3W5VFaPM1AXSVKtAQcRTsdeu
+	mvR0DtfRfDU25ulm54crTYhG139uGF1kDqK2OsjWNFtOGWvwJW4RPSUBTCduP2tNSr8b5twr+0b
+	5ou9P6IQgzIV5swQ/RdY7lTwri2P3lJWUNwmhNpk8Mm8f1FWZA4rFSQ6/+yqg/NIqW891c4Gbw6
+	1xh380vMmqR5OlnUzH99VZqkFaP23uOARu+HmC8oBxi9720APP3bGTa8B30eQEig6HLzCebU368
+	AVQp8CqSpWKiGU7P//9XoAQrq+s18R16OB4Ag9ZeA1+QZY9JY9ngTc5yB9bpk=
+X-Google-Smtp-Source: AGHT+IE0WpYqyane26HGOL9/6kvD4mAkE+KAsK4qv/ltvrCRtn/H6CFjWjAwtZ2viTRpgphPrPBizQ==
+X-Received: by 2002:a05:6122:82a7:b0:54a:a2a3:b16b with SMTP id 71dfb90a1353d-5633ef0e427mr1757113e0c.3.1767799307418;
+        Wed, 07 Jan 2026 07:21:47 -0800 (PST)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5633a1ea810sm3170763e0c.5.2026.01.07.07.21.47
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jan 2026 07:21:47 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5ec838c33e6so440886137.0
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 07:21:47 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUtk4n3/nAdOXAzahSomZP02HXCnxQXkntmivKy5WSPp1xK+JEpGoRiYg+wNoSFZBePSAHINQUm5bU=@vger.kernel.org
+X-Received: by 2002:a05:6102:f0a:b0:5db:cfff:fd66 with SMTP id
+ ada2fe7eead31-5ec75774023mr2670446137.22.1767799305872; Wed, 07 Jan 2026
+ 07:21:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-clk-type-state-v3-3-77d3e3ee59c2@collabora.com>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
-In-Reply-To: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Danilo Krummrich <dakr@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
- Fu Wei <wefu@redhat.com>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Trevor Gross <tmgross@umich.edu>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
- linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, 
- Daniel Almeida <daniel.almeida@collabora.com>
-X-Mailer: b4 0.14.3
+References: <20251224165049.3384870-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20251224165049.3384870-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20251224165049.3384870-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 7 Jan 2026 16:21:34 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWAbdVfTGtAdVCfq31yTNYVgmXoVB5JvPOHde-ZsVMBhw@mail.gmail.com>
+X-Gm-Features: AQt7F2o6g6AUCQi8FFgmNntpDHUQy0QJrCdwxLZBZDunb38OI9ggwtqmRVYkm64
+Message-ID: <CAMuHMdWAbdVfTGtAdVCfq31yTNYVgmXoVB5JvPOHde-ZsVMBhw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] clk: renesas: r9a09g057: Add entries for CANFD
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Convert all imports to use the new import style. This will make it easier
-to land new changes in the future.
+On Wed, 24 Dec 2025 at 17:51, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add clock and reset entries for the CANFD IP.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-No change of functionality implied.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.20.
 
-Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
-Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
----
- rust/kernel/clk.rs | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
-index e840e7c20af7..73a2b51414a1 100644
---- a/rust/kernel/clk.rs
-+++ b/rust/kernel/clk.rs
-@@ -80,12 +80,23 @@ fn from(freq: Hertz) -> Self {
- mod common_clk {
-     use super::Hertz;
-     use crate::{
--        device::{Bound, Device},
--        error::{from_err_ptr, to_result, Result},
--        prelude::*,
-+        device::{
-+            Bound,
-+            Device, //
-+        },
-+        error::{
-+            from_err_ptr,
-+            to_result,
-+            Result, //
-+        },
-+        prelude::*, //
-     };
- 
--    use core::{marker::PhantomData, mem::ManuallyDrop, ptr};
-+    use core::{
-+        marker::PhantomData,
-+        mem::ManuallyDrop,
-+        ptr, //
-+    };
- 
-     mod private {
-         pub trait Sealed {}
-@@ -216,8 +227,17 @@ pub struct Error<State: ClkState> {
-     ///
-     /// ```
-     /// use kernel::c_str;
--    /// use kernel::clk::{Clk, Enabled, Hertz, Unprepared, Prepared};
--    /// use kernel::device::{Bound, Device};
-+    /// use kernel::clk::{
-+    ///     Clk,
-+    ///     Enabled,
-+    ///     Hertz,
-+    ///     Prepared,
-+    ///     Unprepared, //
-+    /// };
-+    /// use kernel::device::{
-+    ///     Bound,
-+    ///     Device, //
-+    /// };
-     /// use kernel::error::Result;
-     ///
-     /// fn configure_clk(dev: &Device<Bound>) -> Result {
+                        Geert
 
 -- 
-2.52.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
