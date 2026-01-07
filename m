@@ -1,127 +1,135 @@
-Return-Path: <linux-clk+bounces-32313-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32297-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD7A3CFF8C5
-	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 19:50:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E164CFFC43
+	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 20:34:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DB60530019D1
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 18:50:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E526C3251245
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 18:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A03935C191;
-	Wed,  7 Jan 2026 18:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQVaYSRr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6583334C04;
+	Wed,  7 Jan 2026 15:12:39 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D709F35BDD6;
-	Wed,  7 Jan 2026 18:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28183331A41
+	for <linux-clk@vger.kernel.org>; Wed,  7 Jan 2026 15:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767811117; cv=none; b=H/A6MRT1stpmklvb3Q4FMc4xdJpE39kqkf+eGK7U/EGOvI2DZvux7ynaC0UCfBuuSaFHlAFeXLZeU9DuSPToujTVtvGk3wyJZduVf5I+Wh/us12o5DheJluWkV9DW+NITyuJ0y1sNSCBCnl/Mf0DXCtT8TSFnvdnA4xg3KERy7c=
+	t=1767798759; cv=none; b=RoHNl/9Wn47OTeuixnpBDj4EDu615EhIl46X2JuLPUOf1Pd4QF8BPlobq29ICjzSwE2OXvw00kbbRhsUCChoT92J+cafuBNOH1TpE5vQdfdJBQlAUH1CjBdfaeEA3zLX8y5qySeOhQMDjLtZNUqudzfm5XNAczGeRo9/T+x5Iog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767811117; c=relaxed/simple;
-	bh=4gA87dpy4WxHWsQQHfKYdtr3VgTSzDJcgdqZ1ZKqS5U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZCUQBzWiOtMbd/s6xF/ojGifFFWn/8wh2xvRExIubRPUFfoiS/4c/PffZwVRttcIsTcnOnlv2mCbGzqfaNmki1lSSxUUwGnS4V9WH1j7vWa8rWitv6bNf2y6gGumbOMz0PHXUYCLHSHnKD7OntUmunmXwIa4TujGmmA6p7GsQjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQVaYSRr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92277C4CEF7;
-	Wed,  7 Jan 2026 18:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767811116;
-	bh=4gA87dpy4WxHWsQQHfKYdtr3VgTSzDJcgdqZ1ZKqS5U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tQVaYSRrv57g3xq+kAmlC19X9l1YrEqk2QaB2GpoZTPFVevg3P3KkXc25r2GpHX8l
-	 ZObuwh7UZNmDoOnfmOlnyT/EFy9uhNPFrvrh3w0dG2Zjq+nLl2mYdAK5vL/CgFm2vs
-	 ZfuS2TgIGTuZ3VzQC0CfesccxDi7Z9+o45yJzO+JnyUTsgIhEbZLNc58LNsVhYBpUN
-	 bPH8qSM7xgULMJQ1KCY9XXYxm3g7Y7CumXp7WvPgip4nMI/pNVyKKTW/0zQUEkVfwb
-	 0JWT/LBEYHwITDg2rfoa3IyUD51V6P+R+vMy+9XU5LBNIX5l+wzkZK2+T+v5RTjMcv
-	 XuKDvuik7uCsA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Taniya Das <taniya.das@oss.qualcomm.com>
-Cc: Ajit Pandey <ajit.pandey@oss.qualcomm.com>,
-	Imran Shaik <imran.shaik@oss.qualcomm.com>,
-	Jagadeesh Kona <jagadeesh.kona@oss.qualcomm.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: (subset) [PATCH v3 00/11] Add support for Multimedia Clock controllers for Kaanapali
-Date: Wed,  7 Jan 2026 12:38:22 -0600
-Message-ID: <176781109972.3262943.12550481124214869830.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260107-kaanapali-mmcc-v3-v3-0-8e10adc236a8@oss.qualcomm.com>
-References: <20260107-kaanapali-mmcc-v3-v3-0-8e10adc236a8@oss.qualcomm.com>
+	s=arc-20240116; t=1767798759; c=relaxed/simple;
+	bh=lQH1FRm/rJzskVoeclFFS2ftwdSJglbw9Ah8hTk5DQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mOyLJnpDgeHgR2wC88IciZi6IlgQRn/bSLUwx2fYNaujyOK0S13Lo/RXYRO0R9XwtFjAMwcW/2xcakfJy+/OrLgNxvfOqu+u8mAFT+Sz5I1y45GPVZshgsUeHlC4xYlnLUe5J2kKsoVu1MBAFDS6+TF4IzkFtejSQZF/B/tfNrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5ed09471ab9so201788137.0
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 07:12:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767798757; x=1768403557;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTnh7CkZFGGtUC43ryOTlC9N4pV7qcvjxYMPMpt68WY=;
+        b=ZccSDVcfCjCS3kAhrakiIiOTfjUNlJSsjw7dzVUk/fPfiNaKTLh/Sj8tGyn4xeSGwx
+         kd3KqQlmvPuKu1f25Ry47xmmjcex8tvXNG6XRGq0VR+PQPzzPk2VBYJUjIF8DqrXeRG+
+         nXJF9pNoJQ6ypfvuVaagXSutVp/GdOp15yd0Y1ackrOEpmsBPP7WRiqk4HpR8j/cbdL0
+         vztFSoFZ9L9+mLsV/QFmt/Dr7OOPAhAUismPF92B0ovyA6uS90j+e0IWOMpkYA2pji1w
+         2h/xOwyyXyRC+rQ+y9pOWlTUvhFzBxtixcFS15tr0ViR2FX+RFAxWyxslUFlr0omyrct
+         0qbw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcs4xQtWfu2dSEnuibF9WQxzESfv8DkTMPCFKDDUqbw2GWPeLfsUU8TEXtoH+NOFtCNKPaLdTvKbE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSkSr2Wf3EDF9G3/zahGvPLlDpdZU0Gm+uA7XS+TIKlAYKl0Iv
+	OVLG8KPGxi6EF6937gdP+qet9FXx4u+bkhqWejV2OAUu2Hn0y3ebDJWqSXm7HyH2
+X-Gm-Gg: AY/fxX4gJW4IKRNLNn38t6lAAkXdAz0MawkD6XwJI4FZ1xU7vhymhNdwTKrruZTIHOw
+	ReTNDlPEgb03StkWlypwxyxu8IouDhTpuyisWrtqHag4ksBR9U8usL8qhCT+PF3N/rxUKXtz/Il
+	4umS4hU6KiUjzln3YqqD7hqrtxdVHvpUGGSwIPNIL3hL2KkKhOHfE04nhjBYVOmsIjHPccIn5N8
+	TLqUPDJyijRFxsKH++0xN11GPOgx45xlom8twuiSD6cqpLEApLqVKW7CXCMjVEUHypS+TpN0/5I
+	HTV8d+wv9Fb0djmvnpGQHc3VC9zlLYFUuPxxovcxC0tMOmmZZLQukt2a/g1rVAnIyYhQnoo6BHx
+	rarDJc97mT/+1rmbvw9aXX53qT0u3ZDOSFl/+DFUz19qT31w2U3Jgl2x5olhBzjj0wUSFrdlvxM
+	WBkvGzpczmTEnnMDambM1sd9CMcBgbwJBkqk3v8ChuMcl0TvVc
+X-Google-Smtp-Source: AGHT+IFVeS8cpSZNoSQlTOXznUCKOgRrui/HY64Fc7ZFvJ5oVCD1joVCJNmtCxCOK6lbt+1AarD/9A==
+X-Received: by 2002:a05:6102:304a:b0:5e5:6360:1f5c with SMTP id ada2fe7eead31-5ecbb160489mr1037420137.42.1767798756867;
+        Wed, 07 Jan 2026 07:12:36 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ec772e322asm3220746137.13.2026.01.07.07.12.36
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jan 2026 07:12:36 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-93f56a97064so649593241.1
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 07:12:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX1pHpofacQHNvI+MzM2SXZyOp+mJP2IPtObL0RiJWM3h0xTgXNt3o7ZbGivd2FFy6xUWiLj0chSAY=@vger.kernel.org
+X-Received: by 2002:a05:6102:560b:b0:5db:3b75:a2aa with SMTP id
+ ada2fe7eead31-5ecb688e212mr1021167137.18.1767798755697; Wed, 07 Jan 2026
+ 07:12:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20251224165049.3384870-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20251224165049.3384870-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20251224165049.3384870-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 7 Jan 2026 16:12:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV9CnVBybm5ipadp5MeUZTfG0GrBXLNmV2A3sOq7s87VA@mail.gmail.com>
+X-Gm-Features: AQt7F2oy55RsF88MDpvy-XJ8ZxqntDCnKvwZjjY1H7FzCraTsk4lAgUrlROdqFc
+Message-ID: <CAMuHMdV9CnVBybm5ipadp5MeUZTfG0GrBXLNmV2A3sOq7s87VA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] clk: renesas: r9a09g077: Add CANFD clocks
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Prabhakar,
 
-On Wed, 07 Jan 2026 15:13:03 +0530, Taniya Das wrote:
-> Add support for Display clock controller, Video, Camera and GPU
-> clock controller for the Qualcomm Kaanapali SoC.
-> 
-> Changes in v3:
->  - Add RB tag for CAMCC dt-bindings [Krzysztof]
->  - Add more description, commit message for the newly added GX Clock controller
->    for GPUCC dt-bindings. Update the complete region for the controller. [Krzysztof]
->  - Add RB tag for display clock controller [Konrad]
->  - Fix the below for the Video clock controller
-> 	- use lowercase for mem_enable/mem_ack reg.
-> 	- use GENMASK for mem_enable_ack_mask.
-> 	- fix the indentation issue.
-> 	- update to use regmap_set_bits().
->  - Fix the below for gx clock controller
-> 	- update offset for gdsc as per new mapping
-> 	- update regmap_config as per new mapping
->  - Link to v2: https://lore.kernel.org/lkml/20251125-kaanapali-mmcc-v2-v2-0-fb44e78f300b@oss.qualcomm.com/
-> 
-> [...]
+On Wed, 24 Dec 2025 at 17:51, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have a CANFD
+> peripheral which has three input clocks PCLKM (peripheral clock),
+> PCLKH (RAM clock) and PCLKCAN (CANFD clock).
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Applied, thanks!
+Thanks for your patch!
 
-[01/11] clk: qcom: clk-alpha-pll: Update the PLL support for cal_l
-        commit: 0f85ef379064b50ad573c6af4c0ffd39673f6968
-[02/11] clk: qcom: clk-alpha-pll: Add support for controlling Pongo EKO_T PLL
-        commit: 6d3e77facbce8e684321d9ba65137a76f2575372
-[03/11] clk: qcom: clk-alpha-pll: Add support for controlling Rivian PLL
-        commit: a419f7bfb714703b9c12fab387b60cb0e0f7ec47
-[08/11] clk: qcom: dispcc: Add support for display clock controller Kaanapali
-        commit: 6c6750b7061ca5b12deaeb246439b5b64a84f9c1
-[09/11] clk: qcom: camcc: Add support for camera clock controller for Kaanapali
-        commit: 92aae35f667cd62359f5938e3259dc72e080e28c
-[10/11] clk: qcom: Add support for VideoCC driver for Kaanapali
-        commit: a4ceaf4b18dd4310c17852efbf880e1c5cd5dc36
-[11/11] clk: qcom: Add support for GPUCC and GXCLK for Kaanapali
-        commit: 685ec348339b118bec728458d0bc3b3e7da1ef0d
+> --- a/drivers/clk/renesas/r9a09g077-cpg.c
+> +++ b/drivers/clk/renesas/r9a09g077-cpg.c
 
-Best regards,
+> @@ -251,6 +261,7 @@ static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst = {
+>         DEF_MOD("adc1", 207, R9A09G077_CLK_PCLKH),
+>         DEF_MOD("adc2", 225, R9A09G077_CLK_PCLKM),
+>         DEF_MOD("tsu", 307, R9A09G077_CLK_PCLKL),
+> +       DEF_MOD("canfd", 310, R9A09G077_CLK_PCLKM),
+
+The documentation is a bit confusing (it states that PCLKCAN is the
+peripheral module clock for CANFD), but after some more digging,
+PCLKM seems to be correct here.
+
+>         DEF_MOD("gmac0", 400, R9A09G077_CLK_PCLKM),
+>         DEF_MOD("ethsw", 401, R9A09G077_CLK_PCLKM),
+>         DEF_MOD("ethss", 403, R9A09G077_CLK_PCLKM),
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.20.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
