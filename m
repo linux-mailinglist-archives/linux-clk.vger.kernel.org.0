@@ -1,161 +1,173 @@
-Return-Path: <linux-clk+bounces-32293-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32301-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAEF5CFF1B6
-	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 18:31:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E15CFF291
+	for <lists+linux-clk@lfdr.de>; Wed, 07 Jan 2026 18:42:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D0DF3340DFD2
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 16:16:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C1CA93290CE5
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jan 2026 16:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A1AB363C4E;
-	Wed,  7 Jan 2026 15:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C7E343D7F;
+	Wed,  7 Jan 2026 16:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LnmnRkXn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MqJT1EKH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SqAHlOMy"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BF23624AF;
-	Wed,  7 Jan 2026 15:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288EF35E54D
+	for <linux-clk@vger.kernel.org>; Wed,  7 Jan 2026 16:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767798603; cv=none; b=sH+nUUvUodydvu+aQfp/9/2P+EXDJWnVYsR3RmknntFqY4PbX9CCFl9TG1GqYnf4E4L0aKCcdKnyEb9pRieqBFMv7rqrOkqLg91m/uqCjJ2o02blLwJ5x38rhk+554reo7QuhmNNiurERDSRwOcBBNnzCDh6LzdnwUClk0Zm8uU=
+	t=1767802644; cv=none; b=H3981ijeAQLjnbSLwh/fK0OTnyplkXbKJlzBqg0paxkQmKzjN63cEBkEG/uLzR39dswSEtLB+huMFuS2FeH6rgXKpPM1plhJFRhPSHEHZnlxoqvIHeYAksN9Ihz1MibvBA40TKRHQ6Q4e7KuC6WZHHF+Ga73LAqLWpF/acxLj1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767798603; c=relaxed/simple;
-	bh=rJaqvOB8/875SKmK7dTBqU4qyFZchqY4Kmbj5roEflw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XuREAnuHoYKymaa1Fok/kKmfEztYVfV+yDzNf+TLtwjFHo4RkErdRwhYl1j2dcfR4/I1PAVEhVbhqV5Rr/vHph9B7E+IYN+CgCMv2rOsRvEY9VURR+Sdg92PlNuUppPTZRwga2lg8/YDXkHbed6wP2UCGgFBjSKBlBMYktmeqr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LnmnRkXn; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1767798599;
-	bh=rJaqvOB8/875SKmK7dTBqU4qyFZchqY4Kmbj5roEflw=;
-	h=From:Subject:Date:To:Cc:From;
-	b=LnmnRkXnQNe1UnB0hMqYpQRqFTI6QfwNN3MV5sH8fGUIQPJFt5Goe1ISJWNT5I48c
-	 0CUrGVe0NSoMAwjGGkwkvgUylrysHJq+bzq5gb+iMhRFHaMwRLdVZx1VDU7z1VSImH
-	 mHSCZISTSmr24CLvcNa0I5sdP4vFS+holZI3tcgDA7sCwtb4Ybg4c4H2tkiSRkTCX2
-	 ae8xmUWzSdOPoSg34EThmEzyjWOn1AhreRUsZHchab3/AfvulkkZ9YHHIG7LMdJfcS
-	 HJbWdCSybK/SQ5tCFnD8lLo4hiZ2yV8gxk4WklOp2UTmAGYVpop6yz5ciPnyPa8M+5
-	 B6hFEa1P6pe8g==
-Received: from [192.168.0.79] (unknown [IPv6:2804:14d:72b4:81ae:67c:16ff:fe57:b5a3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dwlsalmeida)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id F2FB117E13D8;
-	Wed,  7 Jan 2026 16:09:54 +0100 (CET)
-From: Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH v3 0/3] Clk improvements
-Date: Wed, 07 Jan 2026 12:09:51 -0300
-Message-Id: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+	s=arc-20240116; t=1767802644; c=relaxed/simple;
+	bh=517oGs9FsEfTu6NOn7JGse+olEGHedN/noc2azRQxP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kAVv6zTs3s57oiRJVmL+N/vErsL68it3ehUtcnJ+2QAdazjeUx1rHgWdmdyBID0sltB74dpskdqC9ukCKlNXWIepNI8AkAGzaQmyVjXI9uaKwDZC/UJUmt2e9tZxq+3DP7F/YHgb/p+6cOOd/dW35PA3hIt2w9vZ+107XYyBqCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MqJT1EKH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SqAHlOMy; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6079cFMi2877784
+	for <linux-clk@vger.kernel.org>; Wed, 7 Jan 2026 16:17:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=pNn2hydp6mFmiGWfG0RE3hVW
+	bp3VHRZ/n5+RMle+1R8=; b=MqJT1EKHl9gRMK8gc0rPEEOryXVHNkKqHzOPhh/n
+	AKEEjEqLEKTW2bGKBRI06bwASHx6DmgC1ikIzDdo7anBNcZ5nmByjlDBoE8wIxNV
+	+qN2hpoZ7gwmTY6KSu0q6Pf4wE8zoHUNLC4X9c4L03FSu1IyrVpPQ8MJfDfJ0BxP
+	JlfcRMskQheJx3n0Ayixqm/1rzn3HG8yNxshkN2Vuew7aB5yQgQmTG2ciXHcKFc5
+	qZm3c85gkUlgOELx3bCYSq48So95d7h4f/ckw3AO3Myt+rakPPYY8a/OvLQAtatW
+	Wz/OFC7xxjapfrQeP3diKItz8xhCoNAaIoK5tBrS5BdLzg==
+Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com [209.85.217.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bhn1cs73n-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 16:17:09 +0000 (GMT)
+Received: by mail-vs1-f71.google.com with SMTP id ada2fe7eead31-5ecf43202a3so699283137.0
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 08:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1767802628; x=1768407428; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNn2hydp6mFmiGWfG0RE3hVWbp3VHRZ/n5+RMle+1R8=;
+        b=SqAHlOMyvaIllv2AqAb6c7n+o6fEm8agu6XO04V7GQlhA0CkFOSIZpTlt+mc/5B/W+
+         2YPqYVRqFWIrlf0Kqv7WYo5ENGt/eaRoXqYtyVV/E1+KKJZtMmQQNOvks5ihcKwNPRvx
+         91NT27YeVYF7DFhiXqdDdS0vuLdHD/7WUMzFdaqZaBUIAzg6uNR0OFGF6eLvOEtruphf
+         3GoOD2d7zO+MCUgzT2AI83ULTu9fOISNMxbZvs+H4HRYRjDrvmdslPu1t4R5WMg4OTmK
+         fK1jJ8mDP4QAaQKjdkLoI8m6FBASeffbV6aPL7Z0IC+JIl2Iz70ddZZunO5s6+81tRQg
+         TShQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767802628; x=1768407428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pNn2hydp6mFmiGWfG0RE3hVWbp3VHRZ/n5+RMle+1R8=;
+        b=fEOqCtzohPvODkd6lZKgx4Z01y3a45luplxH0HrCriB5v/BP33HQDfWw1S0okXJ44a
+         lqN9OoKDs4wOCE+u2KmVKkYvEoYwjVZVD1CPcMNGDwQ+KGQHGeWg5E15ql5nT/3o5DZT
+         ETFYZIOPuoGG5+dhTzTQP9uGikGz95jpI+plQpq4EDWLHNgOWnQm/VvcB6Q9u4ZlTMXU
+         i5Ybu3w/eV/vrgo2UuJDtQWzdBmynur7xw54N6fLXDN2j1igPhkavHJFsuOBxPHRcDLY
+         oiT8ht4AaiD8tT6ilNngep98aiLXjJlGdX5RVi5KaXMwLUN9pDDsTwmiCdxoCcTgGVFH
+         8L+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUTGBLoziy3zQigJUOFsPFfRKf/gWGODe8A9wapmTW4q5TESmIu8zmmBS/0a/n9osU280NHAHsrAis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPbfY2cSV5d586s6FJ16yPf+NppeLXyG+XEiY2lFrhJAwh0J4R
+	8FYoEbLHDOUfzQLQEADz2gY4sYBlIbtdnOq4Kqgbd+Ro6F552JsM5QNqDPJKq94sNKoz/THmaJ4
+	MM0cwbwDAnypxmDoBp57cFOOiwH3/0prDIUXgJaj1sNHK4nNOypxr19IZtx1dtLc=
+X-Gm-Gg: AY/fxX5aVD6NszWStRNi3vJYOFenc6HS7cUQQNc5kuYgCjEiYfuC6ejhcWR10leIm/y
+	W2o7KRMYhnsyhnGQ5E1rxoMyHl0wBrxlltyLljSImYg0EVwoKWQj74sU8okqS7Re/o+nN0bjjDp
+	D4NKuq3kxDSDudGXUFSZ/2ycO0sL49tvvmnLlU5L575hiPbew2fZhom1hbKe07NPZ2cim9BHHAp
+	iWgbcVt6St4NxuKTbFr7tS4PdaI2w0znI1bEh3UonVohH6JlVxLrCgAu9FFQJEMkYCrKNB4Aqno
+	iZ9JQOdC0z13AxvrNaVK2ToVdmElr/ptI/HHcSrE83gihK4661ShEZDv0qAImuloh7cKAn6EdAh
+	ZySz0Tra4tUIZOvl/CYwOSttF/V6Urzsew269QaGVWatNsw7MfsjEgf1rsQ3IhY+y/nc5haZMiy
+	NGvuRHnE+0m9UOD5PnJVeJXDE=
+X-Received: by 2002:a05:6102:c50:b0:5d7:dec5:b6a7 with SMTP id ada2fe7eead31-5ecb65744b9mr936523137.7.1767802626953;
+        Wed, 07 Jan 2026 08:17:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHWo7kmpZp++avSupk4Uz/4kHmAaLqQIgTBTPz0DzPK5KyO/RxzYBCX2g8LY9QhwFIztQxq7A==
+X-Received: by 2002:a05:6102:c50:b0:5d7:dec5:b6a7 with SMTP id ada2fe7eead31-5ecb65744b9mr936476137.7.1767802626202;
+        Wed, 07 Jan 2026 08:17:06 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b65cea872sm1384019e87.2.2026.01.07.08.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 08:17:05 -0800 (PST)
+Date: Wed, 7 Jan 2026 18:17:03 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Taniya Das <taniya.das@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Ajit Pandey <ajit.pandey@oss.qualcomm.com>,
+        Imran Shaik <imran.shaik@oss.qualcomm.com>,
+        Jagadeesh Kona <jagadeesh.kona@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v3 08/11] clk: qcom: dispcc: Add support for display
+ clock controller Kaanapali
+Message-ID: <3sbqfijv6b2lxvx3kwcu67a233d7xcpvc5x7ysc6ktk2o3d4qx@6eagaimfqd44>
+References: <20260107-kaanapali-mmcc-v3-v3-0-8e10adc236a8@oss.qualcomm.com>
+ <20260107-kaanapali-mmcc-v3-v3-8-8e10adc236a8@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD93XmkC/6WQzW7DIBCEX8XiXCoWjAk+9T2qHPhZGtTYJECtW
- lHevSSu1Ko59jgrzbczcyEFc8RCxu5CMi6xxDQ3IZ464g5mfkMafdOEMy6ZZpq64zut6wlpqaY
- idQyMUd5LCZ400yljiJ934Ou+6ZDTROsho/nBKP6AWYAC3enBSrGDISj74tLxaGzK5tml6UY+x
- FJTXu9JF37j/4e29QH2YOWUUbBaOQBrBwF/rPvrVjLj+aONVbemxJrStkjTFOvYaeOwV1IY2b5
- YxkGDlz3q4IMKGoVv151ES36PPHbfE/f3SAVnT8s6OypcMCr0CA75uIiW4PoFV/nla7YBAAA=
-X-Change-ID: 20250909-clk-type-state-c01aa7dd551d
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Danilo Krummrich <dakr@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
- Fu Wei <wefu@redhat.com>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Trevor Gross <tmgross@umich.edu>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
- linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, 
- Daniel Almeida <daniel.almeida@collabora.com>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107-kaanapali-mmcc-v3-v3-8-8e10adc236a8@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA3MDEyNyBTYWx0ZWRfX5EdJcj33hw0B
+ VYDOPn0Y+DJl4TBrolX8RhxtABIoRgVPGNdXBHQ52UoeEUghY73xE2rgdBJaH6nPzMAISmckveB
+ cbUDSJLcsHM99DQDu7WrlYKCwCHEmnnr1FgHAY83055SLj1+DLLOL3rnIW8sTyoVIJLdPdwlSBQ
+ nJh3oYq3tLHRzcZSo4jA0XX2f9lsQTlFdNzeNqKC8GHoJXXYlwDNwmpL6XKmHD0e/BkaVnNBpK6
+ Y11Wnq4Mapb43tajMunaM2ZJLp4QFquYsZVrOKL71xlevAWzO50QdJa1B5slM40MUsZ43XV1j07
+ RcZbgMGuNU749jyZB2kex5Zxfw9RKYf7JWEOG0MbMoGDIXBvlgACjljM6yDySbTJKKPjzTRkW9k
+ joo01nfzOArFFOW3yiTeDvfc3byX7MAHZJ6Mq7iiEKZsAZaI2QmR5Y91PQMHRrp1qN0g6hoS6Xk
+ I0LMGwANkJgWrIcfr3w==
+X-Authority-Analysis: v=2.4 cv=INwPywvG c=1 sm=1 tr=0 ts=695e8705 cx=c_pps
+ a=P2rfLEam3zuxRRdjJWA2cw==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=gpaIcbXCgmfx5VOTBCIA:9 a=CjuIK1q_8ugA:10
+ a=ODZdjJIeia2B_SHc_B0f:22
+X-Proofpoint-ORIG-GUID: UujMh8kmwnojRNiXfam5g4SGSsYrvGcb
+X-Proofpoint-GUID: UujMh8kmwnojRNiXfam5g4SGSsYrvGcb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-07_02,2026-01-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 suspectscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601070127
 
-This series contains a few improvements that simplifies clock handling for
-drivers.
+On Wed, Jan 07, 2026 at 03:13:11PM +0530, Taniya Das wrote:
+> Support the clock controller driver for Kaanapali to enable display SW to
+> be able to control the clocks.
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Taniya Das <taniya.das@oss.qualcomm.com>
+> ---
+>  drivers/clk/qcom/Kconfig            |   10 +
+>  drivers/clk/qcom/Makefile           |    1 +
+>  drivers/clk/qcom/dispcc-kaanapali.c | 1956 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 1967 insertions(+)
+> 
 
-Patch 1 implements the same typestate pattern that has been used
-successfully for Regulators. This is needed because otherwise drivers
-will be responsible for unpreparing and disabling clocks themselves and
-ultimately handling the reference counts on their own. This is
-undesirable. The patch automatically encodes this information using the
-type system so that no misuse can occur.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Patch 2 makes things more convenient by offering devres-managed APIs. This
-lets drivers set clock parameters once and forget about lifetime
-management.
 
-Patch 3 converts clk.rs to the newer kernel-vertical style in order to make
-future changes easier.
-
-This depends on Alice Ryhl's series [0].
-
-[0]: https://lore.kernel.org/rust-for-linux/20251218-clk-send-sync-v3-0-e48b2e2f1eac@google.com/
-
----
-Changes in v3:
-- Rebased on top of 6.19-rc4
-- Dropped patch 1 (from Alice), added her series as a dependency instead
-- Fixed Tyr, PWM_TH1520 drivers
-- Changed clk.rs imports to kernel-vertical style
-- Added support get_optional shortcut for Prepared and Enabled (i.e.:
-  Clk::<Enabled>::get_optional())
-- Fixed misplaced #[inline] tag
-
-Thanks, Danilo {
-  - Moved the devres changes into its own patch
-  - Require &Device<Bound> for all functions where a &Device is used
-  - Account for con_in in SAFETY comments where applicable
-  - Added backticks
-}
-
-- Link to v2: https://lore.kernel.org/r/20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com
-
-Changes in v2:
-- Added Alice's patch as patch 1, since it is a dependency.
-- Added devm helpers (like we did for Regulator<T>)
-- Fixed missing clk_put() call in Drop (Danilo)
-- Fixed missing parenthesis and wrong docs (Viresh)
-- Removed extra "dev" parameter from "shutdown" example (Danilo)
-- Removed useless type annotation from example (Danilo)
-- Link to v1: https://lore.kernel.org/rust-for-linux/20250729-clk-type-state-v1-1-896b53816f7b@collabora.com/#r
-
----
-Daniel Almeida (3):
-      rust: clk: use the type-state pattern
-      rust: clk: add devres-managed clks
-      rust: clk: use 'kernel vertical style' for imports
-
- drivers/cpufreq/rcpufreq_dt.rs |   2 +-
- drivers/gpu/drm/tyr/driver.rs  |  31 +--
- drivers/pwm/pwm_th1520.rs      |  17 +-
- rust/kernel/clk.rs             | 466 +++++++++++++++++++++++++++++------------
- rust/kernel/cpufreq.rs         |   8 +-
- 5 files changed, 346 insertions(+), 178 deletions(-)
----
-base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
-change-id: 20250909-clk-type-state-c01aa7dd551d
-prerequisite-change-id: 20250904-clk-send-sync-3cfa7f4e1ce2:v3
-prerequisite-patch-id: 13476f9e7e7c3bdbcab42912948953743381b1e0
-prerequisite-patch-id: 8f91583384bb4516afcac66d21ac08b3982747b2
-prerequisite-patch-id: b2ad5ecbd9a395b622bc04f891b5bb276f6f6b16
-
-Best regards,
 -- 
-Daniel Almeida <daniel.almeida@collabora.com>
-
+With best wishes
+Dmitry
 
