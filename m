@@ -1,139 +1,122 @@
-Return-Path: <linux-clk+bounces-32363-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32343-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5872D035F9
-	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 15:35:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B67DD03FAF
+	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 16:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 415C4300788E
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 14:35:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 115363347BF6
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 15:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC4D4DB924;
-	Thu,  8 Jan 2026 14:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="VbA8UffG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128434C097C;
+	Thu,  8 Jan 2026 11:07:44 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3404D2459;
-	Thu,  8 Jan 2026 14:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767881978; cv=pass; b=acNGjDtXppBkFsO9XY3Zuj3vyVAc8sahmEkLRAPNs3g5J/m9EHEUoOSHxa7XhKOLwmFci6agD8WjtB9oPEDwFcDkk0L1fZxodCUG3mgTHO3doAGZU9/6+IJ0t3Pr7IHbCSzXMkkV70lJq+uxilwAclVB0Zaqhzp8MHscfp8SO08=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767881978; c=relaxed/simple;
-	bh=3zz6a3BMr2dfAzv+YoO5B8KGEMHeg6suRN4rMzqljFs=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=m7QawYwGjaN5UGTd7SI77F+dxA3RVIcBKkdHiOXzqNsG5Q0ZQTNjJ6axmtgsySkFftOySSP3nrTJeW0XYT4psNlityL91CTcM35SAt/m9gzJZLkWxvrKePmyh4IHnyP9RzcqsjIR5P6LJo2E2C3JyJ5X2zOK6xJluPVcJWggVP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=VbA8UffG; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767881954; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=BBGSzaRsEJqZsvO1HpX/hKogi+VqGwt8a7LPvUSAFynOoyqffEdMc9Qr+7R2IIR4l9pelvKaiC4ca8aoRjLdd77cN4Kr//pWDmI1ixoF/5TxpIfJGY0cxEPOa5jH0aDMUvNg53gza47/nqwtchzMJBC9tQ7AcHi8EKYHlqcwLzk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767881954; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=3zz6a3BMr2dfAzv+YoO5B8KGEMHeg6suRN4rMzqljFs=; 
-	b=I8Ot6vUy0Vz8MiT3dfC/NVer8UkuX/tQ1Kb6KbOZTWAS59zjFpNXUGzu1BCBGqx6cpieP82l/Zax9BYSKp0kuf117sq7StP+PfRpUYksOk52NC6oINCiyLZKfbE/+iZuOZLHzEoHeTLX1iQ21jWDLhG1gp2o8oqnqb6WSuQNW3A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767881954;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=3zz6a3BMr2dfAzv+YoO5B8KGEMHeg6suRN4rMzqljFs=;
-	b=VbA8UffGuc5UL/XYfaeXeMSJPiV44xD5qtehsqkQRKeP0AdyLr5yyeoKRIr/6Kes
-	RXBPxHHx04baIOYHlqqFmMnjM5ywFy+1LCZ5URfG/J23ZMBAceoe0tEwKa1yl/QRUr5
-	FxwCizG5CzDRFkCXgELDDqr5sihhf3L87Q5G3/gs=
-Received: by mx.zohomail.com with SMTPS id 1767881952278596.4068382305078;
-	Thu, 8 Jan 2026 06:19:12 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5AB4B8DCF
+	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 11:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767870461; cv=none; b=V1zHMmJmW30sl1Sbn75x10Sk8LNCOZjnITGQGGKTi70Nw8CBYBBAq3XKRaFk7Kvrh67ckn9YPncr5D4H7EMzOtk4jyltn0CNbx9NUGAk8ZU+bgp/n+wJ/k03Bx3wVB9klggnsDV3rXX4LDCpNRDyPk5+ouedVO24HG0phsQQbrE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767870461; c=relaxed/simple;
+	bh=4ARUFy/0mqoSVLaK6Rqs10QOx8KtOwrI/t5eQyddFCw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HMRq1Z3+fNhrGUECkt/QW64d9minIT3DWqO09YU1ZGsV++sLbcLJ4u9S33uQd7K8IPMdd9v6R4VGcIDpyRlon+uVuGUGYW7XGtGbDtAWoat5VwsqC+CfRr917wENrbVYJKjgaNwHVaI+IQdgITiWvwfeSfLCSnZrXdjKbzXVAKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdnrR-0006Ib-0m; Thu, 08 Jan 2026 12:07:25 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdnrQ-009fT1-25;
+	Thu, 08 Jan 2026 12:07:24 +0100
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdnrQ-000000005Vi-2KUV;
+	Thu, 08 Jan 2026 12:07:24 +0100
+Message-ID: <e7fa69f1febc37062a59f566be97537a3a1e6ee0.camel@pengutronix.de>
+Subject: Re: [PATCH v3 4/4] reset: spacemit: fix auxiliary device id
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Alex Elder <elder@riscstar.com>, Yixun Lan <dlan@gentoo.org>, Stephen
+ Boyd	 <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>
+Cc: Guodong Xu <guodong@riscstar.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+Date: Thu, 08 Jan 2026 12:07:24 +0100
+In-Reply-To: <058d3911-ff2d-4151-b585-5bcb8810bedf@riscstar.com>
+References: <20260103-06-k1-clk-common-v3-0-6061d9f69eef@gentoo.org>
+	 <20260103-06-k1-clk-common-v3-4-6061d9f69eef@gentoo.org>
+	 <058d3911-ff2d-4151-b585-5bcb8810bedf@riscstar.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <CANiq72=38RO9PGAMDtnTK8wj-yRSmg9UOfq7D6af7AwAKwn=DA@mail.gmail.com>
-Date: Thu, 8 Jan 2026 11:18:53 -0300
-Cc: Maxime Ripard <mripard@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Danilo Krummrich <dakr@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Drew Fustini <fustini@kernel.org>,
- Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>,
- =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Trevor Gross <tmgross@umich.edu>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-riscv@lists.infradead.org,
- linux-pwm@vger.kernel.org,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <16DA3CAF-098A-444F-83C1-AF7BCE149937@collabora.com>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
- <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
- <20260108-delectable-fennec-of-sunshine-ffca19@houat>
- <CANiq72=38RO9PGAMDtnTK8wj-yRSmg9UOfq7D6af7AwAKwn=DA@mail.gmail.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-
-
-> On 8 Jan 2026, at 10:57, Miguel Ojeda =
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Di, 2026-01-06 at 08:43 -0600, Alex Elder wrote:
+> On 1/3/26 1:26 AM, Yixun Lan wrote:
+> > Due to the auxiliary register procedure moved to ccu common module wher=
+e
+> > the module name changed to spacemit_ccu, then the reset auxiliary devic=
+e
+> > register id also need to be adjusted in order to prepare for adding new
+> > K3 reset driver, otherwise two reset drivers will claim to support same
+> > "compatible" auxiliary device.
+> >=20
+> > Signed-off-by: Yixun Lan <dlan@gentoo.org>
 >=20
-> On Thu, Jan 8, 2026 at 9:07=E2=80=AFAM Maxime Ripard =
-<mripard@kernel.org> wrote:
->>=20
->> AFAIU, encoding the state of the clock into the Clk type (and thus
->> forcing the structure that holds it) prevents that mutation. If not, =
-we
->> should make it clearer (by expanding the doc maybe?) how such a =
-pattern
->> can be supported.
+> This would ideally be merged with the previous patch.  Maybe
+> Philipp can negotiate with Stephen to have that happen.
 >=20
-> One possibility to consider in cases like this is whether supporting
-> both cases differently makes sense, i.e. one for that covers
-> easily/safely/... the usual "80%" of cases, and another "advanced" one
-> (possibly unsafe etc.) for the rest.
+> Reviewed-by: Alex Elder <elder@riscstar.com>
 >=20
-> While it may be a bit more to maintain, it may pay itself off by
-> making it easier to review the easy ones if the majority only need
-> that etc.
->=20
-> Cheers,
-> Miguel
+> > ---
+> >   drivers/reset/reset-spacemit.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/reset/reset-spacemit.c b/drivers/reset/reset-space=
+mit.c
+> > index e1272aff28f7..cc7fd1f8750d 100644
+> > --- a/drivers/reset/reset-spacemit.c
+> > +++ b/drivers/reset/reset-spacemit.c
+> > @@ -278,7 +278,7 @@ static int spacemit_reset_probe(struct auxiliary_de=
+vice *adev,
+> >  =20
+> >   #define K1_AUX_DEV_ID(_unit) \
+> >   	{ \
+> > -		.name =3D "spacemit_ccu_k1." #_unit "-reset", \
+> > +		.name =3D "spacemit_ccu.k1-" #_unit "-reset", \
+> >   		.driver_data =3D (kernel_ulong_t)&k1_ ## _unit ## _reset_data, \
+> >   	}
+> >  =20
 
-This is already the case. The devm_* stuff in the next patch covers a =
-lot of
-simpler drivers (who might simply want to enable the clk, perhaps with a =
-given
-rate), while the typestate pattern allows for more control when needed. =
-There
-will be users for both, IMHO.
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-=E2=80=94 Daniel=
+to be merged via the clock tree.
+
+Note that the commits for both patches 2 and 3 will fail to probe the
+reset driver when bisecting.
+If you don't want do merge the corresponding changes to K1_AUX_DEV_ID()
+into those two patches, to make this series (runtime) bisectable, you
+should add a warning to both their commit messages that the reset
+driver will be adapted in the following patch 4.
+
+regards
+Philipp
 
