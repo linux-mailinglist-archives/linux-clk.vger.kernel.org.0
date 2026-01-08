@@ -1,229 +1,231 @@
-Return-Path: <linux-clk+bounces-32338-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32340-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A7D2D02248
-	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 11:35:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3F14D021D9
+	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 11:29:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 16D7E33970FD
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 09:56:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B49203010CF9
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 10:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985263A1A53;
-	Thu,  8 Jan 2026 09:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742F23B8BCD;
+	Thu,  8 Jan 2026 10:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="mhVbFqOo"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="qn+8OAhG"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazolkn19012018.outbound.protection.outlook.com [52.103.11.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369083BF2F8
-	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 09:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767863589; cv=none; b=VUtDQ6rrpE0KXnx5/uXBahFbuzEf0KlWAWCg8+M+sgQVZgdl7k3yEJHC9cWf14C5vtsH/bJEGc4kyzV3uac1uxagvkFNINbj8rRDtS33zt3SUcJ1lleRKuERvR5cL53xRYKr8hLteiCF7he23tF7aWZFJeuoeXdbrAW2aNGjQdc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767863589; c=relaxed/simple;
-	bh=/B5yiqA+ekMUmtc6Bq+Hgdkj26PJlhDLIdx4NpvlZcY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I0vGrfhFyF7QNTzSo3ixC7A3bkkfsC3DK63RmvR4pSfxTHTdb5zjWIGA2fONNsVpdSlJoM68W1uNPyjYZt3NyA9NRSS3OzTl6TTQX6wnSAClKF2wLCgrJVH/nidEknuD2a1+uawlAQxGBVyqT0Yfvuzi2VuAkY2CI3nAY14y2Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=mhVbFqOo; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-47d182a8c6cso18729485e9.1
-        for <linux-clk@vger.kernel.org>; Thu, 08 Jan 2026 01:12:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1767863576; x=1768468376; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qcvzzJMrh0MsjpTIZP7Mzs3g/YqR5+Qi1rSgpNg9db0=;
-        b=mhVbFqOopEU9ULbv80Yr8Yt9hyJx8n0T2RG49I6JZZy7GUCZ3asmt1tx6l5OLgqPlJ
-         /sjBXJfN4O1sXP5kMeCcbUfhnX7Ugr4EBKadfYOLk0EF3vQF3aLZU8Ck2ujzmDbudZ78
-         yKCfhY1fAqTyNwOcp3IYKf6n0Z5y9Tym2FtqYL07EzhYJDSElHeEnCNFr7DbS8CJk2hP
-         qQZZVoTbiTXcWEbbFcDur5Klo0tFFakhjpHud29Ckk6t9bViyiOCsoX7lvtKpQ1DrcYC
-         iEZ69iAddlWPN+yrHBoLzbA/KioFHWnW8c3+1xhRqtiHl4wjcnzJuvuydgNdGePCIjkZ
-         RktA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767863576; x=1768468376;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qcvzzJMrh0MsjpTIZP7Mzs3g/YqR5+Qi1rSgpNg9db0=;
-        b=AXI3gzsi9HMHbmoaRnvkvDw7f6ELre4Gb9qUksSuSg27oKYtm7YZ08evvr6Dd/0EUR
-         EXcBr1t3v65ORSUnA+WACOQxKKwShMr5gmw4D9saNJr2sYB7quC1BrLkvqm3YazSnMw1
-         pq3XStesek5ENpIwoJFjuWebh1wv6TDLcaCADsHmH6nmgUGpUQ8wZeQ3+/hC0S4GtLcr
-         jIR/iIF/LP3cnjaxrPojXwmG/qgYqAwqUp/KFWbHCqKsWWetwkQWIXlyETbnF955nDeS
-         oZM5SNGaV0SO6PObbXBxC75Lr745pZACWll92Hui+eRbEStLSHdr5o9L/uFdm+4qdy/2
-         lIyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX3ayp5ug7y/BzaftjGo4PxcHZvf6aNJkSy6E+OehPPm+0SWXqFHqOu8dASoy5rHtLL9WWqHMd3FXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz1xgQVVCwK71dGpMPKGqZEZsgWf4r6aVPkFktLc8o4yXYT2/J
-	II68eEENeN4gtxFGlS5rgnRACXPuFM/Sh6I6GNb23TT0LOxp9vDOQQt3KsbfN3ZILpM=
-X-Gm-Gg: AY/fxX50ETJeGuK8u8MxAQT5WTI47k/aIVU7enDqxQm3UhAc5Ug876vj7Ldl064wiEf
-	c3X+9p65PEkwofMfAVlm5oU6WlwZ+O7Yf8l/7iDHAT4cAdxRnDUWnp8K0MCdYUqciXVKBj1pwJe
-	0woDM8r8c9VsgLjujnlRKuvYSuf50Xnpv+tN2nu4WdwdMZNhbCI1amFyzEVpf0/XxQ9W4bw1q+B
-	lGHmjNP5T9BNDttPdOVKfeJkPM/JAtr0HlmL3wT0My0EbHtLRrxvkJPWVSUqmpduwJaLIaQ7q4z
-	BaybzVV/43nFPZ+B9Sg45oKDuKgQkrKSfrE3mSr8yXCGok+RGPXEoNnbdIrhVElwy2qX0/AzLp1
-	rht5CRaYv8SyTRp+sQlOwPMl0Nm04KMYdC25Je0775OMQaHJCK7NkMJLTWfRsVTmL0OZQedUpE2
-	42Ar0x91WkKEjdtAFQqw==
-X-Google-Smtp-Source: AGHT+IEP9/Gf0jNEPP/nIaOJ3PVVTz+nOM75oWhn7OGPLdOsoh+kDwG2RY2j3+SjdUgMnPGB8cg9XA==
-X-Received: by 2002:a05:600c:470c:b0:46e:53cb:9e7f with SMTP id 5b1f17b1804b1-47d84b3b4ccmr57983425e9.18.1767863576326;
-        Thu, 08 Jan 2026 01:12:56 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.17])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f4184cbsm151578795e9.6.2026.01.08.01.12.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 01:12:55 -0800 (PST)
-Message-ID: <f2aaa95a-fb69-46d8-ba0b-fdc793273455@tuxon.dev>
-Date: Thu, 8 Jan 2026 11:12:54 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BDD3AEF58;
+	Thu,  8 Jan 2026 10:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767867193; cv=fail; b=b55iRLBV6MzuRxyWCXGBDw4c7Up2K8HIFxjzfOQnuG2BaD1dxjc2e2TAcOjrFKIU9voZ+FgyDALsa5VAurS9EyJCqaFaobqOqkrETCObucxkLrV8/lwZiH0uNgJO8BvbupOQQ7bcDvgYZS3wlktf3BCIraQEJnpzPOOGuZPZhVY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767867193; c=relaxed/simple;
+	bh=IgYZhOkz3pmOqmHWfsxaGNLBBb/tIswhi2gIxK4BS8U=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=oF71w0ce1ZCdUtyjtqfaFTcK7oyEBmmTEIqcxw9euXYFjcisot1Mb000lf5jkH5gzV12uQ3gDGf+6o0+p/R82/r0kIb4HFaSoSZvCwBq44+GbPnbDMP6SmFGeRLjpTol62zN+s/zZCbz0D+rH4/g7KAs4SDDtxT+7ZVEAXqPil0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=qn+8OAhG; arc=fail smtp.client-ip=52.103.11.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=g3nyB/bTC1hnxuSqIVcAo3PxSIQoE8NZ96Ry+2F6ESgZbikPPj8i6746BnjeIIJgfavJV5IVzLmC7qcm9cAnmXTlFgdYl1HNsvKiYuEELh+fKbebySvOfKKWXdVLAzEF32h+sB9F+QEaSvuu5IghhItk9xNMXdPpBwfRgdSqc1sq5+iFAg/n5S2+0GnFSGpalFKAPpBgP9SuTIs/vfH8mWS5jV9CiNbKLqO0+TQrTEL5PcISoA3e6KHzOyMQXkpsb4+zDi1fcrZ+X/U/NhS+BVNoya/2CwxFdDhXMHh0/e6GHLl1hqaoko/G5PUJWJOPMYyhXqc4R4YL2usWxX8gfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=40ve92LmNtiRtKsKrBrPHBaIYm0ud7GCPEmdErPL4QA=;
+ b=P2Qmm6R5jgrt/heu8FPD+YMc7dAkzXkTNR083AeIZVV7npIHI1JTnhrkrMlsf5Nu8aJnVhph+bv10P9/Xos7c0CWVJ/McPk1ZeJeJLjDTPXml1GyB0o6osV0fqfxLV55phWqVFVi8FeTAgUCrUuaggAenRyTTJ8QQ7xOaIZgBfgl9MFa+vflGR0N8RF3N/wD5/gWlYBeJ/AEuZXHgaTxuKVwyz6avnYtYnZGydxuiLcgkxb+CtaLo5imrVE44N04tizTVUD8CUxqvImhT/CiPE5VQ4WX3SO+ynZG9Tba+ZoJcLuo2Xzt/TSQtV5iN7w6vPuRX232dNy/C69oL5Hvlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=40ve92LmNtiRtKsKrBrPHBaIYm0ud7GCPEmdErPL4QA=;
+ b=qn+8OAhGvckDJQx1QEw8d4tKW0c3qbZBqqF+ySxgtGFKu7v2sVypHEHTS9q9CpOMg11xMVw2+/G4MGhprKPlHCLaYPSfcFIGpy2dMUpBzt/rw9bAKtREEQc4xrv/KM3zrWQjo0B6FWo3SNENof2A6u6tBHQa48lXDsGZcHksKsHe1uOzcmt7Ukz53QRu9lG2Yf0Vyp1vzHJ7VfDBolakGiOwkaz7p+71Zfvnm1wd37LyHSWCohCCdJrVC0NqV8GyOIekJFg5Wh1GxzTO80bTIwUe+KaN4CPSsYHr7hbPbeAOJ3Jm0LjEMH4sNMVd/dyEW5Ayui8ZFndgNfwjvmuYAA==
+Received: from DS7PR19MB8883.namprd19.prod.outlook.com (2603:10b6:8:253::16)
+ by BL4PR19MB8904.namprd19.prod.outlook.com (2603:10b6:208:5a7::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Thu, 8 Jan
+ 2026 10:13:02 +0000
+Received: from DS7PR19MB8883.namprd19.prod.outlook.com
+ ([fe80::5880:19f:c819:c921]) by DS7PR19MB8883.namprd19.prod.outlook.com
+ ([fe80::5880:19f:c819:c921%5]) with mapi id 15.20.9499.002; Thu, 8 Jan 2026
+ 10:13:02 +0000
+Message-ID:
+ <DS7PR19MB88830A00467D27BF2D79286A9D85A@DS7PR19MB8883.namprd19.prod.outlook.com>
+Date: Thu, 8 Jan 2026 14:12:47 +0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] clk: qcom: cmnpll: Account for reference clock
+ divider
+To: Jie Luo <jie.luo@oss.qualcomm.com>, Bjorn Andersson
+ <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Luo Jie <quic_luoj@quicinc.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_kkumarcs@quicinc.com, quic_linchen@quicinc.com,
+ quic_leiwei@quicinc.com, quic_pavir@quicinc.com, quic_suruchia@quicinc.com
+References: <20260106-qcom_ipq5332_cmnpll-v2-0-f9f7e4efbd79@oss.qualcomm.com>
+ <20260106-qcom_ipq5332_cmnpll-v2-1-f9f7e4efbd79@oss.qualcomm.com>
+ <DS7PR19MB8883C5FF92412F106B8D41529D84A@DS7PR19MB8883.namprd19.prod.outlook.com>
+ <196858fc-e425-4cc0-a4b8-94a0ff4e512d@oss.qualcomm.com>
+Content-Language: en-US
+From: George Moussalem <george.moussalem@outlook.com>
+In-Reply-To: <196858fc-e425-4cc0-a4b8-94a0ff4e512d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0120.apcprd02.prod.outlook.com
+ (2603:1096:4:92::36) To DS7PR19MB8883.namprd19.prod.outlook.com
+ (2603:10b6:8:253::16)
+X-Microsoft-Original-Message-ID:
+ <d6da2f91-1901-427d-b5b5-5f51a851b65c@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] drm/panel: ilitek-ili9881c: kernel panic on reboot
-To: Hugo Villeneuve <hugo@hugovil.com>, dri-devel@lists.freedesktop.org
-Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <jesszhan0024@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Biju Das Biju Das <biju.das.jz@bp.renesas.com>,
- Chris Brandt <Chris.Brandt@renesas.com>
-References: <20260107164839.a490a194d975edc399d72d01@hugovil.com>
-Content-Language: en-US
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20260107164839.a490a194d975edc399d72d01@hugovil.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR19MB8883:EE_|BL4PR19MB8904:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9cb99b2f-bf65-4798-4dfc-08de4e9e8162
+X-MS-Exchange-SLBlob-MailProps:
+	znQPCv1HvwXZ5XHxNrJCjRnjimRBgM6SZNhIxDVu/EKeqGlxcOVlkLolIOU27k233TolUaC2T/FNaGWpQsOCNgNIex/1ELyxzgfgaiKPv/M/3qlgsIKNWwvMW1xOMpFZrAc5KJ26U+AYSXLQyfNeB7zBTWcFX61WL6qAr4uI+lITdoJ58d7pWtYmMyp8VSFfqWCYiG5/rd6sDEGY94TIqc7dL3jXO3LoaLX8ziXPoRBo2SsUhs+iG2V4drm2f7nA8wp9FUh03I0/8rzje2cVNB7krO59cjb/RoP4CICSf/7aIHw3H2p/WmPLPtkoHVSbBwCeyFnGw4X6uNJYq2JQKDqSOMzL0kVG5aR24l47VqAvV2hNnHC/0/L9QxOC1ywbTnvQii80WIHEvLYkKPyoO4wldyXncBoq3ScRiTaUVlxhg5O3YF9xNx+kBIgPrtiu/pH7R/ug7gIWJef/cKc/QZ5D6T6BZRmjaG0eitJTYA7QCsiN/kWaH1p1D1cRYTDjn/OY6NBLZOa1N4yRF4pgMH9BqZKrIIwvYeuOYKjIHsmXov4/ACr8z+A1YkTkziRY3h2+EQ/SLrG4asQveapTBBKQUBIcoAUW6TapG95Gqm41uyLM1ii55Bs0p8wCEJ3aHx6m8wGFwd/wJtVdpy2nwaIE36m4kOExpXe0d1XoKY1T0w7BAW/FaoGkOVnO2Ljxq4Vlja0qI4h2zR1kV7Rgp+7N76h8jLqaeS/ghsoBf+8vbZoBYWqgyce//FMraA/xeKrpxbB5LHc=
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|11091999009|15080799012|21061999006|461199028|8060799015|5072599009|51005399006|6090799003|23021999003|19110799012|440099028|3412199025|40105399003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T3FVbzFWZkRlU2pMYXBMYm9ZTHpuaHFNZy9hWlQrYytYVGR0U1JDd3dKcHNM?=
+ =?utf-8?B?d1dpL0g1RzYyb3NEN2xzUXEyVHdEeEFvREdoRDNIZnFiS2hUUzZwbUI2NmVC?=
+ =?utf-8?B?WHpDM3dyY0txdnRQbXVab3dmTWl1WW5vS1lKTEkwdjlzRFYzMmwrRnJxNzVa?=
+ =?utf-8?B?cUNaTG5GeFRoRDhYcnJjeG41ZklNVEViTTZpeVRRMXNtOThZSHM0a3NqQXpX?=
+ =?utf-8?B?VmZIK1lvZXI0Y0dMOUlZT3k5Q1RHZzZqYjJLWkVOSGgvSHd1blJGSGlaZFUv?=
+ =?utf-8?B?ZlBVWm50LzUvc2tCZ0gzeGxmMXVGZ0taSFUyNUhmQ1ZVMmRBLzc5S01FTjRG?=
+ =?utf-8?B?TkFvSTVLdkloQUdlQUZxRXZjSUE1RHYvcFlJT2xVTERqcGRYNnpKeXpMcFdU?=
+ =?utf-8?B?ZTJsSnkvVlFHYThWN1dQeE5ucnpJTmIrSktBYWNFSmZuemo1eGhpaWs3UE1K?=
+ =?utf-8?B?cjNIc2lLeXNJaUpkcTZNcjF1enQyREUxK1VkM1oxdjYxdHRrWVpFeGhGcEhM?=
+ =?utf-8?B?MXFGcmd0bHF0MEg2bXdkQ1dkajFYQXdscDdKYUJpSEdQbUJONnlKbXlhK0ZD?=
+ =?utf-8?B?QmxoZldxSnVPaStyR3hhZ3QyWDZIZTVxWFBGR3VaN2FPaGRQYzByZFhyZ2t4?=
+ =?utf-8?B?ZmhiaUhKMU5GR3poNWc5Z0dSU2RIS2pFU1lqQ0NrZGh0NSs5YlRQbzJKSmpU?=
+ =?utf-8?B?YXN3SW9WNVc1NFFhNGEzSml6ZW0vc2R0SWU5VmtQeUJBM3dGY1VoSTdod3Ir?=
+ =?utf-8?B?WW1uVTg0SUVnMWRSOHFrKy9TbEJndDhtR1RNOFJhS1VhdTVZcHlWYm9EU2VP?=
+ =?utf-8?B?WkJUQzRKT3dPWFArdDlTdTRlZG1ibldYM3RKYTBXZVVXdGRYdzVuOS9mekR6?=
+ =?utf-8?B?T1FyU3RSSnhFOVdrSm5FcCtsLzJmZStUTmJOS1BFUFVMeDlnbTNYK3JnZWRJ?=
+ =?utf-8?B?K0FMcVlWNHM4SnZQKzVtSmI4cEl4S3h6d1FoOFFRR2VWMjlZb1BhV1dKS3RV?=
+ =?utf-8?B?MU9RYm9sY2N5Y0RPV3dVcFF4TSttRWJIblZNS0xPS2RFM29UdWZ3bjF2cVBX?=
+ =?utf-8?B?VDY2WklEUGFwYW5yYWE0a1N5eDduWmhEYWdVa1ozb1FrU1Zxcjk1UDBQYW9o?=
+ =?utf-8?B?bHhlVE00R3BpMjJqbnhydEg1Z0dzQThrRlhCWXViOEVFcHVOcmJSSWcyWXp4?=
+ =?utf-8?B?RnBnZDlpUkNLVGl6b2Z2QzNXY2xwaEdiRmZsSW54RHFRWDYyZ1dVL0o5UmRy?=
+ =?utf-8?B?REZTMnJxMDhNdGowc0R0THVnUHdsaFRCd3RyaXl4T3JIUTY1MTcwWjZ1ZmJL?=
+ =?utf-8?B?aSsxWEYydjB1Q2NVVHJQYlZSWWRuZjQ4eXBPdytxWVJHWlcwMnFDZzdraTJT?=
+ =?utf-8?B?N0xldGxIbVNydmZ0ZGp4Q2tXcnpGZFE1dzhTd2I1VFNpN05pUnh0NlpTRjVC?=
+ =?utf-8?B?bk4xSEVWbTBvc282eWtRdkpVTy94Vk05Y052em5ML2ZFQ1BiaTFhZlFCbDJ6?=
+ =?utf-8?B?RzVYL0pwaXIzVjhxZGJIeHhtNWlrSmQ1ZzlVUDhIcjRwWCttQU5xVVphNGNS?=
+ =?utf-8?B?amM1VUlLWnYxUjNnUzV6RnAyMlBkbzg3OU5QK000YXdCUkM5MDl5RGRQZkRi?=
+ =?utf-8?B?UjFDdTV3ZkM4Y1BYVDE4V2hzZ1JKV3puMDQrdjdaYkRCK0ZZOEEwTGdoSHVV?=
+ =?utf-8?B?S3U0anQ1aXFxUWphRnZ5NDFtM3FWbTlkM2h3M1lQa0Q4Q2IzaG9ORkNnPT0=?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?L0VlLzArYm50bWJ2TWQvc0swZ0tvQXBYU1g4Y05oRlVPZUtnbEV2UXNISlBR?=
+ =?utf-8?B?S0xHNmRPUkpORnNkeXRQKzlDb2pMUXdOa3dYSzJEY0YxZmZ0N0dHUEY3aUln?=
+ =?utf-8?B?dTVIeTg5NDh2S0loaHhlMDJQU2pXaWlJNnBEdlAxRTZzWFd1MmMzRFJzVUlC?=
+ =?utf-8?B?a0dEaXZDODZPUlVkMVlxR1R1U0QycXJwdjlBeGNPUUVkeFdwVHFKZ1NUd21o?=
+ =?utf-8?B?a3Y2SG1HdVVhTENpSzA3S1NFWjhuMmJQOFduUTNpSXVHUU9HbUx4Vmo0L3ZP?=
+ =?utf-8?B?TFRLOTFyMXBJdXZyeHAvNWJxU1BwTzQxNFNnMGhocGpnQjJFWk5NaWVMYlNO?=
+ =?utf-8?B?cDhjMHRHRnNLNi9NYmVTeUZ2ZE1TdGVQM3pQTkVQNEg2YW44V2VVbFBrcnEw?=
+ =?utf-8?B?V2ZUb00rRVBlb1VJM2JXRVdtWmE2SjZnbHpXcm9XU1FxYUpNY1BUNzUxYzdS?=
+ =?utf-8?B?NGc5YWRWa0h0VmVJSVExY2pKUjcvbTdmY0FyWXJ1bGtBL1hPd3FJbWVEMks1?=
+ =?utf-8?B?UTBNUU12SGY0eEpTWUxlM2Y3dUJraXFMZHo3UlRwUDZDak1iZE0zWlJNZ2VX?=
+ =?utf-8?B?UTB5TEgyajV3VFZoK3hlUW1GZUNyRHFTVVkxMVRIUkJaajJDNFZjNDZRcWtm?=
+ =?utf-8?B?blJyWUt1eFV4YnlUR0h4aTU3b1ZqQnV3NXFpemhoVEc5SldXd0E0R29nT0xF?=
+ =?utf-8?B?UTZVOXN4d25zWHI5V3hSRE9acndXQ1B6M1dMMnlHWGg2TFptdkUzQms0MkpH?=
+ =?utf-8?B?YktTOVFmcVZobU1QT2VrYkJWZVp1SGYvQlYxZWJ4M3RqeFUzWWRNWXF3S2ww?=
+ =?utf-8?B?TEZVUVp2cDFoZFRsek94azVhVzEvdmd2WHVYK2hRY3hZN2tvWEVmS0xtajVk?=
+ =?utf-8?B?eDd0eTFFS2w5ZkZ6Q1pLTm5OdEs5RldVUEwvUWpIV2N5Q3QrQXU0MnlkKzlx?=
+ =?utf-8?B?QTVVTFpDeXphZ3ZZd3VIL1pXbXNsQU1FZTYyV0kxdWJMc1dkcTNUU01sTlIx?=
+ =?utf-8?B?NkM2MmpNOGdsdW8yQmVjUFgyUks4SlZWNjZGVjcvdVFiZzZyU2RySXpkOFpJ?=
+ =?utf-8?B?Z1ZicWdPK0tmTlJLTFRLNmw3TkJrT204VFNQT1RpYnMzSnJaRXlOSWZ2QldU?=
+ =?utf-8?B?UHZ1R2tHRXBXbGtNUXdydE9DMWIrYUVvUi81UjZBclpKNll6QlFkcFpJUHZo?=
+ =?utf-8?B?VUdJWWFhYW1uTjhadk13NGkwV0JJeG1IWHMrblpLenN1ditKUmtNd0I1bTV6?=
+ =?utf-8?B?VWU2RTFiUkV2Z3RwM0xTb3c4SGxQWGY2RFM5UVVENk8zTjdBdVdCbkgwMjNk?=
+ =?utf-8?B?WlhNQW9GekU0K1V0WjNPR3FiV2pGeVRGVG1EMXpBODdnNzJZRjhSMTdIWHZZ?=
+ =?utf-8?B?dys3STJKM3VIZ08wMk5GaVJIYlBQcFUzVWVCU0g3NnloWk50cEY1dEYxS1p5?=
+ =?utf-8?B?MUliOWNyaGd0MlhsaHJxdTNNNnJPQzRKTlgvRWhZdDlubU1XMFlMclAySWZz?=
+ =?utf-8?B?ZENVWGxEckljcmY4TWdIVlpaL1Zmc05EbnNFV3pNcGxocEY4L1J3MDNOcURR?=
+ =?utf-8?B?bVZWdk1aY1M1eHBrdDU5R3lhZWFxWldLTnRvZlEwUitOSFNSS2MyRmZZajZ4?=
+ =?utf-8?B?OFE1QmNuUGY5N1VHL3UySThGU3hBMTQzczExZGF4dWV4N3hRcjNaRUZWMW0x?=
+ =?utf-8?B?Z2xHN21tV2VoN2tYMTI4bDRWelg1WnloN2VyRDI4emg4WW5WMEl5MXBGcndh?=
+ =?utf-8?B?M09RZFFYbnVuV1hFc0psR1BYMzNHZldKeHVGUjRSVVNYY3QvZ0dTbUFQOTVy?=
+ =?utf-8?B?NXluVEl4M2RobWpOTXExRjRKM3M5cmY0cWI2MjlFMEdOdlVYY1RNck5SSFo5?=
+ =?utf-8?B?Z2xhU2JLSTI5c2JkdUE2cmVvUUdiRUtvemFKQ0Rnb0JzdVE9PQ==?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb99b2f-bf65-4798-4dfc-08de4e9e8162
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR19MB8883.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 10:13:02.5528
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL4PR19MB8904
 
-Hi, Hugo,
 
-On 1/7/26 23:48, Hugo Villeneuve wrote:
-> Hi,
-> when issuing a reboot command, I encounter the following kernel panic:
+
+On 1/8/26 10:42, Jie Luo wrote:
 > 
-> [   36.183478] SError Interrupt on CPU1, code 0x00000000be000011 -- SError
-> [   36.183492] CPU: 1 UID: 0 PID: 1 Comm: systemd-shutdow Tainted: G   M                6.19.0-rc4-arm64-renesas-00019-g067a81578add #62 NONE
-> [   36.183504] Tainted: [M]=MACHINE_CHECK
-> [   36.183507] Hardware name: Gecko ECO2 nxtpad (DT)
-> [   36.183512] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   36.183519] pc : rzg2l_mipi_dsi_host_transfer+0x114/0x458
-> [   36.183538] lr : rzg2l_mipi_dsi_host_transfer+0x98/0x458
-> [   36.183547] sp : ffff8000813db860
-> [   36.183550] x29: ffff8000813db890 x28: ffff800080c602c0 x27: ffff000009dd7450
-> [   36.183563] x26: ffff800080c5fcc0 x25: ffff000009dd7450 x24: ffff800080e1f7a8
-> [   36.183573] x23: ffff000009dd7400 x22: 0000000000000000 x21: ffff000009dd7430
-> [   36.183582] x20: ffff8000813db8e8 x19: 0000000002050028 x18: 00000000ffffffff
-> [   36.183592] x17: 0000000000000000 x16: 0000000000000000 x15: ffff8000813db220
-> [   36.183602] x14: 0000000000000000 x13: ffff800081255bc0 x12: 00000000000009a2
-> [   36.183611] x11: 0000000000000336 x10: ffff8000812b28d0 x9 : ffff800081255bc0
-> [   36.183621] x8 : ffff800081399000 x7 : ffff00000a042600 x6 : 0000000000000000
-> [   36.183631] x5 : 0000000000000805 x4 : 0000000002000000 x3 : 0000000000000028
-> [   36.183640] x2 : 0000000049627000 x1 : ffff800080c60b40 x0 : ffff800081780000
-> [   36.183652] Kernel panic - not syncing: Asynchronous SError Interrupt
-> [   36.183657] CPU: 1 UID: 0 PID: 1 Comm: systemd-shutdow Tainted: G   M                6.19.0-rc4-arm64-renesas-00019-g067a81578add #62 NONE
-> [   36.183665] Tainted: [M]=MACHINE_CHECK
-> [   36.183668] Hardware name: devboard1 (DT)
-> [   36.183672] Call trace:
-> [   36.183675]  show_stack+0x18/0x24 (C)
-> [   36.183692]  dump_stack_lvl+0x34/0x8c
-> [   36.183702]  dump_stack+0x18/0x24
-> [   36.183708]  vpanic+0x314/0x35c
-> [   36.183716]  nmi_panic+0x0/0x64
-> [   36.183722]  add_taint+0x0/0xbc
-> [   36.183728]  arm64_serror_panic+0x70/0x80
-> [   36.183735]  do_serror+0x28/0x68
-> [   36.183742]  el1h_64_error_handler+0x34/0x50
-> [   36.183751]  el1h_64_error+0x6c/0x70
-> [   36.183758]  rzg2l_mipi_dsi_host_transfer+0x114/0x458 (P)
-> [   36.183770]  mipi_dsi_device_transfer+0x44/0x58
-> [   36.183781]  mipi_dsi_dcs_set_display_off_multi+0x9c/0xc4
-> [   36.183792]  ili9881c_unprepare+0x38/0x88
-> [   36.183802]  drm_panel_unprepare+0xbc/0x108
-> [   36.183814]  panel_bridge_atomic_post_disable+0x50/0x60
-> [   36.183823]  drm_atomic_bridge_call_post_disable+0x24/0x4c
-> [   36.183835]  drm_atomic_bridge_chain_post_disable+0xa8/0x100
-> [   36.183845]  drm_atomic_helper_commit_modeset_disables+0x2fc/0x5f8
-> [   36.183856]  drm_atomic_helper_commit_tail_rpm+0x24/0x7c
-> [   36.183865]  commit_tail+0xa4/0x18c
-> [   36.183874]  drm_atomic_helper_commit+0x17c/0x194
-> [   36.183884]  drm_atomic_commit+0x8c/0xcc
-> [   36.183892]  drm_atomic_helper_disable_all+0x200/0x210
-> [   36.183901]  drm_atomic_helper_shutdown+0xa8/0x150
-> [   36.183911]  rzg2l_du_shutdown+0x18/0x24
-> [   36.183920]  platform_shutdown+0x24/0x34
-> [   36.183931]  device_shutdown+0x128/0x284
-> [   36.183938]  kernel_restart+0x44/0xa4
-> [   36.183950]  __do_sys_reboot+0x178/0x270
-> [   36.183959]  __arm64_sys_reboot+0x24/0x30
-> [   36.183968]  invoke_syscall.constprop.0+0x50/0xe4
-> [   36.183979]  do_el0_svc+0x40/0xc0
-> [   36.183988]  el0_svc+0x3c/0x164
-> [   36.183995]  el0t_64_sync_handler+0xa0/0xe4
-> [   36.184002]  el0t_64_sync+0x198/0x19c
-> [   36.184020] Kernel Offset: disabled
-> [   36.184022] CPU features: 0x200000,00020001,4000c501,0400720b
-> [   36.184028] Memory Limit: none
-> [   36.495305] ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
 > 
-> The problem is present since linux-6.18-rc1, but not in linux-6.17. I also confirm the bug is present in linux-6.19-rc4.
+> On 1/7/2026 9:17 PM, George Moussalem wrote:
+>>> Read CMN_PLL_REFCLK_DIV and divide the parent rate by this value before
+>>> applying the 2 * FACTOR scaling. This yields the correct rate calculation:
+>>> rate = (parent_rate / ref_div) * 2 * factor.
+>>>
+>>> Maintain backward compatibility with earlier platforms (e.g. IPQ9574,
+>>> IPQ5424, IPQ5018) that use ref_div = 1.
+>> Just tested this patch and can confirm IPQ5018 also has a ref_div of 2.
+>> With this patch applied, the correct assigned clock rate of 4.8GHz is
+>> also reported:
+>>
+>> root@OpenWrt:~# cat /sys/kernel/debug/clk/clk_summary | grep cmn -A 3 -B 3
+>>
+>>                                   deviceless
+>> no_connection_id
+>>  xo-clk                              1       1        0        48000000
+>>   0          0     50000      Y   deviceless
+>> no_connection_id
+>>     ref-96mhz-clk                    1       1        0        96000000
+>>   0          0     50000      Y      deviceless
+>> no_connection_id
+>>        cmn_pll                       0       0        0
+>> 4800000000  0          0     50000      Y         deviceless
+>>          no_connection_id
+>>           eth-50mhz                  0       0        0        50000000
+>>   0          0     50000      Y            deviceless
+>>   no_connection_id
+>>           sleep-32khz                0       0        0        32000
+>>   0          0     50000      Y            deviceless
+>>   no_connection_id
+>>           xo-24mhz                   0       0        0        24000000
+>>   0          0     50000      Y            deviceless
+>>   no_connection_id
+>>
+>> Once accepted, I will submit a patch to correct the assigned clock rate
+>> from 9.6GHz to 4.8GHz as the ref div is now properly applied.
 > 
-> The bug seems to be happening in rzg2l_mipi_dsi_host_transfer().
+> Thanks for validating this on the IPQ5018 platform.
+
+FWIW:
+
+root@OpenWrt:~# devmem 0x9b794
+0x00006C32
+
+50*96KHz=4.8GHz (correct). So:
+
+Tested-by: George Moussalem <george.moussalem@outlook.com>
+
 > 
-> After bisecting, here is the first bad commit:
-> 
->      commit 56de5e305d4b ("clk: renesas: r9a07g044: Add MSTOP for RZ/G2L")
-> 
-> Reverting this change makes the bug disappear.
-> 
-> My limited understanding seems to indicate that the MIPI/DSI host may
-> no longer be available/on when the panel tries to send MIPI/DSI
-> commands in ili9881c_unprepare(), maybe because the MIPI/DSI clock has been stopped...
-> 
-> The exact same board with two other panels (jd9365da and st7703) doesn't have the bug.
-
-Could you please provide the output of command:
-
-cat /sys/kernel/debug/mstop
-
-for both cases?
-
-Also, could you please check if the following diff solves your problem:
-
-diff --git a/drivers/gpu/drm/renesas/rz-du/rzg2l_mipi_dsi.c 
-b/drivers/gpu/drm/renesas/rz-du/rzg2l_mipi_dsi.c
-index 5edd45424562..62957632a96f 100644
---- a/drivers/gpu/drm/renesas/rz-du/rzg2l_mipi_dsi.c
-+++ b/drivers/gpu/drm/renesas/rz-du/rzg2l_mipi_dsi.c
-@@ -1282,6 +1282,10 @@ static ssize_t 
-rzg2l_mipi_dsi_host_transfer(struct mipi_dsi_host *host,
-                 value |= SQCH0DSC0AR_FMT_SHORT;
-         }
-
-+       ret = pm_runtime_resume_and_get(dsi->dev);
-+       if (ret)
-+               return ret;
-+
-         rzg2l_mipi_dsi_link_write(dsi, SQCH0DSC0AR, value);
-
-         /*
-@@ -1322,6 +1326,8 @@ static ssize_t rzg2l_mipi_dsi_host_transfer(struct 
-mipi_dsi_host *host,
-                         ret = packet.payload_length;
-         }
-
-+       pm_runtime_put(dsi->dev);
-+
-         return ret;
-  }
-
-Thank you,
-Claudiu
-
 
 
