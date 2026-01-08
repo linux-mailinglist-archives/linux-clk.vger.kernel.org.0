@@ -1,134 +1,91 @@
-Return-Path: <linux-clk+bounces-32349-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32339-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA95D02A20
-	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 13:29:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23525D0316D
+	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 14:39:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E27D030087AC
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 12:29:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 579E9303B7B2
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 13:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F5F84CB3BE;
-	Thu,  8 Jan 2026 12:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DDB38B99D;
+	Thu,  8 Jan 2026 09:56:46 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACAE74CB3BB;
-	Thu,  8 Jan 2026 12:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A21538BDAB
+	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 09:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767875060; cv=none; b=ZCtV6VNWQvhp4vXKYs0MxBV+dBdyjOoUFU02FJbq2uP1DhGf6RpCQ104y5LQh/8fsQHqa1OR0Kp7omDO1M0TbPH+K9dQbgiga+Yr+zEYamNgYBLIweSqJhfWQeq7oWp7D3tU74qyc+pIiY2hjnHBlG2WdBbl13qcPvMaGS3EqkQ=
+	t=1767866202; cv=none; b=iconiyY/OsomfC58p0iU69G51XBR5fD4jKqFeKp7O0miHPwbkVpX5+6bHoGmzWNSnTPog6pA0at7LKTYdv8Bd/MHLHpEZw0xoGlp1ADET4GtM28H6Y1ra6P5DfYT0I9Hcgz17cpB4U2hMQWmlP+EftHwCkGA6F6j/1//JivM2Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767875060; c=relaxed/simple;
-	bh=uluj15nv0I39/Rq0UuYS/cxHYmelKtaJjmNgYItHxnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y+70V14AQBSZuqgCuZAAJ5Bu8kXsENKZlqVVafWs/D/CNvF4n7O0dXQ3vvXkJKhHL20sEBDGTF3qPRIaMxRVawOpFPY4oIn6lk1qxxf2iq3U81Cf7cgaIWhUKDuvEnmCcDMMo+evvCh+eWS3rdLwGf/1QhAFdi1uXPx1KKtSe18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [116.232.18.222])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id A82FE340DF7;
-	Thu, 08 Jan 2026 12:24:17 +0000 (UTC)
-Date: Thu, 8 Jan 2026 20:24:13 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Alex Elder <elder@riscstar.com>, Stephen Boyd <sboyd@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Guodong Xu <guodong@riscstar.com>,
-	Inochi Amaoto <inochiama@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev
-Subject: Re: [PATCH v3 4/4] reset: spacemit: fix auxiliary device id
-Message-ID: <20260108122413-GYB4052@gentoo.org>
-References: <20260103-06-k1-clk-common-v3-0-6061d9f69eef@gentoo.org>
- <20260103-06-k1-clk-common-v3-4-6061d9f69eef@gentoo.org>
- <058d3911-ff2d-4151-b585-5bcb8810bedf@riscstar.com>
- <e7fa69f1febc37062a59f566be97537a3a1e6ee0.camel@pengutronix.de>
+	s=arc-20240116; t=1767866202; c=relaxed/simple;
+	bh=xD5y6I5ED+awsboXcZBD4Y4YB9ZOIqfXv+SpP7f45ag=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=m7XbQIwQknu4eOr+bf0Tx+1YwwXYy4Ys2gZeu7K0wnYppk/jh479HQ4MULxYo4eCKiWkWH0yDGhPx97A8htjcBMlfd1yKcudfSGxA00JIQ/JPIP4dScC4UDyW7i2rIe/TQVp2+uWZACIQ5AXkEFcIE/B/0Vh4UiPv3h7ZJ+Q7ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdmkN-0004h1-Ca; Thu, 08 Jan 2026 10:56:03 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdmkM-009eit-2n;
+	Thu, 08 Jan 2026 10:56:02 +0100
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vdmkM-0000000044p-3Gjs;
+	Thu, 08 Jan 2026 10:56:02 +0100
+Message-ID: <5efcdfff3b259294954fdd14d12e16f20944d4ab.camel@pengutronix.de>
+Subject: Re: [PATCH v2 04/13] reset: eyeq: Add Mobileye EyeQ6Lplus OLB
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: =?ISO-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>, Vladimir
+ Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>,  =?ISO-8859-1?Q?Th=E9o?= Lebrun	
+ <theo.lebrun@bootlin.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,  Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Linus Walleij
+ <linusw@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk
+	 <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Date: Thu, 08 Jan 2026 10:56:02 +0100
+In-Reply-To: <20251223-eyeq6lplus-v2-4-cd1fd21d182c@bootlin.com>
+References: <20251223-eyeq6lplus-v2-0-cd1fd21d182c@bootlin.com>
+	 <20251223-eyeq6lplus-v2-4-cd1fd21d182c@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7fa69f1febc37062a59f566be97537a3a1e6ee0.camel@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Hi Philipp,
+On Di, 2025-12-23 at 11:02 +0100, Beno=C3=AEt Monin wrote:
+> Declare the two reset domains found in the EyeQ6Lplus OLB and add
+> them to the data matched by 'mobileye,eyeq6lplus-olb' compatible.
+>=20
+> Those reset domains are identical to those present in the EyeQ5
+> OLB, so no changes are needed to support them.
+>=20
+> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 
-On 12:07 Thu 08 Jan     , Philipp Zabel wrote:
-> On Di, 2026-01-06 at 08:43 -0600, Alex Elder wrote:
-> > On 1/3/26 1:26 AM, Yixun Lan wrote:
-> > > Due to the auxiliary register procedure moved to ccu common module where
-> > > the module name changed to spacemit_ccu, then the reset auxiliary device
-> > > register id also need to be adjusted in order to prepare for adding new
-> > > K3 reset driver, otherwise two reset drivers will claim to support same
-> > > "compatible" auxiliary device.
-> > > 
-> > > Signed-off-by: Yixun Lan <dlan@gentoo.org>
-> > 
-> > This would ideally be merged with the previous patch.  Maybe
-> > Philipp can negotiate with Stephen to have that happen.
-> > 
-> > Reviewed-by: Alex Elder <elder@riscstar.com>
-> > 
-> > > ---
-> > >   drivers/reset/reset-spacemit.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/reset/reset-spacemit.c b/drivers/reset/reset-spacemit.c
-> > > index e1272aff28f7..cc7fd1f8750d 100644
-> > > --- a/drivers/reset/reset-spacemit.c
-> > > +++ b/drivers/reset/reset-spacemit.c
-> > > @@ -278,7 +278,7 @@ static int spacemit_reset_probe(struct auxiliary_device *adev,
-> > >   
-> > >   #define K1_AUX_DEV_ID(_unit) \
-> > >   	{ \
-> > > -		.name = "spacemit_ccu_k1." #_unit "-reset", \
-> > > +		.name = "spacemit_ccu.k1-" #_unit "-reset", \
-> > >   		.driver_data = (kernel_ulong_t)&k1_ ## _unit ## _reset_data, \
-> > >   	}
-> > >   
-> 
-> Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-> 
-thanks
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-> to be merged via the clock tree.
-> 
-ok, got!
-
-and, here is my plan, I will prepare an immutable tag for the patch 4 -
-the change to reset driver ID, and merge it with the whole series,
-then send them along via clock tree.
-
-the tag would be useful if follow-up K3 reset patch[1] need to be merged, since
-both will change the reset driver, and with the tag, patch 4 can be pulled into
-both clock and reset subsystem, future reset patches can commit on top of it.
-even there is no price to pay if above doesn't happen.
-
-
-> Note that the commits for both patches 2 and 3 will fail to probe the
-> reset driver when bisecting.
-> If you don't want do merge the corresponding changes to K1_AUX_DEV_ID()
-> into those two patches, to make this series (runtime) bisectable, you
-no, I do not want to merge changes K1_AUX_DEV_ID() into patch 2/3
-
-> should add a warning to both their commit messages that the reset
-> driver will be adapted in the following patch 4.
-ok, I will send a new version and add a warning message
-
-> 
-> regards
-> Philipp
-
-Link: https://lore.kernel.org/all/20251229-k3-reset-v1-0-eda0747bded3@riscstar.com/ [1]
-
--- 
-Yixun Lan (dlan)
+regards
+Philipp
 
