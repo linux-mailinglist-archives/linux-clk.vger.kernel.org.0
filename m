@@ -1,248 +1,158 @@
-Return-Path: <linux-clk+bounces-32322-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32325-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85C8AD012CF
-	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 06:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92110D0134C
+	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 07:09:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7D8E3300F9CD
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 05:58:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F3D13041551
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 06:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9075733A702;
-	Thu,  8 Jan 2026 05:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF3B33A71D;
+	Thu,  8 Jan 2026 06:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UIPrSe/N";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fZ25sWF/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgcrzXvR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E8833A008
-	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 05:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33532302779;
+	Thu,  8 Jan 2026 06:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767851919; cv=none; b=aTynqlzQniJThxZUvGbNiSbQz9Rl6mKRwEalWsf/WAiMCg9j6Enj6G4tRT8VW7IRuNhUuAfclDR110qo9eqbyCizjvo5QYlFHMFNfDhpu7tx2iTDoZCn1LYtDwNTC25TyQhqqweXuoO/q/7j8WdOiI/tFUGZbuMEm0+4861CA8E=
+	t=1767852506; cv=none; b=m6IFhIwOBD/MGNluU4OHbEc++ER4Cd46AOQ7Kj/SYtFUNpqMzRsrrzcJmDYccG5BJURSJVtm4NqGvrTNOFRkbMEOXemvDQjZ0Fr4XmP6S5Ql4SIldIhv7mApzGAwGpoq6uIf24yy1LbOli79K0HX4DkWkiF/eF9QWhvGNkmDX+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767851919; c=relaxed/simple;
-	bh=jmuRz7laWsvaVKWvXCL5E6YwClFXNXcylq9sPTclTPU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p35aF48YL2eRJVYJ4E3hA68tDIe/wsKIHf4fw0PC81NuIxjT8GPERMTptoK5yqh5OzI3EvqieR/gggSWpg+MiKCMPoJ10SVIOyZgilLeLKkR6tpo5zx+WUaFhgftokO1k+DxdnKNgRXWdCpuWBaCw/uCnq7z29BWa7DiK/raIOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UIPrSe/N; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fZ25sWF/; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 607Noh3R474505
-	for <linux-clk@vger.kernel.org>; Thu, 8 Jan 2026 05:58:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	KPYorIOVmCg/xCSHrscU+vX13wArRA8uiPCnnOt9eD4=; b=UIPrSe/NnwlzeUdy
-	fdeCO4z9d8qcJLSYHLI3XqItHFFjrk88rCm/sHTFN6TSAcjNwVZSdih6qjvI/TkI
-	LeiR4XhnZQpgFJhnNBRLWdhRnac23BGhq2l6xLcmsM5oZAiaOy60OcwWI0rmWrvB
-	kK9+9zyTRm22a323Du6U9+F/Diy6rhdbUZtaLiBR2/Vz9yGxc/I5YAO/m0pBLztk
-	GJdkFAZHefmpAFNxH4RyN76gaVIL2T3H1QwPWVNRY6VenFug1rqSlTnnJl4VP247
-	/nQhOVu8r9zirj1RZ2KvmHTMS3Pa+rPyjDWBT3LnlmHqAEQtSECdN90bXx5LMH4I
-	/4h3Yg==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bhuy71wa4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Thu, 08 Jan 2026 05:58:36 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-29f1f69eec6so30742015ad.1
-        for <linux-clk@vger.kernel.org>; Wed, 07 Jan 2026 21:58:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767851916; x=1768456716; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KPYorIOVmCg/xCSHrscU+vX13wArRA8uiPCnnOt9eD4=;
-        b=fZ25sWF/aq4T4dJGpiusgRSjdXu17AMJINZN0yd09nRV0DxYocf//Y1a0r7/4R5GDw
-         NcEVV9joHw4xU2dAr3PpzuFZysyee/vgvai2an50SqDxbUejqgzAdL0vsy1OmV6hDNLS
-         jWv83xkncekhCoqgvXqPjDuu7I23gKiJTFI9S1FzgyUKmoUnC64uRvEdmphaziaH8veh
-         kzSUpnXugP2urXvraaQjgeBMDkTWJ13aSW+0YcwUAkVippeHutCdI5Ba/B7QBW+hsT07
-         XZAJh/ZK7FkRZqlpLZwSDcpDePbbTIn2DqOKHIuBUoyMHN0bpxIOo+ZqNw/Xq2c7lcH3
-         saLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767851916; x=1768456716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KPYorIOVmCg/xCSHrscU+vX13wArRA8uiPCnnOt9eD4=;
-        b=GU9lXvnMZRaExkwJGbzooF4L4089xyhsvHkbTuFoKbwvgZu9ffB3pMLsuyxY2D4L+i
-         wrUzMLNX0Q7czuNNYCsgAvZ74NO9DLQkt4nFFzDVk7VDNnAzMrZI2jJ/LbCDNcFiDMQ8
-         0Nabn3ulnL/xSAHVWuLnX9dn+Oq8AE5ZR0BH8OYaGOYzJfTQoaYGEg5Kswy5KN7DjnRy
-         b/GdGtKRDXXyBdvhH/zkvvTHOZxgtLA2FhiUcC2Fc3K6rxP6m/S1uoHhwYlGQKx87AKW
-         sUpvx6OIzc1weVBbk9ZTuwLZ01qHV08CwMvCSPRrtZxgGhbmtbbXPWElX2LaezW1b4TT
-         h9vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWPiPlAhQCcxec3H0bM/CVacCIge+ABqOnSlYENvoqy7Ny7NuY5+ZNLDO23n0lS9bmgFT4D8EvYb2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziYBkiK+1H/CaGX1YxWZxtCyS4p5Y82UhLKh+/IduTE9Q03TJG
-	Z89PUcl1R8/zE9dCvJcy9glIWutr2TE/nblec9iBNJvKf4eaQa4p9Vzwov3IgNSlxccCWqL2Cja
-	055pI6Xfxfw1o1mu9aJwH+GoiAlwvVAXIt0f0a7+UVHf4YMuZwBZfywr+Lb/AgbQ=
-X-Gm-Gg: AY/fxX4i/lZbke0CDwgi2MdZRgeMFLta0W3zGwS1DFy1bmMfHF+4LV37yTcQ1sCKFe0
-	7beCzZl9WKPvG3bhALq1V52bhxUd/KYilk6QQNVo074UF6TV5jGfBCQatAUIaVHbBn04HWQodgo
-	F+oF1DpViKN5BfBr+x+rAxFefj5NOpT0c1Ba+XdphOGtFEbgAt7ibIGRDqrjSYSILtSiSqm7kCM
-	pVO39OayLGnaWZfrHyHWV+MgP4BImh8nORK0AHUlQVcoUzNCkyyswWi35DMKCTA3Vj8b3xoCosP
-	jrJ7p7V1rrDSWUDihEFSJMxSv2q8zZz+OPbtG5yBJB2Fqa4RdQaKoMzVOZ9F0Pji4ywm7LSMJVQ
-	IpVCWGFqEfHGefI8RXDhNRA==
-X-Received: by 2002:a17:903:248:b0:2a0:fb1c:144c with SMTP id d9443c01a7336-2a3ee40ee95mr46423295ad.5.1767851915330;
-        Wed, 07 Jan 2026 21:58:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHVWFzdCH0NvCqAqzFjiQJZqOIin8TQmPH0h0f7iHo4faS2uHD2sRCtyN4+GHqvUTWJPMNp0Q==
-X-Received: by 2002:a17:903:248:b0:2a0:fb1c:144c with SMTP id d9443c01a7336-2a3ee40ee95mr46422955ad.5.1767851914736;
-        Wed, 07 Jan 2026 21:58:34 -0800 (PST)
-Received: from work ([120.60.56.4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cd492esm67610355ad.98.2026.01.07.21.58.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 21:58:34 -0800 (PST)
-Date: Thu, 8 Jan 2026 11:28:27 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Taniya Das <taniya.das@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Abel Vesa <abelvesa@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 0/7] clk: qcom: gcc: Do not turn off PCIe GDSCs during
- gdsc_disable()
-Message-ID: <oysexostrdzcyapwpf2ele22lje4limgdknz3xcjgbs5tpvr46@cxzefx6ep477>
-References: <20260102-pci_gdsc_fix-v1-0-b17ed3d175bc@oss.qualcomm.com>
- <a42f963f-a869-4789-a353-e574ba22eca8@oss.qualcomm.com>
- <edca97aa-429e-4a6b-95a0-2a6dfe510ef2@oss.qualcomm.com>
- <500313f1-51fd-450e-877e-e4626b7652bc@oss.qualcomm.com>
- <4d61e8b3-0d40-4b78-9f40-a68b05284a3d@oss.qualcomm.com>
- <e917e98a-4ff3-45b8-87a0-fe0d6823ac2e@oss.qualcomm.com>
- <2lpx7rsko24e45gexsv3jp4ntwwenag47vgproqljqeuk4j7iy@zgh6hrln4h4e>
- <aVuIsUR0pinI0Wp7@linaro.org>
+	s=arc-20240116; t=1767852506; c=relaxed/simple;
+	bh=RYHvBenPbSd/Yi3PszJcY9ayngdFIumRsmnQpcNICxs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QJ0gCuzJ2zGgrZFmJR8xwTz5DG8tgk0hdA6eBa2cuErK33LL7iZESdRh8DfCQakg8pNQAZND+DEjTFTvs2NHR4Bucyp029hJFIwZSYTJSjJZQdKfJA121vF83Ma2suYZV7cUCqH4+ZvuJeEeWf81wPI+p2kEVWclJ9eGFMIY/aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgcrzXvR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD732C116C6;
+	Thu,  8 Jan 2026 06:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767852505;
+	bh=RYHvBenPbSd/Yi3PszJcY9ayngdFIumRsmnQpcNICxs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=EgcrzXvR+e6GdnT9wqdYucJ55Yn8fILi9I1o//ol91/F9HPZ+3GGneZBNE15oFUvI
+	 vyMLAeQ8z1rRnChp2BxJM0Kv5azww5PW8W+naQ37vD7xu4hFAzZhErkmv9JGfQa7L9
+	 pzLj255i7aPaLsBSutm/wAHaIzuwEeGqMKqmfnRNJixA3AQ7IipgcXWASLXkhsqLnX
+	 LGH4luQ3mGr15NCUStnxkt/5h8jEE6W3ZA7yv2ZcXZmaW7aH65+Euf3mQnWF3ZnThx
+	 /gntxcmzBXf4b7JKtoQdGXWL0lWeWZFQ+Wc++a0YILgfqtQESDNzbT+3BzeuLcN4mo
+	 4x520nP8p4czQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB7C2D1489F;
+	Thu,  8 Jan 2026 06:08:25 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Subject: [PATCH v5 0/8] clk: amlogic: Add A5 SoC PLLs and Peripheral clock
+Date: Thu, 08 Jan 2026 14:08:14 +0800
+Message-Id: <20260108-a5-clk-v5-0-9a69fc1ef00a@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aVuIsUR0pinI0Wp7@linaro.org>
-X-Proofpoint-ORIG-GUID: EjKGYBUCagjLUwGpezk0DvMjjOuHyprP
-X-Proofpoint-GUID: EjKGYBUCagjLUwGpezk0DvMjjOuHyprP
-X-Authority-Analysis: v=2.4 cv=DZEaa/tW c=1 sm=1 tr=0 ts=695f478c cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=RufU61fwOX414azV3ffNTg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gMOyne7U4qER8HjkPQQA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDAzNSBTYWx0ZWRfXxVuMkYHeHfTb
- Sr1cWZsX4CthlPhUzkpQEoSUQXNXWxNftsrUQVS27alzMwHNUv+FBydAfEhc1ukOjmvRHFhbOLV
- OegcOHIuWK+UruCmZwByoHCBfvSzhVxJkgbxkVk+mevizaSmWVlIvzio8YtdUzKClV7rL3l/nzx
- M1eilaMLtsS3CfIMRVY4VEs+egdH6tuyIDdcKSDXwioeFOZdo0XDv50oQBaRGBs5ZTxtSEAI7zY
- KxUGvMytzF2B4bLmuHyY0Ks5XB9rox0jcu4g4dZVV8t8Y3B+nZhLAtEANnkYexIGTUOhVxnHInZ
- G3f9Y4vxbjs8WX1SisIBnmuHCQx6AaDiQhwnlSlJIQrwIfLncvr+ZSHhfgPBvudGNiF+m0dssSg
- 6nBfHsn133GukdVt3jqSYMBLANDd0YMmkvpx/pVtgJELzqVD11t1VQTlTYKKY6Nh1ADs8MdtePl
- CYfGUvCyct1HAdeKQSg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-08_01,2026-01-07_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 phishscore=0 bulkscore=0 adultscore=0
- spamscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601080035
+X-B4-Tracking: v=1; b=H4sIAM5JX2kC/2XMTQqDMBCG4atI1k3JjIloV71H6SKOo4b6U0wJL
+ eLdGwWF0uU3zPPOwvPk2ItLMouJg/NuHOIwp0RQa4eGpaviFqhQqwJAWiOpe8jUkC4slalmEPH
+ 5OXHt3lvodo+7df41Tp+tG2C97gm9JwJIJQ0zkq6hVDldbd+NjaMzjb1YIwEPCIDqgBhh3HmGw
+ EUG1T/UOzSgMD+gjpAzJKusZdTpL1yW5QsTZL2sEAEAAA==
+To: Chuan Liu <chuan.liu@amlogic.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767852503; l=3239;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=RYHvBenPbSd/Yi3PszJcY9ayngdFIumRsmnQpcNICxs=;
+ b=bNmkHioG5afqUsiyHyWBmdJF5FymiZB8FvlwfnAAkHB9zBkDq58F6ck1JB+W3dKVC1+97bR+2
+ Zk8BKItr/F+AHr7k7GgC+5esELm5Wny+ymECuG/t+DPCW3Rp3PBtvmD
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
-On Mon, Jan 05, 2026 at 10:47:29AM +0100, Stephan Gerhold wrote:
-> On Mon, Jan 05, 2026 at 10:44:39AM +0530, Manivannan Sadhasivam wrote:
-> > On Fri, Jan 02, 2026 at 02:57:56PM +0100, Konrad Dybcio wrote:
-> > > On 1/2/26 2:19 PM, Krishna Chaitanya Chundru wrote:
-> > > > On 1/2/2026 5:09 PM, Konrad Dybcio wrote:
-> > > >> On 1/2/26 12:36 PM, Krishna Chaitanya Chundru wrote:
-> > > >>> On 1/2/2026 5:04 PM, Konrad Dybcio wrote:
-> > > >>>> On 1/2/26 10:43 AM, Krishna Chaitanya Chundru wrote:
-> > > >>>>> With PWRSTS_OFF_ON, PCIe GDSCs are turned off during gdsc_disable(). This
-> > > >>>>> can happen during scenarios such as system suspend and breaks the resume
-> > > >>>>> of PCIe controllers from suspend.
-> > > >>>> Isn't turning the GDSCs off what we want though? At least during system
-> > > >>>> suspend?
-> > > >>> If we are keeping link in D3cold it makes sense, but currently we are not keeping in D3cold
-> > > >>> so we don't expect them to get off.
-> > > >> Since we seem to be tackling that in parallel, it seems to make sense
-> > > >> that adding a mechanism to let the PCIe driver select "on" vs "ret" vs
-> > > >> "off" could be useful for us
-> > > > At least I am not aware of such API where we can tell genpd not to turn off gdsc
-> > > > at runtime if we are keeping the device in D3cold state.
-> > > > But anyway the PCIe gdsc supports Retention, in that case adding this flag here makes
-> > > > more sense as it represents HW.
-> > > > sm8450,sm8650 also had similar problem which are fixed by mani[1].
-> > > 
-> > > Perhaps I should ask for a clarification - is retention superior to
-> > > powering the GDSC off? Does it have any power costs?
-> > > 
-> > 
-> > In terms of power saving it is not superior, but that's not the only factor we
-> > should consider here. If we keep GDSCs PWRSTS_OFF_ON, then the devices (PCIe)
-> > need to be be in D3Cold. Sure we can change that using the new genpd API
-> > dev_pm_genpd_rpm_always_on() dynamically, but I would prefer to avoid doing
-> > that.
-> > 
-> > In my POV, GDSCs default state should be retention, so that the GDSCs will stay
-> > ON if the rentention is not entered in hw and enter retention otherwise. This
-> > requires no extra modification in the genpd client drivers. One more benefit is,
-> > the hw can enter low power state even when the device is not in D3Cold state
-> > i.e., during s2idle (provided we unvote other resources).
-> > 
-> 
-> What about PCIe instances that are completely unused? The boot firmware
-> on X1E for example is notorious for powering on completely unused PCIe
-> links and powering them down in some half-baked off state (the &pcie3
-> instance, in particular). I'm not sure if the GDSC remains on, but if it
-> does then the unused PD cleanup would also only put them in retention
-> state. I can't think of a good reason to keep those on at all.
->
+The patchset adds support for the peripheral and PLL clock controller
+on the Amlogic A5 SoC family, such as A113X2.
 
-This is a good point. I didn't think of it.
+Co-developed-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
 
-> The implementation of PWRSTS_RET_ON essentially makes the PD power_off()
-> callback a no-op. Everything in Linux (sysfs, debugfs, ...) will tell
-> you that the power domain has been shut down, but at the end it will
-> remain fully powered until you manage to reach a retention state for the
-> parent power domain. Due to other consumers, that will likely happen
-> only if you reach VDDmin or some equivalent SoC-wide low-power state,
-> something barely any (or none?) of the platforms supported upstream is
-> capable of today.
-> 
+---
+Changes in v5:
+- Add “Co-developed-by” tag for Xianwei.
+- Change rtc_clk flags to CLK_SET_RATE_NO_REPARENT.
+- Optimize the macro definitions for clock configuration.
+- Unified naming of clock parent related variables.
+- Link to v4: https://lore.kernel.org/r/20251028-a5-clk-v4-0-e62ca0aae243@amlogic.com
 
-Unfortunately, that's the current state of retention today. It is only a
-firmware visible state. Ofc, the OS could query SMEM and figure out after
-resume, but there is no way currently to translate that to individual power
-domains.
+Changes in v4:
+- dt-binding for peripheral clocks (kept Rob’s 'Reviewed-by' here):
+  - Added optional clock source rtc pll.
+  - Renamed rtc_clk’s clkid to better reflect its function.
+- PLL/Clock driver:
+  - Adapted to Jerome’s refactored driver interface, naming
+conventions, and macros.
+  - Updated related CONFIG entries in Kconfig.
+- Added dts patch of PLL/Clock.
+- Link to v3: https://lore.kernel.org/r/20250103-a5-clk-v3-0-a207ce83b9e9@amlogic.com
 
-> PWRSTS_RET_ON is actually pretty close to setting GENPD_FLAG_ALWAYS_ON,
-> the only advantage of PWRSTS_RET_ON I can think of is that unused GDSCs
-> remain off iff you are lucky enough that the boot firmware has not
-> already turned them on.
-> 
-> IMHO, for GDSCs that support OFF state in the hardware, PWRSTS_RET_ON is
-> a hack to workaround limitations in the consumer drivers. They should
-> either save/restore registers and handle the power collapse or they
-> should vote for the power domain to stay on. That way, sysfs/debugfs
-> will show the real votes held by Linux and you won't be mislead when
-> looking at those while trying to optimize power consumption.
->
+Changes in v3:
+- Rename xtal_24m to xtal, and modify some description of Kconfig.
+- Drop some comment of PLL source code.
+- Move definition of A5_CLK_GATE_FW frome common code into A5 peripheral source code.
+- Use hw instead of name to describe parent_data.
+- Making SCMI binding the first to submit.
+- Link to v2: https://lore.kernel.org/r/20241120-a5-clk-v2-0-1208621e961d@amlogic.com
 
-Maybe we should just use dev_pm_genpd_rpm_always_on() in the client drivers if
-they know for sure that the device context should be preserved and keep
-PWRSTS_OFF_ON flag.
+Changes in v2:
+- Move some sys clock and axi clock from peripheral to scmi impletement.
+- Remove  ARM_SCMI_PROTOCOL in Kconfig and correct name A5 but not A4.
+- Add two optional clock inputs for the peripheral(ddr pll and clk-measure)
+- Make some changes and adjustments according to suggestions.
+- Link to v1: https://lore.kernel.org/r/20240914-a5-clk-v1-0-5ee2c4f1b08c@amlogic.com
 
-- Mani
+---
+Chuan Liu (8):
+      dt-bindings: clock: Add Amlogic A5 SCMI clock controller support
+      dt-bindings: clock: Add Amlogic A5 PLL clock controller
+      dt-bindings: clock: Add Amlogic A5 peripherals clock controller
+      clk: amlogic: Add A5 PLL clock controller driver
+      clk: amlogic: Add A5 clock peripherals controller driver
+      arm64: dts: amlogic: A5: Add scmi-clk node
+      arm64: dts: amlogic: A5: Add PLL controller node
+      arm64: dts: amlogic: A5: Add peripheral clock controller node
 
+ .../clock/amlogic,a5-peripherals-clkc.yaml         | 134 ++++
+ .../bindings/clock/amlogic,a5-pll-clkc.yaml        |  63 ++
+ arch/arm64/boot/dts/amlogic/amlogic-a5.dtsi        |  86 +++
+ drivers/clk/meson/Kconfig                          |  27 +
+ drivers/clk/meson/Makefile                         |   2 +
+ drivers/clk/meson/a5-peripherals.c                 | 796 +++++++++++++++++++++
+ drivers/clk/meson/a5-pll.c                         | 478 +++++++++++++
+ .../clock/amlogic,a5-peripherals-clkc.h            | 132 ++++
+ include/dt-bindings/clock/amlogic,a5-pll-clkc.h    |  24 +
+ include/dt-bindings/clock/amlogic,a5-scmi-clkc.h   |  44 ++
+ 10 files changed, 1786 insertions(+)
+---
+base-commit: f0b9d8eb98dfee8d00419aa07543bdc2c1a44fb1
+change-id: 20240911-a5-clk-35c49acb34e1
+
+Best regards,
 -- 
-மணிவண்ணன் சதாசிவம்
+Chuan Liu <chuan.liu@amlogic.com>
+
+
 
