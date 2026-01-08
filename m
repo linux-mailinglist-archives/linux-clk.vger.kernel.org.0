@@ -1,85 +1,123 @@
-Return-Path: <linux-clk+bounces-32344-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32350-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABC7D0379C
-	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 15:47:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6384FD02DEF
+	for <lists+linux-clk@lfdr.de>; Thu, 08 Jan 2026 14:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BC818304FC0C
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 14:40:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6304B313C7C7
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jan 2026 13:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B65F3D7D92;
-	Thu,  8 Jan 2026 11:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6682E4F24B8;
+	Thu,  8 Jan 2026 12:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBm0FK7n"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044F8450902
-	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 11:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962684F29BB
+	for <linux-clk@vger.kernel.org>; Thu,  8 Jan 2026 12:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767870468; cv=none; b=AgtA0/Z0ZScgN5fwb+sOW/kLEvTa9K5G/nBIJJDCYL85GqO6fLjE/WdyQPf6f95qQf5LBCJxkXw1+Xrj5AU0HlzKVks2nX8PrtdAmPkJcGpRiXB9wsbsrcm2nTE/ExY+4YB33x/FUqMOJyFurHid4GKJMoh+1ylJcRDhLUGZ+M8=
+	t=1767875679; cv=none; b=CfL/SC4w/DG7dfTYvCgNZOym7zVpaoreZlFrchUm7JEuDUzZY4SEcPjhfSWvogdS+pFU85dPEhKClxw7V2pSx2//lrnIuGFXjFLKqSiIAxhbMEA4486Pw9bTKa3/JsCz6vrlbbdKNkXNozv31UIMgJId4CXW9VdcFIeulwDmHEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767870468; c=relaxed/simple;
-	bh=1slDODdYtFbvx+9LgPP0qBuwCcQV//dVL7NoB3/LS0s=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cEkysVXpJiVb9mQCrJPmDAKEIcG6WEc2//XgtaXDgYVREIWtV/cUSaQTZ0rxkrO/I5gyVu/YMZLp0TrnBsyrydKlorSblEwwrgTTB5efteSZOoTHar2OFMQs2DMqeLgVzlOX0SvXW/ySh+fcnPecvx7khzuyReX4JtRSnRbAiIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vdnrY-0006JF-Tu; Thu, 08 Jan 2026 12:07:32 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vdnrY-009fT8-27;
-	Thu, 08 Jan 2026 12:07:32 +0100
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vdnrY-000000005W0-2NQQ;
-	Thu, 08 Jan 2026 12:07:32 +0100
-Message-ID: <00ad0d7f5eebd96717d37be19944bdd2e7d77eef.camel@pengutronix.de>
-Subject: Re: [PATCH 2/2] reset: spacemit: fix auxiliary device id
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Yixun Lan <dlan@gentoo.org>
-Cc: Stephen Boyd <sboyd@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>,  Alex Elder <elder@riscstar.com>, Guodong Xu
- <guodong@riscstar.com>, Inochi Amaoto <inochiama@gmail.com>,  Yao Zi
- <me@ziyao.cc>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Date: Thu, 08 Jan 2026 12:07:32 +0100
-In-Reply-To: <20260103220005-GYA2070627@gentoo.org>
-References: <20251220-06-k1-clk-common-v1-0-df28a0a91621@gentoo.org>
-	 <20251220-06-k1-clk-common-v1-2-df28a0a91621@gentoo.org>
-	 <aUYMjAi8YIqValwb@pie> <20251220025926-GYA1962618@gentoo.org>
-	 <20251224114848-GYA1993014@gentoo.org>
-	 <20260103220005-GYA2070627@gentoo.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	s=arc-20240116; t=1767875679; c=relaxed/simple;
+	bh=F1x0vYfegBL7n3iJichIb1PGAil9viNpxvOdcjfDOjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=liUn3u3eaOrtbqew4zzp+XsWCizmHm1M9HBTmnuE1Jb5Zqf4c4rSpO115hJPWyUIMJlZ82nAmK/vm08pcs/vX7jb522I7prJ2yVwhgAYub1/peeKDwnMBKzuK37MOR5mo46y0BiHrEM/J0NRJNWmzGobZwJSeZZlE77Q5GBNNIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBm0FK7n; arc=none smtp.client-ip=209.85.218.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-b7ffbf4284dso457450966b.3
+        for <linux-clk@vger.kernel.org>; Thu, 08 Jan 2026 04:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767875676; x=1768480476; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxA3rCi4n4Zd11T4YjtWJ+fLfFPU0EDYmXEJgipwb9E=;
+        b=YBm0FK7nhFpRjm14qR7F9a3mNpJpnA8FH8kueIg4n6zYlybC3DCkLmjJCl5xR1o4U/
+         lqW/kNaWnsjTuSd04FGdK0RHZMNdnQUj45ixrJXrN7Wp8C+pzoWBwYMc1BLp41YBDziQ
+         AZkU1jQPMZYIqAbsauPWENFFBQl6sPKR68cIza7LtNc+sNMFLJvNGnVIEFIF+BMweJm/
+         vbyL2a/0mT+MR+e2aShGCzzjovXoWDD4LyvDmG7bWipJ2ewvH4cnzxPsdyu7otkjMij1
+         moZSDnXPY0sjILrSQZIHKlN+KQWBjmHaMz9ok9KdgvFP57C3N60PsZH4yAPnnORhI9Le
+         D6uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767875676; x=1768480476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QxA3rCi4n4Zd11T4YjtWJ+fLfFPU0EDYmXEJgipwb9E=;
+        b=uaUxr9SuT5fbnyyddkjsJrIEtnxW3cjf0wXO7UnCgcfoS0COBDtmI+dA/PyDSg+Qqd
+         5y/LOEiP78GQ6IGq/7bhxBlQy2gWNtlVR2Hnvnq9y7goGigSiu1beon/fjX2YxjVdkQ2
+         +olP8R7Wt1708zpPbR7HE4Y3C7WNafuB+JORrL8F2bVOoRoqqJcMqv85a+vzj2aCrEk3
+         PT6F2eLionq4QgN/H60zLkkSB5eJPViA8G9CY00/jodrbfQpxByhcMhrji6VC+WZVXBj
+         ue7yJu490tSqEijGKVDw6woeKSCbxcKHvMrhQqLSunUWKQq7Li5Rezebc5SigkE6ZXdr
+         AkPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHtPYgPt5cdTBgHuB/OgoVIRaHNSy1gyqxK1cPO6WacBT40TqzfE0k5GMjTH73NINmf11lDAIcLAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPAbXohBFaxmGdDrplIeKSK3GTZnL6TDQLfC3Fh2IBxrjC3ccL
+	8E29Y357tqIjDnHG20MokDXnPnkJtHz2vWLHKbZNFYTP5xMFR6ZPTesg
+X-Gm-Gg: AY/fxX51Q8SQc4PUP+0JdShHVueq+mZp0/jpPNkTUFJochk23u1mp7dLpiExK9ZUxJy
+	GKhX7BA8UdqpHez6ywLqpXHj65DhEJDh8G7P6bFI5Vnkj2nEHdDK2LIOfLF3bsaor75TM5OD70Z
+	jsEeUiDXThnLMvLqfIaRjP91068Zcge+MD1HWIqS3eYc/msHkJYkU4BWTs+RFsqTRHAPJhLlFne
+	H9vao5ZJPCfmoq8H2MuxzzzzAzbquj2PrY3zXj6ngqB5swFEvg7cla+DFsvbijnj30YuznMhcyT
+	94SWhvA/gPePyriwjhEgb3KxDvGDWfXNWnbu7BiuM068pN9rTuvUkIXdsIYtxxUkzeIGLOTY4RT
+	N3N9pTs4OkewSdYYGqdEFmJMPqc1znYsx1FYzsjExZjD1PxqWOvnSaJjAmqNKwKjWrVtji6hTSH
+	yxbEeqwdNE4c7EsMMmcsLYagBx28ZN/KXNDuk=
+X-Google-Smtp-Source: AGHT+IGDYWBzdLP3GPBfT4boWtLi0Nz7sIczo+oyRUwJh3nn+ZhSgyvvzjobNVrE7I2+mIZQNWdOhg==
+X-Received: by 2002:a17:906:6a1b:b0:b83:3294:af63 with SMTP id a640c23a62f3a-b8445031bd4mr517614466b.1.1767875675518;
+        Thu, 08 Jan 2026 04:34:35 -0800 (PST)
+Received: from localhost.localdomain ([2a00:23c4:a758:8a01:a172:15fe:21c8:edf5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a56db21sm780412166b.71.2026.01.08.04.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 04:34:35 -0800 (PST)
+From: Biju <biju.das.au@gmail.com>
+X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v2 0/2] clk: renesas: rz{g2l,v2h}: Deassert reset on assert timeout
+Date: Thu,  8 Jan 2026 12:34:26 +0000
+Message-ID: <20260108123433.104464-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
-On So, 2026-01-04 at 06:00 +0800, Yixun Lan wrote:
-> Hi Philipp Zabel,
->=20
->  I still need your opinion in order to know which direction I should
-> go..
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-I say merge via clock tree. I'll comment on v3.
+If the assert() fails due to timeout error, set the reset register bit
+back to deasserted state. This change is needed especially for handling
+assert error in suspend() callback that expect the device to be in
+operational state in case of failure.
 
-regards
-Philipp
+Ref:
+[1] https://lore.kernel.org/all/b417865397822176e83bca6b9d8094fe92ff2451.camel@pengutronix.de/
+
+v1->v2:
+ * Added the variable "mon" and used in readl_poll_timeout_atomic()
+   instead of reusing "value".
+ * Dropped the assert check in error path and simplified value using xor.
+ * Added Rb tag from Geert.
+
+Biju Das (2):
+  clk: renesas: rzg2l: Deassert reset on assert timeout
+  clk: renesas: rzv2h: Deassert reset on assert timeout
+
+ drivers/clk/renesas/rzg2l-cpg.c | 9 +++++----
+ drivers/clk/renesas/rzv2h-cpg.c | 9 +++++----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
+
+-- 
+2.43.0
+
 
