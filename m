@@ -1,287 +1,241 @@
-Return-Path: <linux-clk+bounces-32418-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32426-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A60D07276
-	for <lists+linux-clk@lfdr.de>; Fri, 09 Jan 2026 05:38:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7318CD07CEE
+	for <lists+linux-clk@lfdr.de>; Fri, 09 Jan 2026 09:28:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C7ACC3022A9D
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Jan 2026 04:34:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B5EA2306293F
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Jan 2026 08:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53F922EA482;
-	Fri,  9 Jan 2026 04:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1426D33EB01;
+	Fri,  9 Jan 2026 08:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQ60iQqM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmbj+sQX"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB392DFA5A
-	for <linux-clk@vger.kernel.org>; Fri,  9 Jan 2026 04:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0E333D4F2
+	for <linux-clk@vger.kernel.org>; Fri,  9 Jan 2026 08:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767933271; cv=none; b=OGXFuwM5GdUfiLOGvXefRv8QPezfQ0h8YJ7R8Bg1wRDEzredyXyMvN+3ej0ZZ6XZi6xoPl0CRUX4xu5N1hXxtvq1sj7ojnif2jUXFSg0wJvrM+x0eGVaQPGwQQMNtIaNE/I4fO15s5wEyrwKUrwO13KehsxRZmODA+h5Ejyd9yI=
+	t=1767947190; cv=none; b=CYSw3Kyx7ye3Dok4Wezo/PHA+NpQUPfwfSRY2SYcme8NhC+ZOIIovLDPtbUDN/1T3LyB3EZtfXe2U0nkdZFqJw3lk5UYtqU565coV33SiScCOwofKrDF5Z/gT8d2NqDHjWNdCssQMFWmd/kE36/6tQLqKCvcu2FD5Ys6RMcZOpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767933271; c=relaxed/simple;
-	bh=2abIKdioHKuqFCVVrc2rlxdq1wJZS4xz8H+W/r0DMWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ESdMPa9DGtFAPCdptCZmCR9rNSgh8hNMXz0vtCPUhOogdRDRRpEsfvrQnntvPVV2TMJ1MDKOSho9Sv0ZMH5aGwzJpo+Xtp1A3Hn8QDXpr6lArxyaii3PHUd4FedZlAUyfeuhyCK5ZTz8nT5GINzWa9Om5jW0xQDZcF9a8JTQL0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQ60iQqM; arc=none smtp.client-ip=209.85.160.44
+	s=arc-20240116; t=1767947190; c=relaxed/simple;
+	bh=TegNChNmHEzD8+9WeNnVdBonXBPxxrbHlIIxhxeFES4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RalB3E7vKq4E60M76rfyAKjnbf7O1t4gH4+oZ4QXX+0Scpew5Py6Th1BACcTn0UZhNasnccMwxj9fVi0Y2cafzPQkYR/j8zeRr/B5uTfKYUTf1OGxdsxCbfGbkBO/T9n0McSoF2nlnQs4CraYcywRgu56mnSQBcktM4JgVmyb6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmbj+sQX; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-3eae4e590a4so2022254fac.1
-        for <linux-clk@vger.kernel.org>; Thu, 08 Jan 2026 20:34:25 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b736ffc531fso764056766b.1
+        for <linux-clk@vger.kernel.org>; Fri, 09 Jan 2026 00:26:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767933264; x=1768538064; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VymCizJkrbUg3Dme3lvHp49OC7wgHu27DgIm2cwwCWU=;
-        b=TQ60iQqMUKe2uCIohS5XyyzpfJ+dTYRvxRLDE0Xgbtx7DE3bLIQWau5OksA0C+V3rz
-         es0U/abwqL98tjLiDUCCzfmYgN+wyAFt6+hzP9RuCqR6X/ChQB3+Wncu2sIJ77ZY4NXW
-         JKCC4TcdFBOhmAWfrEdy8kx28MWZXVRya3E2bWeJcgCI19FfV2MUsq5H2XKLinPg1imw
-         6pdKS8TiII5/3bxAPh5uYNdkYrzcHfbeePIIrOSBVaX94WTSBKA65HrK2VbgGhuhhndi
-         TU7ltlw0fkpyRz0lZ6pRAkgjgC4G3Hv6b+eH+5kc0EPX8RewboN6PcJerraeuqeuZyPm
-         YAkw==
+        d=gmail.com; s=20230601; t=1767947181; x=1768551981; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VpBRuHMiMCleFgRr0io9MPn59FZX7HGviJTaLToKJC0=;
+        b=dmbj+sQX6Npb+NaVsdExvnuWOCZMtcMrRpFdoV+hpQYMyRJUhdyvZXpa3htTf+w0LY
+         sGQfPddcaXXL8nZONwxxvJhhDNA0pQnRNKgE5UL5GGuzggQ181FJhalF2Kfd0uLYswCJ
+         i67qosMgiz+SheSqjdvQb6SYLMGumFy7BOVfL3NPNiKVcgKDEK5X7i1yo4BHZFOcfua5
+         JZ0bFookxp52Y7DQBbfxgbLn8604BNcHaJNCm7luc8XxArWikZjJckLO0DudgeoXzGDj
+         UqfjKmOw6/r8U4HfhgogMGlcZZcstrA8P0Ur73Vvsur8LRuCeRuhZeaSsnzuqYBKq4sV
+         8GQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767933264; x=1768538064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VymCizJkrbUg3Dme3lvHp49OC7wgHu27DgIm2cwwCWU=;
-        b=DQApvF23QNeWfverUTICzeoPidZenZUilWg3sF6B4ysUceuYe9omkH8JIsmcFFYSXQ
-         ORBf79ImnZjxxQ4ULHzH2mZFXGDpJ3yrY80kfBi8xr7LZYoM8dzOLG5xF8yeaMfaK3GH
-         DpOMjR/uwnKcgAct8r57tqRBoapQfXSRiqU7XXOnxxjBsIJRpo0Oq7oG9P2JR69mlzPO
-         IKCI9fPjcutu0XxCZ3SZOIc76KYuy+0qv+qlVQiX+aWP1rh2oafC4LNWjd2oUASGNoV2
-         yS60RW4d8OOhUbu/hIVk2GZBW4m8vloL4CmWV0ostT+6d1zHUuJK917rUen9TB5XQjYZ
-         ofRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXAlFxwtZcuiVuzqKFd21HZ2V7gIKW0KwlH2q6WDiWOIXsEsIk/BzZ2sE/qOME0Y/NgwLNSnMLsbQc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywzkhw7Le6ORm2C0mYqNFQFZ0IvG+IjldAJo7absbFz0G0vYh2x
-	3R6d/EBE6noILsd6jfdgfGcZXN3Y7kA+YW5+2zi6VpyxJ1wVBjOo78sB
-X-Gm-Gg: AY/fxX4HAJ8Kr3MlmXihck3QDVvu5utUHKBwHWYtGv/0mEIwD/DR+LCQfO/mAUAj1Iv
-	fgS0MUGC03hOO/j21V4cCz00foX8vr+8Bn1SFD+PAbSQ0D7FDBloOJwF0K2woD505X1/5mafrIw
-	hzITHN1T3qh2zasjpiXAPgZo5fvjvjbzUZW9uSvCbNhCn6yTW7LcRwc47XxRTnW7JXkZqMzHs5M
-	Zh3KmwEGf3ooeq2Kd6sIwt57dcESqtVHFzzh2W7JMpHUjFOmmK+PGk5KR+q8AyvYhKkIUiP6YV/
-	+SMm/DM7uK5V3IvBwtt5okFSK9bgPsCAJWKYKKgRqxviIpFYd3/afXRVtg6mEnpVOGC72jz5JlR
-	gVD9DZd+fDyK0ZOr4bIrRPB5uM0KVbYfLD7bpLwDUTOqrk8oPCVPa5lGnj+A/UnCUL9r+7WXyIB
-	OIuxqVy4FcxcShAb3Iuv7YaJGgZao6NZWgI5PMdNRA53x8b06hyKTHs8j2ujv3vL7+w56dBS87q
-	00PuLiKJ5jIXBDl1ecRTzWXYzesnpFpC45/ksE=
-X-Google-Smtp-Source: AGHT+IGKogmUEb02ZbJlLltI7+PDxuLuhx/ja1knaw86NH00xOU50PG9fwQfnQN39e+H79FvmbOjIA==
-X-Received: by 2002:a05:6871:e709:b0:3e9:35d4:213f with SMTP id 586e51a60fabf-3ffc090099amr4432615fac.10.1767933264320;
-        Thu, 08 Jan 2026 20:34:24 -0800 (PST)
-Received: from nukework.lan (c-98-57-15-22.hsd1.tx.comcast.net. [98.57.15.22])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3ffa515f4dasm6274421fac.21.2026.01.08.20.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 20:34:22 -0800 (PST)
-From: Alexandru Gagniuc <mr.nuke.me@gmail.com>
-To: andersson@kernel.org,
-	krzk+dt@kernel.org,
-	mturquette@baylibre.com,
-	linux-remoteproc@vger.kernel.org,
-	Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: robh@kernel.org,
-	conor+dt@kernel.org,
-	konradybcio@kernel.org,
-	sboyd@kernel.org,
-	p.zabel@pengutronix.de,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Subject: [PATCH v2 9/9] remoteproc: qcom_q6v5_wcss: use bulk clk API for q6 clocks in QCS404
-Date: Thu,  8 Jan 2026 22:33:44 -0600
-Message-ID: <20260109043352.3072933-10-mr.nuke.me@gmail.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
-References: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
+        d=1e100.net; s=20230601; t=1767947181; x=1768551981;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VpBRuHMiMCleFgRr0io9MPn59FZX7HGviJTaLToKJC0=;
+        b=BYdICWNFEcnxZvePeF/vvE+AMGRhx3wR/Vyni0YHC9CCIYDvgOJhrelULxnyl/JbTc
+         u8O+ddyReWJsxRAJ4YfKMsaq82aReL7NYEthgvhC1IdLq2tOHyz+gunjB+hzKCIdkkoB
+         7qyDVmGXwxaBSG/iaEW7DxrUUs8VpnODvFlBFU/zfDmBronU+X6xiMvXmVxAK2IYRp63
+         dNymPWVMfpEuKHudDYNKpXVoPnH/3HTSHTcFVy00aRifEMy1eWXViZ6ov9+wCj04ZMyL
+         TK+CnYGXHeGTYwFNw74rjUvKD7SUtTJ+urbMw1B6FWDI5jFkOeSQs/Pz0HrqKHI88KgP
+         Kcrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXGnoZgsKgTxynn9ozI8uHpH5cDceXVtvyWCQhhD/S8fm+LYPWtikx1kQNP/hLHdpldCzcv5dWWTGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMubDLXTcXfssEoxauMNgjr/pFgnxsE8p1uGnHEzgruJuW37NA
+	VAdKNZMVBzFE2jwHhPEFKbYSNFzlwtMVMdno0B5RVa2va5liF0Kt45MIC6HQ8e351PM=
+X-Gm-Gg: AY/fxX5rvVWIRHzvCY3rFj8r9hcxEFhqBEXo4E7HVgv/Kxrg5kWyYIt9ZjmKDFpNIJb
+	WIquoMDFQl/9Xe0wBNvmWbRJGFr2yTbwaPSQoRee1T+fSLlb46yFVdRAr/xGsklEoE4WxiHnKdT
+	RUdl5hwstQDItcfESXqWRATdpQt1L7dkzoF+rSryFNDD++M/DuihNGBXk9PbL8+IcXXPFVzYAhs
+	aAFJWuLU8MIDjlZCQpWbzDe+vsAkkKm9NPa7lMV3iWk2epRxRJQ9FNHvm6G2EskwHdUWS99phbi
+	hBQjWFCJqzOs4HXLjhYqyYxwYR2X/1TIq+zpOWxLkoV+CHMG0ixr8lRw7CdrcQNnZ0YXkS8D2dB
+	PwZmz49Td5tRSt6HlmoXpfkWXbx0w0Lx3jc4sKZfyxjTQBhxcf7lJZWXNKhiKWbQq0eukqZpqIC
+	WPfnBEeTUleXuTA9Cw4Obi2SQsR0/RgcpYDn9FAjwUr0BAizUvTwv4JKAX+UEL4/QDtzW9
+X-Google-Smtp-Source: AGHT+IEbfnpAwTBpMLXsSD7GLLq4RdVLr81UJhXWfoMR4g3wMxGRElDJAG31EIjk//ER3TZlJZdKiQ==
+X-Received: by 2002:a2e:b8d0:0:b0:382:ff8c:c9c3 with SMTP id 38308e7fff4ca-382ff8ccac1mr27076741fa.3.1767940183581;
+        Thu, 08 Jan 2026 22:29:43 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb7cc214sm21543771fa.22.2026.01.08.22.29.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 22:29:42 -0800 (PST)
+Message-ID: <63bc889a-b97e-43c3-9f46-9ca444873b70@gmail.com>
+Date: Fri, 9 Jan 2026 08:29:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v6 00/17] Support ROHM BD72720 PMIC
+To: Lee Jones <lee@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+References: <cover.1765804226.git.mazziesaccount@gmail.com>
+ <20260108172735.GK302752@google.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20260108172735.GK302752@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Five of the clocks on QCS404 are consistently enabled and disabled
-together. Use the bulk clock API to get and enable them. They are
-enabled after the Q6 reset is deasserted, implying that pre_boot is
-not the appropriate designator. Store them in wcss->clks.
+On 08/01/2026 19:27, Lee Jones wrote:
+> On Mon, 15 Dec 2025, Matti Vaittinen wrote:
+> 
+>> Resending the v6
+>>
+>> Series is same as v6 _except_ being rebased on v6.19-rc1 - and adding rb
+>> tags which were replied to v6.
+>>
+>> The ROHM BD72720 is a new power management IC for portable, battery
+>> powered devices. It integrates 10 BUCKs and 11 LDOs, RTC, charger, LEDs,
+>> GPIOs and a clock gate. To me the BD72720 seems like a successor to the
+>> BD71828 and BD71815 PMICs.
+>>
+>> This series depends on
+>> 5bff79dad20a ("power: supply: Add bd718(15/28/78) charger driver")
+>> which is in power-supply tree, for-next. Thus, the series is based on
+>> it.
+>>
+>> The testing since v4 has suffered some hardware-issues after I
+>> accidentally enabled charging while the PMIC's battery pin was connected
+>> to the I/O domain. Some heat was generated, not terribly lot smoke
+>> though...
+>>
+>> After the incident I've had occasional I2C failures. I, however, suspect
+>> the root cause is HW damage in I/O lines.
+>>
+>> Revision history:
+>>    v6 resend:
+>>    - Rebased on v6.19-rc1 and collected rb-tags from v6.
+>>
+>>    v5 => v6:
+>>    - MFD fixes as suggested by Lee
+>>      - Styling mostly
+>>      - New patch to Fix comment style for MFD driver
+>>    More accurate changelog in individual patches
+>>
+>>    v4 => v5:
+>>    - dt-binding fixes as discussed in v4 reviews.
+>>      - Drop rohm,vdr-battery.yaml and add vdr properties to battery.yaml
+>>      - Drop 'rohm,' -vendor-prefix from vdr properties
+>>    - Link to v4:
+>>      https://lore.kernel.org/all/cover.1763022807.git.mazziesaccount@gmail.com/
+>>    More accurate changelog in individual patches
+>>
+>>    v3 => v4:
+>>    - dt-binding fixes to the BD72720 MFD example and regulator bindings
+>>    More accurate changelog in individual patches
+>>
+>>    v2 => v3:
+>>    - rebased to power-supply/for-next as dependencies are merged to there
+>>    - plenty of dt-binding changes as suggested by reviewers
+>>    - add new patch to better document existing 'trickle-charging' property
+>>    More accurate changelog in individual patches
+>>
+>>    RFCv1 => v2:
+>>    - Drop RFC status
+>>    - Use stacked regmaps to hide secondary map from the sub-drivers
+>>    - Quite a few styling fixes and improvements as suggested by
+>>      reviewers. More accurate changelog in individual patches.
+>>    - Link to v1:
+>>      https://lore.kernel.org/all/cover.1759824376.git.mazziesaccount@gmail.com/
+>>
+>> ---
+>>
+>> Matti Vaittinen (17):
+>>    dt-bindings: regulator: ROHM BD72720
+>>    dt-bindings: battery: Clarify trickle-charge
+>>    dt-bindings: battery: Add trickle-charge upper limit
+>>    dt-bindings: battery: Voltage drop properties
+>>    dt-bindings: mfd: ROHM BD72720
+>>    dt-bindings: leds: bd72720: Add BD72720
+>>    mfd: rohm-bd71828: Use regmap_reg_range()
+>>    mfd: rohm-bd71828: Use standard file header format
+>>    mfd: rohm-bd71828: Support ROHM BD72720
+>>    regulator: bd71828: rename IC specific entities
+>>    regulator: bd71828: Support ROHM BD72720
+>>    gpio: Support ROHM BD72720 gpios
+>>    clk: clk-bd718x7: Support BD72720 clk gate
+>>    rtc: bd70528: Support BD72720 rtc
+>>    power: supply: bd71828: Support wider register addresses
+>>    power: supply: bd71828-power: Support ROHM BD72720
+>>    MAINTAINERS: Add ROHM BD72720 PMIC
+>>
+>>   .../bindings/leds/rohm,bd71828-leds.yaml      |    7 +-
+>>   .../bindings/mfd/rohm,bd72720-pmic.yaml       |  339 ++++++
+>>   .../bindings/power/supply/battery.yaml        |   33 +-
+>>   .../regulator/rohm,bd72720-regulator.yaml     |  148 +++
+>>   MAINTAINERS                                   |    2 +
+>>   drivers/clk/Kconfig                           |    4 +-
+>>   drivers/clk/clk-bd718x7.c                     |   10 +-
+>>   drivers/gpio/Kconfig                          |    9 +
+>>   drivers/gpio/Makefile                         |    1 +
+>>   drivers/gpio/gpio-bd72720.c                   |  281 +++++
+>>   drivers/mfd/Kconfig                           |   18 +-
+>>   drivers/mfd/rohm-bd71828.c                    |  555 ++++++++-
+>>   drivers/power/supply/bd71828-power.c          |  160 ++-
+>>   drivers/regulator/Kconfig                     |    8 +-
+>>   drivers/regulator/bd71828-regulator.c         | 1025 ++++++++++++++++-
+>>   drivers/rtc/Kconfig                           |    3 +-
+>>   drivers/rtc/rtc-bd70528.c                     |   21 +-
+>>   include/linux/mfd/rohm-bd72720.h              |  634 ++++++++++
+>>   include/linux/mfd/rohm-generic.h              |    1 +
+>>   19 files changed, 3127 insertions(+), 132 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+>>   create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+>>   create mode 100644 drivers/gpio/gpio-bd72720.c
+>>   create mode 100644 include/linux/mfd/rohm-bd72720.h
+> 
+> The MFD parts LGTM.
 
-Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Thanks Lee!
+
+> What Acks are you waiting on?  What's the merge strategy?
+
+I think everything else has been acked by maintainers, except the 
+power-supply parts. I think those have only been looked at by Andreas 
+and Linus W. Haven't heard anything from Sebastian :(
+
+I would love to see the patches 1 - 14 and 17 to be merged (via MFD?). I 
+could then re-spin the 15 and 16 to limited audience as I hope Sebastian 
+had time to take a look at them. However, I don't think any of the other 
+patches in the series depend on the last .
+
+Yours,
+  -- Matti.
+
+
 ---
-Changes since v1:
- - Use wcss->clks, since wcss->q6_clks has been renamed.
----
- drivers/remoteproc/qcom_q6v5_wcss.c | 99 ++++++++---------------------
- 1 file changed, 28 insertions(+), 71 deletions(-)
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index 2bb83e6afb6b..3c1794fde3f0 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -128,14 +128,9 @@ struct q6v5_wcss {
- 	u32 halt_nc;
- 
- 	struct clk *xo;
--	struct clk *ahbfabric_cbcr_clk;
- 	struct clk *gcc_abhs_cbcr;
- 	struct clk *gcc_axim_cbcr;
--	struct clk *lcc_csr_cbcr;
- 	struct clk *ahbs_cbcr;
--	struct clk *tcm_slave_cbcr;
--	struct clk *qdsp6ss_abhm_cbcr;
--	struct clk *qdsp6ss_axim_cbcr;
- 	struct clk *lcc_bcr_sleep;
- 	struct clk_bulk_data *clks;
- 	/* clocks that must be started before the Q6 is booted */
-@@ -427,35 +422,16 @@ static int q6v5_wcss_qcs404_power_on(struct q6v5_wcss *wcss)
- 	/* Remove reset to the WCNSS QDSP6SS */
- 	reset_control_deassert(wcss->wcss_q6_bcr_reset);
- 
--	/* Enable Q6SSTOP_AHBFABRIC_CBCR clock */
--	ret = clk_prepare_enable(wcss->ahbfabric_cbcr_clk);
--	if (ret)
-+	ret = clk_bulk_prepare_enable(wcss->num_clks, wcss->clks);
-+	if (ret) {
-+		dev_err(wcss->dev, "failed to enable q6 clocks, err=%d\n", ret);
- 		goto disable_gcc_abhs_cbcr_clk;
--
--	/* Enable the LCCCSR CBC clock, Q6SSTOP_Q6SSTOP_LCC_CSR_CBCR clock */
--	ret = clk_prepare_enable(wcss->lcc_csr_cbcr);
--	if (ret)
--		goto disable_ahbfabric_cbcr_clk;
-+	};
- 
- 	/* Enable the Q6AHBS CBC, Q6SSTOP_Q6SS_AHBS_CBCR clock */
- 	ret = clk_prepare_enable(wcss->ahbs_cbcr);
- 	if (ret)
--		goto disable_csr_cbcr_clk;
--
--	/* Enable the TCM slave CBC, Q6SSTOP_Q6SS_TCM_SLAVE_CBCR clock */
--	ret = clk_prepare_enable(wcss->tcm_slave_cbcr);
--	if (ret)
--		goto disable_ahbs_cbcr_clk;
--
--	/* Enable the Q6SS AHB master CBC, Q6SSTOP_Q6SS_AHBM_CBCR clock */
--	ret = clk_prepare_enable(wcss->qdsp6ss_abhm_cbcr);
--	if (ret)
--		goto disable_tcm_slave_cbcr_clk;
--
--	/* Enable the Q6SS AXI master CBC, Q6SSTOP_Q6SS_AXIM_CBCR clock */
--	ret = clk_prepare_enable(wcss->qdsp6ss_axim_cbcr);
--	if (ret)
--		goto disable_abhm_cbcr_clk;
-+		goto disable_clks;
- 
- 	/* Enable the Q6SS XO CBC */
- 	val = readl(wcss->reg_base + Q6SS_XO_CBCR);
-@@ -538,17 +514,9 @@ static int q6v5_wcss_qcs404_power_on(struct q6v5_wcss *wcss)
- 	val = readl(wcss->reg_base + Q6SS_XO_CBCR);
- 	val &= ~Q6SS_CLK_ENABLE;
- 	writel(val, wcss->reg_base + Q6SS_XO_CBCR);
--	clk_disable_unprepare(wcss->qdsp6ss_axim_cbcr);
--disable_abhm_cbcr_clk:
--	clk_disable_unprepare(wcss->qdsp6ss_abhm_cbcr);
--disable_tcm_slave_cbcr_clk:
--	clk_disable_unprepare(wcss->tcm_slave_cbcr);
--disable_ahbs_cbcr_clk:
- 	clk_disable_unprepare(wcss->ahbs_cbcr);
--disable_csr_cbcr_clk:
--	clk_disable_unprepare(wcss->lcc_csr_cbcr);
--disable_ahbfabric_cbcr_clk:
--	clk_disable_unprepare(wcss->ahbfabric_cbcr_clk);
-+disable_clks:
-+	clk_bulk_disable_unprepare(wcss->num_clks, wcss->clks);
- disable_gcc_abhs_cbcr_clk:
- 	clk_disable_unprepare(wcss->gcc_abhs_cbcr);
- 
-@@ -666,11 +634,7 @@ static int q6v5_qcs404_wcss_shutdown(struct q6v5_wcss *wcss)
- 	val &= ~Q6SS_BHS_ON;
- 	writel(val, wcss->reg_base + Q6SS_PWR_CTL_REG);
- 
--	clk_disable_unprepare(wcss->ahbfabric_cbcr_clk);
--	clk_disable_unprepare(wcss->lcc_csr_cbcr);
--	clk_disable_unprepare(wcss->tcm_slave_cbcr);
--	clk_disable_unprepare(wcss->qdsp6ss_abhm_cbcr);
--	clk_disable_unprepare(wcss->qdsp6ss_axim_cbcr);
-+	clk_bulk_disable_unprepare(wcss->num_clks, wcss->clks);
- 
- 	val = readl(wcss->reg_base + Q6SS_SLEEP_CBCR);
- 	val &= ~BIT(0);
-@@ -1112,6 +1076,20 @@ static int q6v5_alloc_memory_region(struct q6v5_wcss *wcss)
- 
- static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
- {
-+	static const char *const bulk_clks[] = {
-+		"lcc_ahbfabric_cbc", "tcsr_lcc_cbc", "lcc_tcm_slave_cbc",
-+		"lcc_abhm_cbc", "lcc_axim_cbc" };
-+	int ret, i;
-+
-+	wcss->num_clks = ARRAY_SIZE(bulk_clks);
-+	wcss->clks = devm_kcalloc(wcss->dev, wcss->num_clks,
-+				       sizeof(*wcss->clks), GFP_KERNEL);
-+	if (!wcss->clks)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < wcss->num_clks; i++)
-+		wcss->clks[i].id = bulk_clks[i];
-+
- 	wcss->xo = devm_clk_get(wcss->dev, "xo");
- 	if (IS_ERR(wcss->xo))
- 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->xo),
-@@ -1127,44 +1105,23 @@ static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
- 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_axim_cbcr),
- 				     "failed to get gcc axim clock\n");
- 
--	wcss->ahbfabric_cbcr_clk = devm_clk_get(wcss->dev,
--						"lcc_ahbfabric_cbc");
--	if (IS_ERR(wcss->ahbfabric_cbcr_clk))
--		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbfabric_cbcr_clk),
--				     "failed to get ahbfabric clock\n");
--
--	wcss->lcc_csr_cbcr = devm_clk_get(wcss->dev, "tcsr_lcc_cbc");
--	if (IS_ERR(wcss->lcc_csr_cbcr))
--		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_csr_cbcr),
--				     "failed to get csr cbcr clk\n");
--
- 	wcss->ahbs_cbcr = devm_clk_get(wcss->dev,
- 				       "lcc_abhs_cbc");
- 	if (IS_ERR(wcss->ahbs_cbcr))
- 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbs_cbcr),
- 				     "failed to get ahbs_cbcr clk\n");
- 
--	wcss->tcm_slave_cbcr = devm_clk_get(wcss->dev,
--					    "lcc_tcm_slave_cbc");
--	if (IS_ERR(wcss->tcm_slave_cbcr))
--		return dev_err_probe(wcss->dev, PTR_ERR(wcss->tcm_slave_cbcr),
--				     "failed to get tcm cbcr clk\n");
--
--	wcss->qdsp6ss_abhm_cbcr = devm_clk_get(wcss->dev, "lcc_abhm_cbc");
--	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr))
--		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_abhm_cbcr),
--				     "failed to get abhm cbcr clk\n");
--
--	wcss->qdsp6ss_axim_cbcr = devm_clk_get(wcss->dev, "lcc_axim_cbc");
--	if (IS_ERR(wcss->qdsp6ss_axim_cbcr))
--		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_axim_cbcr),
--				     "failed to get axim cbcr clk\n");
--
- 	wcss->lcc_bcr_sleep = devm_clk_get(wcss->dev, "lcc_bcr_sleep");
- 	if (IS_ERR(wcss->lcc_bcr_sleep))
- 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_bcr_sleep),
- 				     "failed to get bcr cbcr clk\n");
- 
-+	ret = devm_clk_bulk_get(wcss->dev, wcss->num_clks, wcss->clks);
-+	if (ret < 0) {
-+		return dev_err_probe(wcss->dev, ret,
-+				     "failed to bulk get q6 clocks\n");
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.45.1
-
+~~ When things go utterly wrong vim users can always type :help! ~~
 
