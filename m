@@ -1,135 +1,100 @@
-Return-Path: <linux-clk+bounces-32425-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32427-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5681D07BA3
-	for <lists+linux-clk@lfdr.de>; Fri, 09 Jan 2026 09:10:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CC0ED07D69
+	for <lists+linux-clk@lfdr.de>; Fri, 09 Jan 2026 09:33:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C2323300722F
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Jan 2026 08:10:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 580EB300A854
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Jan 2026 08:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4470B2F90DB;
-	Fri,  9 Jan 2026 08:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2FAF34405F;
+	Fri,  9 Jan 2026 08:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="khnjaE9e";
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="FWIm4lCP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKI+tUx8"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FE428642D;
-	Fri,  9 Jan 2026 08:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0757E309F0B;
+	Fri,  9 Jan 2026 08:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767946213; cv=none; b=t6QRy/ygKUnAddCYZUi3ciaZYX7L/sNPMw6ArNEoDN+H1zB06LZWCZrZ27OBcy0Df61ooHXwYu21RO3T5WiBX1sxX1Z5Mb4smytqWhQP/P1yXYGc2A3o/vDBnmNkjXpJhe3wg8FN1FxFkcl6xTVpCtJ1RQpQrx+ooyGak1QRgrY=
+	t=1767947358; cv=none; b=FpoEZDDhavWSZ/2lxZZgGh9imRW6BYAsLCs6W0rX5eIIaIdllT4b3kriskkvLS3fd+KZ1Vdz/bZbA5B32MREMmt+LE5+pzgpSFbhmah/7rDiY+DfoNnwH3vCZqtGJRu2B5QSYFpHvkq2KzkXrqjZ4y9L7k2pichM8Zc+38VggGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767946213; c=relaxed/simple;
-	bh=t/E7bKZ+u/vdPJTBp/1yUrD65ZcPdr1jOsuXNAVd5uY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uiwnh4Zg1+RhxggRvp2GhTbz7hL+CovHPhtwZuR2D1qYsqyEnk+jur3XrOqHYZfLzZaPo1oFpXxYSuEdwtD+XdTuiIuQMDQD6al8PRdEstK9wvRamQ0Tfp8q5gURXcAZd5a3eYnVFglo6jKcc9Cn63kaglsg9gCD0Lj4Yw2a8BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=khnjaE9e; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=FWIm4lCP; arc=none smtp.client-ip=178.79.152.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1767946210; bh=t/E7bKZ+u/vdPJTBp/1yUrD65ZcPdr1jOsuXNAVd5uY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=khnjaE9eSEq0AVmiTfWRsMEERo9YbJYPVsBBdp/zEizvxFQWhPWK4i3wv01L87T+F
-	 KDO2h7mRaoy2NMaz8ilOkgy4PiKwcw+gaifEjvbmWcN1yqfsLjO1l9b9RFQx+qpKJK
-	 O3WFUrx0wuzS8lAi1vSyy9cDee4+Hu4t0tbdFgKq0H8GRY+uw/XGPyWAf1+drdi3Fi
-	 gwHNjpl7+sl8LQDyRtdE9e3Fd86Bhfkm0ePLAJZetxOScEf+H3/qIEFptXhOoTAazu
-	 60HUbzEHg7XpLNq84lev0zipzmhOWhL1jlwmBPD9IJyq/pFh2N/Q/EU/MLkHAWNI0z
-	 iubSFF0m2mV6A==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id 0D62D3EB34F;
-	Fri,  9 Jan 2026 08:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1767946209; bh=t/E7bKZ+u/vdPJTBp/1yUrD65ZcPdr1jOsuXNAVd5uY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FWIm4lCPRFPUrO32qC58RZ105QCWyu7VBOPCx7+xwuV8HDPQTc2HCFLrRYCyBRrbe
-	 cnzV3tZF/VSt+j0SanatHNMqPJBnhyfxZE0pSlE6eb9zqEguOG5hFVCFjC6AN4gXkS
-	 i2rhnhlDFM2Cm5aKXvr4e3rj6pMqw93x5JdM1WXyLVNrs6BBLgbekwPDhwrhPGsMws
-	 v981/Fc+fPNwvyxD71PNp8PRMCkRFEFS6sm7gFChaMz2WSfBH/lsChNM/6Oov57b0W
-	 Hlxr5/WOdre1KtmG1OQFdGglbz1Jnq2OQY8Rwq2JYuZznBRqEyLcLhYoiRZXEdW08O
-	 QBbgrISzIweyw==
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi [91.159.24.186])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mleia.com (Postfix) with ESMTPSA id 8D6A73EAC0F;
-	Fri,  9 Jan 2026 08:10:09 +0000 (UTC)
-Message-ID: <4e69222b-8e26-44d8-8e09-379e7f4c7d55@mleia.com>
-Date: Fri, 9 Jan 2026 10:10:08 +0200
+	s=arc-20240116; t=1767947358; c=relaxed/simple;
+	bh=DR+6npnCyebeUSMfXW51qn4aIacFlfDSregQ/90gJPA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sFcK4bGqi9B4cvht8sJFXyBOY+c+LAtMlLdNsU3/MukFhWbXqPFStGiAwMwoVNchszm3WzfclcIU82KRZnsXoOQE6aeL80enyRWLWF5mCbznNTTH0NFQJKAPV6TMvJLaAQIwLFCHvbVNpaM4qwmp8Z8Y9SWQgCniap5GP8EZ6JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKI+tUx8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED464C4CEF1;
+	Fri,  9 Jan 2026 08:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767947357;
+	bh=DR+6npnCyebeUSMfXW51qn4aIacFlfDSregQ/90gJPA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TKI+tUx8m0cVPNA1oaU9tRMyNG0a0ud6MPpevi38CoynJJ4xJSSC7Hkx8tD42ZcO1
+	 tXZ6KcT0HDZLTG1tBcWG60qhIz7T1Lh6BVDJgqTMvySppinQU1Eheq6MqBdBdBqU0L
+	 ONeqqZ/fiwmWcbuREM2v3Jw+e0abRfs0lS8JfHw+eeVZc3rlWniubliRzOBVFc50aE
+	 wp+d2zLOmT7QP8ktMLYLLTl3UkeSt1E9PPQFLU2scA+HDb7EbfLZSgyyNKU8br1cjo
+	 s5IUFXy1WXahM+5eLdTNc5Yc08DkEvmHWTI9azKzP66s37ZTe66DXpoo5BNxMEi0G5
+	 Kvt7u9JvrxX+Q==
+Date: Fri, 9 Jan 2026 09:29:14 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Cc: andersson@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com, 
+	linux-remoteproc@vger.kernel.org, mathieu.poirier@linaro.org, robh@kernel.org, conor+dt@kernel.org, 
+	konradybcio@kernel.org, sboyd@kernel.org, p.zabel@pengutronix.de, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] remoteproc: qcom_q6v5_wcss: add native ipq9574
+ support
+Message-ID: <20260109-viper-of-radical-correction-836d83@quoll>
+References: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/27] clk: nxp: lpc32xx: convert from
- divider_round_rate() to divider_determine_rate()
-To: Brian Masney <bmasney@redhat.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- linux-arm-kernel@lists.infradead.org
-References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
- <20260108-clk-divider-round-rate-v1-13-535a3ed73bf3@redhat.com>
-From: Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20260108-clk-divider-round-rate-v1-13-535a3ed73bf3@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20260109_081010_069918_D0411628 
-X-CRM114-Status: GOOD (  17.62  )
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
 
-On 1/8/26 23:16, Brian Masney wrote:
-> The divider_round_rate() function is now deprecated, so let's migrate
-> to divider_determine_rate() instead so that this deprecated API can be
-> removed.
+On Thu, Jan 08, 2026 at 10:33:35PM -0600, Alexandru Gagniuc wrote:
+> Support loading remoteproc firmware on IPQ9574 with the qcom_q6v5_wcss
+> driver. This firmware is usually used to run ath11k firmware and enable
+> wifi with chips such as QCN5024.
 > 
-> Note that when the main function itself was migrated to use
-> determine_rate, this was mistakenly converted to:
+> When submitting v1, I learned that the firmware can also be loaded by
+> the trustzone firmware. Since TZ is not shipped with the kernel, it
+> makes sense to have the option of a native init sequence, as not all
+> devices come with the latest TZ firmware.
 > 
->      req->rate = divider_round_rate(...)
+> Qualcomm tries to assure us that the TZ firmware will always do the
+> right thing (TM), but I am not fully convinced, and believe there is
+> justification for a native remoteproc loader. Besides, this series
+> has improvements to the existing code.
 > 
-> This is invalid in the case when an error occurs since it can set the
-> rate to a negative value.
-> 
-> Fixes: 0879768df240 ("clk: nxp: lpc32xx: convert from round_rate() to determine_rate()")
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> 
-> ---
-> To: Vladimir Zapolskiy <vz@mleia.com>
-> To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
->   drivers/clk/nxp/clk-lpc32xx.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/nxp/clk-lpc32xx.c b/drivers/clk/nxp/clk-lpc32xx.c
-> index 23f980cf6a2b59ee1c93a2519fe5188d251fa12f..ae2fa5341a2e4fbe5f2d3ef9a6cf9e9d75180d59 100644
-> --- a/drivers/clk/nxp/clk-lpc32xx.c
-> +++ b/drivers/clk/nxp/clk-lpc32xx.c
-> @@ -975,10 +975,8 @@ static int clk_divider_determine_rate(struct clk_hw *hw,
->   		return 0;
->   	}
->   
-> -	req->rate = divider_round_rate(hw, req->rate, &req->best_parent_rate,
-> -				       divider->table, divider->width, divider->flags);
-> -
-> -	return 0;
-> +	return divider_determine_rate(hw, req, divider->table, divider->width,
-> +				      divider->flags);
->   }
->   
->   static int clk_divider_set_rate(struct clk_hw *hw, unsigned long rate,
-> 
+> Changes since v1:
+>  - Improve bindings following review feedback
 
-Tested-by: Vladimir Zapolskiy <vz@mleia.com>
-Reviewed-by: Vladimir Zapolskiy <vz@mleia.com>
+This is not specific enough.
 
--- 
-Best wishes,
-Vladimir
+With such vague changelog you could at least make it easy for us to
+compare with older version, but not:
+
+$ b4 diff '20260109043352.3072933-1-mr.nuke.me@gmail.com'
+Grabbing thread from lore.kernel.org/all/20260109043352.3072933-1-mr.nuke.me@gmail.com/t.mbox.gz
+Checking for older revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+---
+Analyzing 10 messages in the thread
+Could not find lower series to compare against.
+
+
+Best regards,
+Krzysztof
+
 
