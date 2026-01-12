@@ -1,99 +1,86 @@
-Return-Path: <linux-clk+bounces-32550-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32552-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B49BD1370F
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jan 2026 16:05:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0643ED1387C
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jan 2026 16:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 420D830E6CDC
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jan 2026 14:53:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3A30A304BFD0
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jan 2026 14:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8B12DB78D;
-	Mon, 12 Jan 2026 14:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41812989A2;
+	Mon, 12 Jan 2026 14:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qip6fCr2"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CYSKjae3"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983E52DAFAF
-	for <linux-clk@vger.kernel.org>; Mon, 12 Jan 2026 14:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D4627CB35
+	for <linux-clk@vger.kernel.org>; Mon, 12 Jan 2026 14:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229571; cv=none; b=SUOLjg+kzvrfcCtyOfrksRwIe+EdaCK36F09O0X58v+Lg8/pzhAh+DmbSyKnqMWJjEghZtk4PPuM+gsY9h2T5wpUkIJZCNQ99FyRe8MsG5t3wo3bFWLJvJsef4uUD/ZZBeX1J6KK1CHCDFSsTl3A2E+4YfL/Re8lWsoXlXOERFA=
+	t=1768229646; cv=none; b=h+NKpWS3WOBT8LpEDJxUN8cmqdcRnk3jWByKaZn5je1NMKLJsjJ9t0vlK90UfdO2KVK8dVQPJkpjoxrgVboCdekFV5sbVVUuPpGsNHSAeKKcnDLFeh62C1z6AXxAdzAQWnbD7lZxJmeCtxnmmlX/5xEPvjxBFblD7ZovOTH1sNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229571; c=relaxed/simple;
-	bh=rk8bXKLs85EyZHFcbsB6vMfK2HtohBmLI1PGrH8lWtk=;
+	s=arc-20240116; t=1768229646; c=relaxed/simple;
+	bh=vMdMbkaj9FIBvbrqlM+Ht0cnW5A4bq8nE13c3jx00b4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oKBPAeMSZLwymzq0zyqWmfZg7iuwyDqb59s61bW8bqPn//VQWIZJ5rMqf5zbXl9EN0ZL+x3uPjXSfFlbzOnDCqMWUbbYA0y3xSFnC2DT3APfaxbFm96vEPxw2ceDL9i5XY3Ac0gWlexD/GHnThuUod+WZC1blDWCnFIMb/O9fac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qip6fCr2; arc=none smtp.client-ip=91.218.175.174
+	 In-Reply-To:Content-Type; b=XPNzcJnOGL+hSwGn9dW3D7jMcJxXo64OqSQMvRi/3WXrfTZ6HgHztA+/4KA+4dD2pxNJlJs2noUvYOFInaKQNRIv9NePsI9kyOl13/ruJcDOAyKGqDQc2+wWxbSwyc3H2pAWIS98BoVVjLHa2dCHSpQm+ye1uExRQCMf80h5uxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CYSKjae3; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <87495044-59a3-49ed-b00c-01a7e9a23f6b@linux.dev>
+Message-ID: <e6499ec9-92d3-4a63-8172-3c09a8b64066@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768229556;
+	t=1768229632;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=t0emvJ+ADmIcSWvy6T91yM9f9/IPC+6X0Ta51udzejc=;
-	b=Qip6fCr24w+mxhxajrnVbpJNOVzhcHP5SS4dq32LFfeHU6v++EZE708vYsjQP9R7ZtENgv
-	3YxK9vD1mGRbCrfHbGZweg3170J+D6Wdn9qD6krCW9LQR4Wkt25LMMic/cLfy+u9tel1xT
-	f1wp+rkLsaWPuOpgKjA53vMXKfcqtHk=
-Date: Mon, 12 Jan 2026 14:52:30 +0000
+	bh=WJRXUcKkDog21NY9arGh1QRo0yXqzWSWI32WfNW/NXU=;
+	b=CYSKjae3S5FACFkMnLMzwVE2kPTt9AMRFN7mSAGW7ME7h8gCmWVnkY/8iXTwGDn78taKG+
+	dlMM0E4bxhFjRCNUCQ0EdYqXcA3SfGlSkxhCK1yFDn7rUu5Sk2zK83MCOlOKqDNNxxeFqM
+	XELoFN5cAGbovb03AKSOu9bx+yyVOnI=
+Date: Mon, 12 Jan 2026 09:53:28 -0500
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC] Defining a home/maintenance model for non-NIC PHC devices
- using the /dev/ptpX API
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Sven Schnelle <svens@linux.ibm.com>, Wen Gu <guwen@linux.alibaba.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Richard Cochran <richardcochran@gmail.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Dust Li <dust.li@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, David Woodhouse <dwmw2@infradead.org>,
- virtualization@lists.linux.dev, Nick Shi <nick.shi@broadcom.com>,
- Paolo Abeni <pabeni@redhat.com>, linux-clk@vger.kernel.org
-References: <0afe19db-9c7f-4228-9fc2-f7b34c4bc227@linux.alibaba.com>
- <yt9decnv6qpc.fsf@linux.ibm.com>
- <6a32849d-6c7b-4745-b7f0-762f1b541f3d@linux.dev>
- <7be41f07-50ab-4363-8a53-dcdda63b9147@lunn.ch>
+Subject: Re: [PATCH 2/2] net: axienet: Fix resource release ordering
+To: Jakub Kicinski <kuba@kernel.org>, Suraj Gupta <suraj.gupta2@amd.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, radhey.shyam.pandey@amd.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, michal.simek@amd.com, linux@armlinux.org.uk,
+ linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bmasney@redhat.com
+References: <20260109071051.4101460-1-suraj.gupta2@amd.com>
+ <20260109071051.4101460-3-suraj.gupta2@amd.com>
+ <20260110115306.4049b2cb@kernel.org>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <7be41f07-50ab-4363-8a53-dcdda63b9147@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <20260110115306.4049b2cb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 12/01/2026 13:24, Andrew Lunn wrote:
->>> drivers/ptp/core    - API as written above
->>> drivers/ptp/virtual - all PtP drivers somehow emulating a PtP clock
->>>                         (like the ptp_s390 driver)
->>> drivers/ptp/net     - all NIC related drivers.
->>>
->>
->>
->> Well, drivers/ptp/virtual is not really good, because some drivers are
->> for physical devices exporting PTP interface, but without NIC.
+On 1/10/26 14:53, Jakub Kicinski wrote:
+> On Fri, 9 Jan 2026 12:40:51 +0530 Suraj Gupta wrote:
+>> Device-managed resources are released after manually-managed resources.
+>> Therefore, once any manually-managed resource is acquired, all further
+>> resources must be manually-managed too.
 > 
-> If the lack of a NIC is the differentiating property:
-> 
->>> drivers/ptp/net     - all NIC related drivers.
->>> drivers/ptp/netless - all related drivers which are not associated to a NIC.
-> 
-> Or
-> 
->>> drivers/ptp/emulating - all drivers emulating a PtP clock
+> only for resources which have dependencies. Please include in the commit
+> message what exactly is going wrong in this driver. The commit under
+> Fixes seems to be running ioremap, I don't see how that matters vs
+> netdev allocation for example..
 
-I would go with "emulating" then.
+In the series I originally submitted this in, I wanted to add a devm
+resources (mdio bus etc.) at the end of probe that required the clocks
+to be running. But as a standalone patch this is more of a cleanup.
 
-> 
-> 	Andrew
-
+>> Convert all resources before the MDIO bus is created into device-managed
+>> resources. In all cases but one there are already devm variants available.
 
