@@ -1,39 +1,39 @@
-Return-Path: <linux-clk+bounces-32595-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32594-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 145D3D18B77
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Jan 2026 13:30:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3FC4D18B6E
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Jan 2026 13:30:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 235FB3035CEC
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Jan 2026 12:29:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F179730437BD
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Jan 2026 12:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BAA38F956;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5A238F94A;
 	Tue, 13 Jan 2026 12:29:20 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790BD38F25B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323F838F254
 	for <linux-clk@vger.kernel.org>; Tue, 13 Jan 2026 12:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307360; cv=none; b=Lki7kkUS9Wqt9wpoCdrnJvCKUN5Q2sLY/gTefuR4EkwdsPj6fLAG3BefAhiZDfPP2dZvcRN5OUp1u33pJ0sHUQVVtRxFJRihqCyh7SsLiIAiv06kjDG1e3ZHnvTn3ckrrXeTojwlgb2v3jK5d/X3Wd5jinM9fOY8Dsk+QyWTSK0=
+	t=1768307360; cv=none; b=Bb0y8hidVLLXHzuD8bix+22ii+z6Du/jqayLf9Z3lP9A4Cjm4rCGvQ3s1nq7sA+FlWqIG/2wUABSjGiutq7lLJVz+WZgE8Nqq97qf5TXTBP+vtRcuRsJpiS6kieOYO6c2btwGRYLhNTYzBAD2DDRLWK8u2RWaTOwa0t1QDm6zwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768307360; c=relaxed/simple;
-	bh=4WgVDe//8rzPFp5NLDlYjUTWk2AW45EZT2LONWqoBa8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=f9nEGVZWboua1A89agkRMs8P45+6sHl6VblYZnjYYhY46cQLkRN8F+bkS4oqPCNn3SyzV6APPjZ7HQ1QS34zE1+izto4j1kVNxW05yRlLyYzR8jZzBWkPc3Re1mMPcQZd9WNr5teZwvp+PzFklR51Y0Y4I4Bqsk8spzOFaZOxJk=
+	bh=oUZExTv7ysjsJn5nlTFByWlJf9IP6c/MsHLmv5tO6SQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=k8JO6wrTECf0IbVxJySU5x5X70A0vehZPddKUJlWmIGQrELSxGuh+rOnwao5TMVBL3XVq6OPK2tWXj7fogowWKpLpTEpZmVtEtQCpBg2s5l3SwUIjCUXF44IpxbAZRGqNKJGAJPV9TdTK6a+S87JF2utKCGaoI0nXw2gPQUNOJw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1vfdWG-000338-9Y; Tue, 13 Jan 2026 13:29:08 +0100
+	id 1vfdWG-000338-BB; Tue, 13 Jan 2026 13:29:08 +0100
 From: Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH 0/2] Add more PLL frequencies to i.MX FRACN GPLL
-Date: Tue, 13 Jan 2026 13:29:05 +0100
-Message-Id: <20260113-v6-18-topic-clk-fracn-gppll-v1-0-166e674aabf1@pengutronix.de>
+Date: Tue, 13 Jan 2026 13:29:06 +0100
+Subject: [PATCH 1/2] clk: imx: fracn-gppll: Add 332.60 MHz Support
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -42,10 +42,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJE6ZmkC/x3MwQqDMAwA0F+RnA2YRsrYr4wdJEs1WGppRQTx3
- y07vsu7oGoxrfDuLih6WLUtNVDfgSxTmhXt1wxucH4gYjw80gv3LZugxBVDmSThnHOM6APxyOJ
- 4FIY25KLBzv/++d73Ax3QSVxtAAAA
-X-Change-ID: 20260113-v6-18-topic-clk-fracn-gppll-6f1343c234c3
+Message-Id: <20260113-v6-18-topic-clk-fracn-gppll-v1-1-166e674aabf1@pengutronix.de>
+References: <20260113-v6-18-topic-clk-fracn-gppll-v1-0-166e674aabf1@pengutronix.de>
+In-Reply-To: <20260113-v6-18-topic-clk-fracn-gppll-v1-0-166e674aabf1@pengutronix.de>
 To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
  Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
@@ -61,32 +60,28 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Hi,
-
-this adds two new PLL frequencies for the i.MX FRACN GPLL.
-
-Patch-1 was previously part of [1]. The new version of [1] will drop the
-the patch which is now part of this patchset.
- 
-[1] https://lore.kernel.org/all/20251202-v6-18-topic-imx93-phyboard-segin-av-02-display-v1-0-9c14be6c7478@pengutronix.de/
-
-Regard,
-  Marco
+Some parallel panels have a pixelclk of 33.260 MHz. Add support for
+332.60 MHz so a by 10 divider can be used to derive the exact pixelclk.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-Marco Felsch (2):
-      clk: imx: fracn-gppll: Add 332.60 MHz Support
-      clk: imx: fracn-gppll: Add 241.90 MHz Support
+ drivers/clk/imx/clk-fracn-gppll.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/clk/imx/clk-fracn-gppll.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
----
-base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-change-id: 20260113-v6-18-topic-clk-fracn-gppll-6f1343c234c3
+diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
+index 090d608672508a8819dc68eedec5b8d4a2c140c8..579f76494eb041dfba58b8cd10eb2453a0ec4178 100644
+--- a/drivers/clk/imx/clk-fracn-gppll.c
++++ b/drivers/clk/imx/clk-fracn-gppll.c
+@@ -88,6 +88,7 @@ static const struct imx_fracn_gppll_rate_table fracn_tbl[] = {
+ 	PLL_FRACN_GP(445333333U, 167, 0, 1, 0, 9),
+ 	PLL_FRACN_GP(400000000U, 200, 0, 1, 0, 12),
+ 	PLL_FRACN_GP(393216000U, 163, 84, 100, 0, 10),
++	PLL_FRACN_GP(332600000U, 138, 584, 1000, 0, 10),
+ 	PLL_FRACN_GP(300000000U, 150, 0, 1, 0, 12)
+ };
+ 
 
-Best regards,
 -- 
-Marco Felsch <m.felsch@pengutronix.de>
+2.47.3
 
 
