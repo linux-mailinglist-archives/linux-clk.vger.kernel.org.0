@@ -1,139 +1,258 @@
-Return-Path: <linux-clk+bounces-32736-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32738-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31C31D24CE6
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Jan 2026 14:49:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72F1CD24D58
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Jan 2026 14:55:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A5103301E199
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Jan 2026 13:49:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EF343301E6C6
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Jan 2026 13:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA86A39C628;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC813A0E94;
+	Thu, 15 Jan 2026 13:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7e6QAJ4"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="J+6zIyAL"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f68.google.com (mail-ej1-f68.google.com [209.85.218.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660130EF95;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A354E32B9B4
+	for <linux-clk@vger.kernel.org>; Thu, 15 Jan 2026 13:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484983; cv=none; b=MFnJ5269ePCELYGKSn2Zd7ABE58JFVdJQWsjVpfWyAQI25t9bFo8Eoa0hFqk0lZjUF8Xu6Fy7qkLbDouyNRzWJenyzMpiAEnrU+VPRU/lOAKI2wTaJQxhIjThafrYlVfyBY2EWsR4TfXUYGnw+9nLq7oijn5UwLBOaINh3gKcL8=
+	t=1768485330; cv=none; b=n+3QFYXUjy+yihIVzXASv4wjtxlTihJZi4nfD0nX5ynwnFf4xwxZ11ELIiXXVGUcxMnlswrKGAJyJ77XzE9YlSwB/fPOGpYqeS7LPSHYzleGD6LmzNsAfe74mmpQ8mYkdGKiuA637kc/ANCW0TI4iLbzZGT900eN2trDcshtrCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484983; c=relaxed/simple;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UcJbkkZErsXkElGBl80yYZBS7cAvD1duJ6Y487f+VD+vkoKxTXG67cq4Uj1nlydmGPGuaWZo8G/rXos242lNRjEU4xaLp0L6dqZfFzlpFpW3cQfVqlsJsM3dhHQ8XoG2x0av9voji1GkyUGKGA4YyRAWD00uKGXBwEZwnbYV3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7e6QAJ4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46A6C116D0;
-	Thu, 15 Jan 2026 13:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768484983;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i7e6QAJ44Bf2JaIwbYSBiJpGbCRthi2VIqme1Ke1ACn2O5pMFo2NNQIQRSedVmmnC
-	 4KRmtTWiuXjx+zMOqoflPZ7CIjshWguMaz0biDqMMujSveVX2Jp/xlQXZicZi2dwiw
-	 fa+G9LKOcSF9JgrPyf2X9FgxE2sN7N8MMkVsPn1SZoZqcjc54W5rudRiKPyYoOZAZC
-	 Sz7VayUPxIYPaO1ACAL99ztt1iBUUQ9tawYYDfsEnmbSZJutfz0mWGRnjR3NtSc6Jj
-	 0a6z10JdqG3JfovaLgaXg2zg5zD64tPyxVGTRrShfqI8iLsk+kwXper360+6MEiig2
-	 BxYKjFdkDiwBA==
-Date: Thu, 15 Jan 2026 13:49:35 +0000
-From: Lee Jones <lee@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [GIT PULL] Immutable branch between MFD, Clk, GPIO, Power, Regulator
- and RTC due for the v6.20 merge window
-Message-ID: <20260115134935.GD2842980@google.com>
-References: <cover.1765804226.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1768485330; c=relaxed/simple;
+	bh=rTcmnpef70Bd17FfMNPWpzLu6hWiJcl5FrvjG1iQ7kM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=skGIlNBt5z5A+m4qi2op2r7gIPowVnbNTm+dS/g7zo5NBBNHOVEz8PgNDwhXfVPORORlvnBYKXn9jBrVpyeRtzgE/mH0X1jULr6YC25JpYcA33LA5pc8y+M303th3Huu7SSss49os/eXaQ7cG/sNTsphuRhCukw5gm+auBcg/PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=J+6zIyAL; arc=none smtp.client-ip=209.85.218.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f68.google.com with SMTP id a640c23a62f3a-b870732cce2so150512666b.3
+        for <linux-clk@vger.kernel.org>; Thu, 15 Jan 2026 05:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1768485326; x=1769090126; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QrZ5+jQy92uNw0r2S0THSakmu7K1eDt7PKdDPiL1BxI=;
+        b=J+6zIyALzvkmmvHLhMbqdi5qXkwtAN+VC1tpHA0tEs+1bLX7ofpseQsFp3j1aZn/0Y
+         Kr8/6pSdIqSFRtq6dOCNTKNUW34pzyO11qlJkW5klukx7C24o3UZPn/a0QB38lbilq/5
+         6Zv1mAxaFszr5mQFlP6cXCc74pH9fDjTB1N9rF97cgEJMi2w/4RC+zelGesUPk0tQvQ0
+         lGHYm2HAvVHohvEU5POGQAznYFBVXlF1nkpfCmovGHWnA8W0LTn4jT5pmYnLODu6mMBL
+         dqkIuaFJsJST7e3se4wTS5NcuscSofSbaTZaNiAcDwMYpqzAAsVmf5sLf4UnKCd0VjfF
+         tzyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768485326; x=1769090126;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QrZ5+jQy92uNw0r2S0THSakmu7K1eDt7PKdDPiL1BxI=;
+        b=tH/0S+fKJTrR5YwfJNkAsVpWgde+XxBle5yl6SLV/ngnH/Gmnjwobv/ZWumCE6Mm+O
+         bO6iFcNT4WeOk1LcmRnTxtRXlvyekSkLkSNyfLqBDYz1bmA4nkkFKFgU+jgYZNmHf4pr
+         a+anhuscEMWEK42NUN7K3c0/bcbddR5Np22nc4+QP7iJkS12ZnI1VxhSOrjjiisnEU0C
+         u7yX3nkuc6KWDWKINkMALGJ0r65ewYUx6YcO0v5kfPpkvxrcQnF+3gwk2oidw21vHJRl
+         3pQalfz8Pmtd0V4C5Le4jpWtGiGyl9+ntVZzbuUnYpRPrM/eOSgkA1DSA26yLn4yzEOo
+         ScOg==
+X-Forwarded-Encrypted: i=1; AJvYcCV895UiucsJTN3DlZdRFKxnrPR8flfa3vHi0AO+MKkn0EZs59TgoRe3NfkaKFYK3Z9/4NJJF2AaKFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCWrJWbqNDVDbUtnwal/lsmuDX+x2dL4xyOmdHGfH9JOoEfmMm
+	dHvyjjakDGZrC1sjAo1WHT8KVIrGnpxZY1bnen9SsbIE7vjHYnPepJ4bHMuvjf9VwuI=
+X-Gm-Gg: AY/fxX54VzP8VH75C3LnQghUm1Wj26Kr0rH+rx3L0i6TR9NGYTQoW9JK8JuCsRudz8g
+	dAqi9CnAk/ZndNG+VLXkEGYT2LiPm9F8N8sn5AGfAGTa0PWvWBoZO0tT8hHKYlVpgFYz7KoLkzW
+	0qCQ2v1RXJa1OYSivAVDWiFjHnSwb5PXTQqdySRfHeuyEUfwTzxlAyMyuwtqfyhccd/WoxSrqjr
+	oynX6XNbv7Xmg2GG3HV9wF6zJ1ID/HTDVUHdmyaH1Tks7UIVhr0CsUPIPlh7R4jrM4hOACMNIhs
+	81ZWjol//ERZym+KK+Iq9C6YFNCYsu5eb9JRdNp5J6JyU9fqjaZ0qb3wTpDkkMWBh84J+72xrwx
+	FbitmxiOGWWdSx0oe4Xf22PnCNMsVXwJBUx5DrNJm2wu39SRvSyY7et06ISjFA59D95260JkQik
+	gX62oWSrO/L2IDHsmmrSM=
+X-Received: by 2002:a17:907:3d42:b0:b76:f090:7779 with SMTP id a640c23a62f3a-b876113a251mr548317366b.33.1768485325766;
+        Thu, 15 Jan 2026 05:55:25 -0800 (PST)
+Received: from [10.78.104.246] ([46.97.176.64])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87705a24f6sm365632466b.70.2026.01.15.05.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jan 2026 05:55:24 -0800 (PST)
+Message-ID: <6c87673a-32a7-490b-a365-096f3ae63c6f@tuxon.dev>
+Date: Thu, 15 Jan 2026 15:55:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 05/16] dt-bindings: PCI: renesas,r9a08g045s33-pcie:
+ Document RZ/G3E SoC
+To: John Madieu <john.madieu.xa@bp.renesas.com>,
+ claudiu.beznea.uj@bp.renesas.com, lpieralisi@kernel.org,
+ kwilczynski@kernel.org, mani@kernel.org, geert+renesas@glider.be,
+ krzk+dt@kernel.org
+Cc: robh@kernel.org, bhelgaas@google.com, conor+dt@kernel.org,
+ magnus.damm@gmail.com, biju.das.jz@bp.renesas.com,
+ linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, john.madieu@gmail.com
+References: <20260114153337.46765-1-john.madieu.xa@bp.renesas.com>
+ <20260114153337.46765-6-john.madieu.xa@bp.renesas.com>
+Content-Language: en-US
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20260114153337.46765-6-john.madieu.xa@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Enjoy!
+Hi, John,
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+On 1/14/26 17:33, John Madieu wrote:
+> Extend the existing device tree bindings for Renesas RZ/G3S PCIe
+> controller to include support for the RZ/G3E (renesas,r9a09g047e57-pcie) PCIe
+> controller. The RZ/G3E PCIe controller is similar to RZ/G3S but has some key
+> differences:
+> 
+>   - Uses a different device ID
+>   - Supports PCIe Gen3 (8.0 GT/s) link speeds
+>   - Uses a different clock naming (clkpmu vs clkl1pm)
+>   - Has a different set of interrupts, interrupt ordering, and reset signals
+> 
+> Add device tree bindings for renesas,r9a09g047e57-pcie compatible IPs.
+> 
+> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> ---
+>   .../bindings/pci/renesas,r9a08g045-pcie.yaml  | 243 +++++++++++++-----
+>   1 file changed, 172 insertions(+), 71 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/renesas,r9a08g045-pcie.yaml b/Documentation/devicetree/bindings/pci/renesas,r9a08g045-pcie.yaml
+> index d668782546a2..c68bc76af35d 100644
+> --- a/Documentation/devicetree/bindings/pci/renesas,r9a08g045-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/renesas,r9a08g045-pcie.yaml
+> @@ -10,85 +10,34 @@ maintainers:
+>     - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>   
+>   description:
+> -  Renesas RZ/G3S PCIe host controller complies with PCIe Base Specification
+> -  4.0 and supports up to 5 GT/s (Gen2).
+> +  Renesas RZ/G3{E,S} PCIe host controllers comply with PCIe
+> +  Base Specification 4.0 and support up to 5 GT/s (Gen2) for RZ/G3S and
+> +  up to 8 GT/s (Gen3) for RZ/G3E.
+>   
+>   properties:
+>     compatible:
+> -    const: renesas,r9a08g045-pcie # RZ/G3S
+> +    enum:
+> +      - renesas,r9a08g045-pcie # RZ/G3S
+> +      - renesas,r9a09g047-pcie # RZ/G3E
+>   
+>     reg:
+>       maxItems: 1
+>   
+> -  interrupts:
+> -    items:
+> -      - description: System error interrupt
+> -      - description: System error on correctable error interrupt
+> -      - description: System error on non-fatal error interrupt
+> -      - description: System error on fatal error interrupt
+> -      - description: AXI error interrupt
+> -      - description: INTA interrupt
+> -      - description: INTB interrupt
+> -      - description: INTC interrupt
+> -      - description: INTD interrupt
+> -      - description: MSI interrupt
+> -      - description: Link bandwidth interrupt
+> -      - description: PME interrupt
+> -      - description: DMA interrupt
+> -      - description: PCIe event interrupt
+> -      - description: Message interrupt
+> -      - description: All interrupts
+> -
+> -  interrupt-names:
+> -    items:
+> -      - description: serr
+> -      - description: ser_cor
+> -      - description: serr_nonfatal
+> -      - description: serr_fatal
+> -      - description: axi_err
+> -      - description: inta
+> -      - description: intb
+> -      - description: intc
+> -      - description: intd
+> -      - description: msi
+> -      - description: link_bandwidth
+> -      - description: pm_pme
+> -      - description: dma
+> -      - description: pcie_evt
+> -      - description: msg
+> -      - description: all
+> +  interrupts: true
+> +
+> +  interrupt-names: true
+>   
+>     interrupt-controller: true
+>   
+>     clocks:
+> -    items:
+> -      - description: System clock
+> -      - description: PM control clock
+> +    maxItems: 2
+>   
+>     clock-names:
+> -    items:
+> -      - description: aclk
+> -      - description: pm
+> -
+> -  resets:
+> -    items:
+> -      - description: AXI2PCIe Bridge reset
+> -      - description: Data link layer/transaction layer reset
+> -      - description: Transaction layer (ACLK domain) reset
+> -      - description: Transaction layer (PCLK domain) reset
+> -      - description: Physical layer reset
+> -      - description: Configuration register reset
+> -      - description: Configuration register reset
+> -
+> -  reset-names:
+> -    items:
+> -      - description: aresetn
+> -      - description: rst_b
+> -      - description: rst_gp_b
+> -      - description: rst_ps_b
+> -      - description: rst_rsm_b
+> -      - description: rst_cfg_b
+> -      - description: rst_load_b
+> +    maxItems: 2
+> +
+> +  resets: true
+> +
+> +  reset-names: true
+>   
+>     power-domains:
+>       maxItems: 1
+> @@ -128,11 +77,12 @@ patternProperties:
+>           const: 0x1912
+>   
+>         device-id:
+> -        const: 0x0033
+> +        enum:
+> +          - 0x0033
+> +          - 0x0039
+>   
+>         clocks:
+> -        items:
+> -          - description: Reference clock
+> +        maxItems: 1
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+Can't this stay as is?
 
-are available in the Git repository at:
+>   
+>         clock-names:
+>           items:
+> @@ -142,8 +92,6 @@ patternProperties:
+>         - device_type
+>         - vendor-id
+>         - device-id
+> -      - clocks
+> -      - clock-names
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-clk-gpio-power-regulator-rtc-v6.20
+Any reason this was dropped here? I see in patch 14/16 you are still using 
+clocks, clock-names for the PCIe port.
 
-for you to fetch changes up to e39951f8ad500648b9ab132f8042d6e47da441cf:
-
-  MAINTAINERS: Add ROHM BD72720 PMIC (2026-01-13 12:50:37 +0000)
-
-----------------------------------------------------------------
-Immutable branch between MFD, Clk, GPIO, Power, Regulator and RTC due for the v6.20 merge window
-
-----------------------------------------------------------------
-Matti Vaittinen (17):
-      dt-bindings: regulator: ROHM BD72720
-      dt-bindings: battery: Clarify trickle-charge
-      dt-bindings: battery: Add trickle-charge upper limit
-      dt-bindings: battery: Voltage drop properties
-      dt-bindings: mfd: ROHM BD72720
-      dt-bindings: leds: bd72720: Add BD72720
-      mfd: rohm-bd71828: Use regmap_reg_range()
-      mfd: rohm-bd71828: Use standard file header format
-      mfd: rohm-bd71828: Support ROHM BD72720
-      regulator: bd71828: rename IC specific entities
-      regulator: bd71828: Support ROHM BD72720
-      gpio: Support ROHM BD72720 gpios
-      clk: clk-bd718x7: Support BD72720 clk gate
-      rtc: bd70528: Support BD72720 rtc
-      power: supply: bd71828: Support wider register addresses
-      power: supply: bd71828-power: Support ROHM BD72720
-      MAINTAINERS: Add ROHM BD72720 PMIC
-
- .../bindings/leds/rohm,bd71828-leds.yaml           |    7 +-
- .../devicetree/bindings/mfd/rohm,bd72720-pmic.yaml |  339 +++++++
- .../devicetree/bindings/power/supply/battery.yaml  |   33 +-
- .../bindings/regulator/rohm,bd72720-regulator.yaml |  148 +++
- MAINTAINERS                                        |    2 +
- drivers/clk/Kconfig                                |    4 +-
- drivers/clk/clk-bd718x7.c                          |   10 +-
- drivers/gpio/Kconfig                               |    9 +
- drivers/gpio/Makefile                              |    1 +
- drivers/gpio/gpio-bd72720.c                        |  281 ++++++
- drivers/mfd/Kconfig                                |   18 +-
- drivers/mfd/rohm-bd71828.c                         |  555 ++++++++++-
- drivers/power/supply/bd71828-power.c               |  160 ++-
- drivers/regulator/Kconfig                          |    8 +-
- drivers/regulator/bd71828-regulator.c              | 1025 +++++++++++++++++++-
- drivers/rtc/Kconfig                                |    3 +-
- drivers/rtc/rtc-bd70528.c                          |   21 +-
- include/linux/mfd/rohm-bd72720.h                   |  634 ++++++++++++
- include/linux/mfd/rohm-generic.h                   |    1 +
- 19 files changed, 3127 insertions(+), 132 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
- create mode 100644 drivers/gpio/gpio-bd72720.c
- create mode 100644 include/linux/mfd/rohm-bd72720.h
-
--- 
-Lee Jones [李琼斯]
+Thank you,
+Claudiu
 
