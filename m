@@ -1,206 +1,124 @@
-Return-Path: <linux-clk+bounces-32750-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32752-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32A49D2951D
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 00:45:05 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08610D29941
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 02:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14B7A3011425
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Jan 2026 23:43:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 306303010D4D
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 01:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41A1C331A4F;
-	Thu, 15 Jan 2026 23:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4410032B9AE;
+	Fri, 16 Jan 2026 01:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="OwQ1zwsq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D3O+Lmbf";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="QPhHSctN"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B3F331215
-	for <linux-clk@vger.kernel.org>; Thu, 15 Jan 2026 23:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E032E32D7FF
+	for <linux-clk@vger.kernel.org>; Fri, 16 Jan 2026 01:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768520582; cv=none; b=pNQqFJJU2g+A+HnRudFndnkv0IgOLdkiXDPlEjLbNwe4BT5PeIGVHHeFD9yPRx4d8G3pc1vVvS1iaHM0AVBadFWtCNPVZHhSF0/muXMRkpzVv5cxO2CvZ+Lw8pDC36ZW+YxkHwMmZDBied+PQlOSpt3UCVFApTRkmEUNPuubBo4=
+	t=1768526550; cv=none; b=P1fjnbExv7ZqhymUap/c9L65mWuycrG58f3E1rtct7cIlLh7zZS6vyQfjmamWotBsh6bShbzkKKH3ldDIoKlAmrR6XAQZUBVC0UCZZHjhEpsi4Zoczmf+T1BUvynTREemJeCOrSdGAbTLo62WPn0SHws5heb/YCsxVyY6z1+j5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768520582; c=relaxed/simple;
-	bh=Ylr1ksiIyLAyPY7iXL/dycbAN3cQLzZmATzrikSFelA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=f6TiNTcCnMelTF5NsOZFkMHeE0EAiAPG4C6vXHH756fztw79bBT7RM2UC/v37T276njJia2roRxi+fpaSUJGd5x8hZZyPrO7j9K8B8E21sr3qnUjB/rhxOk2hAB5r8p3WkaCyOdAj1A357Q+9WFnZclAhNFUnlS3ICyJj8itVKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oss.tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=OwQ1zwsq; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oss.tenstorrent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7904a401d5cso16316627b3.3
-        for <linux-clk@vger.kernel.org>; Thu, 15 Jan 2026 15:42:53 -0800 (PST)
+	s=arc-20240116; t=1768526550; c=relaxed/simple;
+	bh=JmS6hXMultdM7kSpg6pUvdv6eOkt62ucLYun6fJOFVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RI1zJeW3LK6KX9nKz9+k+wZmK92YMSarsj37pD1w3ZKMFY+wVw/2y/4UUHCmtcMuaOq5ViAmVCVeFSaZQ9BLqpHX6q2Tl5Jb47kO6ZhLEJuVI0yUhmNYtrKNHC9MDo01SPBusuXVoiShsGFGvd830UlKxuKXfy+5gY1W9m7SDZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D3O+Lmbf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QPhHSctN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768526534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I/7QQfPExfoLaF42b72uhslOlKfH5M9xECrEdJSFRnQ=;
+	b=D3O+Lmbfn5BMLtCvDvnvAuInalzKgcpCxFBk+hYLzm6TVn3iqF4wgNa1kEizFsQHXdhGrq
+	CuFyRrqrgJlXfy5Qh1WiLkrWhyW5QnuA6nE4bK056KvVuYAy0RD3DBrGRspmB3LSxT2521
+	Jh7rhy7Oq4kNimISBi25zwaFwTsosV0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-689-HD4JUZuKM4StKBIPnYFe_w-1; Thu, 15 Jan 2026 20:22:13 -0500
+X-MC-Unique: HD4JUZuKM4StKBIPnYFe_w-1
+X-Mimecast-MFC-AGG-ID: HD4JUZuKM4StKBIPnYFe_w_1768526533
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-50143b67424so41981921cf.0
+        for <linux-clk@vger.kernel.org>; Thu, 15 Jan 2026 17:22:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1768520573; x=1769125373; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z0Wiua7ymfJDhSGN5M3Dn0d7IWpEsqVX/pz6WUwMkns=;
-        b=OwQ1zwsqJddjTJitEZSy0LnAf0QQ2cEB+5midBl2oG6zvHiWl1myUbexlMtp1F3IRX
-         RBqutwr6eXdmdk0SgwjsIvSt68s+8bZuMRKlFrbnST69AcFAawlGx9zradzEz6erIvmY
-         F+iCF9l+L4ec5hi4i2k6yyueJmzdxDn7Juq2NW30nPDhhTvikrnEvVmxRHJOdN9FoaWQ
-         2uKPsVmHr/wmUmhAzTb4BbUnvbSDA2O+v6noAgJNgDMuQAZ9CSsmsbRXPuKhvv9M3k1l
-         +nyKDLpN+xkzGvfZ8Obv0fJlaxVOXMUV5+e20Fj/Onxxm9aGf5yolz96R1L2olv2Johk
-         yxcw==
+        d=redhat.com; s=google; t=1768526533; x=1769131333; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I/7QQfPExfoLaF42b72uhslOlKfH5M9xECrEdJSFRnQ=;
+        b=QPhHSctNPh0zq6+b6NTKFI7bwJZcLf0srIPUKlG/RoeZas0fUbeDgk5dbWLGm43WF5
+         TDobeTjglupgpUr79wWK8j3Qr5jyAR8WmvOAcqOjHHdPCjVeAI85D/iXy0cRFzanpqwW
+         sIFKdvs+HaY0kcW61gfnA/BOHer1tWam6Bj5c/BuYqHDAyljXSMvGNSG3WQ6N68luADX
+         99Rd/jyBJjljMRyWh+oEK554iF2wt/ZVgai8xTAZI5/KHd+VPRuC/XN9Q0t//BqNB5jg
+         /mOJVvmwOdOiuT3TZhjFjYnZBNoVA0EsIdYW7MVEDfc7Qp+S2O88QWCBMYsxFrjv0tcs
+         IVBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768520573; x=1769125373;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z0Wiua7ymfJDhSGN5M3Dn0d7IWpEsqVX/pz6WUwMkns=;
-        b=AZNx5DB1PnCs2JCfgsL2d7DaY7HPqoLHpj54vW41KW/8C26oASQZKb9TIFXtzuCH+4
-         5LLUd4Izm1GtVx6jN3B6eCbcDV9XFwScweDE5n+/7e8ZgMtnYm812nCUizW8XKffVKZ/
-         3djN5C9p87KhC0fa6f9IoQ6WWao5v12K3iO0SW6/8NTIusZKgVd+hSpKe4ooFVZXv+WU
-         +54fyBCcTD4TYgzMxxfrbZ2fDEIZgahFNyvJQNXFddksj10v/mEB3OUdCgoqLRUP8AuL
-         TYUyqgSJHhaEvFdI1fgvytQFdrWrahcWgrEegzfz6ZyfJ3dbEXUe6nUhYzMckY0htIAb
-         dCpw==
-X-Forwarded-Encrypted: i=1; AJvYcCVr5xx0LmGy9qDxqw+oSDLVzweAcenofFJ2f+zq/qx4GJ7/Vr7eLnsOcHhQTQSsbbFRLifr/eC0apM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFm+Hv/BXQ4pcAvDxIO55EbzacUdKG54AQnYQdgulM+xUO16sT
-	wqfsJTZrX3u8IwHG5gscfCnrBtJfjxX6ysPXawQkxCL934so12divxb6YFnwFvkeY4c=
-X-Gm-Gg: AY/fxX5fitySv+BPMxN25rcI5Tp1PbcKfmAixxVWav5oNk57s5AWP4r7mf6lqgZxjFg
-	5kso4EoEgATVB23VJ0VLFK8LJwUmaiQK9gtj4T7axpZ2O4UbqrDXa+54XD0WVqb0UutraaMT/Wj
-	AIbs82Y9G1VB7yavfKVxyK4yjKihD4BvstpK6OfQaazPuoooFDgg8JB0OjqTIuyo5UwWJo0LWke
-	aRsekYK6/ZhLbf1K9zw5eJdTzNUsAC5VUGR0LqK/0pJDHKPy1+8DzYAHONvO7uhFwLYxxzUxnsF
-	NhaDLIUy4FfmPXcoQLHzLgujSnmG4CKRgdIAgI5D8NbM9L8PhQOGNpZ7AkJH+FSJM70Ps369JKz
-	odO6tzh3I5yMoirUwwHJUK2gfkVNlijGX2blYLajZwBXxJGzI4CtfhfklY+WWeE9QV5Ma8sGkIA
-	g8sFUXb+h8luRmPX6AN/LCY9pWLYePJqyMsMbet3o3ASKd8+7ZJK6V9iEL3KfNbvKVqAeVLGmh0
-	JE8fd6PVw==
-X-Received: by 2002:a05:690c:670f:b0:788:1cde:cac9 with SMTP id 00721157ae682-793c52b193cmr12384547b3.23.1768520572934;
-        Thu, 15 Jan 2026 15:42:52 -0800 (PST)
-Received: from [192.168.5.15] ([68.95.197.245])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-793c66c72aesm3027117b3.11.2026.01.15.15.42.52
+        d=1e100.net; s=20230601; t=1768526533; x=1769131333;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=I/7QQfPExfoLaF42b72uhslOlKfH5M9xECrEdJSFRnQ=;
+        b=Afn30NQSfz6SkEktChCpFHgrKmzq5USvzfDmPm1xgfvMCpK0oZ4uKpZ2fZnQd7eIcq
+         JC64N8cHr9EysNUSJ0BEUQfGuD08SUhGzq6+XaSAAB85QEKl3TA6Yjgl+wzYdar4GfVM
+         21OnO+mk91pOvoVMfo+IPs/Qg07B9OceY8ZF6F9PuiiZCEdRFhiHhYIEG7zsZcgHPYbA
+         JdMfN768eXAffjPGeuCV6mMHY/peidexLYPMPNHwam8/Eb0S3jBGpwv8JhnPtsQVlnY3
+         /h4ETK6eC3LsJWOiDM93ba7akR1TgToT2QKd+7cK5GZ4fHRSIpBOtPmbgxunP0GyTj6M
+         rEjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVdVZ/uWIPjFqdR7GwRadgR4DTwcUzr962llb+b924QMqHyDBLiAi+El7SUXtvkoQMKu++qEuuMhIY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw80+Zv7zsprz3fPaovF9mBYw4ts+b0xJbf6WPfZ14l4FlxNVbR
+	WxE5yiSH+Vwu42iPr1fTlmSJJXYBGeQfNgdPwxY/0cMSeYCaJA2cXmlWVOpIahQdL7O0PgJgnX1
+	9vwPlC3ahZFHXM9CyMS3w9buRb78cNgBwyImlNLMkM0GWQ2oVAV+RA1SWrnuIIg==
+X-Gm-Gg: AY/fxX6e3JLxfQQlUz5WEv7/P/oJLqszgQk3itFq2Jd+nbfRHnbweB7T7+uB2DGbbNx
+	UKxVKRh4JExzZDD072JJenH60HNXbeC/btGmUkvmNt+y8gJyDleIUzCEzWUflObzI/QMQMB6xrH
+	7DjzKYKGrK42hmmJapbaWm8nPOkOior49XaeASYiYrfFDW9Il8hty1CQqLsiVKwycUhj3ZEaKbh
+	a7Sa7Js/RCT4KALB1p8CshbgkYmU1hnBUXVqnIihB3QMIIbPvA2XxY0i5/qge0/ZgzuL4ozbuQY
+	lL6SR27ccHqlwvOUX2vBLgQck+FBQEGJtIRQPmDav9J0lg9gs4yagx4K0+DGdQOyF7DBxCvKQOO
+	GD0zcYflBT6dk1VXczttVHO0E9wFovsCmuY1rysttRxz4
+X-Received: by 2002:a05:622a:95:b0:501:466b:5141 with SMTP id d75a77b69052e-502a164b881mr20881691cf.18.1768526532865;
+        Thu, 15 Jan 2026 17:22:12 -0800 (PST)
+X-Received: by 2002:a05:622a:95:b0:501:466b:5141 with SMTP id d75a77b69052e-502a164b881mr20881511cf.18.1768526532495;
+        Thu, 15 Jan 2026 17:22:12 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1d9f2a1sm9622621cf.10.2026.01.15.17.22.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 15:42:52 -0800 (PST)
-From: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
-Date: Thu, 15 Jan 2026 17:42:07 -0600
-Subject: [PATCH 8/8] clk: tenstorrent: Add reset controller to Atlantis
- clock controller probe
+        Thu, 15 Jan 2026 17:22:11 -0800 (PST)
+Date: Thu, 15 Jan 2026 20:22:09 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+Cc: pdeschrijver@nvidia.com, pgaikwad@nvidia.com, mturquette@baylibre.com,
+	sboyd@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+	mperttunen@nvidia.com, tomeu@tomeuvizoso.net,
+	linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] clk: tegra: tegra124-emc: Fix potential memory leak in
+ tegra124_clk_register_emc()
+Message-ID: <aWmSwcza6Qv2aQBO@redhat.com>
+References: <20260115050542.647890-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260115-atlantis-clocks-v1-8-7356e671f28b@oss.tenstorrent.com>
-References: <20260115-atlantis-clocks-v1-0-7356e671f28b@oss.tenstorrent.com>
-In-Reply-To: <20260115-atlantis-clocks-v1-0-7356e671f28b@oss.tenstorrent.com>
-To: Drew Fustini <dfustini@oss.tenstorrent.com>, 
- Joel Stanley <jms@oss.tenstorrent.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, joel@jms.id.au, 
- fustini@kernel.org, mpe@kernel.org, mpe@oss.tenstorrent.com, 
- npiggin@oss.tenstorrent.com, agross@kernel.org, agross@oss.tenstorrent.com
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115050542.647890-1-lihaoxiang@isrc.iscas.ac.cn>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-Create a reset auxiliary device during probe of clock controller
+On Thu, Jan 15, 2026 at 01:05:42PM +0800, Haoxiang Li wrote:
+> If clk_register() fails, call kfree to release "tegra".
+> 
+> Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
 
-Signed-off-by: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>
----
- drivers/clk/tenstorrent/atlantis-ccu.c | 59 ++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/drivers/clk/tenstorrent/atlantis-ccu.c b/drivers/clk/tenstorrent/atlantis-ccu.c
-index f3a2ea49a82e..e4f56018907f 100644
---- a/drivers/clk/tenstorrent/atlantis-ccu.c
-+++ b/drivers/clk/tenstorrent/atlantis-ccu.c
-@@ -491,6 +491,7 @@ struct atlantis_ccu {
- struct atlantis_ccu_data {
- 	struct clk_hw **hws;
- 	size_t num;
-+	const char *reset_name;
- };
- 
- static const struct clk_parent_data osc_24m_clk[] = {
-@@ -706,6 +707,7 @@ static struct clk_hw *atlantis_rcpu_clks[] = {
- static const struct atlantis_ccu_data atlantis_ccu_rcpu_data = {
- 	.hws = atlantis_rcpu_clks,
- 	.num = ARRAY_SIZE(atlantis_rcpu_clks),
-+	.reset_name = "rcpu-reset"
- };
- 
- static int atlantis_ccu_clocks_register(struct device *dev,
-@@ -875,6 +877,59 @@ static int atlantis_ccu_clocks_register(struct device *dev,
- 	return ret;
- }
- 
-+static void atlantis_cadev_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+
-+	kfree(to_atlantis_ccu_adev(adev));
-+}
-+
-+static void atlantis_adev_unregister(void *data)
-+{
-+	struct auxiliary_device *adev = data;
-+
-+	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
-+}
-+
-+static int atlantis_ccu_adev_register(struct device *dev,
-+				      struct atlantis_ccu *ccu,
-+				      const struct atlantis_ccu_data *data,
-+				      const char *adev_name)
-+{
-+	struct atlantis_ccu_adev *cadev;
-+	struct auxiliary_device *adev;
-+	int ret;
-+
-+	cadev = kzalloc(sizeof(*cadev), GFP_KERNEL);
-+	if (!cadev)
-+		return -ENOMEM;
-+
-+	cadev->regmap = ccu->regmap;
-+
-+	adev = &cadev->adev;
-+	adev->name = adev_name;
-+	adev->dev.parent = dev;
-+	adev->dev.release = atlantis_cadev_release;
-+	adev->dev.of_node = dev->of_node;
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret)
-+		goto err_free_cadev;
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	return devm_add_action_or_reset(dev, atlantis_adev_unregister, adev);
-+
-+err_free_cadev:
-+	kfree(cadev);
-+
-+	return ret;
-+}
- static int atlantis_ccu_probe(struct platform_device *pdev)
- {
- 	const struct atlantis_ccu_data *data;
-@@ -905,6 +960,10 @@ static int atlantis_ccu_probe(struct platform_device *pdev)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register clocks\n");
- 
-+	ret = atlantis_ccu_adev_register(dev, ccu, data, data->reset_name);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to register resets\n");
-+
- 	return 0;
- }
- 
-
--- 
-2.43.0
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
 
