@@ -1,51 +1,51 @@
-Return-Path: <linux-clk+bounces-32835-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32834-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30121D386A1
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:08:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10A6CD3869D
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:08:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DCAF23049FE1
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:08:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 00B6A3048932
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEC63A4F5A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648FC3A4F53;
 	Fri, 16 Jan 2026 20:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="xQSdBjgv"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="tJPxidHx"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508CE3A35DE;
-	Fri, 16 Jan 2026 20:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9563A4AAB;
+	Fri, 16 Jan 2026 20:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768594056; cv=none; b=T2ZLyWbuS3i83rVl3c4c2weH/OFXYHbyZvgajHIrjAXqG72RV19VK9VnTi9neDiZjTS80ohRY/CTuAXNKxnb7jT8H71emEgdiY7NqjcqSlJP50qe0SmfSbd8UKf1ZUW5c/sxIKMctJRjZae8G2JQUHLvait1B450lMRHjphYX4U=
+	t=1768594056; cv=none; b=rxLzUD+LTqXpeZB2aG9w7bRi2J09ES+qRCstGtpCEdyCMoBKlXGJlm7N3enpLYKdnTG2aapuAcity+r3/R90BGUnyxoRpZRboiZO0RoY/xu7ly4eQTjTzmElIWEp6TGTwH6lQxWPN7/J1ImQ34yfUvD65cgFNO26ssyU3A5NGZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768594056; c=relaxed/simple;
-	bh=n7mIBMggA516wAOxYTsWouwXOvs5xr+CGDAMpD99kJg=;
+	bh=4j7JJmu0bl4xjlY1WxBs2ZZlXxj0JOHqAkmnYdAEZ7g=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vCxmxE/Er3zljOluj38/x8M7Lhw203IMQiwo+DNtpA/cFAkoUn9q1b6NomyBzahOV/CRdDCo5/xQIfaCyDcasvMBjX/5BFewxcRSvUfqczExEVBtw4reQNHNruXYEmDWHop78aTgxRA3wXEDfdImQeleE4Y/vRZzmHyiHEk6EAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=xQSdBjgv; arc=none smtp.client-ip=68.232.153.233
+	 MIME-Version:Content-Type; b=d33jwj0/oWmocE2DmNj33x8dc2nUd1mY7kpIterN5243GDjEiok2e1LG0joAWI7OolH8CpO8gP1ae/eNX2zWFCKkEPmphTd6oTPm7rNJ1QtJYEkbiiZuz4THko0aRIlW0B5PaImSk93Qk3+Q6EbXyu6a0SMFXkU6oUlcIxZvd8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=tJPxidHx; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1768594051; x=1800130051;
+  t=1768594052; x=1800130052;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n7mIBMggA516wAOxYTsWouwXOvs5xr+CGDAMpD99kJg=;
-  b=xQSdBjgv/vlDjQ4aYzMdP0dUVpgYWJvkVTMAcYwi5VMALOjAIsb1MnmQ
-   Jk7yMF+bSDY0WCSzVAIXT1Ff0yT5V/jgZNfUUIov+19c5BvTBEOvHYxJL
-   N1E4bun/K51Y0l2Bj1b+k1sGZOkmjx/ERfZCueHQh5J/BwUMz6guxkzs9
-   167/yO3VVau/sBsFF1gDdlUXi6RHkEITrIacd5KvCPcobxf5X7bql9FS4
-   xYlaFradJcljK8G9CbLEFe4ekRlD94OrW1S4ilT34XUIYh8FCnuTKIZsX
-   Qp4dYF7SL4fAuclzn1IZ6jPacsyX8FBkBColeXkOtZKEhXRlpTFlz0HNI
-   g==;
+  bh=4j7JJmu0bl4xjlY1WxBs2ZZlXxj0JOHqAkmnYdAEZ7g=;
+  b=tJPxidHxhpX1g59f6Naaw6w+kcV6HWPU7eRSC3egcXS8tXfW2aY30iNK
+   Lle95AGpzAJ9xEfzvLnoz3eMe1cZh4i8T2b7fSMIJ2PJPctbx3+3v506U
+   Ew7t+v1SQT+AeL1ouEN1wQXviD+xqhrZO2e7e/kYbzCDaBDKrorXl5PBT
+   u3zvWFEZYqKXGKQTIRKgJm5Yj0bZku11l8cx8L3OCRFIV/eznEdGPeiDN
+   rOw1wv37Yi1ilw/mPm0b6a98EJXQzZtPI+618SeJdYh7CdzwhSfcpdW9S
+   JN6SebPFpTD8qaGsNeI9JKgCkL8Ms5YWuqcQ6nY8XeaW3ML6zV79tJd9a
+   A==;
 X-CSE-ConnectionGUID: OTooRcwrRNCxZBlF1StIPQ==
-X-CSE-MsgGUID: 4EQoo9cNRY+exmGaOQL3iw==
+X-CSE-MsgGUID: M6+9SkXyQtu+UZN+kxO0mQ==
 X-IronPort-AV: E=Sophos;i="6.21,232,1763449200"; 
-   d="scan'208";a="59042239"
+   d="scan'208";a="59042241"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:07:25 -0700
@@ -64,9 +64,9 @@ To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
 CC: <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <linux-clk@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 17/31] clk: at91: clk-h32mx: add support for parent_data
-Date: Fri, 16 Jan 2026 13:07:10 -0700
-Message-ID: <9f6f22bfd5ca47e4d1608282d13eb80a9c01865a.1768512290.git.ryan.wanner@microchip.com>
+Subject: [PATCH v5 18/31] clk: at91: clk-i2s-mux: add support for parent_data
+Date: Fri, 16 Jan 2026 13:07:11 -0700
+Message-ID: <0d5517f708a262924c6aa6f97a23d078891c218a.1768512290.git.ryan.wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1768512290.git.ryan.wanner@microchip.com>
 References: <cover.1768512290.git.ryan.wanner@microchip.com>
@@ -81,106 +81,93 @@ Content-Type: text/plain
 
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 
-Add support for parent_data in h32mx clock driver.
+Add support for parent_data in i2s mux clock driver.
 With this parent-child relation is described with pointers rather
 than strings making registration a bit faster.
 
-All the SoC based drivers that rely on clk-h32mx were adapted
+All the SoC based drivers that rely on clk-i2s-mux were adapted
 to the new API change. The switch itself for SoCs will be done
 in subsequent patches.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- drivers/clk/at91/clk-h32mx.c | 11 +++++++----
- drivers/clk/at91/dt-compat.c |  2 +-
- drivers/clk/at91/pmc.h       |  2 +-
- drivers/clk/at91/sama5d2.c   |  2 +-
- drivers/clk/at91/sama5d4.c   |  2 +-
- 5 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/clk/at91/clk-i2s-mux.c | 6 +++++-
+ drivers/clk/at91/dt-compat.c   | 2 +-
+ drivers/clk/at91/pmc.h         | 1 +
+ drivers/clk/at91/sama5d2.c     | 4 ++--
+ 4 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-h32mx.c b/drivers/clk/at91/clk-h32mx.c
-index a9aa93b5a870..c691a3b1526f 100644
---- a/drivers/clk/at91/clk-h32mx.c
-+++ b/drivers/clk/at91/clk-h32mx.c
-@@ -94,10 +94,10 @@ static const struct clk_ops h32mx_ops = {
- 
+diff --git a/drivers/clk/at91/clk-i2s-mux.c b/drivers/clk/at91/clk-i2s-mux.c
+index fe6ce172b8b0..04d9fcf940fb 100644
+--- a/drivers/clk/at91/clk-i2s-mux.c
++++ b/drivers/clk/at91/clk-i2s-mux.c
+@@ -51,6 +51,7 @@ static const struct clk_ops clk_i2s_mux_ops = {
  struct clk_hw * __init
- at91_clk_register_h32mx(struct regmap *regmap, const char *name,
--			const char *parent_name)
-+			const char *parent_name, struct clk_parent_data *parent_data)
+ at91_clk_i2s_mux_register(struct regmap *regmap, const char *name,
+ 			  const char * const *parent_names,
++			  struct clk_parent_data *parent_data,
+ 			  unsigned int num_parents, u8 bus_id)
  {
- 	struct clk_sama5d4_h32mx *h32mxclk;
--	struct clk_init_data init;
-+	struct clk_init_data init = {};
- 	int ret;
- 
- 	h32mxclk = kzalloc(sizeof(*h32mxclk), GFP_KERNEL);
-@@ -106,8 +106,11 @@ at91_clk_register_h32mx(struct regmap *regmap, const char *name,
+ 	struct clk_init_data init = {};
+@@ -63,7 +64,10 @@ at91_clk_i2s_mux_register(struct regmap *regmap, const char *name,
  
  	init.name = name;
- 	init.ops = &h32mx_ops;
--	init.parent_names = parent_name ? &parent_name : NULL;
--	init.num_parents = parent_name ? 1 : 0;
+ 	init.ops = &clk_i2s_mux_ops;
+-	init.parent_names = parent_names;
 +	if (parent_data)
 +		init.parent_data = (const struct clk_parent_data *)parent_data;
 +	else
-+		init.parent_names = &parent_name;
-+	init.num_parents = 1;
- 	init.flags = CLK_SET_RATE_GATE;
++		init.parent_names = parent_names;
+ 	init.num_parents = num_parents;
  
- 	h32mxclk->hw.init = &init;
+ 	i2s_ck->hw.init = &init;
 diff --git a/drivers/clk/at91/dt-compat.c b/drivers/clk/at91/dt-compat.c
-index 3285e3110b58..ccdeba3a1130 100644
+index ccdeba3a1130..2b1aa834f111 100644
 --- a/drivers/clk/at91/dt-compat.c
 +++ b/drivers/clk/at91/dt-compat.c
-@@ -201,7 +201,7 @@ static void __init of_sama5d4_clk_h32mx_setup(struct device_node *np)
+@@ -239,7 +239,7 @@ static void __init of_sama5d2_clk_i2s_mux_setup(struct device_node *np)
+ 			continue;
  
- 	parent_name = of_clk_get_parent_name(np, 0);
- 
--	hw = at91_clk_register_h32mx(regmap, name, parent_name);
-+	hw = at91_clk_register_h32mx(regmap, name, parent_name, NULL);
- 	if (IS_ERR(hw))
- 		return;
+ 		hw = at91_clk_i2s_mux_register(regmap_sfr, i2s_mux_np->name,
+-					       parent_names, 2, bus_id);
++					       parent_names, NULL, 2, bus_id);
+ 		if (IS_ERR(hw))
+ 			continue;
  
 diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index e6465259521e..32bb041c1466 100644
+index 32bb041c1466..3680e2d489d8 100644
 --- a/drivers/clk/at91/pmc.h
 +++ b/drivers/clk/at91/pmc.h
-@@ -180,7 +180,7 @@ at91_clk_register_generated(struct regmap *regmap, spinlock_t *lock,
- 
- struct clk_hw * __init
- at91_clk_register_h32mx(struct regmap *regmap, const char *name,
--			const char *parent_name);
-+			const char *parent_name, struct clk_parent_data *parent_data);
- 
+@@ -185,6 +185,7 @@ at91_clk_register_h32mx(struct regmap *regmap, const char *name,
  struct clk_hw * __init
  at91_clk_i2s_mux_register(struct regmap *regmap, const char *name,
+ 			  const char * const *parent_names,
++			  struct clk_parent_data *parent_data,
+ 			  unsigned int num_parents, u8 bus_id);
+ 
+ struct clk_hw * __init
 diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
-index 7904f2122ed7..8c7ff0108b41 100644
+index 8c7ff0108b41..f5d6c7a96cf2 100644
 --- a/drivers/clk/at91/sama5d2.c
 +++ b/drivers/clk/at91/sama5d2.c
-@@ -276,7 +276,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
+@@ -372,7 +372,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
+ 		parent_names[0] = "i2s0_clk";
+ 		parent_names[1] = "i2s0_gclk";
+ 		hw = at91_clk_i2s_mux_register(regmap_sfr, "i2s0_muxclk",
+-					       parent_names, 2, 0);
++					       parent_names, NULL, 2, 0);
+ 		if (IS_ERR(hw))
+ 			goto err_free;
  
- 	sama5d2_pmc->chws[PMC_MCK] = hw;
- 
--	hw = at91_clk_register_h32mx(regmap, "h32mxck", "masterck_div");
-+	hw = at91_clk_register_h32mx(regmap, "h32mxck", "masterck_div", NULL);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-diff --git a/drivers/clk/at91/sama5d4.c b/drivers/clk/at91/sama5d4.c
-index 7cda8032653e..04c848cd7001 100644
---- a/drivers/clk/at91/sama5d4.c
-+++ b/drivers/clk/at91/sama5d4.c
-@@ -214,7 +214,7 @@ static void __init sama5d4_pmc_setup(struct device_node *np)
- 
- 	sama5d4_pmc->chws[PMC_MCK] = hw;
- 
--	hw = at91_clk_register_h32mx(regmap, "h32mxck", "masterck_div");
-+	hw = at91_clk_register_h32mx(regmap, "h32mxck", "masterck_div", NULL);
- 	if (IS_ERR(hw))
- 		goto err_free;
+@@ -381,7 +381,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
+ 		parent_names[0] = "i2s1_clk";
+ 		parent_names[1] = "i2s1_gclk";
+ 		hw = at91_clk_i2s_mux_register(regmap_sfr, "i2s1_muxclk",
+-					       parent_names, 2, 1);
++					       parent_names, NULL, 2, 1);
+ 		if (IS_ERR(hw))
+ 			goto err_free;
  
 -- 
 2.43.0
