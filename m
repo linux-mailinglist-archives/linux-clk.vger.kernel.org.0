@@ -1,200 +1,192 @@
-Return-Path: <linux-clk+bounces-32820-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32824-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5074D385F0
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:32:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56D9BD38692
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:07:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E5A3C3008727
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 19:32:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AF69F303D932
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E0E34BA53;
-	Fri, 16 Jan 2026 19:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6111F3A35AC;
+	Fri, 16 Jan 2026 20:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="dlmZiRUW"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="sQu/2J5E"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011026.outbound.protection.outlook.com [52.101.125.26])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A559E21770A;
-	Fri, 16 Jan 2026 19:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768591956; cv=fail; b=snvQUQr2p3WBI/T9qR94QrRr/+NBLPLR3Tb+pXv3gnkGUs7ErPrkOk8QRBVrFwoDkISoMpa2h0U9wve66ClZjSVguRt4f1wLyjATQhuaG0zFZlymS6u5WOlujv8yur8IAVIXLr5FiJ+K4BlhvIhYEELPS+vn4J3GpSq30kh86oo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768591956; c=relaxed/simple;
-	bh=WJEMEUIxop839QGbgbNe7gvsjV5UN4GmzgSarA9Ugwg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fIQW0sOKqYCgU+RHeWDWvoFTfajs8WPMn+d010qkyXzvwwusaQAIXKElZELPP2N1RUX0HzNj/rGHyWqoJxO6aRCtsdMEl0eH9PfHcDahIHGctsdMpE8xLyOGnICVaiRC/SdK0A/eqBKL7A0p1D7gOkJYSv2VUP/BJtm41mwbCdU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=dlmZiRUW; arc=fail smtp.client-ip=52.101.125.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LsG04aTGi7naNxb7XhsWtAYi8Hu5AWjmlOXKk2ZosWNrtakURQMNItGbrKpquuiEPz52XFH6s9vCwF219ZpY/oYvhlGRK+6bCOG7cy2lrQwEHup+wQxhxQp/81D2xyQSkpYbYAm0nqrTH8q84a/BGCBQNThCKqU3x9CbuIoThp7HggBGC9cyrfzxJrAeVqLvkCIrTALI0QNFGTidZw8xDsbUF1Bf8okkkdUwUbLARkJY4F9ZXSjxByNO8ilgRVvbXtJYV38iomXlEMMsts04wHRNADfbhBqU0MOLxVgaj4jiwNkhMCYy16m9ZTrPqyeew2pxcKAD/f5GQqj2Jwrn3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WJEMEUIxop839QGbgbNe7gvsjV5UN4GmzgSarA9Ugwg=;
- b=qjoSROSGJYNyDUh1uf8IqXv8TJVl0u/eT5pi8ipjBeAfLJRjAC9PuDyr8lCRV1y6QX0Qfwf92vAkXFbMbR1JQhbGSc+PuTWHKsBf1eGrMc8ccToXbCtfKuz6R+Jt4s5w3xCOPbPvMwmG5nRhlLaEW6aKfy6mvPzVAGMCmfWsBq3hPI3Ql1gfVLZzd0kNTXI2yEHAa9cZjfheyRrMermdbKGPGJIKVUsLkyzQXhRypCEWHPtY3vUC53lv+BX0SxDxyThAtLJBd5eL1X5UxR9ZeM/UfZPqXqfhfMCr5go37yhJ/PK3fXPmIeUDQNAf1UQiE1CBcUDKArvMvSOS4Bsc0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WJEMEUIxop839QGbgbNe7gvsjV5UN4GmzgSarA9Ugwg=;
- b=dlmZiRUWejcbRts5FHw61jrih2/1ChoJYcxOddldtvUOQYxzKik6puBPsMN1a/0Y8q97vtmxCjBEJ3T3bTRNg+JLMiPENp43u5gCS39hePY56T/22vO+zW6l+Bwrht3cvWkTYUyY0ggcjNFMZECKSp7wV5wYzAQwtThXCiPjh8A=
-Received: from OS3PR01MB8319.jpnprd01.prod.outlook.com (2603:1096:604:1a2::11)
- by TYVPR01MB10732.jpnprd01.prod.outlook.com (2603:1096:400:2ad::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.8; Fri, 16 Jan
- 2026 19:32:29 +0000
-Received: from OS3PR01MB8319.jpnprd01.prod.outlook.com
- ([fe80::6473:1660:bdc2:c983]) by OS3PR01MB8319.jpnprd01.prod.outlook.com
- ([fe80::6473:1660:bdc2:c983%6]) with mapi id 15.20.9520.005; Fri, 16 Jan 2026
- 19:32:29 +0000
-From: Chris Brandt <Chris.Brandt@renesas.com>
-To: geert <geert@linux-m68k.org>
-CC: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
-	<sboyd@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Hien Huynh <hien.huynh.px@renesas.com>,
-	Nghia Vo <nghia.vo.zn@renesas.com>, Hugo Villeneuve <hugo@hugovil.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [PATCH v6 1/2] clk: renesas: rzg2l: Remove DSI clock rate
- restrictions
-Thread-Topic: [PATCH v6 1/2] clk: renesas: rzg2l: Remove DSI clock rate
- restrictions
-Thread-Index: AQHcXUO7FScFUVs6uE+xTE7uY45vjrVU17yAgACquRA=
-Date: Fri, 16 Jan 2026 19:32:29 +0000
-Message-ID:
- <OS3PR01MB83190C28CC87EB7CF17D8B188A8DA@OS3PR01MB8319.jpnprd01.prod.outlook.com>
-References: <20251124131003.992554-1-chris.brandt@renesas.com>
- <20251124131003.992554-2-chris.brandt@renesas.com>
- <CAMuHMdU9cd3caJb8pk6S6anc_jNKnWMHoUmhezUwz7eBUmvAOQ@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdU9cd3caJb8pk6S6anc_jNKnWMHoUmhezUwz7eBUmvAOQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS3PR01MB8319:EE_|TYVPR01MB10732:EE_
-x-ms-office365-filtering-correlation-id: eb2953f3-5222-4cf4-61e1-08de5535fcbb
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TXdsTktNNG4xMDZBbEw0RjluMEdDYmIrYTVVMGdSNE92MmhiSVFKQXdzZ09S?=
- =?utf-8?B?REF3UWlIQkpoWnhrN3lKVXhOS0M1NGEyZHR2aEJSb1pYWUkvZXVoUlNjaFF0?=
- =?utf-8?B?WVRheFR3QVMybHVCallqSC9IVm1XSXE3NUQ4ZWVyWEhocWdBcm1pWTB0YTJl?=
- =?utf-8?B?VTZmUjNHVlFoZDhIR1hhVjc0dWlaTVFVZ3Q1aVFaY2k1MkkvTHhnZ1VSZk1Q?=
- =?utf-8?B?K2dCRDc4NnhpZmYrMzdYV2JzM3JCWko1UDdIY1llTWVWTkgxMGRaaG1RaFN5?=
- =?utf-8?B?anB1QThvMDhUNHVNaDFpNm4wb05IQ3NXNzdPUW9kNWZsTENaYks1cDFFOXZj?=
- =?utf-8?B?Vnp6SWloam1yMThDQlZlRnhEa0hDYVozNGhCUUhIY1B6bEpRZVNNTVZHdDBM?=
- =?utf-8?B?VkFoektpNGh6eGFIU3I1c0Nlc01USERyV24zaitiZHBQeUd6ZEJuWkdYQW13?=
- =?utf-8?B?MzNrUjN5cU5wbmU4SDFPT3huTDFMT0VvYUFqa0xKamVOVStFelZyMmRBMGNk?=
- =?utf-8?B?UFZ6YSt0S3V0U3BOSnZSTXhBV0dUdThJNkxHMldZMUl0bGM4TlpTcmprcHAy?=
- =?utf-8?B?MUltNXlZNDZJeWVEcFc5UDdLL0ZyaGVMOWdCclpwOFdkUGVmYnZqKzBTWFhp?=
- =?utf-8?B?YUo1Y1BFRkFjY3hSZlFpSUlLUG9pNG55N3gxV01QMjgvUml6TlZVd1VMRmdr?=
- =?utf-8?B?WUx0eFRQckdHMFhwczZsbFJBMWxlWTFVMGtWSGt5M2MrTElnbU1qcVlFWHla?=
- =?utf-8?B?R29DczlCaHVJTG1UUjFCeW5NRlROOTdHaHM5dDNZM3lSNFpXK1lvZEIyQXha?=
- =?utf-8?B?WlJuTDRYeVhIZy9PT3J6ZVRrVjNPMnJ5OTJvOGVzYWxDQ3lqV0dhZFk2RGl1?=
- =?utf-8?B?TjgxVG9TdXQ4MDlTb0NIWmFUR1dDcFo4bCtHRThFVU5xWHprNlUyT3ZSbWlN?=
- =?utf-8?B?cVM2Rk9NU1hVK3dSSUNML0kwSEF6S3o5STJ5SzMrajB0TjZ0S0NqakNOamdz?=
- =?utf-8?B?VjlPam81aG5FSi9EZ242ODZ2bjBGblJRb2NyVm5FaTAwZlNjem9qeTBuVng5?=
- =?utf-8?B?L0NvbE5iWXc3d1R6dkNaaXZ1NU0xc3dONkN2cmsvSkhnQnRGN2tObkNQaWtq?=
- =?utf-8?B?Y2ViT1E0VEJMNmhGaDhyT0hLMTRxREUycDM1QnFBdllCZi83c1pDYjNtNlp1?=
- =?utf-8?B?MENlUzN4NHBOQWp0SnlReXN3MDlLaS8zaS9GWno2Z1N6Wm8wWGFzL0xReFlz?=
- =?utf-8?B?NkVwd0ZndytJc1R1dy9iS0FuSzRqejFGYkdkN0YxRzVEbUJBSEYrWWMzWm41?=
- =?utf-8?B?TmF3Y1V3cDJzVTJOWVR5anFPbCtQbkpzMVhseVQ0NC96anVKV1ZJVko3Uzls?=
- =?utf-8?B?MU5PTHpFWktLeXRnWFpoMnNOYVNRTHExSTEyQnVYSEpFMHZ1OUFkZnczb1dM?=
- =?utf-8?B?cW43U0doeFJwRTdJR2xCR2srYWhhbDdVY2xvY0RnVkdBZU5iMXhORVB1cStn?=
- =?utf-8?B?eTcra3hwK2lMbEV3VGVWWnFhaDVsS29NcjIybVBuSlVNNWVMNkZNdmpJOENQ?=
- =?utf-8?B?OWlJWVZEWHhlL1lrN2Uya2IvTitzRUpOR3BIYUEvdTNmTmhnUW9oT3NaeEJN?=
- =?utf-8?B?MU1TL0cxZ2hWRFNaMmxKcHZ4VVI3UTNrTG1PMHZTakpsazdwY0RrWjdFdEdo?=
- =?utf-8?B?S3RCeENiRFVEM1pYbnc5ZkhFVy9BS0IrUkhIVGRXdndPWGNDdUJ2OHJxb0Jl?=
- =?utf-8?B?eDE1cFlXbWZxMXViTmF2ZEZvaS96M3pXZDVEVXBkL2VMU0J6R3NWM2lORUpi?=
- =?utf-8?B?RFd6ZG9Ia1U4Zlp2b3prUmU5VE1WSEZySG1paThqQVNwSVFYQXoyQ1R1UEhK?=
- =?utf-8?B?dGZzeThUdEpYQTVpMmpsQU1wd29mbW5FYnZ3cUQxVm1SVy9SZHY5cDhJMll3?=
- =?utf-8?B?dndCeXYxK2tLSTlBWDM5aVUwNVJoQ3NZNkYzZlBDYjdVcURhWmpwL1d3aWth?=
- =?utf-8?B?cHNadklIV2FvRkhVZWk4NzdCSnFneXNqOFNKZ2pNSWVzaGhyeS9heWtaeWpV?=
- =?utf-8?B?cnhLcTJCV1NmQlZoYi9reWIzbER3WHljNkpsZHgwelhsTndOb0c2VE1YQkxz?=
- =?utf-8?B?MzZja0p0aUdmQTh1dFhqSzBZWTgrSW5KNUxUL0FDQlNWQmFBWncvUjN2Y1Qx?=
- =?utf-8?Q?WR2HnZXdLeDm4sCy2tKyHjQ=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8319.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?aFJvWkIxdXpNTmo4UTZLNDF5RW83SzQ4NXdEK3N3encyeHBRQjVCemRWcWZM?=
- =?utf-8?B?ak9JalRsc2xudUFxQkJLaDU4dktBSUNHRUxDc3V1SzVvMVQ4MVhLNnkwKzUz?=
- =?utf-8?B?QmRlcnJsQVBHS1FPek5oai9XQXpyVC9Ub0hVSHhLU3J0VDRGV01vLzc2U0pW?=
- =?utf-8?B?Ly93c1JJQm83YURmQlhPRk91ZDAzMHliV3ZpNG9kYnJld09nWS9TY2h1ZW9y?=
- =?utf-8?B?SDEvWkYzbkNBdVRvNmZSMGRXOStIZU9aOFZKWGQzRm9OdFZXZ2ZpRUNna0pm?=
- =?utf-8?B?Z2hJOGw2R0ZwVVVnakFUdllNMW12Q3dibHFRYU41RnFNc2RmUGZzL0h4VG4w?=
- =?utf-8?B?YlZwQlMwZDRTZktaOVVGdG8welRESzNQWW1jVVlsK3hDcytzOFpHV2VTclZ3?=
- =?utf-8?B?M2F2WmJLeDhMUWRkTjNsUXZlRFd1bkloNFY2QkphTjR2Y1hJZVVhNi80SDlR?=
- =?utf-8?B?SHRUVllPN1VRVkZ2cTJLZFFGKzZvblpFU2gyZjYvMm9iSG1FWGZOdXQrcndG?=
- =?utf-8?B?ZVlHR2RoWTN2NDNMdXcrWmNSVGJxMFF4YWFoK2RiR1lYZDQyUHZSOG5QQ3ZS?=
- =?utf-8?B?TmxJZmlva25FU1YrZFlJZTB4RUpLMlFmMGZMMEM5aVQxSjFnT3ZOQ1c3ZFlM?=
- =?utf-8?B?clFWTXhRTjdYa2piZE9CSUE0TkpKeiswZ2drSldyU3M3NzRjVVpxZ3ltWjZu?=
- =?utf-8?B?RzgrV3pPYzlkRTA5eVJIY25QUm9UeXFLS2FjWllMc1MvYzNIUWFJTTlXaWRC?=
- =?utf-8?B?OEhsVHRuamFwcitRY21Nclo5anM1dm9vRGpZOVJvRHJqTTdQWVVJTlVEVTd6?=
- =?utf-8?B?cFl6dHhsVFl6eHhBbkV4SmthMEdwMldOYlpoaHp0Z1dVZkdld1ZLZGUyby9H?=
- =?utf-8?B?U1JEREgyMXBEWTBLd1FwWTVSMFNLcUt4eXB2YUV3WDYyN29aMzdpeC82Y0hD?=
- =?utf-8?B?ci96NHhXc0l6VDJLMGRhcHoyTUhScmxoeStVZDRWcEtvZXMvSXRoRGJ2QzJm?=
- =?utf-8?B?SSt4UFdKWWJXR0IvWTNXc0JHSkhKUmR3OWdSMlYydEZnNGhKR3hLY3JYd0hp?=
- =?utf-8?B?SVR4bVBJcXRIWDVnWEdEZXFvbkhUcTF3dlR3VCs0NGhTcThBcWMxR2t1R3Ay?=
- =?utf-8?B?cnhvSnRQT2xPTnU4djJqVng0RlduRDlFTUZXdENZOHVtbkRiZ0h2ZVcyZWcr?=
- =?utf-8?B?ekVTOTh3MFZPdVBXNkxHbnlZNDVnWlBOTC95TEhoYSs0cHprM3grOUUzUjlL?=
- =?utf-8?B?VnlPaG9od3dDYVgyeE1KNFNTanprTlZ2NGFMV0d3b25CZ1dJRXIveU9aN3pk?=
- =?utf-8?B?eDJPSzc1NWYxdjNOSTQrMVVhdGkzd1RvVmcwdVI0VXhZVmhuVzdZMWtsK1A3?=
- =?utf-8?B?ZFpnRzZNa0M2QmFib0UwZ3BkUTV4Ri9qTm1yRDAyeDRhTVJRWEhBV2RHK2lC?=
- =?utf-8?B?bHlqNEo3ZllMSTFyaU5EUGhNWWs3NEYwRU9vOHdhQUVnYnVZbnJTSDg3ZXJV?=
- =?utf-8?B?dUMza0xDUnl1RWhSV1FvbldUT3d4RytDVEZ0ajZnUGVCWW1Oa0h3cHN5SlNs?=
- =?utf-8?B?dnIydldNWmpUeG1KUk9Pajg4NDdJUzBNS1FadDNMcGl4dU1kYXJFVnVoaW5S?=
- =?utf-8?B?V3lqOGlYRFZBYVhvZERJd28zSVVzWUFHZnA3eHBoa3VMLzl5bGRlNytPS2x5?=
- =?utf-8?B?RjE5WVVLVTEyMUZXem1taVZicVQ3QzdwZWY3bEFLalkxT2wvaml5RndKTWpn?=
- =?utf-8?B?MytRcWtneVNFV05ObE9DRVhEcHNWc3h0blhTNEpPaTZYSittK0RqWTFydlBD?=
- =?utf-8?B?cEpZRThUV204YXZJK1YrSFY5YnBmNnlpRUJycVFtK0N1TnlWRXBTMzlUSlQ5?=
- =?utf-8?B?cVd6REliN0o0SjBqSlh4QlJ4ZFd4dXVLNmkxZk0xQWRHNzZqNW00UHpEUUY0?=
- =?utf-8?B?ekNhMXNFVXJXa2E4RUJxSUxTbWpCUDZkSzgvUk5pdW9MajQrVUNlYzJVQWFV?=
- =?utf-8?B?TS9uS2hwSVVjc0tndHFRbnV1ODcyU0hqaEVTRUdnSkxMVFlSdllZdnBuYWdQ?=
- =?utf-8?B?UnRQOFFDbVBVM2FMaG1kemZhUHVnZXorRW1FVFFwdWNsMSt1cXozU1BlWVRy?=
- =?utf-8?B?TE5QQ01MbUZZcWNLZjArR2tiL3NpM1M0NWdNRWJhRmdvclp5SGdNaXJhL2RG?=
- =?utf-8?B?TGVyNHEyNGg5elZiZHFpQzlsbVBUamtuUG1mMVdGREllMlZWMmdYd1A4Q3pl?=
- =?utf-8?B?WWxSK3JGazVXK3Qwc21jR3hSTVpqUnEzckJJUm5uU2FOT2E0akp4NmFVb29p?=
- =?utf-8?B?aEFmc0ZBTnRZRGIxa25xOE9wWEhVcFUvS1JCWkw5UmQ0R0hPWXU3dz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF643A1E79;
+	Fri, 16 Jan 2026 20:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768594048; cv=none; b=sFMMXmxHOXQoZ/QxgA+voeGgb5LASRbHlJXmaM5gGoHvhBbEh7eaFNYfZls1EiBQKKg+ZnAhQI144yGPsjwSJyn3iLIuBo2Ln1eh/9L7Dsnede6QeZEqxjpDWHoobVZg079D+rznZ9pV/BGxT2gd7RiLVq/ek5ifBlpLlI4Nuc4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768594048; c=relaxed/simple;
+	bh=Un8zLv2FoiIl5H2AOAWw2PcOrYODM0MvdE9ONc7dFAw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OK8VFXM+E5t4gCv3Ams45lqcVthXu6lrKLaZ4JZtsaqrjvDq7dtKs1+33F9RYgpkQMceHQGV/BBe69qm5MJPjcTI1d8nhWDfnYvgoscB9VVR4jNdlu/OH6nowFBQNl8UkIdYX7kOq0badlA+/gw0StYmhTbaJdO5oSeOWJz5Xbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=sQu/2J5E; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1768594045; x=1800130045;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Un8zLv2FoiIl5H2AOAWw2PcOrYODM0MvdE9ONc7dFAw=;
+  b=sQu/2J5Eprg0nx22j2Vik++X+BMMTeF41v6b6CKn9J3HgT2x1HDHVpdI
+   xbK3MEZ1PFeJtNYbdLlYyXXCqYrki19S1m2ZBJ6xopDPWus9JdM8PBuAG
+   iRsBpXfUAxzPDqx2ID2wCP0Nps5C+oGg/bdvlbldm0cpjMyLTeKtePM6J
+   UXyIczYVSCy6nVoxHqeUTCjpUGbOKQ2UvycT9DrDUKU0Kaqa9dVGjvJaM
+   kBOzTc3dli3PPOeqnhu+uumi9w7owp9R8ExV8vQ9rGL+Tam8Kay62XOJk
+   Y5pMRqhhrhVPgm2qxLGgLzQCSGTtnRlGGeeZoj8JfJsm0UyA4/pNQd2Va
+   Q==;
+X-CSE-ConnectionGUID: OTooRcwrRNCxZBlF1StIPQ==
+X-CSE-MsgGUID: lGprxQS5S6i7v0+fJcCNYw==
+X-IronPort-AV: E=Sophos;i="6.21,232,1763449200"; 
+   d="scan'208";a="59042226"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:07:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Fri, 16 Jan 2026 13:07:03 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Fri, 16 Jan 2026 13:07:03 -0700
+From: <ryan.wanner@microchip.com>
+To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <bmasney@redhat.com>,
+	<alexander.sverdlin@gmail.com>, <varshini.rajendran@microchip.com>
+CC: <cristian.birsan@microchip.com>,
+	<balamanikandan.gunasundar@microchip.com>, <linux-clk@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>, "Ryan
+ Wanner" <ryan.wanner@microchip.com>
+Subject: [PATCH v5 00/31] clk: at91: add support for parent_data and
+Date: Fri, 16 Jan 2026 13:06:53 -0700
+Message-ID: <cover.1768512290.git.ryan.wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8319.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb2953f3-5222-4cf4-61e1-08de5535fcbb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2026 19:32:29.4567
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bLi7rZpVuCS/Jtyh8/1O+rtqXSRrNnA8TQF4GzI2f//2gTBQHjsH7MyPr4gWYokFY6biSO8A/5CSsJTaT6VFrCOzUvkplQn7DJMt/rNLLBA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10732
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-SGkgR2VlcnQsDQoNCk9uIEZyaSwgSmFuIDE2LCAyMDI2IDQ6MTkgQU0sIEdlZXJ0IFV5dHRlcmhv
-ZXZlbiB3cm90ZToNCg0KPiAuLi4gdGhpcyBkaXZpc2lvbiBuZWVkcyB0byBiZSB1cGRhdGVkIHRv
-IERJVl9VNjRfUk9VTkRfQ0xPU0VTVCwgdG8gZml4IGJ1aWxkIGZhaWx1cmVzIG9uIDMyLWJpdCwg
-YXMgcmVwb3J0ZWQgYnkgdGhlIGtlcm5lbCB0ZXN0IHJvYm90Lg0KPiBJIHdpbGwgZm9sZCBpbiB0
-aGUgZml4Lg0KDQpUaGFuayB5b3UgIQ0KDQpDaGVlcnMNCg0KQ2hyaXMNCg0K
+From: Ryan Wanner <ryan.wanner@microchip.com>
+
+This series adds support for parent data and parent _hw on the at91
+clock drivers. This also updates all the SoC specific clock drivers to
+use this format as well.
+
+This is a continuation of the V1 of this series here [1].
+
+This has been tested on the SAMA5* SoCs, the sam9x* SoCs, and the SAMA7*
+SoCs.
+
+Changes v1 -> V2:
+- Remove all the small sama7g54 SoC driver changes and put them in their
+  own patch.
+- Add the SAMA7D65 and the SAM9X75 to this update.
+- Add a patch to move all common used macros into the pmc.h file.
+- Update changes from v6.6 to v6.16.
+- Remove patches that where style fixes and include those in the update.
+
+Changes v2 -> v3:
+- Adjust each patch so they are fully atomic.
+- Add a patch to have the SAMA7D65 systemclocks use parent_data and
+  parent_hw.
+- Add a formatting cleanup patch for the SAM9X75.
+- Adjust commit messages that no longer show invalid information.
+
+Changes v3 -> v4:
+- Adjusted the AT91_CLK_PD macros to not use the index and use the name
+  and HW.
+- Adjust the commit message for the sam9x7 to descibe the changes
+  better.
+- Remove the usage of clock indexes and use of_clk_get_parent_name().
+- Adjust commit messages to better describe the changes.
+
+Changes v4 -> v5:
+- Update commit messages to make them more clear.
+- Correct formatting issues.
+- Remove unnecessary parent_data parameters.
+- Remove the incorrect change to the xtal naming.
+- Keep the check for the different naming of slow clock.
+
+Claudiu Beznea (28):
+  clk: at91: pmc: add macros for clk_parent_data
+  clk: at91: clk-sam9x60-pll: use clk_parent_data
+  clk: at91: clk-peripheral: switch to clk_parent_data
+  clk: at91: clk-main: switch to clk parent data
+  clk: at91: clk-utmi: use clk_parent_data
+  clk: at91: clk-master: use clk_parent_data
+  clk: at91: clk-programmable: use clk_parent_data
+  clk: at91: clk-generated: use clk_parent_data
+  clk: at91: clk-usb: add support for clk_parent_data
+  clk: at91: clk-system: use clk_parent_data
+  clk: at91: clk-pll: add support for parent_hw
+  clk: at91: clk-audio-pll: add support for parent_hw
+  clk: at91: clk-plldiv: add support for parent_data
+  clk: at91: clk-h32mx: add support for parent_data
+  clk: at91: clk-i2s-mux: add support for parent_data
+  clk: at91: clk-smd: add support for clk_parent_data
+  clk: at91: clk-slow: add support for parent_data
+  clk: at91: dt-compat: switch to parent_hw and parent_data
+  clk: at91: sam9x60: switch to parent_hw and parent_data
+  clk: at91: sama5d2: switch to parent_hw and parent_data
+  clk: at91: sama5d3: switch to parent_data and parent_hw
+  clk: at91: sama5d4: switch to parent_data and parent_hw
+  clk: at91: at91sam9x5: switch to parent_data and parent_hw
+  clk: at91: at91rm9200: switch to parent_hw and parent_data
+  clk: at91: at91sam9260: switch to parent_hw and parent_data
+  clk: at91: at91sam9g45: switch to parent_data and parent_hw
+  clk: at91: at91sam9n12: switch to parent_hw and parent_data
+  clk: at91: at91sam9rl: switch to clk_parent_data
+
+Ryan Wanner (3):
+  clk: at91: pmc: Move macro to header file
+  clk: at91: sam9x75: switch to parent_hw and parent_data
+  clk: at91: sama7d65: switch system clocks to parent_hw and parent_data
+
+ drivers/clk/at91/at91rm9200.c       |  79 ++++---
+ drivers/clk/at91/at91sam9260.c      | 119 +++++-----
+ drivers/clk/at91/at91sam9g45.c      |  73 ++++---
+ drivers/clk/at91/at91sam9n12.c      |  90 ++++----
+ drivers/clk/at91/at91sam9rl.c       |  49 +++--
+ drivers/clk/at91/at91sam9x5.c       | 106 +++++----
+ drivers/clk/at91/clk-audio-pll.c    |  28 ++-
+ drivers/clk/at91/clk-generated.c    |   8 +-
+ drivers/clk/at91/clk-h32mx.c        |  11 +-
+ drivers/clk/at91/clk-i2s-mux.c      |   6 +-
+ drivers/clk/at91/clk-main.c         |  16 +-
+ drivers/clk/at91/clk-master.c       |  24 +--
+ drivers/clk/at91/clk-peripheral.c   |  16 +-
+ drivers/clk/at91/clk-pll.c          |   9 +-
+ drivers/clk/at91/clk-plldiv.c       |  11 +-
+ drivers/clk/at91/clk-programmable.c |   8 +-
+ drivers/clk/at91/clk-sam9x60-pll.c  |  14 +-
+ drivers/clk/at91/clk-slow.c         |   8 +-
+ drivers/clk/at91/clk-smd.c          |  10 +-
+ drivers/clk/at91/clk-system.c       |   8 +-
+ drivers/clk/at91/clk-usb.c          |  41 ++--
+ drivers/clk/at91/clk-utmi.c         |  16 +-
+ drivers/clk/at91/dt-compat.c        |  80 ++++---
+ drivers/clk/at91/pmc.h              |  68 +++---
+ drivers/clk/at91/sam9x60.c          | 101 +++++----
+ drivers/clk/at91/sam9x7.c           | 323 ++++++++++++++++------------
+ drivers/clk/at91/sama5d2.c          | 153 +++++++------
+ drivers/clk/at91/sama5d3.c          | 104 +++++----
+ drivers/clk/at91/sama5d4.c          | 112 +++++-----
+ drivers/clk/at91/sama7d65.c         | 155 +++++++------
+ drivers/clk/at91/sama7g5.c          | 111 +++++-----
+ 31 files changed, 1115 insertions(+), 842 deletions(-)
+
+-- 
+2.43.0
+
 
