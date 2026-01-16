@@ -1,32 +1,32 @@
-Return-Path: <linux-clk+bounces-32853-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32856-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 745BAD38781
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:27:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D0AD3875C
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:24:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1B50732D1733
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:20:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3498A30350C0
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A69934DB54;
-	Fri, 16 Jan 2026 20:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65DF53A4AB9;
+	Fri, 16 Jan 2026 20:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="PSbglL42"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="DYHUvL39"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90182306B02
-	for <linux-clk@vger.kernel.org>; Fri, 16 Jan 2026 20:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D42D306B02
+	for <linux-clk@vger.kernel.org>; Fri, 16 Jan 2026 20:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768594803; cv=none; b=S/oYI19oMdzwivZZSelyItWWxxVarZbTkNQoa5tCquPZI+OSkVtZhWu6nN+VXbE3Vr5SuMAtYT95Du9GRTqeJjwyJu9TZCadHqpfvlfFQAjUp19TFlrg7YZFGM64QNccjAamy3PUWE70lcz3s0IaIu8pUOCa/Tu1CBs9RV+f0cQ=
+	t=1768594806; cv=none; b=Uqbv35jE6CidvLIVpQBNlcH0jwOHx/JhUccQsUXNtmrtepdNt6A7uR0BaqCrDpa5GBvwuKND+DvKRazny1MpsGyIQ9mU8eQUUwQ63ItS+bOecw0wpJ7gjB8a8N9ADgpqfdGaXul1PWj9M8tCIlhQiuBkcqKLSU6jSIBBQS+dihA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768594803; c=relaxed/simple;
-	bh=a86ujsJ75WvlFh6AWb20qgMJjaYWLO1/IG/W48O2Xpo=;
+	s=arc-20240116; t=1768594806; c=relaxed/simple;
+	bh=tKaBTKihufGpzplKTdtgDCmbllpsjApfHUu/YWFSm9c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cpF5Nj765UV1NMPbUUaJ2Xpj6R2yjPpFDyXcrMC3A8d2N1MrVFhqAkzpjng+JkVlMY5j5kMYvl09BSrS06LcWLjXXgkFciDkkmj0FuQaRS/Nbd0MZjNTRKw5UijdaAQu7TE5XgcdsL5MEgns0telD6uD0JabEib11ZdjtLsrmOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=PSbglL42; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=VlE/HbSFtqPcbdDfpRPMnSGKLmh+Jk2vDjWxuZjaxNwE8gVIszYbmPEykYLqXUZ7GYi0dtWFvhAc3GVOC3UILAFfMFG924Pxc2Kl3VRvuFk9ByqKNGp1GLRvv3hoUUCzNGSsX5zR65rBNZx0EHb6L4YsezLHLjbR8YY+YHc7Pdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=DYHUvL39; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -35,19 +35,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=dfn0qHAXnC5r2c8zLwOe5UjZPw0lxw0YfKvyjJ/Tws8=; b=PSbglL42p7h0UJKFqJSrrQhHeL
-	NofEs+cXaA3dM5eh1YxhrGG8MBBesY4D9l1p1dPW9AX75ulZetLntTk+JHvdosWtpPSbUQG3CXfGo
-	v7ceEl9YrR5yeJI3dxwbgOPI/6lmoaJKtHNU1CPXcTvirD5/EAmIxw7pJYjx3Pt5E0QCfZdopZGzy
-	ESoLAk7f920kDCUnFPgP7pp/LoAA4KICNk1Q2PbcaI0N2pK1zqD+h+6iPdw/EyApmULq5i4xqivEr
-	zpeisH1fy8DeRFZfbYLmpnF+BEMNsaYFL11SVmH9+PiGu+QO66bZxYAas8SBKh3+dBi91ukk4addb
-	d1dZM3KQ==;
+	bh=Yy++5hODMX5p5YzKM/q7CyLQreC3FF6dizPunriWDeY=; b=DYHUvL393OJ+xbIZws/6ylBopN
+	QZB7Ki0GETveZ1kNA8U0shbJGPXR+FDKt81LHAsxn48j/8zSky0vPuysK46tsAS3/0zWN1RR7cHPU
+	HV2o9JqWSHI1ehH6KSZ3oNF+IeXED1vY4+0hbagg4YdrzOwEFxgJiS20fBrRtg2faislsaayMnqiT
+	JPfG5uj19QUecdFyIrSeeQHhh/NIzr9cz5OoP4WRpIelfSC2k6XVw6IVlBm+cZwyrKeKysGUbKUQd
+	mM2ic37DcI2SwiZWbwLvQHKSKg7SVugdcwbV63dkjH9Qo5yViy/akBDi/BxHGtPv2jMZn2PYoUpPN
+	GUl9eO/Q==;
 Received: from [187.36.210.68] (helo=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vgqIQ-006Ixj-4a; Fri, 16 Jan 2026 21:19:50 +0100
+	id 1vgqIU-006Ixj-Hy; Fri, 16 Jan 2026 21:19:54 +0100
 From: =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
-Date: Fri, 16 Jan 2026 17:19:22 -0300
-Subject: [PATCH v3 1/4] clk: bcm: rpi: Let V3D consumers manage clock rate
+Date: Fri, 16 Jan 2026 17:19:23 -0300
+Subject: [PATCH v3 2/4] clk: bcm: rpi: Mark PIXEL_CLK and HEVC_CLK as
+ CLK_IGNORE_UNUSED
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -56,7 +57,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260116-v3d-power-management-v3-1-4e1874e81dd6@igalia.com>
+Message-Id: <20260116-v3d-power-management-v3-2-4e1874e81dd6@igalia.com>
 References: <20260116-v3d-power-management-v3-0-4e1874e81dd6@igalia.com>
 In-Reply-To: <20260116-v3d-power-management-v3-0-4e1874e81dd6@igalia.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -72,67 +73,51 @@ Cc: linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
  Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
  kernel-dev@igalia.com, =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1668; i=mcanal@igalia.com;
- h=from:subject:message-id; bh=a86ujsJ75WvlFh6AWb20qgMJjaYWLO1/IG/W48O2Xpo=;
- b=owEBbQGS/pANAwAIAT/zDop2iPqqAcsmYgBpap1c6H41PkO94M8KCrXwgsVZGuQlnnxt4UI0A
- QzqWL759juJATMEAAEIAB0WIQT45F19ARZ3Bymmd9E/8w6Kdoj6qgUCaWqdXAAKCRA/8w6Kdoj6
- qr0EB/9pzfAJNi7siaK97trfApJY/wPuh1JEKAD3ceTb3DqBmtPB2bczed8FERUooMEjtQKTQWI
- 5x3pf+rnTU+9Pypo4eOEa5vR0RMqfymQsDgenaDoqcVdFe4OMMbFDXtWvYlr1iY1qfCmFnF1Huy
- TGnGnS4J5cG/li/vtVibjQ1edKt71z0hySa8kFysV6Wn3zf5+DeRlVFtohaAur8ZJUoK7XM0d7X
- j9mDf54CreIWMaHkUlY+rc510TgCPmnjFR5+mcsXAUJEY8duHKCqtxpO69Xlqx2Elvql+mtO2vH
- CD+U6xTnocfY3vJrBbGU73M4jVLanWtbx85snRVgG3nkeacf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1239; i=mcanal@igalia.com;
+ h=from:subject:message-id; bh=tKaBTKihufGpzplKTdtgDCmbllpsjApfHUu/YWFSm9c=;
+ b=owEBbQGS/pANAwAIAT/zDop2iPqqAcsmYgBpap1cYiK+StQMlHBkqjaDzA52CLRKYITCDTkro
+ gjI7KvkC5qJATMEAAEIAB0WIQT45F19ARZ3Bymmd9E/8w6Kdoj6qgUCaWqdXAAKCRA/8w6Kdoj6
+ qlnpB/9JA2Kxcwd7zMxAPVaMFaLF184UTVMzsZ6CEqfvBljDYWpC1FJxGVuimqMyxmOuWCqiPdq
+ X3b37c5W1dpXU0FgDL1HPnaG+XkceMwa23dGgVfcLXFgrOckRjbYON50D/Q0Bm6o5oZDMWfBo4r
+ wohfBpNotfCw45Y456T6IRW9uIQBhU4mavrN11QW7cUwyu2kM/76uIfCEYhKVwkxIcu4jzZFvSE
+ i1MfAU+N+xg9NhAkGUGNiXdfku2zeOes2Fbfdjl1O7Of0IQ0rWSzZ13Agg6iZ2NQpnxgCtGDbOr
+ wG/Q1S/Rv6y0xJhbhz4+TTvbvLJg9FXOUv84jAqIx4HJ8arm
 X-Developer-Key: i=mcanal@igalia.com; a=openpgp;
  fpr=F8E45D7D0116770729A677D13FF30E8A7688FAAA
 
-Remove the `maximize` infrastructure and don't set `minimize` for the
-V3D clock, giving consumers full control over its rate.
+If PIXEL_CLK or HEVC_CLK is disabled during boot, the firmware will skip
+HSM initialization, which would result in a bus lockup. However, those
+clocks are consumed by drivers (vc4 and HEVC decoder drivers,
+respectively), which means that they can be enabled/disabled by the
+drivers.
 
-On some firmware versions, RPI_FIRMWARE_SET_CLOCK_STATE doesn't
-actually power off the clock. To achieve meaningful power consumption
-reduction, consumers need to set the clock rate to minimum before
-disabling it. Forcing the clock to maximum rate in the clock framework
-prevents this, as consumers don't have any flexibility over the clock
-rate.
+Mark those clocks as CLK_IGNORE_UNUSED to allow them to be disabled by
+drivers when appropriate.
 
-This change enables the v3d driver to control the clock rate directly
-in its suspend/resume callbacks.
-
-Fixes: 6526402b9bac ("clk: bcm: rpi: Maximize V3D clock")
 Signed-off-by: Maíra Canal <mcanal@igalia.com>
 ---
- drivers/clk/bcm/clk-raspberrypi.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/clk/bcm/clk-raspberrypi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 1a9162f0ae31e330c46f6eafdd00350599b0eede..9783385d5859836898683209e320fcc928dfdc71 100644
+index 9783385d5859836898683209e320fcc928dfdc71..41f058bf44e8a5257e4b2a90389b5e9525f2fffb 100644
 --- a/drivers/clk/bcm/clk-raspberrypi.c
 +++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -68,7 +68,6 @@ struct raspberrypi_clk_variant {
- 	char		*clkdev;
- 	unsigned long	min_rate;
- 	bool		minimize;
--	bool		maximize;
- 	u32		flags;
- };
- 
-@@ -136,7 +135,6 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
- 	},
- 	[RPI_FIRMWARE_V3D_CLK_ID] = {
- 		.export = true,
--		.maximize = true,
- 	},
+@@ -139,12 +139,12 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
  	[RPI_FIRMWARE_PIXEL_CLK_ID] = {
  		.export = true,
-@@ -387,9 +385,6 @@ static struct clk_hw *raspberrypi_clk_register(struct raspberrypi_clk *rpi,
- 		}
- 	}
- 
--	if (variant->maximize)
--		variant->min_rate = max_rate;
--
- 	if (variant->min_rate) {
- 		unsigned long rate;
- 
+ 		.minimize = true,
+-		.flags = CLK_IS_CRITICAL,
++		.flags = CLK_IGNORE_UNUSED,
+ 	},
+ 	[RPI_FIRMWARE_HEVC_CLK_ID] = {
+ 		.export = true,
+ 		.minimize = true,
+-		.flags = CLK_IS_CRITICAL,
++		.flags = CLK_IGNORE_UNUSED,
+ 	},
+ 	[RPI_FIRMWARE_ISP_CLK_ID] = {
+ 		.export = true,
 
 -- 
 2.52.0
