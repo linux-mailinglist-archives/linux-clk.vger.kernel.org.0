@@ -1,35 +1,35 @@
-Return-Path: <linux-clk+bounces-32786-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32788-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4A4D3091F
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 12:43:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C60D3087B
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 12:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9E1C930E7A57
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 11:39:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D2DD7301E6EA
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 11:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A212379987;
-	Fri, 16 Jan 2026 11:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3100B37A49D;
+	Fri, 16 Jan 2026 11:39:16 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE22C30BF69;
-	Fri, 16 Jan 2026 11:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FF536655C;
+	Fri, 16 Jan 2026 11:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768563553; cv=none; b=ObCcR5Phliytwqu/S28rjwcn5FgEno8kbo5w4CzctsP6xpPDug6BA41ul0rlz93qkaxvy3mw1Tl5vRR3VFAzeMhCo99vkKJd2vn8fTkgJsrmbuFPFFVpU8CUmCX/ZAzQRBuL4uTwibbWISEmJP1nwqp4BA346hKM2V3A2Lh9iLM=
+	t=1768563555; cv=none; b=Cpt0ITVB0UxuqPJJ1bFOab0bBb1kFLpJixBV8zCNbsUO+ZK951MsTtKDLmctIZnKyY0iPwQnIwd+V7EXS0wbrA0iCf0ha06GJJ0F/nIMqU7w5wUs/BOhin1twPuPXuHUTfadILwvykoJmkAen0oNZsWdNc7b16iSPtR7EKbSSlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768563553; c=relaxed/simple;
-	bh=2pGahujOT1l34zZrt6mP5J5Ff6Vfzmzb7PIvnIcVxc0=;
+	s=arc-20240116; t=1768563555; c=relaxed/simple;
+	bh=tIA0bHjOyuVp8tIikNsCrkcFSy2bdvB+nFtMgE8sPAE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=n5nYTAf8QQiKjIYH3QlokFamXu8GZ743INGPOlLNmyAuVfvHk7S+ozaYJSvD2Lr+bHcuxHQTEqyJtT+qZVcrX4vsXuriIqu6vevm9Imgl34r3CGphw9LuG2cxetyB+e7Z/5PDYfuEnH9JmYlx5E+0YcbhgdOlF19JPvvjh5VLQo=
+	 MIME-Version; b=nG7SN/j+/V3ea6DUqtMZmcvgHUeVq/xCnRkQvXfyRDxcyH1Ii+ONtA5xAQv2/f1xORTQS+M9QVlKJCWbL53HIWaNeihrhH3eCIk0h/gtohZZK4grdHV/US0eYjAaYvudfajiilqQwOOZLGkL6tLbeJNNjZ5+uXZoD49ufQaDC5E=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
 Received: from localhost.localdomain (unknown [36.112.3.223])
-	by APP-05 (Coremail) with SMTP id zQCowAC3TBBMI2ppZbMsBQ--.56400S4;
-	Fri, 16 Jan 2026 19:39:04 +0800 (CST)
+	by APP-05 (Coremail) with SMTP id zQCowAC3TBBMI2ppZbMsBQ--.56400S5;
+	Fri, 16 Jan 2026 19:39:05 +0800 (CST)
 From: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
 To: mturquette@baylibre.com,
 	sboyd@kernel.org,
@@ -37,9 +37,9 @@ To: mturquette@baylibre.com,
 Cc: linux-clk@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
-Subject: [PATCH 2/7] clk: st: clkgen-pll: Rename some variables in clkgen_c32_pll_setup()
-Date: Fri, 16 Jan 2026 19:38:42 +0800
-Message-Id: <20260116113847.1827694-3-lihaoxiang@isrc.iscas.ac.cn>
+Subject: [PATCH 3/7] clk: st: clkgen-pll: Rename some variables in clkgen_c32_pll_setup()
+Date: Fri, 16 Jan 2026 19:38:43 +0800
+Message-Id: <20260116113847.1827694-4-lihaoxiang@isrc.iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260116113847.1827694-1-lihaoxiang@isrc.iscas.ac.cn>
 References: <20260116113847.1827694-1-lihaoxiang@isrc.iscas.ac.cn>
@@ -50,12 +50,12 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAC3TBBMI2ppZbMsBQ--.56400S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5tF1rZFyUuFyrGryrXrb_yoW8Gw1rpa
-	4rAasIv398Xr4q9Fs3JrZ5uF90g3Z7KFWxCrWvkw1FvwsxZry5Xr4rXa48Zr15u3yxuFWY
-	qF4qvr18ZF1UtF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+X-CM-TRANSID:zQCowAC3TBBMI2ppZbMsBQ--.56400S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5tF1rZFyUtrWftFW5ZFb_yoW8Jw4Upa
+	4rJ34av39rXrWvgF4fJrZ3WF90q3Z7KFy09rWDKwnY9wsxAry5Zw45u34I93W5uryfuF43
+	tr4jyrW8uF1kJF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
 	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
 	ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AI
@@ -66,51 +66,48 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5tF1rZFyUuFyrGryrXrb_yoW8Gw1rpa
 	Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
 	xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
 	JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-	C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUULZ2DUUUUU==
-X-CM-SenderInfo: 5olkt0x0ld0ww6lv2u4olvutnvoduhdfq/1tbiCQ8JE2lp34rSnwAAsE
+	C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUtC7UUUUUU==
+X-CM-SenderInfo: 5olkt0x0ld0ww6lv2u4olvutnvoduhdfq/1tbiBwoJE2lp3rvVAQAAsm
 
 In clkgen_c32_pll_setup(), `clk` is used for two distint variables' name.
-This patch rename the preceding `clk` to `pll_clk`.
+This patch rename the later `clk` to `odf_clk`.
 The rename is in preparation for cleaning up some memory leaks.
 
 Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
 ---
- drivers/clk/st/clkgen-pll.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/clk/st/clkgen-pll.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clk/st/clkgen-pll.c b/drivers/clk/st/clkgen-pll.c
-index a7d605b52cf3..0390f6834a0d 100644
+index 0390f6834a0d..4ff9b35fe399 100644
 --- a/drivers/clk/st/clkgen-pll.c
 +++ b/drivers/clk/st/clkgen-pll.c
-@@ -755,11 +755,10 @@ static struct clk * __init clkgen_odf_register(const char *parent_name,
- 	return clk;
- }
+@@ -797,7 +797,7 @@ static void __init clkgen_c32_pll_setup(struct device_node *np,
+ 		goto err;
  
--
- static void __init clkgen_c32_pll_setup(struct device_node *np,
- 		struct clkgen_pll_data_clks *datac)
- {
--	struct clk *clk;
-+	struct clk *pll_clk;
- 	const char *parent_name, *pll_name;
- 	void __iomem *pll_base;
- 	int num_odfs, odf;
-@@ -777,12 +776,12 @@ static void __init clkgen_c32_pll_setup(struct device_node *np,
+ 	for (odf = 0; odf < num_odfs; odf++) {
+-		struct clk *clk;
++		struct clk *odf_clk;
+ 		const char *clk_name;
+ 		unsigned long odf_flags = 0;
  
- 	of_clk_detect_critical(np, 0, &pll_flags);
+@@ -813,13 +813,13 @@ static void __init clkgen_c32_pll_setup(struct device_node *np,
+ 			of_clk_detect_critical(np, odf, &odf_flags);
+ 		}
  
--	clk = clkgen_pll_register(parent_name, datac->data, pll_base, pll_flags,
-+	pll_clk = clkgen_pll_register(parent_name, datac->data, pll_base, pll_flags,
- 				  np->name, datac->data->lock);
--	if (IS_ERR(clk))
- 		return;
-+	if (IS_ERR(pll_clk))
+-		clk = clkgen_odf_register(pll_name, pll_base, datac->data,
++		odf_clk = clkgen_odf_register(pll_name, pll_base, datac->data,
+ 				odf_flags, odf, &clkgena_c32_odf_lock,
+ 				clk_name);
+-		if (IS_ERR(clk))
+ 			goto err;
++		if (IS_ERR(odf_clk))
  
--	pll_name = __clk_get_name(clk);
-+	pll_name = __clk_get_name(pll_clk);
+-		clk_data->clks[odf] = clk;
++		clk_data->clks[odf] = odf_clk;
+ 	}
  
- 	num_odfs = datac->data->num_odfs;
- 
+ 	of_clk_add_provider(np, of_clk_src_onecell_get, clk_data);
 -- 
 2.25.1
 
