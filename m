@@ -1,51 +1,51 @@
-Return-Path: <linux-clk+bounces-32828-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32825-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9ECD386B8
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:11:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A4A6D38693
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 21:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EEFAC3172F17
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:07:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C4C06303A3A8
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jan 2026 20:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5C33A4AAE;
-	Fri, 16 Jan 2026 20:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874A63A35C6;
+	Fri, 16 Jan 2026 20:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1Hkc6fqR"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="PPr8yAkh"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894623A1E70;
-	Fri, 16 Jan 2026 20:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7521F395252;
+	Fri, 16 Jan 2026 20:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768594051; cv=none; b=E3n6j6BP7l4i49Yct9la+oGmV7b8F1cUjixt/7TWu60EAEgM8qpf865EPQrHgYApNLL52432XaAdIFhDAGdLfj7YDTpfOdiEn0Fx9Tf4YkKSiWLu6t8T6d6kjN2kcPNEbeGFUPs83sEJ42ThiFGX2WmSvMzO3WwQFNYmc0WmWic=
+	t=1768594050; cv=none; b=FHKxsRGUiGxd6EGq5AmPTmR71lEX8MkI1dlI8KhZtAqCH9z/mEBv/t9/MMn3T+dcnCKdpdLq+pl+WHb9UWig5K7UlOyc00xM/n+QFk7xsbaon1YeOJKvOTYCCAFX1jKHbXCaYhzStktxaUJzz/Yny8Cb4gLmVyrtw/Ft1nZhNVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768594051; c=relaxed/simple;
-	bh=BuDLvUI0gXXL+sAMfsCM6uqttzROVeaAE5P1ijRX1/0=;
+	s=arc-20240116; t=1768594050; c=relaxed/simple;
+	bh=neIWWmyypnNHqZZGX8lfunmzpOCJxCwV8FKTDxUQwLE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CodgBMNcG2TkqsinEhiGCCByOg6XHe6HPohUHlu5hhUlYYkTFLkLiJoWjR7+dC85fzvPX9I6YAMbFZRpFl5+cujC40DOts/EVyZUjKnZmC4tvtkP4GNYeygPzQK50DJ4SZUGzzavG2p/Q48dWhIBvQaOGLDw9VJF2Sb8733lI2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1Hkc6fqR; arc=none smtp.client-ip=68.232.153.233
+	 MIME-Version:Content-Type; b=s5oogVTr9cXdWXzUu0mY78AYo6qptylEkxh0LEqcw5/WzW3BLEKmLI+4WuyfS3GcZ+c0loZDuzwuFdpZZSNn8SxVaAM937n+QkG16XO0YNZSsxun2rLpeTE3n+rFtAMYOas6BZFt5jliivgN8NLHh7aiBWdPoOe/olNcO0vGgy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=PPr8yAkh; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1768594047; x=1800130047;
+  t=1768594048; x=1800130048;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BuDLvUI0gXXL+sAMfsCM6uqttzROVeaAE5P1ijRX1/0=;
-  b=1Hkc6fqRiA+BuJV0dpo7fMLRX5sGElOHJL/jruI/QtwpfGsMelGquqRB
-   ECowmlH0cwGchCi73Yqd4Tx7ePYukQAAiL9rr6GUhzSylQUXwG0JYdvru
-   zmB6UY2wb0lJI8bI8kUertgZjARI2cXgljRNyJ5KBABKMGk1RCYk4fK1Q
-   jBMS3qgLQ5EjPnSntF9pQmr9HyM1jzNzJpAOncwb3QXK0iyNXCxvF2PiL
-   13IR58cfTacmvsNTKtwTV6+LnkAYHCJ763ZWI4A3yLrHotgtahL2VNvJw
-   osyPLfg6S1cUpp0ZAp0wLjj8xZjGwJogPjbZDyD4W+lis4MFw4WFpk1kn
+  bh=neIWWmyypnNHqZZGX8lfunmzpOCJxCwV8FKTDxUQwLE=;
+  b=PPr8yAkhx6mOx0LsgdQBiONjm78osbqE1QgBvEeaFA5JhVrp9fpE9fwd
+   6f+WrGMuWLAEnM6AB6xDKiHmadYGmVI1NDySFXBLW/ffXbrxec/XZHplP
+   NYMuFjQiqSGB/+tN141rjbJfS/J3JMXjqiqbQgu5tpaCBKA+JXh/aIQYh
+   noRCeQrq3KdGNp1SidC9d6mMkNXETRF65n9o7wr2tc3Zjr1Wc3Zne22oF
+   e/mO0S+kKZTy+BV+lzInmZrnUpbAIE2xDBGXVzj/1W53yLfeY6MKZnjbv
+   OQLyB5hjSF+GWNP5+Ll+udz/qDZCWP1Q/sZAIfTLwsLZqiB1eK+uslH++
    w==;
 X-CSE-ConnectionGUID: +9RSiAtvRY+RhxWEUm06Wg==
-X-CSE-MsgGUID: LLerEwPyQTas4GJIqdU+8g==
+X-CSE-MsgGUID: PhczZzwKQji/3pi6D4ywRQ==
 X-IronPort-AV: E=Sophos;i="6.21,232,1763449200"; 
-   d="scan'208";a="283397052"
+   d="scan'208";a="283397053"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:07:17 -0700
@@ -63,10 +63,11 @@ To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
 	<alexander.sverdlin@gmail.com>, <varshini.rajendran@microchip.com>
 CC: <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <linux-clk@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 12/31] clk: at91: clk-system: use clk_parent_data
-Date: Fri, 16 Jan 2026 13:07:05 -0700
-Message-ID: <7537c90e81803116bbf440c08f883c4e0f30a28d.1768512290.git.ryan.wanner@microchip.com>
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>, "Ryan
+ Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH v5 13/31] clk: at91: sama7d65: switch system clocks to parent_hw and parent_data
+Date: Fri, 16 Jan 2026 13:07:06 -0700
+Message-ID: <96e09d47cbff0fb4593d642a1151791e20c15c48.1768512290.git.ryan.wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1768512290.git.ryan.wanner@microchip.com>
 References: <cover.1768512290.git.ryan.wanner@microchip.com>
@@ -79,93 +80,78 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Use struct clk_parent_data instead of struct parent_hw as this leads
-to less usage of __clk_get_hw() in SoC specific clock drivers and simpler
-conversion of existing SoC specific clock drivers from parent_names to
-modern clk_parent_data structures.
+Switch the system clocks to use parent_hw and parent_data. Having this
+allows the driver to conform to the new clk-system API.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-[ryan.wanner@microchip: Update SAM9X75 clk-system to use parent_data.]
+The parent registration is after the USBCK registration due to one of
+the system clocks being dependent on USBCK.
+
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- drivers/clk/at91/clk-system.c | 8 ++++----
- drivers/clk/at91/pmc.h        | 2 +-
- drivers/clk/at91/sam9x7.c     | 2 +-
- drivers/clk/at91/sama7g5.c    | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/clk/at91/sama7d65.c | 36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-system.c b/drivers/clk/at91/clk-system.c
-index 90eed39d0785..55f8e46fe9c7 100644
---- a/drivers/clk/at91/clk-system.c
-+++ b/drivers/clk/at91/clk-system.c
-@@ -105,7 +105,7 @@ static const struct clk_ops system_ops = {
+diff --git a/drivers/clk/at91/sama7d65.c b/drivers/clk/at91/sama7d65.c
+index 8aea926094d8..0c9d43fa01c1 100644
+--- a/drivers/clk/at91/sama7d65.c
++++ b/drivers/clk/at91/sama7d65.c
+@@ -537,23 +537,23 @@ static struct {
+ /*
+  * System clock description
+  * @n:	clock name
+- * @p:	clock parent name
++ * @p:	clock parent hw
+  * @id: clock id
+  */
+-static const struct {
++static struct {
+ 	const char *n;
+-	const char *p;
++	struct clk_hw *parent_hw;
+ 	u8 id;
+ } sama7d65_systemck[] = {
+-	{ .n = "uhpck",		.p = "usbck", .id = 6 },
+-	{ .n = "pck0",		.p = "prog0", .id = 8, },
+-	{ .n = "pck1",		.p = "prog1", .id = 9, },
+-	{ .n = "pck2",		.p = "prog2", .id = 10, },
+-	{ .n = "pck3",		.p = "prog3", .id = 11, },
+-	{ .n = "pck4",		.p = "prog4", .id = 12, },
+-	{ .n = "pck5",		.p = "prog5", .id = 13, },
+-	{ .n = "pck6",		.p = "prog6", .id = 14, },
+-	{ .n = "pck7",		.p = "prog7", .id = 15, },
++	{ .n = "uhpck",		.id = 6 },
++	{ .n = "pck0",		.id = 8, },
++	{ .n = "pck1",		.id = 9, },
++	{ .n = "pck2",		.id = 10, },
++	{ .n = "pck3",		.id = 11, },
++	{ .n = "pck4",		.id = 12, },
++	{ .n = "pck5",		.id = 13, },
++	{ .n = "pck6",		.id = 14, },
++	{ .n = "pck7",		.id = 15, },
+ };
  
- struct clk_hw * __init
- at91_clk_register_system(struct regmap *regmap, const char *name,
--			 const char *parent_name, struct clk_hw *parent_hw, u8 id,
-+			 const char *parent_name, struct clk_parent_data *parent_data, u8 id,
- 			 unsigned long flags)
- {
- 	struct clk_system *sys;
-@@ -113,7 +113,7 @@ at91_clk_register_system(struct regmap *regmap, const char *name,
- 	struct clk_init_data init = {};
- 	int ret;
+ /* Mux table for programmable clocks. */
+@@ -1298,9 +1298,19 @@ static void __init sama7d65_pmc_setup(struct device_node *np)
+ 		sama7d65_pmc->pchws[i] = hw;
+ 	}
  
--	if (!(parent_name || parent_hw) || id > SYSTEM_MAX_ID)
-+	if (!(parent_name || parent_data) || id > SYSTEM_MAX_ID)
- 		return ERR_PTR(-EINVAL);
- 
- 	sys = kzalloc(sizeof(*sys), GFP_KERNEL);
-@@ -122,8 +122,8 @@ at91_clk_register_system(struct regmap *regmap, const char *name,
- 
- 	init.name = name;
- 	init.ops = &system_ops;
--	if (parent_hw)
--		init.parent_hws = (const struct clk_hw **)&parent_hw;
-+	if (parent_data)
-+		init.parent_data = (const struct clk_parent_data *)parent_data;
- 	else
- 		init.parent_names = &parent_name;
- 	init.num_parents = 1;
-diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index 238d9d06efc5..cd8f286f4711 100644
---- a/drivers/clk/at91/pmc.h
-+++ b/drivers/clk/at91/pmc.h
-@@ -283,7 +283,7 @@ at91sam9x5_clk_register_smd(struct regmap *regmap, const char *name,
- 
- struct clk_hw * __init
- at91_clk_register_system(struct regmap *regmap, const char *name,
--			 const char *parent_name, struct clk_hw *parent_hw,
-+			 const char *parent_name, struct clk_parent_data *parent_data,
- 			 u8 id, unsigned long flags);
- 
- struct clk_hw * __init
-diff --git a/drivers/clk/at91/sam9x7.c b/drivers/clk/at91/sam9x7.c
-index 4cb0ba8b6cf9..4cc61b56a13a 100644
---- a/drivers/clk/at91/sam9x7.c
-+++ b/drivers/clk/at91/sam9x7.c
-@@ -923,7 +923,7 @@ static void __init sam9x7_pmc_setup(struct device_node *np)
- 	sam9x7_systemck[3].parent_hw = sam9x7_pmc->pchws[1];
- 	for (i = 0; i < ARRAY_SIZE(sam9x7_systemck); i++) {
- 		hw = at91_clk_register_system(regmap, sam9x7_systemck[i].n,
--					      NULL, sam9x7_systemck[i].parent_hw,
-+					      NULL, &AT91_CLK_PD_HW(sam9x7_systemck[i].parent_hw),
- 					      sam9x7_systemck[i].id,
- 					      sam9x7_systemck[i].flags);
- 		if (IS_ERR(hw))
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 252a5e9cfd3c..558406b83b5f 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -1174,7 +1174,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 
- 	for (i = 0; i < ARRAY_SIZE(sama7g5_systemck); i++) {
- 		hw = at91_clk_register_system(regmap, sama7g5_systemck[i].n,
--					      NULL, sama7g5_pmc->pchws[i],
-+					      NULL, &AT91_CLK_PD_HW(sama7g5_pmc->pchws[i]),
- 					      sama7g5_systemck[i].id, 0);
++	/* Set systemck parent hws. */
++	sama7d65_systemck[0].parent_hw = usbck_hw;
++	sama7d65_systemck[1].parent_hw = sama7d65_pmc->pchws[0];
++	sama7d65_systemck[2].parent_hw = sama7d65_pmc->pchws[1];
++	sama7d65_systemck[3].parent_hw = sama7d65_pmc->pchws[2];
++	sama7d65_systemck[4].parent_hw = sama7d65_pmc->pchws[3];
++	sama7d65_systemck[5].parent_hw = sama7d65_pmc->pchws[4];
++	sama7d65_systemck[6].parent_hw = sama7d65_pmc->pchws[5];
++	sama7d65_systemck[7].parent_hw = sama7d65_pmc->pchws[6];
++	sama7d65_systemck[8].parent_hw = sama7d65_pmc->pchws[7];
+ 	for (i = 0; i < ARRAY_SIZE(sama7d65_systemck); i++) {
+ 		hw = at91_clk_register_system(regmap, sama7d65_systemck[i].n,
+-					      sama7d65_systemck[i].p, NULL,
++					      NULL, &AT91_CLK_PD_HW(sama7d65_systemck[i].parent_hw),
+ 					      sama7d65_systemck[i].id, 0);
  		if (IS_ERR(hw))
  			goto err_free;
 -- 
