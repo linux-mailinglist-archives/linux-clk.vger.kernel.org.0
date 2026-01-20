@@ -1,43 +1,44 @@
-Return-Path: <linux-clk+bounces-32988-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32992-lists+linux-clk=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0AkEIgyub2nxEwAAu9opvQ
-	(envelope-from <linux-clk+bounces-32988-lists+linux-clk=lfdr.de@vger.kernel.org>)
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 17:32:12 +0100
+	id kHw5I1a2b2nHMAAAu9opvQ
+	(envelope-from <linux-clk+bounces-32992-lists+linux-clk=lfdr.de@vger.kernel.org>)
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:07:34 +0100
 X-Original-To: lists+linux-clk@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33F64479C2
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 17:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 360EB4845A
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:07:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8FF6C7C52A0
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 15:24:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EA9AE7C5EEA
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 15:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A6944D6AE;
-	Tue, 20 Jan 2026 15:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201BE478E57;
+	Tue, 20 Jan 2026 15:06:34 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E91243C076;
-	Tue, 20 Jan 2026 15:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F95466B50;
+	Tue, 20 Jan 2026 15:06:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768921582; cv=none; b=RKmSFlhtAuu4dClepe4FQyFiA5juEBjmOs+ZlQn019cjvD7q5/NMsDL8+jkCQ7qtmlrB+sJn/pUwIXrZPFnR3qWIWv0b0Kdz2FpWKsf8tez0VmZRGu+eTzjbgWpplIKK+mT/j+hx4vIyShvW08Hk8zb6cggvf+fNawrpSaTaKkE=
+	t=1768921594; cv=none; b=QPE5jYVGXohA5lVod4wcoyaYcMTz2mH4KLrnwcK6abD7TNp1jj6v0wDWc0JYXeRDyfjwre31OXdrujEypoBWTM3ONSrpuu/4zyqbib6dY7DAuqKvJJpZJlf/4oV1X8qyziq52mjtuiyTLNg1fKpZeUWQI0ZSmDHS3Nvt28YjAxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768921582; c=relaxed/simple;
-	bh=iMcAVcZi0JvK1BoRXW/xhNQDvSGDtgDC6QX7DEPzLcw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AXrkeDi25rylG/R6kxd3HNwqttVa5954+cFVlYYPe53lF5CrlW1jTWcWxnUlY13NKyjDEYimhohIJ7x3xu2oFHw4UPnZ/hTRkhwyL3Lk5fiFRyFRMeHZI6jMHiccdauUN4FT8Kmj1Ri57gdiQsppym8oPKEvizYjQnKm3QYUE1s=
+	s=arc-20240116; t=1768921594; c=relaxed/simple;
+	bh=vgIXuJTGjYgFHqOU/AjAXxtKNjUamkHUF8We3gLEPZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=h/ZEYKLD9t/ZWklu3SO7+ZkTNGVKasfX9UQEUw8HvCBIg7nbvj7BbjoVNjXKHLV7ujrezSPbw8X5/TwZtYAgAfJIpIH5SnE7AuoHPDIve3bIUnmaSygcnfOr/SaAmCdwPwg+LYhAQ6DmrqotpD1UGH2YDf0RjsYnwsQpp3WQ7xc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: W7e0F+Q8RK6LGWO1Q/TJBw==
-X-CSE-MsgGUID: NHrdqL1ZRfqwDoJrc+m9UQ==
+X-CSE-ConnectionGUID: O3X+MApoTZKD71CsGiiHpA==
+X-CSE-MsgGUID: Fk0qRjr3RRe3wIeUmI+QQw==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 21 Jan 2026 00:06:12 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 21 Jan 2026 00:06:30 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.24])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1E8BE402261F;
-	Wed, 21 Jan 2026 00:06:07 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id D8173402261F;
+	Wed, 21 Jan 2026 00:06:26 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: geert+renesas@glider.be,
 	magnus.damm@gmail.com,
@@ -52,10 +53,12 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 0/5] Add versaclock3 support for RZ/V2H and RZ/V2N EVKs
-Date: Tue, 20 Jan 2026 15:06:01 +0000
-Message-ID: <20260120150606.7356-1-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH v2 4/5] arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Add versa3 clock generator node
+Date: Tue, 20 Jan 2026 15:06:05 +0000
+Message-ID: <20260120150606.7356-5-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260120150606.7356-1-ovidiu.panait.rb@renesas.com>
+References: <20260120150606.7356-1-ovidiu.panait.rb@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -65,63 +68,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [1.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[renesas.com : No valid SPF, No valid DKIM,none];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32988-lists,linux-clk=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[glider.be,gmail.com,kernel.org,baylibre.com,bp.renesas.com,renesas.com];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[ovidiu.panait.rb@renesas.com,linux-clk@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32992-lists,linux-clk=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[glider.be,gmail.com,kernel.org,baylibre.com,bp.renesas.com,renesas.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	TAGGED_RCPT(0.00)[linux-clk,renesas,dt];
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ovidiu.panait.rb@renesas.com,linux-clk@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
 	TO_DN_NONE(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	TAGGED_RCPT(0.00)[linux-clk,renesas,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 33F64479C2
+	DBL_PROHIBIT(0.00)[0.0.0.12:email,0.0.0.69:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,renesas.com:mid,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 360EB4845A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+Add versa3 clock generator node. It provides clocks for the RTC, PCIe
+and audio devices.
 
-This series extends the versaclock3 driver to support the internal
-freerunning 32.768 kHz clock, which is used on the Renesas RZ/V2H
-and RZ/V2N SoCs as RTC counter clock. It also adds the dts nodes for
-the RZ/V2H and RZ/V2N EVKs.
+Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+---
+v2 changes: None.
 
-Best regards,
-Ovidiu
+ .../dts/renesas/r9a09g057h44-rzv2h-evk.dts    | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-v2:
-- Added versaclock3 dts node for RZ/V2N EVK.
-
-v1: https://lore.kernel.org/all/20251021175311.19611-1-ovidiu.panait.rb@renesas.com/
-
-Ovidiu Panait (5):
-  clk: versaclock3: Remove unused SE2 clock select macro
-  clk: versaclock3: Use clk_parent_data arrays for clk_mux
-  clk: versaclock3: Add freerunning 32.768kHz clock support
-  arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Add versa3 clock
-    generator node
-  arm64: dts: renesas: r9a09g056n48-rzv2n-evk: Add versa3 clock
-    generator node
-
- .../dts/renesas/r9a09g056n48-rzv2n-evk.dts    |  25 ++++
- .../dts/renesas/r9a09g057h44-rzv2h-evk.dts    |  25 ++++
- drivers/clk/clk-versaclock3.c                 | 126 +++++++++++++-----
- 3 files changed, 145 insertions(+), 31 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts b/arch/arm64/boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts
+index dc4577ebf2e9..4a70e0707b38 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts
++++ b/arch/arm64/boot/dts/renesas/r9a09g057h44-rzv2h-evk.dts
+@@ -108,6 +108,12 @@ vqmmc_sdhi1: regulator-vccq-sdhi1 {
+ 		states = <3300000 0>, <1800000 1>;
+ 	};
+ 
++	x1: x1-clock {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++	};
++
+ 	/* 32.768kHz crystal */
+ 	x6: x6-clock {
+ 		compatible = "fixed-clock";
+@@ -277,6 +283,25 @@ raa215300: pmic@12 {
+ 		clocks = <&x6>;
+ 		clock-names = "xin";
+ 	};
++
++	versa3: clock-generator@69 {
++		compatible = "renesas,5l35023";
++		reg = <0x69>;
++		clocks = <&x1>;
++		#clock-cells = <1>;
++		assigned-clocks = <&versa3 0>,
++				  <&versa3 1>,
++				  <&versa3 2>,
++				  <&versa3 3>,
++				  <&versa3 4>,
++				  <&versa3 5>;
++		assigned-clock-rates = <24000000>,
++				       <24576000>,
++				       <32768>,
++				       <22579200>,
++				       <100000000>,
++				       <100000000>;
++	};
+ };
+ 
+ &mdio0 {
 -- 
 2.51.0
 
