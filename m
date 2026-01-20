@@ -1,52 +1,52 @@
-Return-Path: <linux-clk+bounces-32987-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32980-lists+linux-clk=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sD8qGCO7b2kOMQAAu9opvQ
-	(envelope-from <linux-clk+bounces-32987-lists+linux-clk=lfdr.de@vger.kernel.org>)
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:28:03 +0100
+	id QIk0Jb22b2nHMAAAu9opvQ
+	(envelope-from <linux-clk+bounces-32980-lists+linux-clk=lfdr.de@vger.kernel.org>)
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:09:17 +0100
 X-Original-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BFFE488D3
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:28:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BABA484D2
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 18:09:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0D899728F97
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 15:00:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6A9D4707A41
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 14:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B96743E9D2;
-	Tue, 20 Jan 2026 14:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ABE644BCB2;
+	Tue, 20 Jan 2026 14:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="Mt3JeJBj"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="oMyZMHrB"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EDC43E4B1;
-	Tue, 20 Jan 2026 14:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563CB441041;
+	Tue, 20 Jan 2026 14:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768920465; cv=none; b=ht9fyv7jqm8YJ1EtLHQy4FbJSwDurLYzCgVzZkGI781F1beeipGVUHkUJ8GlVz8sX0XQQYkwla0utunrpcPYLabRdwvZpKAoPKlochhcho63daMfOWafqqnp08DXQWk+LF+br5fwY9W6HNX7LGzEG/uTaSXnTbhhCpgFrDzv5eA=
+	t=1768919928; cv=none; b=ac3wXgwlOI314uIhEY3QNTXRDWdEPZt6KZ+GQqcA/iHzxtn9x9MpCtfiNPvt46rHk2SwU2NO6skiNFbd7i0P42UGOiYBMf+SXme9Q+rckhx/tzSOEUB2/uK3lZNG6Xkb0p10gT3E2foc3jbx8b4fII/YVLuQ1zpZ/OfIf/ptkx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768920465; c=relaxed/simple;
-	bh=mDCwO90ysQVh5/8jJEIMvPHnvTPC0hHEvdhq6jEtPs4=;
+	s=arc-20240116; t=1768919928; c=relaxed/simple;
+	bh=2F3Ic8dnVXSZ6XAYCS0sMyqTJm6Qsx5CCLU3rhvRvQ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n/0NlyxVpKlciz58o1YOrYcawC7I9NyzyDylkzi8q6dHHppPJAidLkGfF3gI6gb5PZgNhngWXo2PFTDzf3lGyXS4QeMhq7M645W+WybeL6mYxQoFL3Y3q9Lhnm9Ozp2TH3cDU1ijJasntm2SXjiA+d+iBsCO6gWhBmF91YcQXVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=Mt3JeJBj; arc=none smtp.client-ip=217.92.40.78
+	 MIME-Version; b=WzxV1t8fZXUd3mUpnGXCBo7gaUHO1G1pv45EmdcFd2SKPbfGiB2atepqFuNi3AOnWxUeuXCgYvW6ivJv5fDEpmgs29m0GUWRuuLUTPJ0w525qghcNIssorCz1uI+HawNScRotm68UXN1+BbTWnkiue12F6zcGUjQTzFTTY1MiYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=oMyZMHrB; arc=none smtp.client-ip=217.92.40.78
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CABF8148AD3F;
-	Tue, 20 Jan 2026 15:38:26 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D702C148AD45;
+	Tue, 20 Jan 2026 15:38:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1768919907; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1768919924; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=8mxUGDWjQ9NguFK3rUEO18MYDJEvo9VLccfwDD5+w38=;
-	b=Mt3JeJBjz6yH+aPyOuHtXYQMkJgheqZYPcbWBdz0Xr1T2YUHCAwx9Dr0zx12yyAzOUaNKg
-	K4zwUq4QcOSUSEGacPIE3y/5Q+d0QwyDygU9Tv5YCivxrcyhKn8VfWcXyqXFW1JkAHtYYx
-	dorH+CWIrOZ4la/XUuKMfjPrhRHcMzSmpts99hjh0PsfOzcfnoIQB/JxaxiwYZdyadJl0w
-	bFIMCGQg/0lWwsjEnq1CyaICrf8Ku9J8Nk4xE7D1/8DAmt55eybJ4iSgXbm1fOJ0ntmB3n
-	Hn+6MeYS8n+dQGlP9INgDfoiS+8xmcSMVmD2udnaM55qHsCIiraIZGR6BHAKyQ==
+	bh=6XzkSDuDP0HfzejUTV5XzIVGv3/HCsAZ2kabQBiMoXc=;
+	b=oMyZMHrBI12VPCPL0yQIS0fjxoar0Ljo5pzPQ3ubhw8r5eYKbZm6j9O2804oOXaMg1m23X
+	6l7c2y2zCfnnUPtOYKMdaNXEXmqq+oTCndzwGhmS/SULtz7K6Jieivw7skL+M48hL0jWcm
+	f3DmEoHBVsFTc2KUC9MlX4GLNVjfgNPaJGvhcdgdSmd7Iwst4NH2pMSap5WQgHq/iwfXA9
+	fvoKK29N09ZsuXEJcyvHjJBkWWzopahom8M+WWiNZT9ss20z7j49XYECEcUpBsUXM8G6sp
+	lQKGhqFcqUytn9Zfj13/Snr4jE5N3+gB4CLi4KH/Q4mO4P0t+NPCZgIlq8n8LA==
 From: Alexander Dahl <ada@thorsis.com>
 To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -56,15 +56,14 @@ Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH v3 02/19] dt-bindings: clock: at91: Split up per SoC partially
-Date: Tue, 20 Jan 2026 15:37:23 +0100
-Message-ID: <20260120143759.904013-3-ada@thorsis.com>
+	Stephen Boyd <sboyd@kernel.org>,
+	Cristian Birsan <cristian.birsan@microchip.com>,
+	Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>
+Subject: [PATCH v3 07/19] clk: at91: Add peripheral id for OTPC
+Date: Tue, 20 Jan 2026 15:37:28 +0100
+Message-ID: <20260120143759.904013-8-ada@thorsis.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260120143759.904013-1-ada@thorsis.com>
 References: <20260120143759.904013-1-ada@thorsis.com>
@@ -76,403 +75,105 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [1.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[thorsis.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32987-lists,linux-clk=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32980-lists,linux-clk=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[thorsis.com,quarantine];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[thorsis.com:+];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ada@thorsis.com,linux-clk@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[thorsis.com,quarantine];
+	DKIM_TRACE(0.00)[thorsis.com:+];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-clk,dt];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[thorsis.com:email,thorsis.com:dkim,thorsis.com:mid,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,fffffd00:email]
-X-Rspamd-Queue-Id: 1BFFE488D3
+	TAGGED_RCPT(0.00)[linux-clk];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[thorsis.com:email,thorsis.com:dkim,thorsis.com:mid,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 3BABA484D2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Before adding even more new indexes creating more holes in the
-clk at91 drivers pmc_data->chws arrays, split this up.
+That peripheral clock is required for proper OTPC function.
 
-This is a partial split up only for some of the old PMC definitions.
-
-Binding splitup was proposed for several reasons:
-
-1) keep the driver code simple, readable, and efficient
-2) avoid accidental array index duplication
-3) avoid memory waste by creating more and more unused array members.
-
-Old values are kept to not break dts, and to maintain dt ABI.
-
-Link: https://lore.kernel.org/linux-devicetree/20250207-jailbird-circus-bcc04ee90e05@thorsis.com/T/#u
+Link: https://lore.kernel.org/linux-clk/ec34efc2-2051-4b8a-b5d8-6e2fd5e08c28@microchip.com/T/#u
 Signed-off-by: Alexander Dahl <ada@thorsis.com>
 ---
 
 Notes:
     v3:
-    - full splitup for all at91 family SoCs instead of just a few
+    - no changes
     
     v2:
-    - new patch, not present in v1
+    - new patch in series, was not present in v1
 
- .../reset/atmel,at91sam9260-reset.yaml        |  3 ++-
- .../dt-bindings/clock/atmel,at91rm9200-pmc.h  | 15 ++++++++++++
- .../dt-bindings/clock/atmel,at91sam9260-pmc.h | 16 +++++++++++++
- .../dt-bindings/clock/atmel,at91sam9g45-pmc.h | 15 ++++++++++++
- .../dt-bindings/clock/atmel,at91sam9n12-pmc.h | 15 ++++++++++++
- .../dt-bindings/clock/atmel,at91sam9rl-pmc.h  | 15 ++++++++++++
- .../dt-bindings/clock/atmel,at91sam9x5-pmc.h  | 15 ++++++++++++
- include/dt-bindings/clock/atmel,sama5d2-pmc.h | 20 ++++++++++++++++
- include/dt-bindings/clock/atmel,sama5d3-pmc.h | 14 +++++++++++
- include/dt-bindings/clock/atmel,sama5d4-pmc.h | 15 ++++++++++++
- .../dt-bindings/clock/microchip,sam9x60-pmc.h | 15 ++++++++++++
- .../dt-bindings/clock/microchip,sam9x7-pmc.h  | 19 +++++++++++++++
- .../clock/microchip,sama7d65-pmc.h            | 24 +++++++++++++++++++
- .../dt-bindings/clock/microchip,sama7g5-pmc.h | 19 +++++++++++++++
- 14 files changed, 219 insertions(+), 1 deletion(-)
- create mode 100644 include/dt-bindings/clock/atmel,at91rm9200-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,at91sam9260-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,at91sam9g45-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,at91sam9n12-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,at91sam9rl-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,at91sam9x5-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,sama5d2-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,sama5d3-pmc.h
- create mode 100644 include/dt-bindings/clock/atmel,sama5d4-pmc.h
- create mode 100644 include/dt-bindings/clock/microchip,sam9x60-pmc.h
- create mode 100644 include/dt-bindings/clock/microchip,sam9x7-pmc.h
- create mode 100644 include/dt-bindings/clock/microchip,sama7d65-pmc.h
- create mode 100644 include/dt-bindings/clock/microchip,sama7g5-pmc.h
+ drivers/clk/at91/sam9x60.c  | 1 +
+ drivers/clk/at91/sam9x7.c   | 1 +
+ drivers/clk/at91/sama7d65.c | 1 +
+ drivers/clk/at91/sama7g5.c  | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-index 84c4801df8d9a..8c89ccc3d6393 100644
---- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-@@ -67,9 +67,10 @@ additionalProperties: false
- examples:
-   - |
-     #include <dt-bindings/clock/at91.h>
-+    #include <dt-bindings/clock/atmel,at91sam9260-pmc.h>
- 
-     reset-controller@fffffd00 {
-         compatible = "atmel,at91sam9260-rstc";
-         reg = <0xfffffd00 0x10>;
--        clocks = <&pmc PMC_TYPE_CORE PMC_SLOW>;
-+        clocks = <&pmc PMC_TYPE_CORE AT91SAM9260_PMC_SLOW>;
-     };
-diff --git a/include/dt-bindings/clock/atmel,at91rm9200-pmc.h b/include/dt-bindings/clock/atmel,at91rm9200-pmc.h
-new file mode 100644
-index 0000000000000..ab0d0d7a3b655
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91rm9200-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91rm9200 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91RM9200_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91RM9200_PMC_H
-+
-+#define AT91RM9200_PMC_MCK	1
-+#define AT91RM9200_PMC_MAIN	3
-+#define AT91RM9200_PMC_PLLACK	7
-+#define AT91RM9200_PMC_PLLBCK	8
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,at91sam9260-pmc.h b/include/dt-bindings/clock/atmel,at91sam9260-pmc.h
-new file mode 100644
-index 0000000000000..6a5453cf70954
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91sam9260-pmc.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91sam9260 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9260_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9260_PMC_H
-+
-+#define AT91SAM9260_PMC_SLOW	0
-+#define AT91SAM9260_PMC_MCK	1
-+#define AT91SAM9260_PMC_MAIN	3
-+#define AT91SAM9260_PMC_PLLACK	7
-+#define AT91SAM9260_PMC_PLLBCK	8
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,at91sam9g45-pmc.h b/include/dt-bindings/clock/atmel,at91sam9g45-pmc.h
-new file mode 100644
-index 0000000000000..63134ecafa50c
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91sam9g45-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91sam9g45 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9G45_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9G45_PMC_H
-+
-+#define AT91SAM9G45_PMC_MCK	1
-+#define AT91SAM9G45_PMC_UTMI	2
-+#define AT91SAM9G45_PMC_MAIN	3
-+#define AT91SAM9G45_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,at91sam9n12-pmc.h b/include/dt-bindings/clock/atmel,at91sam9n12-pmc.h
-new file mode 100644
-index 0000000000000..e41ad6d68108a
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91sam9n12-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91sam9n12 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9N12_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9N12_PMC_H
-+
-+#define AT91SAM9N12_PMC_MCK	1
-+#define AT91SAM9N12_PMC_MAIN	3
-+#define AT91SAM9N12_PMC_PLLACK	7
-+#define AT91SAM9N12_PMC_PLLBCK	8
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,at91sam9rl-pmc.h b/include/dt-bindings/clock/atmel,at91sam9rl-pmc.h
-new file mode 100644
-index 0000000000000..4306d457f8d2b
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91sam9rl-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91sam9rl clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9RL_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9RL_PMC_H
-+
-+#define AT91SAM9RL_PMC_MCK	1
-+#define AT91SAM9RL_PMC_UTMI	2
-+#define AT91SAM9RL_PMC_MAIN	3
-+#define AT91SAM9RL_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,at91sam9x5-pmc.h b/include/dt-bindings/clock/atmel,at91sam9x5-pmc.h
-new file mode 100644
-index 0000000000000..d3e612f063a00
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,at91sam9x5-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91sam9x5 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9X5_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_AT91SAM9X5_PMC_H
-+
-+#define AT91SAM9X5_PMC_MCK	1
-+#define AT91SAM9X5_PMC_UTMI	2
-+#define AT91SAM9X5_PMC_MAIN	3
-+#define AT91SAM9X5_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,sama5d2-pmc.h b/include/dt-bindings/clock/atmel,sama5d2-pmc.h
-new file mode 100644
-index 0000000000000..1690a69087522
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,sama5d2-pmc.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sama5d2 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_SAMA5D2_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_SAMA5D2_PMC_H
-+
-+#define SAMA5D2_PMC_MCK		1
-+#define SAMA5D2_PMC_UTMI	2
-+#define SAMA5D2_PMC_MAIN	3
-+#define SAMA5D2_PMC_MCK2	4
-+#define SAMA5D2_PMC_I2S0_MUX	5
-+#define SAMA5D2_PMC_I2S1_MUX	6
-+#define SAMA5D2_PMC_PLLACK	7
-+#define SAMA5D2_PMC_AUDIOPLLCK	9
-+#define SAMA5D2_PMC_AUDIOPINCK	10
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,sama5d3-pmc.h b/include/dt-bindings/clock/atmel,sama5d3-pmc.h
-new file mode 100644
-index 0000000000000..85b772ccd996a
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,sama5d3-pmc.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sama5d3 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_SAMA5D3_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_SAMA5D3_PMC_H
-+
-+#define SAMA5D3_PMC_MCK		1
-+#define SAMA5D3_PMC_UTMI	2
-+#define SAMA5D3_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/atmel,sama5d4-pmc.h b/include/dt-bindings/clock/atmel,sama5d4-pmc.h
-new file mode 100644
-index 0000000000000..15b812e1b9259
---- /dev/null
-+++ b/include/dt-bindings/clock/atmel,sama5d4-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sama5d4 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_ATMEL_SAMA5D4_PMC_H
-+#define _DT_BINDINGS_CLOCK_ATMEL_SAMA5D4_PMC_H
-+
-+#define SAMA5D4_PMC_MCK		1
-+#define SAMA5D4_PMC_UTMI	2
-+#define SAMA5D4_PMC_MCK2	4
-+#define SAMA5D4_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/microchip,sam9x60-pmc.h b/include/dt-bindings/clock/microchip,sam9x60-pmc.h
-new file mode 100644
-index 0000000000000..91f8f863ea076
---- /dev/null
-+++ b/include/dt-bindings/clock/microchip,sam9x60-pmc.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sam9x60 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_MICROCHIP_SAM9X60_PMC_H
-+#define _DT_BINDINGS_CLOCK_MICROCHIP_SAM9X60_PMC_H
-+
-+#define SAM9X60_PMC_MCK		1
-+#define SAM9X60_PMC_UTMI	2
-+#define SAM9X60_PMC_MAIN	3
-+#define SAM9X60_PMC_PLLACK	7
-+
-+#endif
-diff --git a/include/dt-bindings/clock/microchip,sam9x7-pmc.h b/include/dt-bindings/clock/microchip,sam9x7-pmc.h
-new file mode 100644
-index 0000000000000..e1dd41fe75046
---- /dev/null
-+++ b/include/dt-bindings/clock/microchip,sam9x7-pmc.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sam9x7 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_MICROCHIP_SAM9X7_PMC_H
-+#define _DT_BINDINGS_CLOCK_MICROCHIP_SAM9X7_PMC_H
-+
-+#define SAM9X7_PMC_MCK		1
-+#define SAM9X7_PMC_UTMI		2
-+#define SAM9X7_PMC_MAIN		3
-+#define SAM9X7_PMC_PLLACK	7
-+#define SAM9X7_PMC_AUDIOPMCPLL	9
-+#define SAM9X7_PMC_AUDIOIOPLL	10
-+#define SAM9X7_PMC_PLLADIV2	14
-+#define SAM9X7_PMC_LVDSPLL	15
-+
-+#endif
-diff --git a/include/dt-bindings/clock/microchip,sama7d65-pmc.h b/include/dt-bindings/clock/microchip,sama7d65-pmc.h
-new file mode 100644
-index 0000000000000..09d152da6db44
---- /dev/null
-+++ b/include/dt-bindings/clock/microchip,sama7d65-pmc.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sama7d65 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_MICROCHIP_SAMA7D65_PMC_H
-+#define _DT_BINDINGS_CLOCK_MICROCHIP_SAMA7D65_PMC_H
-+
-+#define SAMA7D65_PMC_MCK0		1
-+#define SAMA7D65_PMC_UTMI		2
-+#define SAMA7D65_PMC_MAIN		3
-+#define SAMA7D65_PMC_CPUPLL		4
-+#define SAMA7D65_PMC_SYSPLL		5
-+#define SAMA7D65_PMC_BAUDPLL		8
-+#define SAMA7D65_PMC_AUDIOPMCPLL	9
-+#define SAMA7D65_PMC_AUDIOIOPLL		10
-+#define SAMA7D65_PMC_ETHPLL		11
-+#define SAMA7D65_PMC_MCK1		13
-+#define SAMA7D65_PMC_LVDSPLL		15
-+#define SAMA7D65_PMC_MCK3		16
-+#define SAMA7D65_PMC_MCK5		17
-+
-+#endif
-diff --git a/include/dt-bindings/clock/microchip,sama7g5-pmc.h b/include/dt-bindings/clock/microchip,sama7g5-pmc.h
-new file mode 100644
-index 0000000000000..0303cae56f849
---- /dev/null
-+++ b/include/dt-bindings/clock/microchip,sama7g5-pmc.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * The constants defined in this header are being used in dts and in
-+ * at91 sama7g5 clock driver.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_MICROCHIP_SAMA7G5_PMC_H
-+#define _DT_BINDINGS_CLOCK_MICROCHIP_SAMA7G5_PMC_H
-+
-+#define SAMA7G5_PMC_MCK0	1
-+#define SAMA7G5_PMC_UTMI	2
-+#define SAMA7G5_PMC_MAIN	3
-+#define SAMA7G5_PMC_CPUPLL	4
-+#define SAMA7G5_PMC_SYSPLL	5
-+#define SAMA7G5_PMC_AUDIOPMCPLL	9
-+#define SAMA7G5_PMC_AUDIOIOPLL	10
-+#define SAMA7G5_PMC_MCK1	13
-+
-+#endif
+diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
+index a9f293a8e3b26..11f16126ff9e9 100644
+--- a/drivers/clk/at91/sam9x60.c
++++ b/drivers/clk/at91/sam9x60.c
+@@ -146,6 +146,7 @@ static const struct {
+ 	{ .n = "isi_clk",    .id = 43, },
+ 	{ .n = "pioD_clk",   .id = 44, },
+ 	{ .n = "tcb1_clk",   .id = 45, },
++	{ .n = "otpc_clk",   .id = 46, },
+ 	{ .n = "dbgu_clk",   .id = 47, },
+ 	/*
+ 	 * mpddr_clk feeds DDR controller and is enabled by bootloader thus we
+diff --git a/drivers/clk/at91/sam9x7.c b/drivers/clk/at91/sam9x7.c
+index 9a5afd258cb86..c4d2b022d9d07 100644
+--- a/drivers/clk/at91/sam9x7.c
++++ b/drivers/clk/at91/sam9x7.c
+@@ -407,6 +407,7 @@ static const struct {
+ 	{ .n = "isi_clk",	.id = 43, },
+ 	{ .n = "pioD_clk",	.id = 44, },
+ 	{ .n = "tcb1_clk",	.id = 45, },
++	{ .n = "otpc_clk",	.id = 46, },
+ 	{ .n = "dbgu_clk",	.id = 47, },
+ 	{ .n = "pmecc_clk",	.id = 48, },
+ 	/*
+diff --git a/drivers/clk/at91/sama7d65.c b/drivers/clk/at91/sama7d65.c
+index 5d8973aa50a53..52467d629258f 100644
+--- a/drivers/clk/at91/sama7d65.c
++++ b/drivers/clk/at91/sama7d65.c
+@@ -641,6 +641,7 @@ static struct {
+ 	{ .n = "mcan2_clk",	.p = PCK_PARENT_HW_MCK5, .id = 60, .r = { .max = 200000000, }, },
+ 	{ .n = "mcan3_clk",	.p = PCK_PARENT_HW_MCK5, .id = 61, .r = { .max = 200000000, }, },
+ 	{ .n = "mcan4_clk",	.p = PCK_PARENT_HW_MCK5, .id = 62, .r = { .max = 200000000, }, },
++	{ .n = "otpc_clk",	.p = PCK_PARENT_HW_MCK0, .id = 63, },
+ 	{ .n = "pdmc0_clk",	.p = PCK_PARENT_HW_MCK9, .id = 64, .r = { .max = 200000000, }, },
+ 	{ .n = "pdmc1_clk",	.p = PCK_PARENT_HW_MCK9, .id = 65, .r = { .max = 200000000, }, },
+ 	{ .n = "pit64b0_clk",	.p = PCK_PARENT_HW_MCK7, .id = 66, },
+diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
+index 9a6f0f30b2b7e..3e0cfd2613851 100644
+--- a/drivers/clk/at91/sama7g5.c
++++ b/drivers/clk/at91/sama7g5.c
+@@ -504,6 +504,7 @@ static struct {
+ 	{ .n = "mcan3_clk",	.p = PCK_PARENT_HW_MCK1, .id = 64, .r = { .max = 200000000, }, },
+ 	{ .n = "mcan4_clk",	.p = PCK_PARENT_HW_MCK1, .id = 65, .r = { .max = 200000000, }, },
+ 	{ .n = "mcan5_clk",	.p = PCK_PARENT_HW_MCK1, .id = 66, .r = { .max = 200000000, }, },
++	{ .n = "otpc_clk",	.p = PCK_PARENT_HW_MCK0, .id = 67, },
+ 	{ .n = "pdmc0_clk",	.p = PCK_PARENT_HW_MCK1, .id = 68, .r = { .max = 200000000, }, },
+ 	{ .n = "pdmc1_clk",	.p = PCK_PARENT_HW_MCK1, .id = 69, .r = { .max = 200000000, }, },
+ 	{ .n = "pit64b0_clk",	.p = PCK_PARENT_HW_MCK1, .id = 70, },
 -- 
 2.47.3
 
