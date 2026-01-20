@@ -1,220 +1,299 @@
-Return-Path: <linux-clk+bounces-32970-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-32986-lists+linux-clk=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cGG3FyXIb2mgMQAAu9opvQ
-	(envelope-from <linux-clk+bounces-32970-lists+linux-clk=lfdr.de@vger.kernel.org>)
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 19:23:33 +0100
+	id SERQKO3Db2lsMQAAu9opvQ
+	(envelope-from <linux-clk+bounces-32986-lists+linux-clk=lfdr.de@vger.kernel.org>)
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 19:05:33 +0100
 X-Original-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85164963B
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 19:23:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9DA4915A
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 19:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3A157CB6AE
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 11:22:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FE75924545
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 15:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D024219F3;
-	Tue, 20 Jan 2026 11:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72C143E9DE;
+	Tue, 20 Jan 2026 14:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Cn5FwKto";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QRBMD48V"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="IeTIO0+U"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F43280A5B
-	for <linux-clk@vger.kernel.org>; Tue, 20 Jan 2026 11:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA6143E4AF;
+	Tue, 20 Jan 2026 14:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768908110; cv=none; b=PJ1krFhnHd5ixJrApnr4FieZuuovqCrlFIRtDQf1NzmW0Y/kZhk/iXEKJpyGpe9ns6GwP+ZNqdGIf87P50ZJVLwbNuwHBMb/4DnXJCNwjp8UUFW8Nc/MCHX9QJAfJRX5ifWvlacDmHWpu5WidqlKD0AVKp3RohPd77ZJuGxElSw=
+	t=1768920464; cv=none; b=fNdj1sy61ITU61JjQohERCRLz/WDfH0X9uQVe5oD+o2x59tQR4/SDoRFodOgDveF6nazmnbeFpcJAnYsIvf7zimYsvfIyQfNpa4KkcXUpSWjfTcQflTmXazi6Mh3D8KViXFQAUl0VJaTHj/LCGd4FOvQUGi4I0oT11lrwThGu7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768908110; c=relaxed/simple;
-	bh=F0t5sbycw9YQ5W7Eletv4zTITIv2QNOjvOBgJ0EmP7g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sZksEwA0mK03ZR+6XOn92z5ueq3PHBJ6cRuaRLoomkPJ12jr2E29TcpKIEdszPutSMvmVQU2tcgvEKl27CKVH9/i3qGB3VRFHqY0Jgxom9ZbAedwAGZygFlT0KbkE7dkY6lZ3bnt2tBMUdC5Fv3hSziiwwhoDPi7VRBiUVLZl/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Cn5FwKto; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QRBMD48V; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K6hpvo428514
-	for <linux-clk@vger.kernel.org>; Tue, 20 Jan 2026 11:21:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4a0PQ+QMkBfoZo42ZG8lJzDFY2OErM69QALH+UBgI0o=; b=Cn5FwKto2g6hPBaw
-	UsUSqS4m283A8SRLWkXhAn3W93rj48e9LGYOqcZzSs/KXaiveTBr2V8Etu+A85Go
-	J23qd1hriOjIhmmpFirHP2Um2mKCXaiJ51IHRGGNBajCIysI/Vxhhb4FlaJr0vPB
-	3mdVBzaDHIeTZuVn2UyFJTh96fkICve9vV0lnBqTEQ+ZK+A3KCaS6q0S51Zf/E0Y
-	/CGqpj9nSpK5GjOV/ZjNEhtLxz8y7aK/CeIoeD9r1+DfMTqaIDEkWuMs8sGk8J0N
-	Ivm5G6/cQLrAV/ATRTx5n2lWzZJnLkmCVERteTn/5WHMjtaCBWArL4+EpgXojsM0
-	lOq8zA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bt4ps0trp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Tue, 20 Jan 2026 11:21:46 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-501476535f8so17882651cf.3
-        for <linux-clk@vger.kernel.org>; Tue, 20 Jan 2026 03:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768908106; x=1769512906; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4a0PQ+QMkBfoZo42ZG8lJzDFY2OErM69QALH+UBgI0o=;
-        b=QRBMD48VhGDy2WJhD1eRTxvy/xb+02jXLCDhdWcpgTVKHXbaoWk83H5JANYj6X2Le8
-         tmzSA5STFhdydmJ1k7Yw02N17FJbyyoMtrNjLBipREAhJYU4PHYYWocn6lzE3NobX8jb
-         vxczOsuIRPimoaRbTH3h6gQkOcYczEAA7TchqYwhk7LHdL7Tr2bJpjmVyDVxk8SUD+MG
-         FDuox2Khj/V3eFW6gwJgpG7T/lMzJe7idyqzQ5Q3AXuI2Rk1CVRVDav6isU9qnP8Zfli
-         sMWp+7AhwEdaw8XMHY6Ocde7cIwm51bfDVy1fFw4J9ZS/cbcwoYTJ9ysyyhAUJkbuK6v
-         JbLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768908106; x=1769512906;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4a0PQ+QMkBfoZo42ZG8lJzDFY2OErM69QALH+UBgI0o=;
-        b=RivjFPVXP38QvZA7k3z7cc5+DFpy+kOPoV9RNge14p4tEidGgSeBs5bQ8QYN5dtTE1
-         V6FK3ozfQR4xDzJemcDQL3njv8gLTq0xncNCAusGUoOavMzA1kRDnbAJALlBIUp6NBJh
-         mhGY+BVovon6VqQ02eymnScKf6RFu841offBEHDhiyW6ttm7vsni3QOOoRyzQ6KwqPz3
-         w24BEp06Qpz9/OrEXvRLQ1+xOTA17zdC7jv7UfnmT51i0rG4b6abj/6k7CO5RssoiIhB
-         g525yqtLrNo8g7lwh3fHZAXpYVS11UUY646/BpcpcPBnUKYoUtjsbEjCR9apTYfhBQXP
-         YURw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfig3+GyDG0y8obbdTjPp4k1kQruSDFF8rHrsSYI41jyJ2eybxlrRroUCHb29Pc+jMgA6OVZeS3Es=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9qKuyh6VOYWEP8jMQxAli0U2Ms1H9xmEGS4Y4aQml9WJST4HR
-	bnNxBjAY6J6q5mf5DxXMs81C1KlxhIbIG8+pdDEzNYH4AsuSpAMgGfbRSrIe59dKidThCYdftrG
-	PyuoEja+xNZAc3Uckclm7N2wsztSUYGC4lBHJtQX1Whmlre9T72H7jHwgItYhDQ8=
-X-Gm-Gg: AY/fxX7DgiP+2ahI4Q7zfqW/TUsBR7xE5evWm1cYJNjORPgfFS070jCDIQGXo5n8OEt
-	yLsrW66ptDea4Yb8ONxfNDBssOGHyerqeid8Qxqbf/1GsmLjrznUKj5T6fpDEqcvVDJLhU9RQ0M
-	9zQs9SBUf9sYxxtOBmDzVM8nRAqX5zUdKhIPtLL2D4n7N3KkpgW4Ldlw1J/cXyZTGPyUw6y2KzV
-	FPxb0ivTzJ9Qr0mjek+HWJxQX8jVMJMb/AD6RgOyeJLt/NhnhqzB6ILOrFjd1HT6ZUVJbDgsf5M
-	uxtvmTGhhaOoJwTGGdQ8hckvYTtGbLmhNehVs96Ba+O88RWPK/A3nXuCMe72vTCxSC7X8su+dV7
-	4Xp56QMSOxZMittXeucGM2HqrbJc29F3T8+f8T6hbZVBGCJ+PdK3iHOmhrwiIqYGt16s=
-X-Received: by 2002:a05:622a:51:b0:4f1:b3c1:20f8 with SMTP id d75a77b69052e-502a168dce3mr167653131cf.4.1768908105754;
-        Tue, 20 Jan 2026 03:21:45 -0800 (PST)
-X-Received: by 2002:a05:622a:51:b0:4f1:b3c1:20f8 with SMTP id d75a77b69052e-502a168dce3mr167652921cf.4.1768908105374;
-        Tue, 20 Jan 2026 03:21:45 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6580ec85bc4sm90439a12.5.2026.01.20.03.21.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 03:21:44 -0800 (PST)
-Message-ID: <b27bd055-d6e1-4021-a2e6-95064b2a0ea3@oss.qualcomm.com>
-Date: Tue, 20 Jan 2026 12:21:42 +0100
+	s=arc-20240116; t=1768920464; c=relaxed/simple;
+	bh=BWY6JmyEq/tJ9ZMer6mDz1ZiUoeCuHRiFf8ShUU3ndo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mq2sKJt37sQFcLlsz5UPaAf2zcj4kj7A04BzEVufIzUg3RA8XSnohPdvWxx6++RO9ZhHvcZO9G794Vv383PINmChRNbGzsptitLFHfea5VIDrvZWZISuvOAg8M0gl+39AJgjqyOl6cm+gZpBPN45j8hkkDTmCuGl4e5FKmwAVIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=IeTIO0+U; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 23162148AD37;
+	Tue, 20 Jan 2026 15:38:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1768919904; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=sjdXwo1evm+KXL7WYk1Hdt9L00R40tyG0G67Zg86Eqg=;
+	b=IeTIO0+Ur/7LJ2nVH0dfN7hdErWOXwGkNUMHqc6TdINkp6LqxFRFgHCNcE+rc2Fk/fX6ob
+	ZsjJuKpdULOBu/NaR+VU8eQN9CSi9dPm9hK9e+xWAyZApETFsEN4MOSM5NsA6QZuTuSc6N
+	T22H3fuMCDV+jvkYsQv6pUAYbjXdWxx6VMwz+DAeD9Zx4imBOMoeg1WJHVyFJhyf9LioPR
+	rpWvRIWvHTV9FCr2kswuETa+KEt8dvVOvbNW/ipXDmLW1E17Ib2lISN7WxnVKqXn59rauW
+	woC5i/OJQxHUZ04w4wQDlgkODLlni4IVxTmeJ9AS0mzfHlTH/hl9FR4IKU12AQ==
+From: Alexander Dahl <ada@thorsis.com>
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ryan Wanner <ryan.wanner@microchip.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH v3 00/19] Microchip OTPC driver on SAM9X60 exposing UIDxR as additional nvmem device
+Date: Tue, 20 Jan 2026 15:37:21 +0100
+Message-ID: <20260120143759.904013-1-ada@thorsis.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc7180: Add missing MDSS core reset
-To: Konrad Dybcio <konradybcio@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        cros-qcom-dts-watchers@chromium.org,
-        Kalyan Thota
- <quic_kalyant@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Harigovindan P <harigovi@codeaurora.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Val Packett <val@packett.cool>
-References: <20260120-topic-7180_dispcc_bcr-v1-0-0b1b442156c3@oss.qualcomm.com>
- <20260120-topic-7180_dispcc_bcr-v1-3-0b1b442156c3@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260120-topic-7180_dispcc_bcr-v1-3-0b1b442156c3@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: nnebu_sPwemd6ppU4pwmU80uLGKCSEag
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA5MyBTYWx0ZWRfX47z/1lKlCtR4
- hBE6m8YHQx6goCNG3FZYvtV7GfIJ11fwe4VCucXYCmmxvcaTdYhatphjR4O9HlDiqZgcM46Wcc5
- iClQ8zD2DiqkY4ZVYN5Ex3Npyc04sFvbEuqunw2ZhUURxeOSeIVEYF7vW+dFbQXXrSHEYV6oMoY
- T1Hm9wMh48WVxXmGiamFEcMPU3hHf436x+vnAlDL+rJyKesPQm6xw3Kkvs6oqiKZNUbNHSx7eCM
- V9tj8HxchpF2VUZz0V+bCnFlZs4iybsWWjgcY0SvlCOHoFy++XsBp5kMDP3lyiPUgOvQki/ixKm
- GK6t0mgHvpjyyl8J3DKPAG1DHsnOVUa5GEc3Ip6rasvqK1hEfzaSojaV5q2N8+Bzlpretazlde6
- vd3O4UTPCojPDXHVciK5eWBISYc41HfpZZXU5YLTBpXA6yXg+K9g8TakErxm+RzW+3urXtQK17+
- yZw6Vk8ZiB11tGT5nIw==
-X-Authority-Analysis: v=2.4 cv=PdfyRyhd c=1 sm=1 tr=0 ts=696f654a cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=ijxkZjTTDkK4w4DhjVMA:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: nnebu_sPwemd6ppU4pwmU80uLGKCSEag
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-20_02,2026-01-20_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 spamscore=0 phishscore=0 malwarescore=0
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2601200093
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_DKIM_ALLOW(-0.20)[thorsis.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[qualcomm.com,reject];
-	TAGGED_FROM(0.00)[bounces-32970-lists,linux-clk=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,qualcomm.com:email,qualcomm.com:dkim];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-clk@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	TAGGED_RCPT(0.00)[linux-clk,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32986-lists,linux-clk=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[thorsis.com,quarantine];
+	DKIM_TRACE(0.00)[thorsis.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-clk];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	PRECEDENCE_BULK(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: A85164963B
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	FROM_NEQ_ENVFROM(0.00)[ada@thorsis.com,linux-clk@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[thorsis.com:mid,thorsis.com:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,infradead.org:email,ada-pc:email,distrokit:email]
+X-Rspamd-Queue-Id: 2A9DA4915A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/20/26 12:19 PM, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> 
-> To make sure the core starts in a predictable state, it's useful to
-> first reset it.
-> 
-> Wire up the reset to fulfill that missing part of the HW description.
-> 
-> Reported-by: Val Packett <val@packett.cool>
-> Fixes: a3db7ad1af49 ("arm64: dts: sc7180: add display dt nodes")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 45b9864e3304..f7937fa88536 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -3221,6 +3221,8 @@ mdss: display-subsystem@ae00000 {
->  				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
->  			clock-names = "iface", "ahb", "core";
->  
-> +			resets = <&dispcc DISPCC_MDSS_CORE_BCR>;
+Hei hei,
 
-^ won't compile without a _ between 'DISP' and 'CC', should have 
-compile-tested harder..
+on a custom sam9x60 based board we want to access a unique ID of the
+SoC.  Microchip sam-ba has a command 'readuniqueid' which returns the
+content of the OTPC Product UID x Registers in that case.
 
-Konrad
+(On different boards with a SAMA5D2 sam-ba and we use the Serial Number
+x Register for that purpose.  In the linux kernel those are exposed
+through nvmem by the atmel soc driver.  Those registers are not present
+in the SAM9X60 series, but only for SAMA5D2/SAMA5D4 AFAIK.  Neither of
+those uses /sys/devices/socX for exposing the serial number.)
+
+There is a driver for the OTPC of the SAMA7G5 and after comparing
+register layouts it seems that one is almost identical to the one used
+by SAM9X60.  Currently that driver has no support for the UIDx
+registers, but I suppose it would be the right place to implement it,
+because the registers are within the OTPC register address offsets.
+
+When developing and testing it became clear the OTPC needs explicit
+enabling of certain clocks in the otpc driver.  So the patch series
+starts with some rework of clock bindings and clock drivers, along with
+referencing that in SoC dtsi files.
+
+The five patches for the otpc driver start with two patches with some
+unrelated fixups for that driver. Following are more patches dealing
+with sam9x60 support for the driver and the necessary clock enablement.
+The last patch for the otpc driver adds an additional nvmem device for
+the UIDx registers, fullfilling the initial goal of mine.
+
+Output of sam-ba:
+
+    adahl@ada-pc /opt/sam-ba_v3.9.1 % ./sam-ba -p serial -d sam9x60:0:1 -t 5 -a readuniqueid
+    SAM-BA Command Line Interface Tool v3.9.1 (linux - x86_64-little_endian-lp64)
+    Copyright 2025 Microchip Technology
+    Opening serial port 'ttyACM0' (USB)
+    Connection opened.
+    Launch readuniqueid
+    Executing Applet at @0x300000
+    UID[0] = 0x36465356
+    UID[1] = 0x10340637
+    UID[2] = 0x6036f6f0
+    UID[3] = 0x27b483c8
+    Execution time: 150 ms
+    Connection closed.
+
+New Linux nvmem device content (little-endian):
+
+    root@DistroKit:~ hexdump -C /sys/bus/nvmem/devices/mchp-uid0/nvmem
+    00000000  56 53 46 36 37 06 34 10  f0 f6 36 60 c8 83 b4 27  |VSF67.4...6`...'|
+    00000010
+
+I tested the series at runtime only on SAM9X60, not on SAMA7G5 or the
+other SoCs affected, because I only have sam9x60 hardware for testing.
+If someone could test on SAM9X7, SAMA7G5, and SAMA7D65, that would be
+highly appreciated.
+
+Series is build time tested for sam9, sama5, and sama7.
+
+Last question: Should the UID be added to the device entropy pool with
+add_device_randomness() as done in the SAMA5D2 sfr driver?
+
+For detailed patch changelog see each patch, general changelog below.
+
+Greets
+Alex
+
+(series based on v6.19-rc6)
+
+v3:
+- Reordered patch series (thanks Claudiu)
+- Collected review tags plus minor commit message fixes (e.g. tag order)
+- Removed clock-names from dt bindings, led to confusion on review,
+  and not used by the driver anyways (always enables all clocks)
+- Removed redundant example from dt bindings docs
+- Extended the per SoC splitup of the PMC definitions to the whole at91 family
+- Add patch for a small after splitup fixup of the sama7d65 clock driver
+- Add patch for removing old preprocessor definitions
+
+v2:
+- Removed patch adding bad OPTC conditions warnings on probe
+- Removed patch adding more register definitions (the one register
+  definition required was moved to the last patch adding the nvmem for
+  UID registers)
+- Added multiple new patches handling the dt-bindings issues
+- Extend the possibility to enable the main rc oscillator to all at91
+  SoCs with an OTPC
+- Added patches to reference and enable the OTPC peripheral clock on all
+  capable SoCs
+- Reordered patches
+- Reworded commit messages
+- Squashed patches with dts changes for sam9x60
+- Fixed bot warnings
+- Link: https://lore.kernel.org/all/20250210164506.495747-1-ada@thorsis.com/T/#u
+
+v1:
+- Link: https://lore.kernel.org/all/20240821105943.230281-1-ada@thorsis.com/T/#u
+
+(I sent an RFC patch on this topic earlier in 2024, you'll find the
+link below as a reference to the discussion.  The patch itself was
+trivial and not meant for applying as is anyways, so I decided to not
+write a full changelog from RFC to v1.)
+
+RFC:
+- Link: https://lore.kernel.org/all/20240412140802.1571935-1-ada@thorsis.com/T/#u
+
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+
+Alexander Dahl (19):
+  MAINTAINERS: Add sam9/sama to (AT91) SoC support
+  dt-bindings: clock: at91: Split up per SoC partially
+  dt-bindings: clock: at91: Allow referencing main rc oscillator in DT
+  clk: at91: Use new PMC bindings
+  clk: at91: sama7d65: Use highest PMC definition as max index
+  clk: at91: Allow enabling main_rc_osc through DT
+  clk: at91: Add peripheral id for OTPC
+  dt-bindings: nvmem: microchip-otpc: Add compatible for SAM9X60
+  dt-bindings: nvmem: microchip-otpc: Add required clocks
+  nvmem: microchip-otpc: Avoid reading a write-only register
+  nvmem: microchip-otpc: Fix swapped 'sleep' and 'timeout' parameters
+  nvmem: microchip-otpc: Add SAM9X60 support
+  nvmem: microchip-otpc: Enable necessary clocks
+  nvmem: microchip-otpc: Expose UID registers as 2nd nvmem device
+  ARM: dts: microchip: Use new PMC bindings
+  ARM: dts: microchip: sama7g5: Add OTPC clocks
+  ARM: dts: microchip: sam9x60: Add OTPC node
+  ARM: dts: microchip: sam9x60_curiosity: Enable OTP Controller
+  dt-bindings: clock: at91: Remove old PMC definitions
+
+ .../nvmem/microchip,sama7g5-otpc.yaml         | 12 ++++-
+ .../reset/atmel,at91sam9260-reset.yaml        |  3 +-
+ MAINTAINERS                                   |  1 +
+ .../dts/microchip/at91-sam9x60_curiosity.dts  |  4 ++
+ arch/arm/boot/dts/microchip/at91rm9200.dtsi   |  3 +-
+ arch/arm/boot/dts/microchip/at91sam9260.dtsi  | 19 +++----
+ arch/arm/boot/dts/microchip/at91sam9261.dtsi  |  7 +--
+ arch/arm/boot/dts/microchip/at91sam9263.dtsi  |  9 ++--
+ arch/arm/boot/dts/microchip/at91sam9g45.dtsi  | 11 ++--
+ arch/arm/boot/dts/microchip/at91sam9n12.dtsi  |  7 +--
+ arch/arm/boot/dts/microchip/at91sam9rl.dtsi   |  9 ++--
+ arch/arm/boot/dts/microchip/at91sam9x5.dtsi   | 11 ++--
+ arch/arm/boot/dts/microchip/sam9x60.dtsi      | 23 +++++---
+ arch/arm/boot/dts/microchip/sam9x7.dtsi       | 13 ++---
+ arch/arm/boot/dts/microchip/sama5d2.dtsi      | 25 ++++-----
+ arch/arm/boot/dts/microchip/sama5d3.dtsi      |  9 ++--
+ arch/arm/boot/dts/microchip/sama5d4.dtsi      |  9 ++--
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     | 15 +++---
+ arch/arm/boot/dts/microchip/sama7g5.dtsi      | 24 +++++----
+ drivers/clk/at91/at91rm9200.c                 | 12 ++---
+ drivers/clk/at91/at91sam9260.c                | 14 ++---
+ drivers/clk/at91/at91sam9g45.c                | 12 ++---
+ drivers/clk/at91/at91sam9n12.c                | 12 ++---
+ drivers/clk/at91/at91sam9rl.c                 | 12 ++---
+ drivers/clk/at91/at91sam9x5.c                 | 12 ++---
+ drivers/clk/at91/sam9x60.c                    | 16 +++---
+ drivers/clk/at91/sam9x7.c                     | 24 +++++----
+ drivers/clk/at91/sama5d2.c                    | 22 ++++----
+ drivers/clk/at91/sama5d3.c                    | 10 ++--
+ drivers/clk/at91/sama5d4.c                    | 12 ++---
+ drivers/clk/at91/sama7d65.c                   | 44 +++++++--------
+ drivers/clk/at91/sama7g5.c                    | 30 ++++++-----
+ drivers/nvmem/microchip-otpc.c                | 53 ++++++++++++++++---
+ include/dt-bindings/clock/at91.h              | 32 -----------
+ .../dt-bindings/clock/atmel,at91rm9200-pmc.h  | 15 ++++++
+ .../dt-bindings/clock/atmel,at91sam9260-pmc.h | 16 ++++++
+ .../dt-bindings/clock/atmel,at91sam9g45-pmc.h | 15 ++++++
+ .../dt-bindings/clock/atmel,at91sam9n12-pmc.h | 15 ++++++
+ .../dt-bindings/clock/atmel,at91sam9rl-pmc.h  | 15 ++++++
+ .../dt-bindings/clock/atmel,at91sam9x5-pmc.h  | 15 ++++++
+ include/dt-bindings/clock/atmel,sama5d2-pmc.h | 20 +++++++
+ include/dt-bindings/clock/atmel,sama5d3-pmc.h | 14 +++++
+ include/dt-bindings/clock/atmel,sama5d4-pmc.h | 15 ++++++
+ .../dt-bindings/clock/microchip,sam9x60-pmc.h | 16 ++++++
+ .../dt-bindings/clock/microchip,sam9x7-pmc.h  | 20 +++++++
+ .../clock/microchip,sama7d65-pmc.h            | 25 +++++++++
+ .../dt-bindings/clock/microchip,sama7g5-pmc.h | 20 +++++++
+ 47 files changed, 514 insertions(+), 238 deletions(-)
+ create mode 100644 include/dt-bindings/clock/atmel,at91rm9200-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,at91sam9260-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,at91sam9g45-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,at91sam9n12-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,at91sam9rl-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,at91sam9x5-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,sama5d2-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,sama5d3-pmc.h
+ create mode 100644 include/dt-bindings/clock/atmel,sama5d4-pmc.h
+ create mode 100644 include/dt-bindings/clock/microchip,sam9x60-pmc.h
+ create mode 100644 include/dt-bindings/clock/microchip,sam9x7-pmc.h
+ create mode 100644 include/dt-bindings/clock/microchip,sama7d65-pmc.h
+ create mode 100644 include/dt-bindings/clock/microchip,sama7g5-pmc.h
+
+
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+-- 
+2.47.3
+
 
