@@ -1,52 +1,52 @@
-Return-Path: <linux-clk+bounces-33002-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-33004-lists+linux-clk=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPxYCr7Ub2mgMQAAu9opvQ
-	(envelope-from <linux-clk+bounces-33002-lists+linux-clk=lfdr.de@vger.kernel.org>)
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 20:17:18 +0100
+	id YPFnAPzUb2mgMQAAu9opvQ
+	(envelope-from <linux-clk+bounces-33004-lists+linux-clk=lfdr.de@vger.kernel.org>)
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 20:18:20 +0100
 X-Original-To: lists+linux-clk@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A224A289
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 20:17:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 591904A2A8
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 20:18:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A285D8468A7
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 16:51:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 48FA9A234F9
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jan 2026 16:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287DC33C51A;
-	Tue, 20 Jan 2026 16:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A6633D6D9;
+	Tue, 20 Jan 2026 16:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="lQSQpedZ"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="wn2vRAPr"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB9933C1AC;
-	Tue, 20 Jan 2026 16:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A959C33C1B6;
+	Tue, 20 Jan 2026 16:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768927617; cv=none; b=JuCkOFVtKvhEkXpmfUfCkeMyFmUt+f9YscgGF9FzRwmXrkLcp353Bz3nlDZ5NO74N3/E6sZUvvRhYSdo8icFATed2Yfyjb6Tk39T4v95zbvHFXWo2Uwsx7FZd8nayc7cEAOeUo9PJnL5Kq4U0TiwssTh8q5pIN+wv/MDJj4cK/0=
+	t=1768927619; cv=none; b=s+CE5ghuikzRnDiBTgmRPaGlmijskyAdMVeB0/YJOh7+3wNx3E7ZE7ATub8fNYOSNRQ7eZN/RHE2D8o/q1O6R1oaBTXpeUuI/bm/02TZFIkBCc6faetjIRQLUW1Jcf2qRZL2csHV77eB9x1hR09BldiA9tseINruNFGlnzhoyQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768927617; c=relaxed/simple;
-	bh=0c3vh79p6gsm3uCGtnvAspS2ib7dhe2tFGNzDzCbccQ=;
+	s=arc-20240116; t=1768927619; c=relaxed/simple;
+	bh=V+WjWfo7uW8ljN1wEXMec4ZmlwgXSEKxSi7oKhZi0rI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GlLa95M0ikqHEdeqwAQTTWueiOBrp9gxwIr1J+0ZOpVI7cys0QwYBKTuhNjBEs/iIu6wBhMMl0fhIu/aKBEjn52C3U8hDsSa7U/cdQnOIIhcDAeG782NXcFc2Nsx/9RCJbI42syLNVOt4BJrYNW/Q1akaunhcqakqtPJ7xQ3/B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=lQSQpedZ; arc=none smtp.client-ip=217.92.40.78
+	 MIME-Version; b=TFbeY/j+Xb9+u0SplU6uGYjTIPRnrqLA26+QVdz2oZmHEoieGCXUq8o1LNLVw8eQeV/O2zO8Xqx2L6iAKablMzRFnHFl2nfgNb7iJmFqnzJWS27xsTol6qWhOiZfE6hwlIJF0aSZhYUOUBrV6KdL6udUH2Wee7DYRGptHUgD/18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=wn2vRAPr; arc=none smtp.client-ip=217.92.40.78
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 886631488638;
-	Tue, 20 Jan 2026 17:46:52 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 190C8148AD7A;
+	Tue, 20 Jan 2026 17:46:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1768927612; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1768927613; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=ulo77ylyJZMF+/aZjD30uG2oZc3o7QcUP3IHLM+BdQQ=;
-	b=lQSQpedZYGaCXUVdPKEo+JbBJSbufqszB6YbOEuq3DXKqeMQV7KK9GcbUzcxRD67j05RZq
-	FRDPg+GRczRx/4AXPhimI+R7nN8VpkEBdgoI4aEX9NbZiWyo6xu6mMQa4f49vm6dWnO0SV
-	iR+57Otsj6/GMGkaI5Po3YR7dPOTHhjqYhebsb5snBrhYfyiBEG18kj9P8jTZdLMF3VwSd
-	oGT0banOk3cEkTKBN+jPcF25sAQro2qzFTCJDKF1UD2sR17QCmNqX9bhrqHqbKCdSyNM3Y
-	DJ4HUcLbCZMxuODvlseWE4Jyi9ndIGSADRTru8r20hLNTzUtj6ewRy11EYlRxA==
+	bh=YR90EkWwJSLCfMczGEB5+HrU6/Wdn0NZfB5BOFTbURA=;
+	b=wn2vRAPrqdP7/ry3T/94tRFINwothj+ZqrCFWA+e6JLax2OlQxP6kzwviYhuLliGhcsxBe
+	zjvgfJUZxvqZ4+vMNFl487QKqDojHqWGDdrgxZIJiE2GZb7JMMWGLfjYnhpF3EDRR0MdtE
+	OtMNKMsMmL1WJEpOOuO2p78+mx8W03QdzyjejyLbB5dFx64Q3jpPJZmCoX+f+11JP1magU
+	5Oxt+d80fj409eA3X87e/ILvprgovwr9TWkjyuWckQpQ82SP17VlmifVHyUyk+TonVo+0M
+	MC/bDmbDUj/wqRXa88yBlv7Ne7fa1a/nGzy10pFCU5S4CpYT4qzfM0iBuWQQQQ==
 From: Alexander Dahl <ada@thorsis.com>
 To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -57,9 +57,9 @@ Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Srinivas Kandagatla <srini@kernel.org>
-Subject: [PATCH v3 13/19] nvmem: microchip-otpc: Enable necessary clocks
-Date: Tue, 20 Jan 2026 16:44:47 +0100
-Message-ID: <20260120154502.1280938-7-ada@thorsis.com>
+Subject: [PATCH v3 14/19] nvmem: microchip-otpc: Expose UID registers as 2nd nvmem device
+Date: Tue, 20 Jan 2026 16:44:48 +0100
+Message-ID: <20260120154502.1280938-8-ada@thorsis.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260120154502.1280938-1-ada@thorsis.com>
 References: <20260120143759.904013-1-ada@thorsis.com>
@@ -83,7 +83,7 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	TAGGED_FROM(0.00)[bounces-33002-lists,linux-clk=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33004-lists,linux-clk=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -96,67 +96,107 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
 	FROM_NEQ_ENVFROM(0.00)[ada@thorsis.com,linux-clk@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,thorsis.com:email,thorsis.com:dkim,thorsis.com:mid]
-X-Rspamd-Queue-Id: C7A224A289
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,thorsis.com:email,thorsis.com:dkim,thorsis.com:mid,mchp_otpc_uid_nvmem_config.dev:url]
+X-Rspamd-Queue-Id: 591904A2A8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Without enabling the main rc clock, initializing the packet list leads
-to a read timeout on the first packet, at least on sam9x60.
+For SAM9X60 the Product UID x Register containing the Unique Product ID
+is part of the OTPC registers.  We have everything at hand here to just
+create a trivial nvmem device for those.
 
-According to SAM9X60 datasheet (DS60001579G) section "23.4 Product
-Dependencies" the clock must be enabled for reading and writing.
-
-Tested on sam9x60-curiosity board.
-
-Link: https://lore.kernel.org/linux-clk/ec34efc2-2051-4b8a-b5d8-6e2fd5e08c28@microchip.com/T/#u
 Signed-off-by: Alexander Dahl <ada@thorsis.com>
 ---
 
 Notes:
     v3:
-    - Rewrap lines
+    - no changes
     
     v2:
-    - Rewrite to enable _all_ clocks defined in dts
+    - Use dev_err_probe() for error reporting (thanks Claudiu)
+    - Move required register definition over here from removed patch
 
- drivers/nvmem/microchip-otpc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/nvmem/microchip-otpc.c | 38 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/nvmem/microchip-otpc.c b/drivers/nvmem/microchip-otpc.c
-index d39f2d57e5f5e..34c0d7611f3e4 100644
+index 34c0d7611f3e4..b35ed13b004bb 100644
 --- a/drivers/nvmem/microchip-otpc.c
 +++ b/drivers/nvmem/microchip-otpc.c
-@@ -8,6 +8,7 @@
-  */
+@@ -25,10 +25,14 @@
+ #define MCHP_OTPC_HR			(0x20)
+ #define MCHP_OTPC_HR_SIZE		GENMASK(15, 8)
+ #define MCHP_OTPC_DR			(0x24)
++#define MCHP_OTPC_UID0R			(0x60)
  
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/nvmem-provider.h>
-@@ -241,6 +242,7 @@ static struct nvmem_config mchp_nvmem_config = {
+ #define MCHP_OTPC_NAME			"mchp-otpc"
+ #define MCHP_OTPC_SIZE			(11 * 1024)
+ 
++#define MCHP_OTPC_UID_NAME		"mchp-uid"
++#define MCHP_OTPC_UID_SIZE		16
++
+ /**
+  * struct mchp_otpc - OTPC private data structure
+  * @base: base address
+@@ -230,6 +234,16 @@ static int mchp_otpc_init_packets_list(struct mchp_otpc *otpc, u32 *size)
+ 	return 0;
+ }
+ 
++static int mchp_otpc_uid_read(void *priv, unsigned int offset,
++			      void *val, size_t bytes)
++{
++	struct mchp_otpc *otpc = priv;
++
++	memcpy_fromio(val, otpc->base + MCHP_OTPC_UID0R + offset, bytes);
++
++	return 0;
++}
++
+ static struct nvmem_config mchp_nvmem_config = {
+ 	.name = MCHP_OTPC_NAME,
+ 	.type = NVMEM_TYPE_OTP,
+@@ -239,6 +253,15 @@ static struct nvmem_config mchp_nvmem_config = {
+ 	.reg_read = mchp_otpc_read,
+ };
+ 
++static struct nvmem_config mchp_otpc_uid_nvmem_config = {
++	.name = MCHP_OTPC_UID_NAME,
++	.read_only = true,
++	.word_size = 4,
++	.stride = 4,
++	.size = MCHP_OTPC_UID_SIZE,
++	.reg_read = mchp_otpc_uid_read,
++};
++
  static int mchp_otpc_probe(struct platform_device *pdev)
  {
  	struct nvmem_device *nvmem;
-+	struct clk_bulk_data *clks;
- 	struct mchp_otpc *otpc;
- 	u32 size;
- 	int ret;
-@@ -253,6 +255,10 @@ static int mchp_otpc_probe(struct platform_device *pdev)
- 	if (IS_ERR(otpc->base))
- 		return PTR_ERR(otpc->base);
+@@ -269,8 +292,21 @@ static int mchp_otpc_probe(struct platform_device *pdev)
+ 	mchp_nvmem_config.size = size;
+ 	mchp_nvmem_config.priv = otpc;
+ 	nvmem = devm_nvmem_register(&pdev->dev, &mchp_nvmem_config);
++	if (IS_ERR(nvmem)) {
++		return dev_err_probe(&pdev->dev, PTR_ERR(nvmem),
++				     "Error registering OTP as nvmem device\n");
++	}
  
-+	ret = devm_clk_bulk_get_all_enabled(&pdev->dev, &clks);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Error getting clocks!\n");
+-	return PTR_ERR_OR_ZERO(nvmem);
++	mchp_otpc_uid_nvmem_config.dev = otpc->dev;
++	mchp_otpc_uid_nvmem_config.priv = otpc;
 +
- 	otpc->dev = &pdev->dev;
- 	ret = mchp_otpc_init_packets_list(otpc, &size);
- 	if (ret)
++	nvmem = devm_nvmem_register(&pdev->dev, &mchp_otpc_uid_nvmem_config);
++	if (IS_ERR(nvmem)) {
++		return dev_err_probe(&pdev->dev, PTR_ERR(nvmem),
++				     "Error registering UIDxR as nvmem device\n");
++	}
++
++	return 0;
+ }
+ 
+ static const struct of_device_id __maybe_unused mchp_otpc_ids[] = {
 -- 
 2.47.3
 
